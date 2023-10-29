@@ -7,6 +7,6 @@ namespace Domain
 {
     public class Dog : Animal
     {
-        
+        //
     }
 }

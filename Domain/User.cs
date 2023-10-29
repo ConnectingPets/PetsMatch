@@ -7,6 +7,7 @@ namespace Domain
         //Age
         //NumberOfPetsOwning
         //Education
+        //Photo?
         //Job Title
         //Gender - Enum
         //Address

@@ -6,15 +6,16 @@ namespace Domain
         //Name
         //Description
         //Age
-        //BirthDate
+        //BirthDate?
         //Breed - Create and add data about dog/cat breeds => enum
+        //hasGivenBirth?
+        //Educated
         //Photo
         //HeathStatus - Vacinated - yes/no
         //Gender - Enum
         //SocialMedia? (of the pet)
         //Weight? kg
         //IsHavingValidDocuments
-        //Passport
         //Owner - User
         //Address & City of the animal are the same as the user
     }
