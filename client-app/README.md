@@ -1,11 +1,18 @@
-# React + TypeScript + Vite
+# PetsMatch -- client app
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is "PetsMatch" client application project documentation.
 
-Currently, two official plugins are available:
+### Getting started
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+   1.In your console navigate to 'client-app' folder.
+
+   2.Install all dependencies –> 'npm install'
+
+   3.Start the application with 'npm start'
+
+   4.When Vite is ready, click on the local: link (http://localhost:3000/)
+
+
 
 ## Expanding the ESLint configuration
 
