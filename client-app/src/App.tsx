@@ -1,11 +1,18 @@
+import React from 'react';
 
-function App() {
+import { BrowserRouter } from 'react-router-dom';
 
+import Routes from './Routes';
+import Layout from './components/Layout/Layout';
+
+const App: React.FC = () => {
   return (
-    <>
-      <h1>Welcome to PetsMatch</h1>
-    </>
+    <BrowserRouter>
+      <Layout>
+        <Routes />
+      </Layout>
+    </BrowserRouter>
   );
-}
+};
 
 export default App;
