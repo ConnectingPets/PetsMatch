@@ -2,14 +2,14 @@
 
 $breakpoints-down: (
     'mobile-start':20em,
-    'tablet-start': 30,
-    'display-start':48,
+    'tablet-start': 30em,
+    'display-start':48em,
 );
 
 $breakpoints-up: (
     'mobile-end':29.9375em,
-    'tablet-end':47.9375,
-    'display-end':75,
+    'tablet-end':47.9375em,
+    'display-end':75em,
 );
 
 @mixin breakpoint ($size-start, $size-end) {
