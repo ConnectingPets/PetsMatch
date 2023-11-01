@@ -1,15 +1,23 @@
 namespace Domain
 {
-    //Here we will store the data about the swipes.
+    using Microsoft.EntityFrameworkCore;
+
+    [Comment("swipe table")]
     public class Swipe
     {
         public int SwipeID { get; set; }
-        public int UserID { get; set; }
-        public int SwipedUserID { get; set; }
+        //public int UserID { get; set; }
+        [Comment("swiper animal id")]
+        public required int SwiperAnimalId { get; set; }
+
+        [Comment("swipee animal id")]
+        public required int SwipeeAnimalId { get; set; }
 
         // Like/Dislike
-        public string Action { get; set; }
-        public DateTime Timestamp { get; set; }
-        public User User { get; set; }
+        [Comment("it stores of the swipe is right")]
+        public required bool SwipedRight { get; set; }
+
+        [Comment("it stores when the it is swiped")]
+        public DateTime SwipedOn { get; set; }
     }
 }
