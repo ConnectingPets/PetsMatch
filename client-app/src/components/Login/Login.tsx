@@ -1,7 +1,7 @@
 import React from 'react';
-import './Login.scss';
 import { CLabel } from '../common/CLabel/CLabel';
 import { CInput } from '../common/CInput/CInput';
+import './Login.scss';
 
 interface LoginProps { };
 
