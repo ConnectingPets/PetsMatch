@@ -1,19 +1,28 @@
 @use '../../global-styles/' as gs;
 
 .login__register {
+    width: 100vw;
+
     &__wrapper {
         @include gs.page-center(column, none, center);
         background-color: gs.$dark-background-color;
-        object-fit: contain;
-        // background-image: url('../../../public/images/cats.jpg');
-        // background-image: url('../../../public/images/lr-background.jpg');
-        background-image: url('../../../public/images/pets-bg.png');
+        object-fit: cover;
+        // background-image: url('/public/images/cats.jpg');
+        // background-image: url('/images/lr-background.jpg');
+        background-image: url('/images/pets-bg.png');
         background-repeat: no-repeat;
-        background-origin: content-box;
         background-attachment: fixed;
-        background-size: 100%;
         background-position: center;
-        background-position-y: -4rem;
+        background-position-y: -1.5rem;
+        background-size: auto;
+
+        @include gs.breakpoint(large-display-start, large-display-end) {
+            background-size: 100%;
+        }
+
+        @include gs.breakpoint(display-start, display-end) {
+            background-color: #fff;
+        }
     }
 
     &__options {
@@ -42,7 +51,8 @@
                     margin: 0.1rem;
                     transform: scale(0);
                 }
-                &:hover::after{
+
+                &:hover::after {
                     width: 100%;
                     animation: opacityShow 0.5 forwards;
                     -webkit-animation: opacityShow 0.5s forwards;
@@ -54,6 +64,10 @@
 
 
     }
+
+    &__forms__wrapper {
+        @include gs.display-flex(column, center, center);
+    }
 }
 
 @keyframes opacityShow {
@@ -61,7 +75,7 @@
         opacity: 0;
         transform: scale(0);
     }
-    
+
     100% {
         opacity: 1;
         transform: scale(1.1);
