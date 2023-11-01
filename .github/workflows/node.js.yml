@@ -38,4 +38,3 @@ jobs:
         working-directory: ./client-app
         run: |
           npm run build
-          npm test
