@@ -1,6 +1,5 @@
 using Domain;
 using MediatR;
-using Persistence;
 
 namespace Application.Matches
 {
