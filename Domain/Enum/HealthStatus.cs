@@ -2,5 +2,7 @@
 {
     public enum HealthStatus
     {
+        Vaccinated,
+        Dewormed
     }
 }

@@ -34,6 +34,6 @@ namespace Domain
         [Comment("user city")]
         public required string City { get; set; }
 
-        public ICollection<Swipe> Swipes { get; set; }
+        public ICollection<Swipe> Swipes { get; set; } = null!;
     }
 }

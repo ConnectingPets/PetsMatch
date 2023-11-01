@@ -17,7 +17,7 @@ namespace Domain
         [Comment("it stores of the swipe is right")]
         public required bool SwipedRight { get; set; }
 
-        [Comment("it stores when the it is swiped")]
+        [Comment("timestamp when the swipe is made")]
         public DateTime SwipedOn { get; set; }
     }
 }
