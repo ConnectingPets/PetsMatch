@@ -10,22 +10,29 @@ on:
     branches: [ "main", "Dev" ]
 
 jobs:
-  build:
-
+  # This workflow contains multiple jobs
+  build_test:
+    # The type of runner that the job will run on
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         node-version: [16.x, 17.x, 18.x, 19.x, 20.x, 21.x ]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
+    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm ci
-    - run: npm run build --if-present
-    - run: npm test
+      - uses: actions/checkout@v2
+
+      - name: setup node
+        uses: actions/setup-node@master
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      # install applicaion dependencies
+      - name: Install dependencies
+        run: |
+          npm install
+      # build and test the apps
+      - name: build
+        run: |
+          npm run build
+          npm test
