@@ -8,8 +8,6 @@
         @include gs.page-center(column, none, center);
         background-color: gs.$dark-background-color;
         object-fit: cover;
-        background-image: url('/public/images/cats.jpg');
-        background-image: url('/images/lr-background.jpg');
         background-image: url('/images/pets-bg.png');
         background-repeat: no-repeat;
         background-attachment: fixed;
@@ -20,8 +18,6 @@
         @include gs.breakpoint(large-display-start, large-display-end) {
             background-size: 100%;
         }
-
-
     }
 
     &__options {

@@ -10,15 +10,15 @@ export const Login: React.FC<LoginProps> = () => {
     return (
         <section className='login__form__section'>
             <form className='login__form'>
-               <div>
+                <div>
                     <CLabel inputName={'email'} title={'Email'} />
-                    <CInput type='email' id='email' name='email' placeholder='john-sillver@gmail.com'/>
-               </div>
-               <div>
+                    <CInput type='email' id='email' name='email' placeholder='john-sillver@gmail.com' />
+                </div>
+                <div>
                     <CLabel inputName={'password'} title={'Password'} />
-                    <CInput type='password' id='password' name='password' placeholder='* * * * * * *'/>
-               </div>
-               <CSubmitButton textContent='Login'/>
+                    <CInput type='password' id='password' name='password' placeholder='* * * * * * *' />
+                </div>
+                <CSubmitButton textContent='Login' />
             </form>
         </section>
     )
