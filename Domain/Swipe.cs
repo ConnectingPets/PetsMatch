@@ -1,15 +1,31 @@
 namespace Domain
 {
-    //Here we will store the data about the swipes.
+    using System.ComponentModel.DataAnnotations.Schema;
+
+    using Microsoft.EntityFrameworkCore;
+
+    [Comment("swipe table")]
     public class Swipe
     {
-        public int SwipeID { get; set; }
-        public int UserID { get; set; }
-        public int SwipedUserID { get; set; }
+        [Comment("swiper animal id")]
+        public required Guid SwiperAnimalId { get; set; }
+
+        [Comment("swiper animal")]
+        [ForeignKey(nameof(SwiperAnimalId))]
+        public Animal SwiperAnimal { get; set; } = null!;
+
+        [Comment("swipee animal id")]
+        public required Guid SwipeeAnimalId { get; set; }
+
+        [Comment("swipee animal")]
+        [ForeignKey(nameof(SwipeeAnimalId))]
+        public Animal SwipeeAnimal { get; set; } = null!;
 
         // Like/Dislike
-        public string Action { get; set; }
-        public DateTime Timestamp { get; set; }
-        public User User { get; set; }
+        [Comment("it stores of the swipe is right")]
+        public required bool SwipedRight { get; set; }
+
+        [Comment("timestamp when the swipe is made")]
+        public DateTime SwipedOn { get; set; }
     }
 }
