@@ -1,0 +1,78 @@
+@use '../../global-styles/' as gs;
+
+.login__register {
+    width: 100vw;
+    min-height: 100vh;
+
+    &__wrapper {
+        @include gs.page-center(column, none, center);
+        background-color: gs.$dark-background-color;
+        object-fit: cover;
+        background-image: url('/images/pets-bg.png');
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-position: center;
+        background-size: auto;
+        background-color: #fff;
+
+        @include gs.breakpoint(large-display-start, large-display-end) {
+            background-size: 100%;
+        }
+    }
+
+    &__options {
+        @include gs.display-flex(row, space-between, center);
+        text-transform: capitalize;
+        width: 17rem;
+        padding: 2rem;
+        margin-top: 1.2rem;
+
+        &>div {
+            &>h3 {
+                display: flex;
+                flex-direction: column;
+                position: relative;
+                cursor: pointer;
+
+                &::after {
+                    content: '';
+                    width: 100%;
+                    border-radius: 20%;
+                    height: 0.2rem;
+                    background: #000;
+                    position: absolute;
+                    opacity: 0;
+                    bottom: -0.6rem;
+                    margin: 0.1rem;
+                    transform: scale(0);
+                }
+
+                &:hover::after {
+                    width: 100%;
+                    animation: opacityShow 0.5 forwards;
+                    -webkit-animation: opacityShow 0.5s forwards;
+                    -moz-animation: opacityShow 0.5s forwards;
+                    opacity: 1;
+                }
+            }
+        }
+
+
+    }
+
+    &__forms__wrapper {
+        @include gs.display-flex(column, center, center);
+    }
+}
+
+@keyframes opacityShow {
+    0% {
+        opacity: 0;
+        transform: scale(0);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1.1);
+    }
+}

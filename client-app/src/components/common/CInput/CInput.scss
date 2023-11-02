@@ -1,0 +1,18 @@
+@use '../../../global-styles/' as gs;
+
+.form__input {
+    width: 100%;
+    border-radius: 1.5rem;
+    padding: 0.3rem;
+    border: 1px solid lightgrey;
+    text-align: center;
+
+    &:focus{
+        background: gs.$light-gradient-second-transparent;
+        border: 1px solid gs.$light-button-color;
+    }
+
+    &::placeholder{
+        text-align: center;
+    }
+}

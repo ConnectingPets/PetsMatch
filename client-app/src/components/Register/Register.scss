@@ -1,0 +1,35 @@
+@use '../../global-styles/' as gs;
+
+.register__form {
+    @include gs.set-form(100%, center, 85%, column, center);
+
+    &__section {
+        width: 19rem;
+    }
+
+    &__input{
+        width: 100%;
+        border-radius: 1.5rem;
+        padding: 0.3rem;
+        border: 1px solid lightgrey;
+        text-align: center;
+    
+        &:focus{
+            background: gs.$light-gradient-second-transparent;
+            border: 1px solid gs.$light-button-color;
+        }
+    
+        &::placeholder{
+            text-align: center;
+        }
+    }
+
+    &__error__message{
+        margin-top: 0.4rem;
+        font-size: 0.7rem;
+        font-weight: 500;
+        color: rgb(138, 0, 0);
+        text-transform: capitalize;
+        text-align: center;
+    }
+}
