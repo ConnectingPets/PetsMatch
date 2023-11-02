@@ -1,17 +1,24 @@
 namespace Domain
 {
     using Microsoft.EntityFrameworkCore;
+    using System.ComponentModel.DataAnnotations.Schema;
 
     [Comment("swipe table")]
     public class Swipe
     {
-        public int SwipeID { get; set; }
-        //public int UserID { get; set; }
         [Comment("swiper animal id")]
         public required int SwiperAnimalId { get; set; }
 
+        [Comment("swiper animal")]
+        [ForeignKey(nameof(SwiperAnimalId))]
+        public Animal SwiperAnimal { get; set; } = null!;
+
         [Comment("swipee animal id")]
         public required int SwipeeAnimalId { get; set; }
+
+        [Comment("swipee animal")]
+        [ForeignKey(nameof(SwipeeAnimalId))]
+        public Animal SwipeeAnimal { get; set; } = null!;
 
         // Like/Dislike
         [Comment("it stores of the swipe is right")]
