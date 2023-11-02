@@ -12,16 +12,11 @@ export const LoginRegisterPage: React.FC<LoginRegisterPageProps> = () => {
 
     const showLogin = () => {
         setIsRegistered(true);
-        console.log(isRegistered);
     };
 
     const showRegister = () => {
         setIsRegistered(false);
-        console.log(isRegistered);
-
     };
-
-
 
     return (
         <div className='login__register__wrapper'>
@@ -38,7 +33,7 @@ export const LoginRegisterPage: React.FC<LoginRegisterPageProps> = () => {
                 {
                     isRegistered
                         ? <Login showRegister={showRegister}/>
-                        : <Register/>
+                        : <Register showLogin={showLogin}/>
                 }
             </section>
         </div>

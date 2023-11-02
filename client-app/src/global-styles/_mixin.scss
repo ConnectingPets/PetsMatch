@@ -68,7 +68,7 @@
     }
 }
 
-@mixin form-submit-button($first-color, $second-color) {
+@mixin form-submit-button($first-color, $second-color,$text-color) {
     font-family: 'Raleway', 'serif';
     font-weight: 600;
     padding: 0.3rem 1.3rem;
@@ -85,5 +85,6 @@
     &:hover {
         transform: scale(1.1);
         transition: 0.5s;
+        color: $text-color;
     }
 }

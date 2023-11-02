@@ -4,9 +4,13 @@ import { CInput } from '../common/CInput/CInput';
 import { CSubmitButton } from '../common/CSubmitButton/CSubmitButton';
 import './Register.scss';
 
-interface RegisterProps { }
+interface RegisterProps { 
+    showLogin:()=>void;
+}
 
-export const Register: React.FC<RegisterProps> = () => {
+export const Register: React.FC<RegisterProps> = ({
+    showLogin
+}) => {
     return (
         <section className='register__form__section'>
             <form className='register__form'>
@@ -23,10 +27,11 @@ export const Register: React.FC<RegisterProps> = () => {
                     <CInput type='password' id='password' name='password' placeholder='* * * * * * *' />
                 </div>
                 <div>
-                    <CLabel inputName={'password'} title={'Retype Password'} />
-                    <CInput type='password' id='password' name='password' placeholder='* * * * * * *' />
+                    <CLabel inputName={'repassword'} title={'Retype Password'} />
+                    <CInput type='password' id='repassword' name='repassword' placeholder='* * * * * * *' />
                 </div>
                 <CSubmitButton textContent='Register' />
+                <p className='account__message' onClick={showLogin}>If you have an account click here!</p>
             </form>
         </section>
     )

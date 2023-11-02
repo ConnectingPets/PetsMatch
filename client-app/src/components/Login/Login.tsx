@@ -15,8 +15,8 @@ export const Login: React.FC<LoginProps> = ({
         <section className='login__form__section'>
             <form className='login__form'>
                 <div>
-                    <CLabel inputName={'email'} title={'Email'} />
-                    <CInput type='email' id='email' name='email' placeholder='john-sillver@gmail.com' />
+                    <CLabel inputName={'userEmail'} title={'Email'} />
+                    <CInput type='email' id='userEmail' name='userEmail' placeholder='john-sillver@gmail.com' />
                 </div>
                 <div>
                     <CLabel inputName={'password'} title={'Password'} />
