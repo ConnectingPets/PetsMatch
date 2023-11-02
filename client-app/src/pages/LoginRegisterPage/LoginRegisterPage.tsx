@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 import './LoginRegisterPage.scss';
 import { Login } from '../../components/Login/Login';
+import { Register } from '../../components/Register/Register';
 
 interface LoginRegisterPageProps { };
 
@@ -36,8 +37,8 @@ export const LoginRegisterPage: React.FC<LoginRegisterPageProps> = () => {
             <section className='login__register__forms__wrapper'>
                 {
                     isRegistered
-                        ? <Login />
-                        : null
+                        ? <Login showRegister={showRegister}/>
+                        : <Register/>
                 }
             </section>
         </div>

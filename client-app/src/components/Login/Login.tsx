@@ -1,12 +1,16 @@
 import React from 'react';
 import { CLabel } from '../common/CLabel/CLabel';
 import { CInput } from '../common/CInput/CInput';
-import './Login.scss';
 import { CSubmitButton } from '../common/CSubmitButton/CSubmitButton';
+import './Login.scss';
 
-interface LoginProps { };
+interface LoginProps {
+    showRegister: () => void;
+};
 
-export const Login: React.FC<LoginProps> = () => {
+export const Login: React.FC<LoginProps> = ({
+    showRegister
+}) => {
     return (
         <section className='login__form__section'>
             <form className='login__form'>
@@ -19,6 +23,7 @@ export const Login: React.FC<LoginProps> = () => {
                     <CInput type='password' id='password' name='password' placeholder='* * * * * * *' />
                 </div>
                 <CSubmitButton textContent='Login' />
+                <p className='account__message' onClick={showRegister}>If you don't have an account click here!</p>
             </form>
         </section>
     )

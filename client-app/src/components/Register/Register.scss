@@ -1,0 +1,9 @@
+@use '../../global-styles/' as gs;
+
+.register__form {
+    @include gs.set-form(100%, center, 85%, column, center);
+
+    &__section {
+        width: 19rem;
+    }
+}

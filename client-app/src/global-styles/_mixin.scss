@@ -37,6 +37,22 @@
         display: flex;
         flex-direction: $divDirection;
         align-items: $divAlignItems;
+
+        &>label{
+            text-shadow: 1px 0px 3px white;
+        }
+    }
+    
+    .account__message{
+        margin-top: 1.25rem;
+        font-size:0.67rem; 
+        text-decoration: underline;
+        cursor: pointer;
+        color: blue;
+        &:hover{
+            color: #3c3cfc;
+            font-style: italic;
+        }
     }
 
     @keyframes opacityShow {
