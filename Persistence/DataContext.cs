@@ -9,7 +9,8 @@ namespace Persistence
 
     public class DataContext : IdentityDbContext<User>
     {
-        public DataContext(DbContextOptions options) : base(options)
+        public DataContext(DbContextOptions options)
+            : base(options)
         {
         }
 
