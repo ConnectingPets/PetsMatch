@@ -1,13 +1,9 @@
 @use '../../global-styles/' as gs;
 
 .login__form {
+    @include gs.set-form(100%, center, column, center);
 
-    &__section{
-        width: 15rem;
-        display: flex;
-        align-items: center;
-        flex-direction: column;
-        background: #706f6f11;
-        padding: 1.2rem;
+    &__section {
+        width: 19rem;
     }
 }

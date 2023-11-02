@@ -2,27 +2,26 @@
 
 .login__register {
     width: 100vw;
+    min-height: 100vh;
 
     &__wrapper {
         @include gs.page-center(column, none, center);
         background-color: gs.$dark-background-color;
         object-fit: cover;
-        // background-image: url('/public/images/cats.jpg');
-        // background-image: url('/images/lr-background.jpg');
+        background-image: url('/public/images/cats.jpg');
+        background-image: url('/images/lr-background.jpg');
         background-image: url('/images/pets-bg.png');
         background-repeat: no-repeat;
         background-attachment: fixed;
         background-position: center;
-        background-position-y: -1.5rem;
         background-size: auto;
+        background-color: #fff;
 
         @include gs.breakpoint(large-display-start, large-display-end) {
             background-size: 100%;
         }
 
-        @include gs.breakpoint(display-start, display-end) {
-            background-color: #fff;
-        }
+
     }
 
     &__options {
