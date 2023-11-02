@@ -1,0 +1,55 @@
+@use '../../global-styles' as gs;
+
+.container__header {
+    position: fixed;
+    padding: 1rem;
+    display: flex;
+    width: 100%;
+    color: gs.$white-text;
+    z-index: 2;
+    // border-bottom: 1px solid #39b539;
+
+    &__logo {
+        margin-left: 4rem; // large screen
+        margin-right: auto;
+
+        @include gs.breakpoint(display-start, display-end) {
+            margin-left: 3rem;
+        }
+
+        @include gs.breakpoint(tablet-start, tablet-end) {
+            margin-left: 2rem;
+        }
+
+        @include gs.breakpoint(mobile-start, mobile-end) {
+            margin-left: 1rem;
+        }
+
+        &>img {
+            width: 3rem;
+        }
+
+        &>h2 {
+            display: inline-block;
+            margin-bottom: unset;
+            text-shadow: 2px -2px 1px black;
+            color: #adff2f;
+        }
+    }
+
+    &>a {
+        padding: 0.5rem;
+        color: gs.$light-button-color;
+        border: 1px solid #adff2f;
+        border-radius: 2.5rem;
+        font-style: italic;
+        font-family: 'Times New Roman', Times, serif;
+        // font-size: 1.25rem;
+        // margin-top: 0.5rem;
+        align-self: end;
+
+        &:hover {
+            box-shadow: 0px 0px 22px #ffff00;
+        }
+    }
+}
