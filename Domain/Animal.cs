@@ -15,6 +15,7 @@ namespace Domain
     {
         public Animal()
         {
+            this.AnimalId = Guid.NewGuid();
             this.Swipes = new HashSet<Swipe>();
             this.Matches = new HashSet<Match>();
             this.Messages = new HashSet<Message>();

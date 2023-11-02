@@ -10,16 +10,17 @@ namespace Domain
     using static Common.ExceptionMessages.User;
 
     [Comment("user table")]
-    public class User : IdentityUser
+    public class User : IdentityUser<Guid>
     {
         public User()
         {
+            base.Id = Guid.NewGuid();
             this.UsersPassions = new HashSet<UserPassion>();
             this.Animals = new HashSet<Animal>();
         }
 
         [Comment("user name")]
-        [StringLength(NameMaxLength, MinimumLength = NameMinLength, ErrorMessage = InvalidNameLength)]
+        [StringLength(NameMaxLength, ErrorMessage = InvalidNameLength)]
         public required string Name { get; set; }
 
         [Comment("user description")]
@@ -31,25 +32,25 @@ namespace Domain
         public required int Age { get; set; }
 
         [Comment("user education")]
-        [StringLength(EducationMaxLength, MinimumLength = EducationMinLength, ErrorMessage = InvalidEducationLength)]
+        [StringLength(EducationMaxLength, ErrorMessage = InvalidEducationLength)]
         public required string Education { get; set; }
 
         [Comment("user photo")]
         public byte[]? Photo { get; set; }
 
         [Comment("user job title")]
-        [StringLength(JobTitleMaxLength, MinimumLength = EducationMinLength, ErrorMessage = InvalidJobTitleLength)]
+        [StringLength(JobTitleMaxLength, ErrorMessage = InvalidJobTitleLength)]
         public required string JobTitle { get; set; }
 
         [Comment("user gender")]
         public required Gender Gender { get; set; }
 
         [Comment("user address")]
-        [StringLength(AddressMaxLength, MinimumLength = AddressMinLength, ErrorMessage = InvalidAddressLength)]
+        [StringLength(AddressMaxLength, ErrorMessage = InvalidAddressLength)]
         public required string Address { get; set; }
 
         [Comment("user city")]
-        [StringLength(CityMaxLength, MinimumLength = CityMinLength, ErrorMessage = InvalidCityLength)]
+        [StringLength(CityMaxLength, ErrorMessage = InvalidCityLength)]
         public required string City { get; set; }
 
         public ICollection<UserPassion> UsersPassions { get; set; } = null!;

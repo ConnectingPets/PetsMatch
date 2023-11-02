@@ -9,6 +9,7 @@
     {
         public Conversation()
         {
+            this.ConversationId = Guid.NewGuid();
             this.Messages = new HashSet<Message>();
         }
 

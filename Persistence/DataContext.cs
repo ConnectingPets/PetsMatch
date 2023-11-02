@@ -6,8 +6,9 @@ namespace Persistence
     using Microsoft.EntityFrameworkCore;
 
     using Domain;
+    using Microsoft.AspNetCore.Identity;
 
-    public class DataContext : IdentityDbContext<User>
+    public class DataContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     {
         public DataContext(DbContextOptions options)
             : base(options)

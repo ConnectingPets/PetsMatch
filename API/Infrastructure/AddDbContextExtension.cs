@@ -5,7 +5,7 @@
 
     /// <summary>
     /// This is an extension method for configuration DbContext. 
-    /// It gets the connection string from the configuration and add the db context to the service collection.
+    /// It gets the connection string from the configuration and adds the db context to the service collection.
     /// </summary>
     public static class AddDbContextExtension
     {

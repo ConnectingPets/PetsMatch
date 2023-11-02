@@ -20,7 +20,7 @@
         public int AnimalCategoryId { get; set; }
 
         [Comment("animal category name")]
-        [StringLength(NameMaxLength, MinimumLength = NameMinLength, ErrorMessage = InvalidNameLength)]
+        [StringLength(NameMaxLength, ErrorMessage = InvalidNameLength)]
         public required string Name { get; set; }
 
         public ICollection<Breed> Breeds { get; set; } = null!;

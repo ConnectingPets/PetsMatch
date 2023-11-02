@@ -8,14 +8,14 @@ namespace Domain
     public class Swipe
     {
         [Comment("swiper animal id")]
-        public required int SwiperAnimalId { get; set; }
+        public required Guid SwiperAnimalId { get; set; }
 
         [Comment("swiper animal")]
         [ForeignKey(nameof(SwiperAnimalId))]
         public Animal SwiperAnimal { get; set; } = null!;
 
         [Comment("swipee animal id")]
-        public required int SwipeeAnimalId { get; set; }
+        public required Guid SwipeeAnimalId { get; set; }
 
         [Comment("swipee animal")]
         [ForeignKey(nameof(SwipeeAnimalId))]

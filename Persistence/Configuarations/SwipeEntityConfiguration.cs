@@ -15,12 +15,14 @@
             builder
                 .HasOne(s => s.SwiperAnimal)
                 .WithMany(a => a.Swipes)
-                .HasForeignKey(s => s.SwiperAnimalId);
+                .HasForeignKey(s => s.SwiperAnimalId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             builder
                 .HasOne(s => s.SwipeeAnimal)
-                .WithMany(a => a.Swipes)
-                .HasForeignKey(s => s.SwipeeAnimalId);
+                .WithMany()
+                .HasForeignKey(s => s.SwipeeAnimalId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

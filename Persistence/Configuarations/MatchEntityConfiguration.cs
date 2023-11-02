@@ -15,12 +15,14 @@
             builder
                 .HasOne(m => m.AnimalOne)
                 .WithMany(a => a.Matches)
-                .HasForeignKey(m => m.AnimalOneId);
+                .HasForeignKey(m => m.AnimalOneId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             builder
                 .HasOne(m => m.AnimalTwo)
-                .WithMany(a => a.Matches)
-                .HasForeignKey(m => m.AnimalTwoId);
+                .WithMany()
+                .HasForeignKey(m => m.AnimalTwoId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }
