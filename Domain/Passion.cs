@@ -1,7 +1,9 @@
 ﻿namespace Domain
 {
-    using Microsoft.EntityFrameworkCore;
     using System.ComponentModel.DataAnnotations;
+
+    using Microsoft.EntityFrameworkCore;
+
     using static Common.EntityValidationConstants.Passion;
     using static Common.ExceptionMessages.Passion;
 

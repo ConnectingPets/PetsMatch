@@ -1,10 +1,11 @@
 namespace Persistence
 {
+    using System.Reflection;
+
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
 
     using Domain;
-    using System.Reflection;
 
     public class DataContext : IdentityDbContext<User>
     {

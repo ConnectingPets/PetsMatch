@@ -1,7 +1,8 @@
 ﻿namespace Domain
 {
-    using Microsoft.EntityFrameworkCore;
     using System.ComponentModel.DataAnnotations.Schema;
+
+    using Microsoft.EntityFrameworkCore;
 
     [Comment("user passion table")]
     public class UserPassion

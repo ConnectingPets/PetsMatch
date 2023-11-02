@@ -1,8 +1,10 @@
 ﻿namespace Domain
 {
-    using Microsoft.EntityFrameworkCore;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
+
+    using Microsoft.EntityFrameworkCore;
+
     using static Common.EntityValidationConstants.Breed;
     using static Common.ExceptionMessages.Breed;
 

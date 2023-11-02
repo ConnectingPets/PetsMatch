@@ -1,7 +1,8 @@
 namespace Domain
 {
-    using Microsoft.EntityFrameworkCore;
     using System.ComponentModel.DataAnnotations.Schema;
+
+    using Microsoft.EntityFrameworkCore;
 
     [Comment("swipe table")]
     public class Swipe

@@ -1,12 +1,14 @@
 namespace Domain
 {
-    using Domain.Enum;
-    using Microsoft.EntityFrameworkCore;
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
+
+    using Microsoft.EntityFrameworkCore;
+
     using static Common.EntityValidationConstants.Animal;
     using static Common.ExceptionMessages.Animal;
+    using Domain.Enum;
 
     [Comment("animal table")]
     public class Animal

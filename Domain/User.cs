@@ -1,9 +1,11 @@
 namespace Domain
 {
     using Domain.Enum;
+    using System.ComponentModel.DataAnnotations;
+
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
-    using System.ComponentModel.DataAnnotations;
+
     using static Common.EntityValidationConstants.User;
     using static Common.ExceptionMessages.User;
 
