@@ -6,9 +6,9 @@ namespace Application.Matches
     public class List 
     {
         //CQRS + MediatR pattern Implemented. 
-        public class Query : IRequest<List<Cat>> {
+        //public class Query : IRequest<List<Cat>> {
 
-        }
+        //}
 
         //TODO: fix the login in the architecture
         // public class Handler : IRequestHandler<Query, List<Cat>>
