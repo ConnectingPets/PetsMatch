@@ -1,8 +1,9 @@
 ﻿namespace Persistence.Configuarations
 {
-    using Domain;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+    using Domain;
 
     public class MatchEntityConfiguration : IEntityTypeConfiguration<Match>
     {
