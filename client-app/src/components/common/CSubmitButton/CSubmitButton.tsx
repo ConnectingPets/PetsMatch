@@ -2,13 +2,13 @@ import React from 'react';
 import './CSubmitButton.scss';
 
 interface CSubmitButtonProps {
-    textContent:string,
+    textContent: string,
 }
 
-export const CSubmitButton:React.FC<CSubmitButtonProps> = ({
+export const CSubmitButton: React.FC<CSubmitButtonProps> = ({
     textContent
 }) => {
-  return (
-    <input type="submit" value={textContent} />
-  )
+    return (
+        <input className='form__submit__button' type="submit" value={textContent} />
+    )
 }
