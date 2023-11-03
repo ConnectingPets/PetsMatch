@@ -8,11 +8,15 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.ConfigurateDbContext(builder.Configuration);
+
+string reactBaseUrl = builder.Configuration.GetValue<string>("ReactApp:BaseUrl") ?? 
+    throw new InvalidOperationException("The react base url is not found.");
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("ReactPolicy", builder =>
     {
-        builder.WithOrigins("http://localhost:3000")
+        builder.WithOrigins(reactBaseUrl)
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials();
