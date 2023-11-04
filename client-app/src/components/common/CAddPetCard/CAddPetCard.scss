@@ -1,0 +1,88 @@
+@use '../../../global-styles/' as gs;
+
+.add__pet__card {
+    @include gs.card-main-style(17.5rem, 23rem, #fff, gs.$dark-shadow);
+    cursor: default;
+
+    &:hover {
+        animation: zoom 0.5s both;
+    }
+
+    &__cover {
+        position: absolute;
+        width: 90%;
+        height: 91%;
+        border-radius: 1rem;
+        padding: 1rem;
+        inset: 0.9rem;
+        border: 1px solid #000;
+        background: linear-gradient(220deg, gs.$light-gradient-first 0%, gs.$light-gradient-second 77%);
+        @include gs.display-flex(column, space-between, center);
+
+        &__content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            @include gs.display-flex(column, center, center);
+
+            &>svg {
+                width: 2.2rem;
+                height: 2.2rem;
+                color: gs.$white-text;
+            }
+
+            &>h3 {
+                text-transform: capitalize;
+                color: gs.$light-background-color;
+                font-weight: 800;
+                -webkit-text-stroke: 1px #000;
+                margin-top: 1rem;
+            }
+            
+            &:hover>h3 {
+                color: gs.$light-blue;
+                -webkit-text-stroke: 0;
+                transition: 0.5s;
+            }
+            
+            &:hover>svg {
+                color: gs.$light-blue;
+                animation: rotate 0.5s forwards;
+                transition: 0.5s;
+            }
+        }
+        
+        &>h4{
+            position: absolute;
+            bottom: 0rem;
+            text-align: center;
+            color: gs.$white-text;
+            text-transform: uppercase;
+            text-shadow: 1px 2px 3px #000,
+           
+        }
+        
+    }
+}
+
+
+@keyframes zoom {
+    0% {
+        transform: scale(1);
+    }
+
+    100% {
+        transform: scale(1.05);
+    }
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg) scale(1);
+    }
+
+    100% {
+        transform: rotate(90deg) scale(1.3);
+    }
+}

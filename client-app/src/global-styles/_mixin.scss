@@ -101,3 +101,15 @@
         color: $text-color;
     }
 }
+
+@mixin card-main-style ($width, $hight,$background-color,$shadow-color){
+    position: relative;
+    width: 17.5rem;
+    height: 23rem;
+    background: $background-color;
+    border-radius: 1rem;
+    overflow: hidden;
+    @include shadow($shadow-color);
+    padding: 0.2rem;
+    cursor: pointer;
+}

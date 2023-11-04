@@ -1,6 +1,7 @@
 import React from 'react';
 import './DashboardPage.scss';
 import { CPetCard } from '../../components/common/CPetCard/CPetCard';
+import { CAddPetCard } from '../../components/common/CAddPetCard/CAddPetCard';
 
 const pets = [
     {
@@ -39,6 +40,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = () => {
                 <h3>my pets:</h3>
                 <section className='dashboard__pets'>
                     { pets.map(x=><CPetCard name={x.name} photo={x.photo} key={x.name}/>)}
+                    <CAddPetCard/>
                 </section>
             </article>
 
