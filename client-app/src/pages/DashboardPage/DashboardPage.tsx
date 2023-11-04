@@ -33,7 +33,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = () => {
         <section className='dashboard__wrapper'>
 
             <article className='dashboard__greet'>
-                <h2>welcome, jim carrey !</h2>
+                <h1>welcome, jim carrey !</h1>
             </article>
 
             <article className='dashboard__article '>
