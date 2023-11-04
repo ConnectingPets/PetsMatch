@@ -1,5 +1,5 @@
 @use '../../../global-styles/' as gs;
 
 .form__submit__button {
-    @include gs.form-submit-button(gs.$light-gradient-first,gs.$light-gradient-second,#fff);
+    @include gs.set-button(gs.$light-gradient-first,gs.$light-gradient-second, gs.$white-text);
 }

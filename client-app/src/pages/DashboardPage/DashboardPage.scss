@@ -8,11 +8,16 @@
 
     &__greet {
         padding: 1.8rem;
-        text-transform: capitalize;
+
+        &>h2 {
+            text-transform: capitalize;
+            text-decoration: underline;
+        }
     }
 
     &__pets {
-        @include gs.display-grid(3, 1rem);
+        @include gs.display-grid(3, 2.2rem);
+        margin: 2rem 0;
     }
 
 
@@ -25,9 +30,7 @@
     margin: 1.3rem auto;
     border-radius: 1.5rem;
     padding: 1rem;
-    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.58);
-    -webkit-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.58);
-    -moz-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.58);
+    @include gs.shadow(gs.$dark-shadow);
 
     &>h3 {
         text-align: center;

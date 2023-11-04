@@ -1,7 +1,7 @@
 @use '../../global-styles/' as gs;
 
 .login__form {
-    @include gs.set-form(100%, center, 85%, column, center);
+    @include gs.set-form(100%, center, 85%, column, center,gs.$dark-shadow);
 
     &__section {
         width: 19rem;

@@ -11,6 +11,7 @@
     gap: $gap;
     align-items: center;
     justify-content: center;
+    justify-items: center;
 }
 
 @mixin page-center ($direction, $content, $items) {
@@ -23,7 +24,13 @@
     align-items: $items;
 }
 
-@mixin set-form ($width, $alignItems, $divWidth,$divDirection, $divAlignItems) {
+@mixin shadow ($color) {
+    box-shadow: 0px 0px 10px 0px $color;
+    -webkit-box-shadow: 0px 0px 10px 0px$color;
+    -moz-box-shadow: 0px 0px 10px 0px $color; 
+}
+
+@mixin set-form ($width, $alignItems, $divWidth,$divDirection, $divAlignItems,$shadow-color) {
     width: $width;
     display: flex;
     flex-direction: column;
@@ -31,14 +38,12 @@
     padding: 2rem 1.4rem;
     background: #706f6f11;
     border-radius: 1.5rem;
-    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.58);
-    -webkit-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.58);
-    -moz-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.58);
+    @include shadow($shadow-color);
     backdrop-filter: blur(0.25rem);
     animation: opacityShow 0.5 forwards;
     -webkit-animation: opacityShow 0.5s forwards;
     -moz-animation: opacityShow 0.5s forwards;
-
+    
     &>div {
         width: $divWidth;
         margin-bottom: 1rem;
@@ -76,7 +81,7 @@
     }
 }
 
-@mixin form-submit-button($first-color, $second-color,$text-color) {
+@mixin set-button($first-color, $second-color,$text-color) {
     font-family: 'Raleway', 'serif';
     font-weight: 600;
     padding: 0.3rem 1.3rem;
