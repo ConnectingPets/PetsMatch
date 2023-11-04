@@ -1,0 +1,39 @@
+@use '../../global-styles/' as gs;
+
+.dashboard {
+
+    &__wrapper {
+        @include gs.page-center (column, none, center);
+    }
+
+    &__greet {
+        padding: 1.8rem;
+        text-transform: capitalize;
+    }
+
+    &__pets {
+        @include gs.display-grid(3, 1rem);
+    }
+
+
+}
+
+.dashboard__article {
+    width: 95%;
+    max-width: 86rem;
+    background: gs.$light-background-color;
+    margin: 1.3rem auto;
+    border-radius: 1.5rem;
+    padding: 1rem;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.58);
+    -webkit-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.58);
+    -moz-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.58);
+
+    &>h3 {
+        text-align: center;
+        margin: 0.5rem;
+        text-transform: capitalize;
+    }
+
+
+}
