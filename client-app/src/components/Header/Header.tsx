@@ -1,8 +1,11 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import './Header.scss';
 
-const Header: React.FC = () => {
+interface HeaderProps { }
+
+const Header: React.FC<HeaderProps> = () => {
     return (
         <header className="container__header">
             <div className="container__header__logo">
@@ -10,7 +13,7 @@ const Header: React.FC = () => {
                 <h2>PetsMatch</h2>
             </div>
 
-            <a href="/faq">FAQ</a>
+            <Link to="/faq">About / FAQ</Link>
         </header>
     );
 };
