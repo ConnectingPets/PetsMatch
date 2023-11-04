@@ -1,6 +1,7 @@
 import React from 'react';
-import './CPetCard.scss';
 import { CCardMatchesButton } from '../CCardMatchesButton/CCardMatchesButton';
+import './CPetCard.scss';
+import { CCardEditButton } from '../CCardEditButton/CCardEditButton';
 
 interface CPetCardProps {
     name: string,
@@ -14,6 +15,7 @@ export const CPetCard: React.FC<CPetCardProps> = (pet) => {
             <div className='pet__card__content'>
                 <h3>{pet.name}</h3>
                 <div className='pet__card__buttons__wrapper'>
+                    <CCardEditButton/>
                     <CCardMatchesButton/>
                 </div>
             </div>

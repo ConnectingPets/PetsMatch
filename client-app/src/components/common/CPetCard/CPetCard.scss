@@ -26,7 +26,7 @@
         padding: 1rem;
         inset: 0;
         background: gs.$card-hover-color;
-        @include gs.display-flex(column,space-between,center);
+        @include gs.display-flex(column, space-between, center);
         opacity: 0;
 
         &>h3 {
@@ -35,17 +35,23 @@
             -webkit-text-stroke: 1px #000;
         }
 
-        &:hover{
+        &:hover {
             animation: show 1s forwards;
         }
+    }
+
+    &__buttons__wrapper {
+        width: 75%;
+        @include gs.display-flex(row,space-between,center);
     }
 }
 
 @keyframes show {
-    0%{
+    0% {
         opacity: 0;
     }
-    100%{
+
+    100% {
         opacity: 1;
     }
 }

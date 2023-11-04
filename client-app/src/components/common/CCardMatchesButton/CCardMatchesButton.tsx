@@ -7,6 +7,6 @@ interface CCardMatchesButtonProps { };
 export const CCardMatchesButton: React.FC<CCardMatchesButtonProps> = () => {
     return (
         //TODO endpoint
-        <Link to={'#'} className='matches__button'> matches</Link>
+        <Link to={'#'} className='card__matches__button'> matches</Link>
     )
 }
