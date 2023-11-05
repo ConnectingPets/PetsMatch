@@ -31,6 +31,21 @@
             color: gs.$light-background-color;
             font-weight: 800;
             -webkit-text-stroke: 1px #000;
+            position: relative;
+            @include gs.display-flex(column,center,center);
+
+            &::after {
+                content: '';
+                width: 120%;
+                border-radius: 50%;
+                height: 0.2rem;
+                background: gs.$light-background-color;
+                position: absolute;
+                border: 1px solid gs.$dark-background-color;
+                bottom: -0.6rem;
+              
+                
+            }
         }
 
         &:hover {
@@ -39,7 +54,7 @@
     }
 
     &__buttons__wrapper {
-        width: 75%;
+        width: 90%;
         @include gs.display-flex(row, space-between, center);
     }
 }

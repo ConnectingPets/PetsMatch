@@ -1,7 +1,8 @@
 import React from 'react';
-import './DashboardPage.scss';
 import { CPetCard } from '../../components/common/CPetCard/CPetCard';
 import { CAddPetCard } from '../../components/common/CAddPetCard/CAddPetCard';
+import { UserProfile } from '../../components/UserProfile/UserProfile';
+import './DashboardPage.scss';
 
 const pets = [
     {
@@ -17,7 +18,7 @@ const pets = [
         photo: "https://i.guim.co.uk/img/media/26392d05302e02f7bf4eb143bb84c8097d09144b/446_167_3683_2210/master/3683.jpg?width=1200&height=900&quality=85&auto=format&fit=crop&s=11e949fc5d06576bc8b80ec192896753"
     },
     {
-        name: "50cent",
+        name: "snoop dogg",
         photo: "https://www.cdc.gov/healthypets/images/pets/cute-dog-headshot.jpg?_=42445"
     },
     {
@@ -25,6 +26,7 @@ const pets = [
         photo: "https://i.pinimg.com/originals/0d/08/60/0d0860d917320784369a58a1f01187d3.jpg"
     },
 ]
+
 
 interface DashboardPageProps { };
 
@@ -37,19 +39,16 @@ export const DashboardPage: React.FC<DashboardPageProps> = () => {
             </article>
 
             <article className='dashboard__article '>
-                <h3>my pets:</h3>
+                <h3>my pets</h3>
                 <section className='dashboard__pets'>
-                    { pets.map(x=><CPetCard name={x.name} photo={x.photo} key={x.name}/>)}
-                    <CAddPetCard/>
+                    {pets.map(x => <CPetCard name={x.name} photo={x.photo} key={x.name} />)}
+                    <CAddPetCard />
                 </section>
             </article>
 
             <article className='dashboard__article'>
-                <h3>my profile:</h3>
-                <section className='dashboard__user'>
-
-                </section>
-
+                <h3>my profile</h3>
+                <UserProfile />
             </article>
 
         </section>

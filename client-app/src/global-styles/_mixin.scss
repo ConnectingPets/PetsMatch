@@ -5,13 +5,13 @@
     align-items: $items;
 }
 
-@mixin display-grid($columns-count, $gap){
+@mixin display-grid($columns-count, $gap, $justify-items) {
     display: grid;
-    grid-template-columns: repeat($columns-count,1fr);
+    grid-template-columns: repeat($columns-count, 1fr);
     gap: $gap;
     align-items: center;
     justify-content: center;
-    justify-items: center;
+    justify-items: $justify-items;
 }
 
 @mixin page-center ($direction, $content, $items) {
@@ -27,10 +27,10 @@
 @mixin shadow ($color) {
     box-shadow: 0px 0px 10px 0px $color;
     -webkit-box-shadow: 0px 0px 10px 0px$color;
-    -moz-box-shadow: 0px 0px 10px 0px $color; 
+    -moz-box-shadow: 0px 0px 10px 0px $color;
 }
 
-@mixin set-form ($width, $alignItems, $divWidth,$divDirection, $divAlignItems,$shadow-color) {
+@mixin set-form ($width, $alignItems, $divWidth, $divDirection, $divAlignItems, $shadow-color) {
     width: $width;
     display: flex;
     flex-direction: column;
@@ -43,7 +43,7 @@
     animation: opacityShow 0.5 forwards;
     -webkit-animation: opacityShow 0.5s forwards;
     -moz-animation: opacityShow 0.5s forwards;
-    
+
     &>div {
         width: $divWidth;
         margin-bottom: 1rem;
@@ -51,18 +51,19 @@
         flex-direction: $divDirection;
         align-items: $divAlignItems;
 
-        &>label{
+        &>label {
             text-shadow: 1px 0px 3px white;
         }
     }
-    
-    .account__message{
+
+    .account__message {
         margin-top: 1.25rem;
-        font-size:0.67rem; 
+        font-size: 0.67rem;
         text-decoration: underline;
         cursor: pointer;
         color: blue;
-        &:hover{
+
+        &:hover {
             color: #3c3cfc;
             font-style: italic;
         }
@@ -81,7 +82,8 @@
     }
 }
 
-@mixin set-button($first-color, $second-color,$text-color) {
+@mixin set-button($first-color, $second-color, $text-color) {
+    @include display-flex(row, center, center);
     font-family: 'Raleway', 'serif';
     font-weight: 600;
     padding: 0.3rem 1.3rem;
@@ -95,6 +97,10 @@
     -moz-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.58);
     margin-top: 0.7rem;
 
+    &>svg {
+        margin-left: 0.3rem;
+    }
+
     &:hover {
         transform: scale(1.1);
         transition: 0.5s;
@@ -102,7 +108,7 @@
     }
 }
 
-@mixin card-main-style ($width, $hight,$background-color,$shadow-color){
+@mixin card-main-style ($width, $hight, $background-color, $shadow-color) {
     position: relative;
     width: 17.5rem;
     height: 23rem;

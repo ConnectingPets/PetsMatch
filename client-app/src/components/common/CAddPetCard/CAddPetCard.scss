@@ -38,31 +38,33 @@
                 font-weight: 800;
                 -webkit-text-stroke: 1px #000;
                 margin-top: 1rem;
+                text-shadow: 1px 1px 3px #000,
             }
-            
+
             &:hover>h3 {
                 color: gs.$light-blue;
                 -webkit-text-stroke: 0;
                 transition: 0.5s;
+
             }
-            
+
             &:hover>svg {
                 color: gs.$light-blue;
                 animation: rotate 0.5s forwards;
                 transition: 0.5s;
             }
         }
-        
-        &>h4{
+
+        &>h4 {
             position: absolute;
             bottom: 0rem;
             text-align: center;
             color: gs.$white-text;
             text-transform: uppercase;
             text-shadow: 1px 2px 3px #000,
-           
+
         }
-        
+
     }
 }
 
@@ -82,7 +84,11 @@
         transform: rotate(0deg) scale(1);
     }
 
+    50% {
+        transform: rotate(90deg);
+    }
+
     100% {
-        transform: rotate(90deg) scale(1.3);
+        transform: rotate(-90deg) scale(1.3);
     }
 }

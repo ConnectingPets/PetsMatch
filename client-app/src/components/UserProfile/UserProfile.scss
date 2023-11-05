@@ -1,0 +1,65 @@
+@use '../../global-styles/' as gs;
+
+.dashboard__user__profile {
+    @include gs.display-flex(column, space-between, center);
+    width: 100%;
+    padding: 2rem;
+    max-width: 54rem;
+    margin-inline:auto ;
+
+    &>article {
+        margin: 1.5rem;
+    }
+
+    &__image__wrapper {
+        width: 18rem;
+        height: 18rem;
+        overflow: hidden;
+        border-radius: 50%;
+        border: 0.5rem solid white;
+        @include gs.shadow(gs.$dark-shadow);
+
+        &>img {
+            width: 100%;
+            object-fit: cover;
+            border: 1px solid gs.$dark-background-color;
+            border-radius: 50%;
+        }
+    }
+
+    &>h2 {
+        text-transform: capitalize;
+        @include gs.display-flex(column, center, center);
+        position: relative;
+        margin-bottom: 1rem;
+
+        &::after {
+            content: '';
+            width: 120%;
+            border-radius: 50%;
+            height: 0.35rem;
+            background: #000;
+            opacity: 0.79;
+            bottom: -0.6rem;
+        }
+    }
+
+    &__content {
+        @include gs.display-grid(2, 1.5rem,start);
+        width: 90%;
+        padding-left: 5rem;
+        &>li{
+            @include gs.display-flex(row,space-between,center);
+
+            &>*{
+                margin: 0 0.4rem 0 0;
+                text-transform: capitalize;
+            }
+        }
+    }
+
+    &__buttons__wrapper {
+        @include gs.display-flex(row,space-between,center);
+        width: 60%;
+    }
+}
