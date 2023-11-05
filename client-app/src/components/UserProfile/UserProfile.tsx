@@ -1,7 +1,7 @@
 import React from 'react';
-import './UserProfile.scss';
 import { IUser } from '../../interfaces/Interfaces';
 import { CCardEditButton } from '../common/CCardEditButton/CCardEditButton';
+import './UserProfile.scss';
 
 interface UserProfileProps { }
 
@@ -30,18 +30,6 @@ export const UserProfile: React.FC<UserProfileProps> = () => {
                     <p>{user.email}</p>
                 </li>
                 <li>
-                    <h4>age:</h4>
-                    <p>{user.age}</p>
-                </li>
-                <li>
-                    <h4>education:</h4>
-                    <p>{user.education}</p>
-                </li>
-                <li>
-                    <h4>job:</h4>
-                    <p>{user.jobTitle}</p>
-                </li>
-                <li>
                     <h4>gender:</h4>
                     <p>{user.gender}</p>
                 </li>
@@ -50,8 +38,20 @@ export const UserProfile: React.FC<UserProfileProps> = () => {
                     <p>{user.address}</p>
                 </li>
                 <li>
+                    <h4>education:</h4>
+                    <p>{user.education}</p>
+                </li>
+                <li>
                     <h4>city:</h4>
                     <p>{user.city}</p>
+                </li>
+                <li>
+                    <h4>job:</h4>
+                    <p>{user.jobTitle}</p>
+                </li>
+                <li>
+                    <h4>age:</h4>
+                    <p>{user.age}</p>
                 </li>
             </ul>
 

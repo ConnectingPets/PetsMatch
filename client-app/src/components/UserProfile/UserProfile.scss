@@ -4,7 +4,7 @@
     @include gs.display-flex(column, space-between, center);
     width: 100%;
     padding: 2rem;
-    max-width: 54rem;
+    max-width: 59rem;
     margin-inline:auto ;
 
     &>article {
@@ -46,8 +46,8 @@
 
     &__content {
         @include gs.display-grid(2, 1.5rem,start);
-        width: 90%;
-        padding-left: 5rem;
+        width: 92%;
+        padding-left: 3rem;
         &>li{
             @include gs.display-flex(row,space-between,center);
 

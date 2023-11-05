@@ -2,6 +2,7 @@ import React from 'react';
 import { CPetCard } from '../../components/common/CPetCard/CPetCard';
 import { CAddPetCard } from '../../components/common/CAddPetCard/CAddPetCard';
 import { UserProfile } from '../../components/UserProfile/UserProfile';
+import { observer } from 'mobx-react';
 import './DashboardPage.scss';
 
 const pets = [
@@ -30,7 +31,7 @@ const pets = [
 
 interface DashboardPageProps { };
 
-export const DashboardPage: React.FC<DashboardPageProps> = () => {
+export const DashboardPage: React.FC<DashboardPageProps> = observer(() => {
     return (
         <section className='dashboard__wrapper'>
 
@@ -53,4 +54,4 @@ export const DashboardPage: React.FC<DashboardPageProps> = () => {
 
         </section>
     )
-}
+})
