@@ -7,9 +7,14 @@
     }
 
     &__greet {
+        width: 100%;
+        max-width: 93rem;
+        @include gs.display-flex(row, space-between, center);
         padding: 1.8rem;
+        margin-bottom: 1rem;
 
         &>h1 {
+            margin: 0;
             text-transform: capitalize;
             letter-spacing: 0.19rem;
             // -webkit-text-stroke: 1px #000;
