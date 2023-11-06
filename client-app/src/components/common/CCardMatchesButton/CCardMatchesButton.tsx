@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { AiOutlineFire } from 'react-icons/ai';
-import './CCardMatchesButton.scss';
 import themeStore from '../../../stores/themeStore';
+import './CCardMatchesButton.scss';
 
 interface CCardMatchesButtonProps { };
 

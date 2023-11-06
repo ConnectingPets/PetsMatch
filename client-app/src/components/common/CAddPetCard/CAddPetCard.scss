@@ -4,12 +4,18 @@
     @include gs.card-main-style(17.5rem, 23rem, #fff, gs.$dark-shadow);
     cursor: default;
     
+    @include gs.breakpoint(tablet-start, tablet-end) {
+        width: 13rem;
+        height: 18rem;
+    }
+    
     &:hover {
         animation: zoom 0.5s both;
     }
     
-    &__dark{
+    &__dark {
         background: gs.$dark-background-color-second !important;
+        @include gs.shadow(gs.$light-shadow)
     }
 
     &__cover {
@@ -22,6 +28,13 @@
         border: 1px solid #000;
         background: linear-gradient(220deg, gs.$light-gradient-first 0%, gs.$light-gradient-second 77%);
         @include gs.display-flex(column, space-between, center);
+
+        @include gs.breakpoint(tablet-start,tablet-end){
+            width: 86%;
+            height: 89%;
+            padding: 0;
+            text-align: center;
+        }
 
         &__dark {
             background: linear-gradient(220deg, gs.$dark-primary 0%, gs.$dark-secondary 77%) !important;
@@ -63,16 +76,16 @@
                 animation: rotate 0.5s forwards;
                 transition: 0.5s;
             }
-            
-            &__dark{
+
+            &__dark {
                 &:hover>h3 {
                     color: gs.$dark-primary-variant;
                 }
-    
+
                 &:hover>svg {
                     color: gs.$dark-primary-variant;
                 }
-                
+
             }
         }
 

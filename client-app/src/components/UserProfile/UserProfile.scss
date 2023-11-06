@@ -16,7 +16,7 @@
         height: 18rem;
         overflow: hidden;
         border-radius: 50%;
-        border: 0.5rem solid white;
+        border: 0.5rem solid gs.$white-text;
         @include gs.shadow(gs.$dark-shadow);
 
         &>img {
@@ -49,8 +49,26 @@
         width: 92%;
         padding-left: 3rem;
 
+        @include gs.breakpoint(tablet-start, tablet-end) {
+            @include gs.display-grid(1, 1.5rem, center);
+            padding: 0;
+        }
+
+        @include gs.breakpoint(mobile-start, mobile-end) {
+            @include gs.display-grid(1, 1.5rem, center);
+            padding: 0;
+        }
+
         &>li {
             @include gs.display-flex(row, space-between, center);
+
+            @include gs.breakpoint(tablet-start, tablet-end) {
+             flex-direction: column
+            }
+
+            @include gs.breakpoint(mobile-start, mobile-end) {
+             flex-direction: column;
+            }
 
             &>* {
                 margin: 0 0.4rem 0 0;
@@ -62,6 +80,19 @@
     &__buttons__wrapper {
         @include gs.display-flex(row, space-between, center);
         width: 60%;
+        flex-wrap: wrap;
+
+        &>a {
+            margin: 0.5rem;
+        }
+
+        @include gs.breakpoint(tablet-start, tablet-end) {
+            @include gs.display-flex(row, center, center);
+        }
+
+        @include gs.breakpoint(mobile-start, mobile-end) {
+            @include gs.display-flex(row, center, center);
+        }
     }
 }
 

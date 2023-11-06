@@ -3,6 +3,11 @@
 .pet__card {
     @include gs.card-main-style(17.5rem, 23rem, #fff, gs.$dark-shadow);
 
+    @include gs.breakpoint(tablet-start, tablet-end) {
+        width: 13rem;
+        height: 18rem;
+    }
+
     &:hover {
         animation: zoom 0.5s both;
     }
@@ -54,11 +59,21 @@
     &__buttons__wrapper {
         width: 90%;
         @include gs.display-flex(row, space-between, center);
+
+        @include gs.breakpoint(tablet-start, tablet-end) {
+            flex-wrap: wrap;
+            justify-content: center;
+        }
     }
 }
 
 .pet__card__dark {
-    @include gs.card-main-style(17.5rem, 23rem, linear-gradient(220deg, gs.$dark-primary 0%, gs.$dark-secondary 77%), gs.$dark-shadow);
+    @include gs.card-main-style(17.5rem, 23rem, linear-gradient(220deg, gs.$dark-primary 0%, gs.$dark-secondary 77%), gs.$light-shadow);
+
+    @include gs.breakpoint(tablet-start, tablet-end) {
+        width: 13rem;
+        height: 18rem;
+    }
 
     &:hover {
         animation: zoom 0.5s both;
@@ -111,6 +126,11 @@
     &__buttons__wrapper {
         width: 90%;
         @include gs.display-flex(row, space-between, center);
+
+        @include gs.breakpoint(tablet-start, tablet-end) {
+            flex-wrap: wrap;
+        }
+
     }
 }
 

@@ -117,7 +117,6 @@
     overflow: hidden;
     @include shadow($shadow-color);
     padding: 0.2rem;
-    cursor: pointer;
 }
 
 @mixin dark-theme ($background) {

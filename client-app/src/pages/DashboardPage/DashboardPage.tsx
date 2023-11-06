@@ -39,8 +39,8 @@ export const DashboardPage: React.FC<DashboardPageProps> = observer(() => {
         <section className={themeStore.isLightTheme ? 'dashboard__wrapper' : 'dashboard__wrapper dashboard__wrapper__dark'}>
 
             <article className='dashboard__greet'>
-                <CLogo />
-                <h1 className={themeStore.isLightTheme ? '' :'dashboard__greet__dark'}>welcome, jim carrey !</h1>
+                <CLogo/>
+                <h1 className={themeStore.isLightTheme ? 'greet__title' :'greet__title dashboard__greet__dark'}>welcome, jim carrey !</h1>
                 <CChangeThemeButton />
             </article>
 
