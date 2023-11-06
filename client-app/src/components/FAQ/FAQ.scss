@@ -1,0 +1,71 @@
+@use '../../global-styles/' as gs;
+
+.info__container__faq-banner {
+    display: flex;
+    max-width: 75rem;
+    width: 100%;
+    margin-bottom: 3rem;
+    border-radius: 1.5rem;
+    box-shadow: 0px 0px 6px #808080;
+
+    @include gs.breakpoint(mobile-start, mobile-end) {
+        flex-direction: column-reverse;
+    }
+
+    &>div:first-of-type {
+        width: 100%;
+        @include gs.display-flex(column, center, center);
+        background-color: #C8DDFF;
+        color: gs.$light-gradient-first;
+        padding: 1.5rem;
+        border-top-left-radius: 1.5rem;
+        border-bottom-left-radius: 1.5rem;
+
+        &>a {
+            @include gs.set-button(gs.$light-gradient-first, gs.$light-gradient-second, #fff);
+        }
+    }
+
+    &__img>img {
+        width: 100%;
+        height: 100%;
+        border-top-right-radius: 1.5rem;
+        border-bottom-right-radius: 1.5rem;
+    }
+}
+
+.info__container__qa {
+    width: 60%;
+    padding: 0 2rem;
+    margin-bottom: 5rem;
+
+    @include gs.breakpoint(mobile-start, mobile-end) {
+        width: 100%;
+    }
+
+    &__question {
+        cursor: pointer;
+        border-bottom: 1px solid gs.$dark-primary-variant;
+
+        &:hover {
+            color: #ad44ab;
+        }
+
+        &>div {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 0;
+
+            &>p {
+                margin-bottom: unset;
+            }
+        }
+
+        &>p:last-of-type {
+            background-color: rgba(200, 221, 255, 0.95);
+            color: #ad44ab;
+            padding: 1.5rem;
+            box-shadow: 0px 0px 6px #808080;
+        }
+    }
+}

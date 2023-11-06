@@ -91,10 +91,7 @@ export const Register: React.FC<RegisterProps> = ({
                                 </div>
                             )}
                         </Field>
-                        {/* <div>
-                            <CLabel inputName={'password'} title={'Password'} />
-                            <CInput type='password' id='password' name='password' placeholder='* * * * * * *' />
-                        </div> */}
+                        
                         <Field name="repassword">
                             {({ input, meta }) => (
                                 <div>
