@@ -1,6 +1,7 @@
 import React from 'react';
 import { IUser } from '../../interfaces/Interfaces';
 import { CCardEditButton } from '../common/CCardEditButton/CCardEditButton';
+import themeStore from '../../stores/themeStore';
 import './UserProfile.scss';
 
 interface UserProfileProps { }
@@ -23,7 +24,7 @@ export const UserProfile: React.FC<UserProfileProps> = () => {
             <article className='dashboard__user__profile__image__wrapper'>
                 <img src={user.photo} alt="" />
             </article>
-            <h2>{user.name}</h2>
+            <h2 className={themeStore.isLightTheme ? '' : 'user__name__dark'}>{user.name}</h2>
             <ul className='dashboard__user__profile__content'>
                 <li>
                     <h4>email:</h4>

@@ -1,6 +1,5 @@
 @use '../../../global-styles/' as gs;
 
-
 .change__theme__button {
     @include gs.display-flex(row, space-between, center);
     position: relative;
@@ -10,6 +9,11 @@
     padding: 0.15rem;
     @include gs.shadow(gs.$light-shadow);
     cursor: pointer;
+
+    &:hover {
+        transform: scale(1.05);
+        transition: 0.5s;
+    }
 
     &>svg {
         font-size: 1.18rem;

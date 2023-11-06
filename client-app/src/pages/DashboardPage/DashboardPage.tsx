@@ -5,6 +5,7 @@ import { CAddPetCard } from '../../components/common/CAddPetCard/CAddPetCard';
 import { UserProfile } from '../../components/UserProfile/UserProfile';
 import { CLogo } from '../../components/common/CLogo/CLogo';
 import { CChangeThemeButton } from '../../components/common/CChangeThemeButton/CChangeThemeButton';
+import themeStore from '../../stores/themeStore';
 import './DashboardPage.scss';
 
 const pets = [
@@ -35,15 +36,15 @@ interface DashboardPageProps { };
 
 export const DashboardPage: React.FC<DashboardPageProps> = observer(() => {
     return (
-        <section className='dashboard__wrapper'>
+        <section className={themeStore.isLightTheme ? 'dashboard__wrapper' : 'dashboard__wrapper dashboard__wrapper__dark'}>
 
             <article className='dashboard__greet'>
                 <CLogo />
-                <h1>welcome, jim carrey !</h1>
+                <h1 className={themeStore.isLightTheme ? '' :'dashboard__greet__dark'}>welcome, jim carrey !</h1>
                 <CChangeThemeButton />
             </article>
 
-            <article className='dashboard__article '>
+            <article className={themeStore.isLightTheme ?'dashboard__article ' : 'dashboard__article dashboard__article__dark '}>
                 <h3>my pets</h3>
                 <section className='dashboard__pets'>
                     {pets.map(x => <CPetCard name={x.name} photo={x.photo} key={x.name} />)}
@@ -51,7 +52,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = observer(() => {
                 </section>
             </article>
 
-            <article className='dashboard__article'>
+            <article className={themeStore.isLightTheme ? 'dashboard__article': 'dashboard__article dashboard__article__dark'}>
                 <h3>my profile</h3>
                 <UserProfile />
             </article>

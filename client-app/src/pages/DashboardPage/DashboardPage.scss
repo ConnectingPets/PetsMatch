@@ -4,6 +4,8 @@
 
     &__wrapper {
         @include gs.page-center (column, none, center);
+        transition: 0.5s;
+
     }
 
     &__greet {
@@ -17,7 +19,6 @@
             margin: 0;
             text-transform: capitalize;
             letter-spacing: 0.19rem;
-            // -webkit-text-stroke: 1px #000;
             font-weight: 900;
             background-image: linear-gradient(220deg, gs.$light-gradient-first 0%, gs.$light-gradient-second 77%);
             background-size: 100%;
@@ -27,6 +28,10 @@
             -webkit-text-fill-color: transparent;
             -moz-background-clip: text;
             -moz-text-fill-color: transparent;
+        }
+        
+        &__dark{
+            background-image: linear-gradient(220deg, gs.$dark-primary 0%, gs.$dark-secondary 77%) !important;
         }
     }
 
@@ -52,6 +57,15 @@
         margin: 0.5rem;
         text-transform: capitalize;
     }
+}
 
+.dashboard__wrapper__dark {
+    // @include gs.dark-theme(gs.$dark-background-color);
+    @include gs.dark-theme(gs.$dark-background-color-second);
+}
+
+.dashboard__article__dark{
+    // @include gs.dark-theme(gs.$dark-background-color-second);
+    @include gs.dark-theme(gs.$dark-background-color);
 
 }

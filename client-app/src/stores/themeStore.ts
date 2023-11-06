@@ -11,8 +11,6 @@ class ThemeStore {
     }
 
     changeTheme() {
-        console.log(this.isLightTheme);
-        
         this.isLightTheme = !this.isLightTheme
     }
 }

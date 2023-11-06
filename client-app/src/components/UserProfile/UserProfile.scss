@@ -5,7 +5,7 @@
     width: 100%;
     padding: 2rem;
     max-width: 59rem;
-    margin-inline:auto ;
+    margin-inline: auto;
 
     &>article {
         margin: 1.5rem;
@@ -45,13 +45,14 @@
     }
 
     &__content {
-        @include gs.display-grid(2, 1.5rem,start);
+        @include gs.display-grid(2, 1.5rem, start);
         width: 92%;
         padding-left: 3rem;
-        &>li{
-            @include gs.display-flex(row,space-between,center);
 
-            &>*{
+        &>li {
+            @include gs.display-flex(row, space-between, center);
+
+            &>* {
                 margin: 0 0.4rem 0 0;
                 text-transform: capitalize;
             }
@@ -59,7 +60,13 @@
     }
 
     &__buttons__wrapper {
-        @include gs.display-flex(row,space-between,center);
+        @include gs.display-flex(row, space-between, center);
         width: 60%;
+    }
+}
+
+.user__name__dark {
+    &::after {
+        background: gs.$white-text !important;
     }
 }

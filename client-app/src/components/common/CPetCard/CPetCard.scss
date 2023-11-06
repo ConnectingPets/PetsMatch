@@ -1,7 +1,7 @@
 @use '../../../global-styles/' as gs;
 
 .pet__card {
-    @include gs.card-main-style(17.5rem, 23rem,#fff ,gs.$dark-shadow);
+    @include gs.card-main-style(17.5rem, 23rem, #fff, gs.$dark-shadow);
 
     &:hover {
         animation: zoom 0.5s both;
@@ -32,7 +32,7 @@
             font-weight: 800;
             -webkit-text-stroke: 1px #000;
             position: relative;
-            @include gs.display-flex(column,center,center);
+            @include gs.display-flex(column, center, center);
 
             &::after {
                 content: '';
@@ -43,8 +43,63 @@
                 position: absolute;
                 border: 1px solid gs.$dark-background-color;
                 bottom: -0.6rem;
-              
-                
+            }
+        }
+
+        &:hover {
+            animation: show 1s forwards;
+        }
+    }
+
+    &__buttons__wrapper {
+        width: 90%;
+        @include gs.display-flex(row, space-between, center);
+    }
+}
+
+.pet__card__dark {
+    @include gs.card-main-style(17.5rem, 23rem, linear-gradient(220deg, gs.$dark-primary 0%, gs.$dark-secondary 77%), gs.$dark-shadow);
+
+    &:hover {
+        animation: zoom 0.5s both;
+    }
+
+    &>img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 1rem;
+        border: 1px solid black;
+    }
+
+    &__content {
+        position: absolute;
+        width: 98%;
+        height: 98%;
+        border-radius: 1rem;
+        padding: 1rem;
+        inset: 0.2rem;
+        background: gs.$card-hover-color;
+        @include gs.display-flex(column, space-between, center);
+        opacity: 0;
+
+        &>h3 {
+            text-transform: capitalize;
+            color: gs.$light-background-color;
+            font-weight: 800;
+            -webkit-text-stroke: 1px #000;
+            position: relative;
+            @include gs.display-flex(column, center, center);
+
+            &::after {
+                content: '';
+                width: 120%;
+                border-radius: 50%;
+                height: 0.2rem;
+                background: gs.$light-background-color;
+                position: absolute;
+                border: 1px solid gs.$dark-background-color;
+                bottom: -0.6rem;
             }
         }
 

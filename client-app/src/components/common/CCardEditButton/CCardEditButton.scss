@@ -5,3 +5,9 @@
     font-size: 0.8rem;
     @include gs.set-button(gs.$light-gradient-first,gs.$light-gradient-second,gs.$white-text);
 }
+
+.card__edit__button__dark {
+    color: gs.$black-text;
+    font-size: 0.8rem;
+    @include gs.set-button(gs.$dark-primary,gs.$dark-secondary,gs.$dark-primary-variant);
+}

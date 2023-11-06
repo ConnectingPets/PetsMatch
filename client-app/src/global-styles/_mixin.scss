@@ -110,12 +110,18 @@
 
 @mixin card-main-style ($width, $hight, $background-color, $shadow-color) {
     position: relative;
-    width: 17.5rem;
-    height: 23rem;
+    width: $width;
+    height: $hight;
     background: $background-color;
     border-radius: 1rem;
     overflow: hidden;
     @include shadow($shadow-color);
     padding: 0.2rem;
     cursor: pointer;
+}
+
+@mixin dark-theme ($background) {
+    color: $white-text !important;
+    background: $background !important;
+    transition: 0.5s;
 }
