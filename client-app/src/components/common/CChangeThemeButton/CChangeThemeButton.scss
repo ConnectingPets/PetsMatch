@@ -1,0 +1,49 @@
+@use '../../../global-styles/' as gs;
+
+
+.change__theme__button {
+    @include gs.display-flex(row, space-between, center);
+    position: relative;
+    background: #000;
+    width: 2.7rem;
+    border-radius: 2rem;
+    padding: 0.15rem;
+    @include gs.shadow(gs.$light-shadow);
+    cursor: pointer;
+
+    &>svg {
+        font-size: 1.18rem;
+        padding: 0.1rem;
+
+        &:nth-child(1) {
+            color: gs.$light-yellow;
+        }
+
+        &:nth-child(2) {
+            color: gs.$light-gradient-second;
+        }
+    }
+
+    &>span {
+        position: absolute;
+        width: 1.14rem;
+        height: 1.14rem;
+        background: #fff;
+        border-radius: 50%;
+
+        &:hover {
+            transform: scale(1.1);
+            transition: 0.5s;
+        }
+    }
+}
+
+.span {
+    &__left {
+        left: 0.2rem;
+    }
+
+    &__right {
+        right: 0.2rem;
+    }
+}

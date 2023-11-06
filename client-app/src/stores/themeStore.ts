@@ -4,15 +4,16 @@ class ThemeStore {
     isLightTheme: boolean = true;
 
     constructor() {
-        makeAutoObservable(this,{
-            isLightTheme:observable,
-            changeTheme:action
+        makeAutoObservable(this, {
+            isLightTheme: observable,
+            changeTheme: action
         })
     }
 
     changeTheme() {
+        console.log(this.isLightTheme);
+        
         this.isLightTheme = !this.isLightTheme
-        console.log(this.isLightTheme);  
     }
 }
 

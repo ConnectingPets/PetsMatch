@@ -1,10 +1,11 @@
 import React from 'react';
+import { observer } from 'mobx-react';
 import { CPetCard } from '../../components/common/CPetCard/CPetCard';
 import { CAddPetCard } from '../../components/common/CAddPetCard/CAddPetCard';
 import { UserProfile } from '../../components/UserProfile/UserProfile';
-import { observer } from 'mobx-react';
-import './DashboardPage.scss';
 import { CLogo } from '../../components/common/CLogo/CLogo';
+import { CChangeThemeButton } from '../../components/common/CChangeThemeButton/CChangeThemeButton';
+import './DashboardPage.scss';
 
 const pets = [
     {
@@ -37,8 +38,9 @@ export const DashboardPage: React.FC<DashboardPageProps> = observer(() => {
         <section className='dashboard__wrapper'>
 
             <article className='dashboard__greet'>
-                <CLogo/>
+                <CLogo />
                 <h1>welcome, jim carrey !</h1>
+                <CChangeThemeButton />
             </article>
 
             <article className='dashboard__article '>
