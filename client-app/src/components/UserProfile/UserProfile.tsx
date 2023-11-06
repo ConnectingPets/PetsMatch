@@ -31,28 +31,28 @@ export const UserProfile: React.FC<UserProfileProps> = () => {
                     <p>{user.email}</p>
                 </li>
                 <li>
-                    <h4>gender:</h4>
-                    <p>{user.gender}</p>
-                </li>
-                <li>
                     <h4>address:</h4>
                     <p>{user.address}</p>
                 </li>
                 <li>
-                    <h4>education:</h4>
-                    <p>{user.education}</p>
+                    <h4>gender:</h4>
+                    <p>{user.gender}</p>
                 </li>
                 <li>
                     <h4>city:</h4>
                     <p>{user.city}</p>
                 </li>
                 <li>
-                    <h4>job:</h4>
-                    <p>{user.jobTitle}</p>
+                    <h4>education:</h4>
+                    <p>{user.education}</p>
                 </li>
                 <li>
                     <h4>age:</h4>
                     <p>{user.age}</p>
+                </li>
+                <li>
+                    <h4>job:</h4>
+                    <p>{user.jobTitle}</p>
                 </li>
             </ul>
 
