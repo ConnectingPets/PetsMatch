@@ -9,6 +9,20 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.ConfigurateDbContext(builder.Configuration);
 
+string reactBaseUrl = builder.Configuration.GetValue<string>("ReactApp:BaseUrl") ?? 
+    throw new InvalidOperationException("The react base url is not found.");
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("ReactPolicy", builder =>
+    {
+        builder.WithOrigins(reactBaseUrl)
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
+});
+
 WebApplication app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -37,6 +51,8 @@ app.MapGet("/weatherforecast", () =>
 })
 .WithName("GetWeatherForecast")
 .WithOpenApi();
+
+app.UseCors("ReactPolicy");
 
 await app.RunAsync();
 
