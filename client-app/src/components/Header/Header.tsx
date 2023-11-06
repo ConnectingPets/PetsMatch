@@ -13,7 +13,7 @@ const Header: React.FC<HeaderProps> = () => {
                 <h2>PetsMatch</h2>
             </div>
 
-            <Link to="/faq">About / FAQ</Link>
+            <Link to="/about-faq">About / FAQ</Link>
         </header>
     );
 };
