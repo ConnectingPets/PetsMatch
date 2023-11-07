@@ -9,8 +9,11 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.ConfigurateDbContext(builder.Configuration);
 
+ builder.Services.AddMediatR(typeof(Program));
+
 string reactBaseUrl = builder.Configuration.GetValue<string>("ReactApp:BaseUrl") ?? 
     throw new InvalidOperationException("The react base url is not found.");
+
 
 builder.Services.AddCors(options =>
 {
