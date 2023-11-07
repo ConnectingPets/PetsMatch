@@ -12,7 +12,7 @@ namespace Application.Matches
 
         }
 
-        TODO: fix the login in the architecture
+        //TODO: fix the login in the architecture
         public class Handler : IRequestHandler<Query, List<Animal>>
         {
             private readonly DataContext _ctx;
