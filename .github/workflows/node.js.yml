@@ -38,3 +38,7 @@ jobs:
         working-directory: ./client-app
         run: |
           npm run build
+        continue-on-error: false
+      - name: Check status and prevent push on failure
+        if: ${{ failure() }}
+        run: exit 1

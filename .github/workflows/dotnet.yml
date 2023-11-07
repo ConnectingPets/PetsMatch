@@ -12,7 +12,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -25,6 +24,11 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
+      continue-on-error: false
     - name: Test with dotnet cli
       run: dotnet test --no-build --verbosity normal
+      continue-on-error: false
+    - name: Check status and prevent push on failure
+      if: ${{ failure() }}
+      run: exit 1
 
