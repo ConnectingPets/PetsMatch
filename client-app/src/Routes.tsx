@@ -5,6 +5,7 @@ import Page404 from './pages/Page404/Page404';
 import { DashboardPage } from './pages/DashboardPage/DashboardPage';
 import AboutFAQPage from './pages/FAQPage/AboutFAQPage';
 import StartUpPage from './pages/StartUpPage/StartUpPage';
+import { MatchesChatPage } from './pages/MatchesChatPage/MatchesChatPage';
 
 const AllRoutes: React.FC = () => {
     return (
@@ -13,6 +14,7 @@ const AllRoutes: React.FC = () => {
             <Route path='about-faq' element={<AboutFAQPage />} />
             <Route path='login-register' element={<LoginRegisterPage />} />
             <Route path='dashboard' element={<DashboardPage />} />
+            <Route path='matches/:id' element={<MatchesChatPage />} />
             <Route path='*' element={<Page404 />} />
         </Routes>
     );
