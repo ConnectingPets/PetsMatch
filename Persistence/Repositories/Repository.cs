@@ -10,6 +10,9 @@
 
     using static Common.ExceptionMessages.Repository;
 
+    /// <summary>
+    /// Implementation of the IRepository interface
+    /// </summary>
     public class Repository : IRepository
     {
         private readonly DataContext context;
@@ -18,6 +21,12 @@
         {
             this.context = context;
         }
+
+        /// <summary>
+        /// Representaion of table in the database
+        /// </summary>
+        protected DbSet<T> Set<T>() where T : class
+            => this.context.Set<T>();
 
         public async Task AddAsync<T>(T entity) where T : class
             => await this.Set<T>()
@@ -105,10 +114,7 @@
             => await this.Set<T>()
                          .FindAsync(id);
 
-        public async Task SaveChangesAsync()
+        public async Task<int> SaveChangesAsync()
             => await this.context.SaveChangesAsync();
-
-        protected DbSet<T> Set<T>() where T : class
-            => this.context.Set<T>();
     }
 }
