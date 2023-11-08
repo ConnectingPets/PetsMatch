@@ -22,10 +22,10 @@ export const LoginRegisterPage: React.FC<LoginRegisterPageProps> = () => {
         <div className='login__register__wrapper'>
             <section className='login__register__options'>
                 <div>
-                    <h3 onClick={showLogin}>login</h3>
+                    <h3 className={isRegistered ? 'login__register__option': ''} onClick={showLogin}>login</h3>
                 </div>
                 <div>
-                    <h3 onClick={showRegister}>register</h3>
+                    <h3 className={!isRegistered ? 'login__register__option': ''} onClick={showRegister}>register</h3>
                 </div>
             </section>
 
