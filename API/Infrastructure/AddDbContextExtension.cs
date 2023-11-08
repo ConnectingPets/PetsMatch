@@ -1,7 +1,6 @@
 ﻿namespace API.Infrastructure
 {
     using Microsoft.EntityFrameworkCore;
-
     using Persistence;
 
     /// <summary>
