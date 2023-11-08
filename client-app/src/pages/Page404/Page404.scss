@@ -1,0 +1,75 @@
+@use '../../global-styles/' as gs;
+
+.container-404 {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+
+    &__logo {
+        position: absolute;
+        top: 1rem;
+        left: 2rem;
+        z-index: 3;
+    }
+
+    &__img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    &__background {
+        position: absolute;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        @include gs.display-flex(column, center, center);
+        background-color: rgba(245, 245, 245, 0.7);
+
+        &__content {
+            width: 25%;
+
+            @include gs.breakpoint(display-start, display-end) {
+                width: 32%;
+            }
+
+            @include gs.breakpoint(tablet-start, tablet-end) {
+                width: 40%;
+            }
+
+            @include gs.breakpoint(mobile-start, mobile-end) {
+                width: 50%;
+            }
+
+            &>div>img {
+                width: 100%;
+                height: 100%;
+            }
+
+            &__link>a {
+                @include gs.set-button(gs.$light-gradient-first, gs.$light-gradient-second, #fff);
+                width: 40%;
+                margin: 0 auto;
+                line-height: 2;
+
+                @include gs.breakpoint(display-start, display-end) {
+                    width: 45%;
+                }
+
+                @include gs.breakpoint(tablet-start, tablet-end) {
+                    width: 65%;
+                }
+
+                @include gs.breakpoint(mobile-start, mobile-end) {
+                    width: 80%;
+                }
+            }
+        }
+    }
+
+    &__footer {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+    }
+}
