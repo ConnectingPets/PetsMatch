@@ -22,31 +22,18 @@
         @include gs.breakpoint(mobile-start, mobile-end) {
             margin-left: 1rem;
         }
-
-        &>img {
-            width: 3rem;
-        }
-
-        &>h2 {
-            display: inline-block;
-            margin-bottom: unset;
-            text-shadow: 2px 2px 2px #000000;
-            color: #9353d0;
-        }
     }
 
     &>a {
-        color: gs.$dark-primary-variant;
-        font-style: italic;
-        font-family: 'Times New Roman', Times, serif;
+        color: gs.$light-gradient-first;
         font-weight: 900;
         font-size: 1.25rem;
-        text-shadow: 1px 1px 1px #fff;
+        text-shadow: 1px 1px 1px #000000;
         align-self: end;
 
         &:hover {
-            text-decoration: underline;
-            color: #ad44ab;
+            color: gs.$dark-primary-variant;
+            text-shadow: 1px 1px 1px #fff;
         }
     }
 }
