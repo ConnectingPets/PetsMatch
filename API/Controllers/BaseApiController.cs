@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using Application.Core;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -41,7 +40,7 @@ namespace API.Controllers
         protected IMediator Mediator => _mediator ??=
             HttpContext.RequestServices.GetService<IMediator>();
 
-        protected ActionResult HandleResult<T>(Result<T> result)
+      /*  protected ActionResult HandleResult<T>(Result<T> result)
         {
             if (result == null) return NotFound();
             if (result.IsSuccess && result.Value != null)
@@ -50,7 +49,7 @@ namespace API.Controllers
                 return NotFound();
 
             return BadRequest(result.Error);
-        }
+        }*/
 
         //TODO: Check if we are going to need this pagedRes.
         // protected ActionResult HandlePagedResult<T>(Result<PagedList<T>> result)

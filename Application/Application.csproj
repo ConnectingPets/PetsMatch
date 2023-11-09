@@ -9,6 +9,21 @@
     <PackageReference Include="MediatR" Version="12.1.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Animal\" />
+    <Folder Include="AnimalCategory\" />
+    <Folder Include="Breed\" />
+    <Folder Include="Conversation\" />
+    <Folder Include="Match\" />
+    <Folder Include="Message\" />
+    <Folder Include="DTOs\" />
+    <Folder Include="UserPassion\" />
+    <Folder Include="User\" />
+    <Folder Include="Swipe\" />
+    <Folder Include="Passion\" />
+    <Folder Include="Service\" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
