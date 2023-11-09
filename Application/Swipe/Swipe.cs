@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application
+namespace Application.Swipe
 {
-    internal class Animal
+    internal class Swipe
     {
     }
 }
