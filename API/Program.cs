@@ -8,6 +8,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.ConfigurateDbContext(builder.Configuration);
+builder.Services.ConfigurateServices();
 
 string reactBaseUrl = builder.Configuration.GetValue<string>("ReactApp:BaseUrl") ?? 
     throw new InvalidOperationException("The react base url is not found.");
