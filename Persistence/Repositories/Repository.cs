@@ -49,7 +49,7 @@
                    .AsNoTracking();
 
         public IQueryable<T> AllReadonly<T>(Expression<Func<T, bool>> expression) where T : class
-            => this.All<T>(expression)
+            => this.All(expression)
                    .AsNoTracking();
 
         public async Task<bool> AnyAsync<T>(Expression<Func<T, bool>> expression) where T : class
@@ -69,7 +69,7 @@
                 throw new InvalidOperationException(EntityNotFound);
             }
 
-            Delete(entity);
+            this.Delete(entity);
         }
 
         public void Delete<T>(T entity) where T : class
