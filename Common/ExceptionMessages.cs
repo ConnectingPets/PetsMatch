@@ -37,5 +37,10 @@
         {
             public const string InvalidContentLength = "The message content has max length of 350";
         }
+
+        public static class Repository
+        {
+            public const string EntityNotFound = "Entity not found";
+        }
     }
 }
