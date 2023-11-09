@@ -3,10 +3,10 @@ using MediatR;
 
 namespace Application.Matches
 {
-    public class List 
+    /*public class List 
     {
        // CQRS + MediatR pattern Implemented.
-        public class Query : IRequest<List<Animal>>
+      /*  public class Query : IRequest<List<Animal>>
         {
 
         }
@@ -25,5 +25,5 @@ namespace Application.Matches
                 return await _ctx.Cat.ToListAsync();
             }
         }
-    }
+    }*/
 }
