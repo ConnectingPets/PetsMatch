@@ -55,7 +55,5 @@
         bottom: 0;
         color: gs.$white-text;
         width: 100%;
-        @include gs.display-flex(none, center, none);
-        padding: 0.75rem;
     }
 }

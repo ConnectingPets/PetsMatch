@@ -1,0 +1,12 @@
+@use '../../global-styles/' as gs;
+
+a>img {
+    width: 3rem;
+}
+
+a>h2 {
+    display: inline-block;
+    margin-bottom: unset;
+    text-shadow: 2px 2px 2px #000000;
+    color: gs.$light-gradient-first;
+}
