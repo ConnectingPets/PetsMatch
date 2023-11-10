@@ -1,4 +1,9 @@
 using API.Infrastructure;
+using Application.Service;
+using Application.Service.Interfaces;
+using MediatR;
+using System.Reflection;
+using static Application.Animal.AddAnimal;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +28,12 @@ builder.Services.AddCors(options =>
             .AllowCredentials();
     });
 });
+
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
+
+builder.Services.AddControllers();
+builder.Services.AddScoped<IAnimalService, AnimalService>();
+builder.Services.AddScoped<IRequestHandler<AddAnimalCommand, Unit>, AddAnimalCommandHandler>();
 
 WebApplication app = builder.Build();
 
@@ -54,6 +65,13 @@ app.MapGet("/weatherforecast", () =>
 .WithOpenApi();
 
 app.UseCors("ReactPolicy");
+
+app.UseRouting();
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
 
 await app.RunAsync();
 
