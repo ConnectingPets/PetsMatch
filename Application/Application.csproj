@@ -14,7 +14,6 @@
     <Folder Include="AnimalCategory\" />
     <Folder Include="Breed\" />
     <Folder Include="Conversation\" />
-    <Folder Include="Match\" />
     <Folder Include="Message\" />
     <Folder Include="DTOs\" />
     <Folder Include="UserPassion\" />
