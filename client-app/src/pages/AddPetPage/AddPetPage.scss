@@ -56,12 +56,29 @@
         &>form {
             @include gs.set-form(100%, center, 85%, column, center, gs.$dark-shadow);
 
+            &>.required {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                margin-bottom: 0.5rem;
+
+                &>label {
+                    margin: unset;
+                    text-shadow: unset;
+                }
+            }
+
             &>input {
                 width: 60%;
                 border-radius: 1.5rem;
                 padding: 0.3rem;
                 border: 1px solid lightgrey;
                 text-align: center;
+                margin-bottom: 0.5rem;
+
+                @include gs.breakpoint(mobile-start, mobile-end) {
+                    width: 100%;
+                }
 
                 &:focus {
                     background: gs.$light-gradient-second-transparent;
@@ -74,7 +91,11 @@
             }
 
             &>input:last-of-type {
-                width: 20%
+                width: 20%;
+
+                @include gs.breakpoint(mobile-start, mobile-end) {
+                    width: 40%;
+                }
             }
         }
 
@@ -91,4 +112,8 @@
     &__dark {
         @include gs.dark-theme(gs.$dark-background-color-second);
     }
+}
+
+.asterisk {
+    color: red;
 }

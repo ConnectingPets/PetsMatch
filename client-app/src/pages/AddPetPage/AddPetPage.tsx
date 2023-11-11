@@ -3,6 +3,7 @@ import React from 'react';
 import { observer } from 'mobx-react';
 import { Form, Field } from 'react-final-form';
 import themeStore from '../../stores/themeStore';
+import { CgAsterisk } from 'react-icons/cg';
 
 import { CLogo } from '../../components/common/CLogo/CLogo';
 import { CChangeThemeButton } from '../../components/common/CChangeThemeButton/CChangeThemeButton';
@@ -15,8 +16,8 @@ interface AddPetPageProps { }
 
 const AddPetPage: React.FC<AddPetPageProps> = observer(() => {
 
-    const onAddPetSubmit = () => {
-        // .......
+    const onAddPetSubmit = (values: unknown) => {
+        console.log(values);
     };
 
     return (
@@ -28,6 +29,8 @@ const AddPetPage: React.FC<AddPetPageProps> = observer(() => {
             </header>
 
             <section className="add-pet__container__form">
+                <p>Fields with "<CgAsterisk className="asterisk" />" are required!</p>
+                
                 <Form
                     onSubmit={onAddPetSubmit}
                     render={({ handleSubmit }) => (
@@ -35,7 +38,10 @@ const AddPetPage: React.FC<AddPetPageProps> = observer(() => {
                             <Field name='name'>
                                 {({ input }) => (
                                     <>
-                                        <CLabel inputName='name' title='Name' />
+                                        <div className="required">
+                                            <CLabel inputName='name' title='Name' />
+                                            <CgAsterisk className="asterisk" />
+                                        </div>
                                         <input type="text" {...input} name='name' id='name' placeholder='Rico' />
                                     </>
                                 )}
@@ -44,7 +50,10 @@ const AddPetPage: React.FC<AddPetPageProps> = observer(() => {
                             <Field name='description'>
                                 {({ input }) => (
                                     <>
-                                        <CLabel inputName='description' title='Description' />
+                                        <div className="required">
+                                            <CLabel inputName='description' title='Description' />
+                                            <CgAsterisk className="asterisk" />
+                                        </div>
                                         <input type="text" {...input} name='description' id='description' placeholder='?' />
                                     </>
                                 )}
@@ -53,7 +62,10 @@ const AddPetPage: React.FC<AddPetPageProps> = observer(() => {
                             <Field name='age'>
                                 {({ input }) => (
                                     <>
-                                        <CLabel inputName='age' title='Age' />
+                                        <div className="required">
+                                            <CLabel inputName='age' title='Age' />
+                                            <CgAsterisk className="asterisk" />
+                                        </div>
                                         <input type="text" {...input} name='age' id='age' placeholder='5' />
                                     </>
                                 )}
@@ -71,7 +83,10 @@ const AddPetPage: React.FC<AddPetPageProps> = observer(() => {
                             <Field name='educated'>
                                 {({ input }) => (
                                     <>
-                                        <CLabel inputName='educated' title='Educated' />
+                                        <div className="required">
+                                            <CLabel inputName='educated' title='Educated' />
+                                            <CgAsterisk className="asterisk" />
+                                        </div>
                                         <input type="text" {...input} name='educated' id='educated' placeholder='?' />
                                     </>
                                 )}
@@ -80,7 +95,10 @@ const AddPetPage: React.FC<AddPetPageProps> = observer(() => {
                             <Field name='photo'>
                                 {({ input }) => (
                                     <>
-                                        <CLabel inputName='photo' title='Photo' />
+                                        <div className="required">
+                                            <CLabel inputName='photo' title='Photo' />
+                                            <CgAsterisk className="asterisk" />
+                                        </div>
                                         <input type="text" {...input} name='photo' id='photo' placeholder='?' />
                                     </>
                                 )}
@@ -89,7 +107,10 @@ const AddPetPage: React.FC<AddPetPageProps> = observer(() => {
                             <Field name='healthStatus'>
                                 {({ input }) => (
                                     <>
-                                        <CLabel inputName='healthStatus' title='Health Status' />
+                                        <div className="required">
+                                            <CLabel inputName='healthStatus' title='Health Status' />
+                                            <CgAsterisk className="asterisk" />
+                                        </div>
                                         <input type="text" {...input} name='healthStatus' id='healthStatus' placeholder='?' />
                                     </>
                                 )}
@@ -98,7 +119,10 @@ const AddPetPage: React.FC<AddPetPageProps> = observer(() => {
                             <Field name='gender'>
                                 {({ input }) => (
                                     <>
-                                        <CLabel inputName='gender' title='Gender' />
+                                        <div className="required">
+                                            <CLabel inputName='gender' title='Gender' />
+                                            <CgAsterisk className="asterisk" />
+                                        </div>
                                         <input type="text" {...input} name='gender' id='gender' placeholder='male' />
                                     </>
                                 )}
@@ -125,7 +149,10 @@ const AddPetPage: React.FC<AddPetPageProps> = observer(() => {
                             <Field name='isHavingValidDocuments'>
                                 {({ input }) => (
                                     <>
-                                        <CLabel inputName='isHavingValidDocuments' title='Valid Documents' />
+                                        <div className="required">
+                                            <CLabel inputName='isHavingValidDocuments' title='Valid Documents' />
+                                            <CgAsterisk className="asterisk" />
+                                        </div>
                                         <input type="text" {...input} name='isHavingValidDocuments' id='isHavingValidDocuments' placeholder='?' />
                                     </>
                                 )}
@@ -134,7 +161,10 @@ const AddPetPage: React.FC<AddPetPageProps> = observer(() => {
                             <Field name='address'>
                                 {({ input }) => (
                                     <>
-                                        <CLabel inputName='address' title='Address' />
+                                        <div className="required">
+                                            <CLabel inputName='address' title='Address' />
+                                            <CgAsterisk className="asterisk" />
+                                        </div>
                                         <input type="text" {...input} name='address' id='address' placeholder='29 Elmore Rd' />
                                     </>
                                 )}
@@ -143,7 +173,10 @@ const AddPetPage: React.FC<AddPetPageProps> = observer(() => {
                             <Field name='city'>
                                 {({ input }) => (
                                     <>
-                                        <CLabel inputName='city' title='City' />
+                                        <div className="required">
+                                            <CLabel inputName='city' title='City' />
+                                            <CgAsterisk className="asterisk" />
+                                        </div>
                                         <input type="text" {...input} name='city' id='city' placeholder='Bristol' />
                                     </>
                                 )}
