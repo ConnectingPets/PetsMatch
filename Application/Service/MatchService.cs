@@ -8,6 +8,7 @@
     using Application.DTOs;
     using Application.Service.Interfaces;
     using static Application.Match.AnimalMatches;
+    using static Application.Match.UnMatchAnimal;
 
     public class MatchService : IMatchService
     {
@@ -22,6 +23,13 @@
             => await this.mediator.Send(new AnimalMatchesQuery
             {
                 AnimalId = animalId
+            });
+
+        public async Task UnMatch(Guid animalOneId, Guid animalTwoId)
+            => await this.mediator.Send(new UnMatchAnimalCommand
+            {
+                AnimalOneId = animalOneId,
+                AnimalTwoId = animalTwoId
             });
     }
 }

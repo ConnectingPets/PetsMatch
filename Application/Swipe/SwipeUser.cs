@@ -11,7 +11,7 @@
 
     public class SwipeUser
     {
-        public class SwipeUserCommand : IRequest<Unit>
+        public class SwipeUserCommand : IRequest<bool>
         {
             public Guid SwiperAnimalId { get; set; }
 
@@ -20,7 +20,7 @@
             public bool SwipedRight { get; set; }
         }
 
-        public class SwipeUserHandler : IRequestHandler<SwipeUserCommand, Unit>
+        public class SwipeUserHandler : IRequestHandler<SwipeUserCommand, bool>
         {
             private readonly IRepository repository;
 
@@ -29,7 +29,7 @@
                 this.repository = repository;
             }
 
-            public async Task<Unit> Handle(SwipeUserCommand request, CancellationToken cancellationToken)
+            public async Task<bool> Handle(SwipeUserCommand request, CancellationToken cancellationToken)
             {
                 if (await this.repository.AnyAsync<Animal>(animal => animal.AnimalId == request.SwiperAnimalId) == false)
                 {
@@ -52,7 +52,11 @@
                 await this.repository.AddAsync(swipe);
                 await this.repository.SaveChangesAsync();
 
-                return Unit.Value;
+                return await this.repository.AnyAsync<Swipe>(swipe => 
+                    swipe.SwiperAnimalId == request.SwipeeAnimalId &&
+                    swipe.SwipeeAnimalId == request.SwiperAnimalId &&
+                    swipe.SwipedRight &&
+                    request.SwipedRight);
             }
         }
     }

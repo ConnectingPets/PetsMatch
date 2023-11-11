@@ -7,27 +7,39 @@
     using Domain;
 
     using Persistence.Repositories;
+    using static Common.ExceptionMessages.Match;
 
-    public class MatchUser
+    public class MatchAnimal
     {
-        public class MatchUserCommand : IRequest<Unit>
+        public class MatchAnimalCommand : IRequest<Unit>
         {
             public Guid AnimalOneId { get; set; }
 
             public Guid AnimalTwoId { get; set; }
         }
 
-        public class MatchUserHandler : IRequestHandler<MatchUserCommand, Unit>
+        public class MatchAnimalHandler : IRequestHandler<MatchAnimalCommand, Unit>
         {
             private readonly IRepository repository;
 
-            public MatchUserHandler(IRepository repository)
+            public MatchAnimalHandler(IRepository repository)
             {
                 this.repository = repository;
             }
 
-            public async Task<Unit> Handle(MatchUserCommand request, CancellationToken cancellationToken)
+            public async Task<Unit> Handle(MatchAnimalCommand request, CancellationToken cancellationToken)
             {
+                Match? existestingMatch = await this.repository.GetByIds<Match>(new
+                {
+                    request.AnimalOneId,
+                    request.AnimalTwoId,
+                });
+
+                if (existestingMatch != null)
+                {
+                    throw new InvalidOperationException(AlreadyMatched);
+                }
+
                 Match match = new Match
                 {
                     AnimalOneId = request.AnimalOneId,

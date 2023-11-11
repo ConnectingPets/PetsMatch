@@ -6,9 +6,8 @@
     using MediatR;
 
     using Application.Service.Interfaces;
-    using static Application.Match.IsMatch;
     using static Application.Swipe.SwipeUser;
-    using static Application.Matches.MatchUser;
+    using static Application.Matches.MatchAnimal;
 
     public class SwipeService : ISwipeService
     {
@@ -21,14 +20,7 @@
 
         public async Task<bool> Swipe(Guid swiperAnimalId, Guid swipeeAnimalId, bool swipedRight)
         {
-            await this.mediator.Send(new SwipeUserCommand
-            {
-                SwiperAnimalId = swiperAnimalId,
-                SwipedRight = swipedRight,
-                SwipeeAnimalId = swipeeAnimalId
-            });
-
-            bool isMatch = await this.mediator.Send(new IsMatchQuery
+            bool isMatch = await this.mediator.Send(new SwipeUserCommand
             {
                 SwiperAnimalId = swiperAnimalId,
                 SwipedRight = swipedRight,
@@ -37,7 +29,7 @@
 
             if (isMatch)
             {
-                await this.mediator.Send(new MatchUserCommand
+                await this.mediator.Send(new MatchAnimalCommand
                 {
                     AnimalOneId = swiperAnimalId,
                     AnimalTwoId = swipeeAnimalId,

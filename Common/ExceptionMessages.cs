@@ -6,7 +6,13 @@
         {
             public const string InvalidNameLength = "The animal name should be with length between 2 and 50";
             public const string InvalidDescriptionLength = "The animal description has max length of 150";
-            public const string AnimalNotFound = "The animal is not found.";
+            public const string AnimalNotFound = "The animal is not found";
+        }
+
+        public static class Match
+        {
+            public const string AlreadyMatched = "There is already a match between these animals";
+            public const string NotMatched = "The animals are not matched";
         }
 
         public static class AnimalCategory

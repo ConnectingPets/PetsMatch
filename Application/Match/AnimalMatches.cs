@@ -42,7 +42,7 @@
                 return animal.Matches
                     .Select(m => new UserMatchDto
                     {
-                        AnimalId = default(Guid)
+                        AnimalId = m.AnimalTwoId
                     })
                     .ToList();
             }
