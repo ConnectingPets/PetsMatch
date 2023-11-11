@@ -6,25 +6,25 @@
     using System.Threading;
     using System.Threading.Tasks;
 
-    public class MatchUserCommand
+    public class MatchUser
     {
-        public class MatchAnimalsCommand : IRequest<Unit>
+        public class MatchUserCommand : IRequest<Unit>
         {
             public Guid AnimalOneId { get; set; }
 
             public Guid AnimalTwoId { get; set; }
         }
 
-        public class MatchAnimalsHandler : IRequestHandler<MatchAnimalsCommand, Unit>
+        public class MatchUserHandler : IRequestHandler<MatchUserCommand, Unit>
         {
             private readonly IRepository repository;
 
-            public MatchAnimalsHandler(IRepository repository)
+            public MatchUserHandler(IRepository repository)
             {
                 this.repository = repository;
             }
 
-            public async Task<Unit> Handle(MatchAnimalsCommand request, CancellationToken cancellationToken)
+            public async Task<Unit> Handle(MatchUserCommand request, CancellationToken cancellationToken)
             {
                 Match match = new Match
                 {

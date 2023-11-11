@@ -1,4 +1,5 @@
 using API.Infrastructure;
+using System.Reflection;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +24,8 @@ builder.Services.AddCors(options =>
             .AllowCredentials();
     });
 });
+
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
 
 WebApplication app = builder.Build();
 
