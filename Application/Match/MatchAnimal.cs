@@ -29,13 +29,13 @@
 
             public async Task<Unit> Handle(MatchAnimalCommand request, CancellationToken cancellationToken)
             {
-                Match? existestingMatch = await this.repository.GetByIds<Match>(new
+                Match? existingMatch = await this.repository.GetByIds<Match>(new
                 {
                     request.AnimalOneId,
                     request.AnimalTwoId,
                 });
 
-                if (existestingMatch != null)
+                if (existingMatch != null)
                 {
                     throw new InvalidOperationException(AlreadyMatched);
                 }
