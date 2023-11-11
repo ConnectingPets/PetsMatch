@@ -9,7 +9,6 @@
     using static Application.Match.IsMatch;
     using static Application.Swipe.SwipeUser;
     using static Application.Matches.MatchUser;
-    using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 
     public class SwipeService : ISwipeService
     {
@@ -44,7 +43,7 @@
                     AnimalTwoId = swipeeAnimalId,
                 });
             }
-
+            
             return isMatch;
         }
     }

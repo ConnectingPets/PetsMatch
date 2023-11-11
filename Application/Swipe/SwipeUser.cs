@@ -1,10 +1,13 @@
 ﻿namespace Application.Swipe
 {
-    using Domain;
-    using MediatR;
-    using Persistence.Repositories;
     using System.Threading;
     using System.Threading.Tasks;
+
+    using MediatR;
+    using Domain;
+
+    using Persistence.Repositories;
+    using static Common.ExceptionMessages.Animal;
 
     public class SwipeUser
     {
@@ -28,6 +31,16 @@
 
             public async Task<Unit> Handle(SwipeUserCommand request, CancellationToken cancellationToken)
             {
+                if (await this.repository.AnyAsync<Animal>(animal => animal.AnimalId == request.SwiperAnimalId) == false)
+                {
+                    throw new InvalidOperationException(AnimalNotFound);
+                }
+
+                if (await this.repository.AnyAsync<Animal>(animal => animal.AnimalId == request.SwipeeAnimalId) == false)
+                {
+                    throw new InvalidOperationException(AnimalNotFound);
+                }
+
                 Swipe swipe = new Swipe
                 {
                     SwiperAnimalId = request.SwiperAnimalId,

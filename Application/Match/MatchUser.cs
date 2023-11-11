@@ -1,10 +1,12 @@
 ﻿namespace Application.Matches
 {
-    using Domain;
-    using MediatR;
-    using Persistence.Repositories;
     using System.Threading;
     using System.Threading.Tasks;
+
+    using MediatR;
+    using Domain;
+
+    using Persistence.Repositories;
 
     public class MatchUser
     {

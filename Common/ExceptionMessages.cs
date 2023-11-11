@@ -6,6 +6,7 @@
         {
             public const string InvalidNameLength = "The animal name should be with length between 2 and 50";
             public const string InvalidDescriptionLength = "The animal description has max length of 150";
+            public const string AnimalNotFound = "The animal is not found.";
         }
 
         public static class AnimalCategory
