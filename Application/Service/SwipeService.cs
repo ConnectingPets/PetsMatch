@@ -9,6 +9,7 @@
     using static Application.Match.IsMatch;
     using static Application.Swipe.SwipeUser;
     using static Application.Matches.MatchUser;
+    using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 
     public class SwipeService : ISwipeService
     {
@@ -19,7 +20,7 @@
             this.mediator = mediator;
         }
 
-        public async Task Swipe(Guid swiperAnimalId, Guid swipeeAnimalId, bool swipedRight)
+        public async Task<bool> Swipe(Guid swiperAnimalId, Guid swipeeAnimalId, bool swipedRight)
         {
             await this.mediator.Send(new SwipeUserCommand
             {
@@ -43,6 +44,8 @@
                     AnimalTwoId = swipeeAnimalId,
                 });
             }
+
+            return isMatch;
         }
     }
 }
