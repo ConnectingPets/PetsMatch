@@ -1,24 +1,24 @@
 ﻿namespace Application.Animal
 {
-    using System.Threading.Tasks;
     using System.Threading;
+    using System.Threading.Tasks;
 
     using MediatR;
+    using Microsoft.EntityFrameworkCore;
 
     using DTOs;
-    using Persistence.Repositories;
     using Domain;
-    using Microsoft.EntityFrameworkCore;
+    using Persistence.Repositories;
 
     public class ShowAnimalToAdd
     {
-        public class ShowAnimalToAddQuery : IRequest<ShowAnimalToAddDto>
+        public class ShowAnimalToAddQuery : IRequest<ShowAnimalDto>
         {
 
         }
 
         public class ShowAnimalToAddQueryHandler :
-            IRequestHandler<ShowAnimalToAddQuery, ShowAnimalToAddDto>
+            IRequestHandler<ShowAnimalToAddQuery, ShowAnimalDto>
         {
             private readonly IRepository repository;
 
@@ -27,9 +27,9 @@
                 this.repository = repository;
             }
 
-            public async Task<ShowAnimalToAddDto> Handle(ShowAnimalToAddQuery request, CancellationToken cancellationToken)
+            public async Task<ShowAnimalDto> Handle(ShowAnimalToAddQuery request, CancellationToken cancellationToken)
             {
-                var animal = new ShowAnimalToAddDto()
+                var animal = new ShowAnimalDto()
                 {
                     Breeds = await repository.AllReadonly<Breed>().
                     Select(b => new BreedDto()

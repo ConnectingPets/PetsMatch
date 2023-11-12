@@ -7,6 +7,9 @@ using Application.DTOs;
 using static Application.Animal.AddAnimal;
 using static Application.Animal.AllAnimal;
 using static Application.Animal.ShowAnimalToAdd;
+using static Application.Animal.DeleteAnimal;
+using static Application.Animal.ShowAnimalToEdit;
+using static Application.Animal.EditAnimal;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -36,8 +39,11 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.G
 
 builder.Services.AddControllers();
 builder.Services.AddScoped<IRequestHandler<AddAnimalCommand, Unit>, AddAnimalCommandHandler>();
-builder.Services.AddScoped<IRequestHandler<AllAnimalQuery, IEnumerable<AnimalDto>>, AllAnimalQueryHandler>();
-builder.Services.AddScoped<IRequestHandler<ShowAnimalToAddQuery, ShowAnimalToAddDto>, ShowAnimalToAddQueryHandler>();
+builder.Services.AddScoped<IRequestHandler<AllAnimalQuery, IEnumerable<AllAnimalDto>>, AllAnimalQueryHandler>();
+builder.Services.AddScoped<IRequestHandler<ShowAnimalToAddQuery, ShowAnimalDto>, ShowAnimalToAddQueryHandler>();
+builder.Services.AddScoped<IRequestHandler<DeleteAnimalCommand, Unit>, DeleteAnimalCommandHandler>();
+builder.Services.AddScoped<IRequestHandler<ShowAnimalToEditQuery, ShowAnimalDto>, ShowAnimalToEditQueryHandler>();
+builder.Services.AddScoped<IRequestHandler<EditAnimalCommand, Unit>, EditAnimalCommandHandler>();
 
 WebApplication app = builder.Build();
 

@@ -1,24 +1,24 @@
 ﻿namespace Application.Animal
 {
-    using System.Threading.Tasks;
     using System.Threading;
+    using System.Threading.Tasks;
 
-    using Microsoft.EntityFrameworkCore;
     using MediatR;
+    using Microsoft.EntityFrameworkCore;
 
     using DTOs;
-    using Persistence.Repositories;
     using Domain;
+    using Persistence.Repositories;
 
     public class AllAnimal
     {
-        public class AllAnimalQuery : IRequest<IEnumerable<AnimalDto>>
+        public class AllAnimalQuery : IRequest<IEnumerable<AllAnimalDto>>
         {
             public string OwnerId { get; set; } = null!;
         }
 
         public class AllAnimalQueryHandler :
-            IRequestHandler<AllAnimalQuery, IEnumerable<AnimalDto>>
+            IRequestHandler<AllAnimalQuery, IEnumerable<AllAnimalDto>>
         {
 
             private readonly IRepository repository;
@@ -28,10 +28,10 @@
                 this.repository = repository;
             }
 
-            public async Task<IEnumerable<AnimalDto>> Handle(AllAnimalQuery request, CancellationToken cancellationToken)
+            public async Task<IEnumerable<AllAnimalDto>> Handle(AllAnimalQuery request, CancellationToken cancellationToken)
             {
                 return  await repository.
-                    AllReadonly<Animal>(a => a.OwnerId.ToString() == request.OwnerId).Select(a => new AnimalDto()
+                    AllReadonly<Animal>(a => a.OwnerId.ToString() == request.OwnerId).Select(a => new AllAnimalDto()
                 {
                     Id = a.OwnerId.ToString(),
                     Name = a.Name,

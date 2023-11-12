@@ -1,6 +1,6 @@
 ﻿namespace Application.DTOs
 {
-    public class AnimalDto
+    public class AllAnimalDto
     {
         public required string  Id { get; set; }
 

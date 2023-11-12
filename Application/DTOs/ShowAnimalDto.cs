@@ -1,8 +1,8 @@
 ﻿namespace Application.DTOs
 {
-    public class ShowAnimalToAddDto
+    public class ShowAnimalDto
     {
-        public ShowAnimalToAddDto()
+        public ShowAnimalDto()
         {
             Breeds = new HashSet<BreedDto>();
             AnimalCategories = new HashSet<AnimalCategoryDto>();
@@ -18,7 +18,7 @@
 
         public bool IsEducated { get; set; }
 
-        public byte[] Photo { get; set; }
+        public byte[]? Photo { get; set; }
 
         public string? HealthStatus { get; set; }
 

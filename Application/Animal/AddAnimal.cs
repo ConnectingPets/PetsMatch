@@ -24,21 +24,23 @@
 
             public async Task<Unit> Handle(AddAnimalCommand request, CancellationToken cancellationToken)
             {
+                AddAnimalDto animalDto = request.AnimalDto;
+
                 Animal animal = new Animal()
                 {
-                    Age = request.AnimalDto.Age,
-                    BirthDate = request.AnimalDto.BirthDate,
-                    Description = request.AnimalDto.Description,
-                    Gender = request.AnimalDto.Gender,
-                    HealthStatus = request.AnimalDto.HealthStatus,
-                    Name = request.AnimalDto.Name,
-                    Weight = request.AnimalDto.Weight,
-                    SocialMedia = request.AnimalDto.SocialMedia,
-                    IsEducated = request.AnimalDto.IsEducated,
-                    Photo = request.AnimalDto.Photo,
-                    IsHavingValidDocuments = request.AnimalDto.IsHavingValidDocuments,
-                    OwnerId = Guid.Parse(request.AnimalDto.OwnerId!),
-                    BreedId = request.AnimalDto.BreedId,
+                    Age = animalDto.Age,
+                    BirthDate = animalDto.BirthDate,
+                    Description = animalDto.Description,
+                    Gender = animalDto.Gender,
+                    HealthStatus = animalDto.HealthStatus,
+                    Name = animalDto.Name,
+                    Weight = animalDto.Weight,
+                    SocialMedia = animalDto.SocialMedia,
+                    IsEducated = animalDto.IsEducated,
+                    Photo = animalDto.Photo,
+                    IsHavingValidDocuments = animalDto.IsHavingValidDocuments,
+                    OwnerId = Guid.Parse(animalDto.OwnerId!),
+                    BreedId = animalDto.BreedId,
                 };
 
                 await repository.AddAsync(animal);

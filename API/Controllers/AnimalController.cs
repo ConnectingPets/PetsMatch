@@ -1,13 +1,16 @@
 ﻿namespace API.Controllers
 {
-    using MediatR;
     using Microsoft.AspNetCore.Mvc;
+    using MediatR;
 
     using Infrastructure;
     using Application.DTOs;
     using static Application.Animal.AddAnimal;
     using static Application.Animal.AllAnimal;
     using static Application.Animal.ShowAnimalToAdd;
+    using static Application.Animal.DeleteAnimal;
+    using static Application.Animal.ShowAnimalToEdit;
+    using static Application.Animal.EditAnimal;
 
     public class AnimalController : BaseApiController
     {
@@ -46,15 +49,54 @@
         {
             string ownerId = this.User.GetById();
 
-            AllAnimalQuery allAnimalQuery = new AllAnimalQuery()
+            AllAnimalQuery query = new AllAnimalQuery()
             {
                 OwnerId = ownerId
             };
 
-            var allAnimals = await mediator.Send(allAnimalQuery);
+            var allAnimals = await mediator.Send(query);
 
             return Ok(allAnimals);
-        }  
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteAnimal(string id)
+        {
+            DeleteAnimalCommand command = new DeleteAnimalCommand()
+            {
+                AnimalId = id
+            };
+
+            await mediator.Send(command);
+
+            return Ok();
+        }
+
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> UpdateAnimal(EditAnimalDto animalDto, string id)
+        {
+            EditAnimalCommand command = new EditAnimalCommand()
+            {
+                AnimalDto = animalDto,
+                AnimalId = id
+            };
+
+            await mediator.Send(command);
+
+            return Ok();
+        }
+
+        [HttpGet("EditAnimal/{id}")]
+        public async Task<IActionResult> EditAnimal(string id)
+        {
+            ShowAnimalToEditQuery query = new ShowAnimalToEditQuery()
+            {
+                AnimalId = id
+            };
+
+            var animal = await mediator.Send(query);
+            return Ok(animal);
+        }
 
     }
 }

@@ -48,7 +48,7 @@ namespace API.Controllers
                 return NotFound();
 
             return BadRequest(result.Error);
-        }*/
+        } */
 
         //TODO: Check if we are going to need this pagedRes.
         // protected ActionResult HandlePagedResult<T>(Result<PagedList<T>> result)
