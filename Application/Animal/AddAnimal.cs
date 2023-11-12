@@ -2,18 +2,20 @@
 {
     using MediatR;
 
-    using Domain;
     using DTOs;
+    using Domain;
+    using Response;
     using Persistence.Repositories;
 
     public class AddAnimal
     {
-        public class AddAnimalCommand : IRequest<Unit>
+        public class AddAnimalCommand : IRequest<Result<Unit>>
         {
             public AddAnimalDto AnimalDto { get; set; } = null!;
         }
 
-        public class AddAnimalCommandHandler : IRequestHandler<AddAnimalCommand, Unit>
+        public class AddAnimalCommandHandler : 
+            IRequestHandler<AddAnimalCommand, Result<Unit>>
         {
             private readonly IRepository repository;
 
@@ -22,7 +24,7 @@
                 this.repository = repository;
             }
 
-            public async Task<Unit> Handle(AddAnimalCommand request, CancellationToken cancellationToken)
+            public async Task<Result<Unit>> Handle(AddAnimalCommand request, CancellationToken cancellationToken)
             {
                 AddAnimalDto animalDto = request.AnimalDto;
 
@@ -48,10 +50,11 @@
 
                 if (!result)
                 {
-                    //return Result<Unit>.Failure("Failed to create activity");
+                    return 
+                        Result<Unit>.Failure($"Failed to create pet - {animal.Name}");
                 }
 
-                return Unit.Value;
+                return Result<Unit>.Success(Unit.Value);
             }
         }
     }
