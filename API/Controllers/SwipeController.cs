@@ -16,7 +16,7 @@
             this.swipeService = swipeService;
         }
 
-        [Route("/")]
+        [Route("swipe")]
         public async Task<ActionResult> Swipe([FromBody] SwipeDto swipe)
         {
             try

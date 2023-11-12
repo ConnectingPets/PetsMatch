@@ -16,6 +16,7 @@ namespace API.Controllers
             this.matchService = matchService;
         }
 
+        [Route("match")]
         public async Task<ActionResult> Match(Guid animalOneId, Guid animalTwoId, bool swipedRight)
         {
             try
@@ -30,6 +31,7 @@ namespace API.Controllers
             return Ok();
         }
 
+        [Route("unmatch")]
         public async Task<ActionResult> UnMatch(Guid animalOneId, Guid animalTwoId)
         {
             try
@@ -44,6 +46,7 @@ namespace API.Controllers
             return Ok();
         }
 
+        [Route("animal-matches")]
         public async Task<ActionResult> AnimalMatches(Guid animalId)
         {
             IEnumerable<AnimalMatchDto> matches;
