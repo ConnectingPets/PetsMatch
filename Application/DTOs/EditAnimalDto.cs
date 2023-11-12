@@ -19,7 +19,7 @@
         [Range(typeof(int), AgeMinValue, AgeMaxValue)]
         public required int Age { get; set; }
 
-        //public DateTime? BirthDate { get; set; }
+        public DateTime? BirthDate { get; set; }
 
         public required bool IsEducated { get; set; }
 

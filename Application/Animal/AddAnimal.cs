@@ -54,7 +54,7 @@
                         Result<Unit>.Failure($"Failed to create pet - {animal.Name}");
                 }
 
-                return Result<Unit>.Success(Unit.Value);
+                return Result<Unit>.Success(Unit.Value, $"You have successfully add {animal.Name} to your pet's list");
             }
         }
     }

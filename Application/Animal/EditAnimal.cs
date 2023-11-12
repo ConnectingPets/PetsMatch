@@ -8,18 +8,21 @@
     using DTOs;
     using Domain;
     using Persistence.Repositories;
+    using Application.Response;
 
     public class EditAnimal
     {
-        public class EditAnimalCommand : IRequest<Unit>
+        public class EditAnimalCommand : IRequest<Result<Unit>>
         {
             public EditAnimalDto AnimalDto { get; set; } = null!;
 
             public string AnimalId { get; set; } = null!;
+
+            public string UserId { get; set; } = null!;
         }
 
         public class EditAnimalCommandHandler :
-            IRequestHandler<EditAnimalCommand, Unit>
+            IRequestHandler<EditAnimalCommand, Result<Unit>>
         {
             private readonly IRepository repository;
 
@@ -28,13 +31,22 @@
                 this.repository = repository;
             }
 
-            public async Task<Unit> Handle(EditAnimalCommand request, CancellationToken cancellationToken)
+            public async Task<Result<Unit>> Handle(EditAnimalCommand request, CancellationToken cancellationToken)
             {
                 EditAnimalDto dto = request.AnimalDto;
-                Animal animal =
+                Animal? animal =
                     await repository.GetById<Animal>(Guid.Parse(request.AnimalId));
 
-                //animal.BirthDate = dto.BirthDate;
+                if (animal == null)
+                {
+                    return Result<Unit>.Failure("This pet does not exist! Please select existing one");
+                }
+                if (animal.OwnerId.ToString() != request.UserId.ToLower())
+                {
+                    return Result<Unit>.Failure("This pet does not belong to you!");
+                }
+
+                animal.BirthDate = dto.BirthDate;
                 animal.Gender = dto.Gender;
                 animal.Description = dto.Description;
                 animal.HealthStatus = dto.HealthStatus;
@@ -47,8 +59,14 @@
                 animal.Name = dto.Name;
                 animal.Weight = dto.Weight;
 
-                await repository.SaveChangesAsync();
-                return Unit.Value;
+                var result = await repository.SaveChangesAsync() > 0;
+                if (!result)
+                {
+                   return 
+                        Result<Unit>.Failure($"Failed to update pet - {animal.Name}");
+                }
+
+                return Result<Unit>.Success(Unit.Value, $"Successfully updated {animal.Name}");
             }
         }
     }

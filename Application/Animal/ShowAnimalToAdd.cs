@@ -8,17 +8,18 @@
 
     using DTOs;
     using Domain;
+    using Response;
     using Persistence.Repositories;
 
     public class ShowAnimalToAdd
     {
-        public class ShowAnimalToAddQuery : IRequest<ShowAnimalDto>
+        public class ShowAnimalToAddQuery : IRequest<Result<ShowAnimalDto>>
         {
 
         }
 
         public class ShowAnimalToAddQueryHandler :
-            IRequestHandler<ShowAnimalToAddQuery, ShowAnimalDto>
+            IRequestHandler<ShowAnimalToAddQuery, Result<ShowAnimalDto>>
         {
             private readonly IRepository repository;
 
@@ -27,7 +28,7 @@
                 this.repository = repository;
             }
 
-            public async Task<ShowAnimalDto> Handle(ShowAnimalToAddQuery request, CancellationToken cancellationToken)
+            public async Task<Result<ShowAnimalDto>> Handle(ShowAnimalToAddQuery request, CancellationToken cancellationToken)
             {
                 var animal = new ShowAnimalDto()
                 {
@@ -46,7 +47,7 @@
                     }).ToArrayAsync()
                 };
 
-                return animal;
+                return Result<ShowAnimalDto>.Success(animal);
             }
         }
     }

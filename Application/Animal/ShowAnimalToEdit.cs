@@ -8,17 +8,20 @@
 
     using DTOs;
     using Domain;
+    using Response;
     using Persistence.Repositories;
 
     public class ShowAnimalToEdit
     {
-        public class ShowAnimalToEditQuery : IRequest<ShowAnimalDto>
+        public class ShowAnimalToEditQuery : IRequest<Result<ShowAnimalDto>>
         {
             public string AnimalId { get; set; } = null!;
+
+            public string UserId { get; set; } = null!;
         }
 
         public class ShowAnimalToEditQueryHandler :
-            IRequestHandler<ShowAnimalToEditQuery, ShowAnimalDto>
+            IRequestHandler<ShowAnimalToEditQuery, Result<ShowAnimalDto>>
         {
             private readonly IRepository repository;
 
@@ -27,10 +30,19 @@
                 this.repository = repository;
             }
 
-            public async Task<ShowAnimalDto> Handle(ShowAnimalToEditQuery request, CancellationToken cancellationToken)
+            public async Task<Result<ShowAnimalDto>> Handle(ShowAnimalToEditQuery request, CancellationToken cancellationToken)
             {
-                Animal animal =
+                Animal? animal =
                     await repository.GetById<Animal>(Guid.Parse(request.AnimalId));
+
+                if (animal == null)
+                {
+                    return Result<ShowAnimalDto>.Failure("This pet does not exist! Please select existing one");
+                }
+                if (animal.OwnerId.ToString() != request.UserId.ToLower())
+                {
+                    return Result<ShowAnimalDto>.Failure("This pet does not belong to you!");
+                }
 
                 ShowAnimalDto animalDto = new ShowAnimalDto()
                 {
@@ -60,7 +72,7 @@
                     Weight = animal.Weight,
                 };
 
-                return animalDto;
+                return Result<ShowAnimalDto>.Success(animalDto);
             }
         }
     }

@@ -32,16 +32,15 @@
                 AnimalDto = animalDto
             };
 
-            await mediator.Send(command);
-
-            return Ok(animalDto);
+            var result = await mediator.Send(command);
+            return new JsonResult(result);
         }
 
         [HttpGet("AddAnimal")]
         public async Task<IActionResult> AddAnimal()
         {
             var animal = await mediator.Send(new ShowAnimalToAddQuery());
-            return Ok(animal);
+            return new JsonResult(animal);
         }
 
         [HttpGet("AllAnimals")]
@@ -55,8 +54,7 @@
             };
 
             var allAnimals = await mediator.Send(query);
-
-            return Ok(allAnimals);
+            return new JsonResult(allAnimals);
         }
 
         [HttpDelete("{id}")]
@@ -64,12 +62,11 @@
         {
             DeleteAnimalCommand command = new DeleteAnimalCommand()
             {
-                AnimalId = id
+                AnimalId = id,
+                UserId = this.User.GetById()
             };
 
-            await mediator.Send(command);
-
-            return Ok();
+            return new JsonResult(await mediator.Send(command));
         }
 
         [HttpPatch("{id}")]
@@ -78,12 +75,11 @@
             EditAnimalCommand command = new EditAnimalCommand()
             {
                 AnimalDto = animalDto,
-                AnimalId = id
+                AnimalId = id,
+                UserId = this.User.GetById()
             };
 
-            await mediator.Send(command);
-
-            return Ok();
+            return new JsonResult(await mediator.Send(command));
         }
 
         [HttpGet("EditAnimal/{id}")]
@@ -91,11 +87,11 @@
         {
             ShowAnimalToEditQuery query = new ShowAnimalToEditQuery()
             {
-                AnimalId = id
+                AnimalId = id,
+                UserId = this.User.GetById()
             };
 
-            var animal = await mediator.Send(query);
-            return Ok(animal);
+            return new JsonResult(await mediator.Send(query));
         }
 
     }
