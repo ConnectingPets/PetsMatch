@@ -17,11 +17,15 @@ namespace API.Controllers
         }
 
         [Route("match")]
-        public async Task<ActionResult> Match(Guid animalOneId, Guid animalTwoId, bool swipedRight)
+        [HttpPost]
+        public async Task<ActionResult> Match([FromBody] MatchDto matchDto)
         {
             try
             {
-                await this.matchService.Match(animalOneId, animalTwoId, swipedRight);
+                await this.matchService.Match(
+                    Guid.Parse(matchDto.AnimalOneId),
+                    Guid.Parse(matchDto.AnimalTwoId),
+                    matchDto.SwipedRight);
             }
             catch (Exception)
             {
@@ -32,11 +36,15 @@ namespace API.Controllers
         }
 
         [Route("unmatch")]
-        public async Task<ActionResult> UnMatch(Guid animalOneId, Guid animalTwoId)
+        [HttpPost]
+        public async Task<ActionResult> UnMatch([FromBody] UnMatchDto unMatchDto)
         {
             try
             {
-                await this.matchService.UnMatch(animalOneId, animalTwoId);
+                await this.matchService.UnMatch(
+                    Guid.Parse(unMatchDto.AnimalOneId),
+                    Guid.Parse(unMatchDto.AnimalTwoId)
+                );
             }
             catch (Exception)
             {
@@ -47,19 +55,22 @@ namespace API.Controllers
         }
 
         [Route("animal-matches")]
-        public async Task<ActionResult> AnimalMatches(Guid animalId)
+        [HttpGet]
+        public async Task<ActionResult> AnimalMatches([FromQuery] string animalId)
         {
             IEnumerable<AnimalMatchDto> matches;
             try
             {
-                matches = await this.matchService.GetAnimalMatches(animalId);
+                matches = await this.matchService.GetAnimalMatches(
+                    Guid.Parse(animalId)
+                );
             }
             catch (Exception)
             {
                 throw;
             }
 
-            return Ok();
+            return Ok(matches);
         }
     }
 }

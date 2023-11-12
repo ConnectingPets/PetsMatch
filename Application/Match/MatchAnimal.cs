@@ -42,28 +42,27 @@
                     throw new InvalidOperationException(AnimalNotFound);
                 }
 
-                bool isMatch = await IsMatch(request.AnimalOneId, request.AnimalTwoId, request.SwipedRight);
+                bool isPresentMatch = await IsPresentMatch(request.AnimalOneId, request.AnimalTwoId);
 
-                Match? existingMatch = await this.repository.GetByIds<Match>(new
-                {
-                    request.AnimalOneId,
-                    request.AnimalTwoId,
-                });
-
-                if (existingMatch != null)
+                if (isPresentMatch)
                 {
                     throw new InvalidOperationException(AlreadyMatched);
                 }
 
-                Match match = new Match
-                {
-                    AnimalOneId = request.AnimalOneId,
-                    AnimalTwoId = request.AnimalTwoId,
-                    MatchOn = DateTime.Now
-                };
+                bool isMatch = await IsMatch(request.AnimalOneId, request.AnimalTwoId, request.SwipedRight);
 
-                await repository.AddAsync(match);
-                await repository.SaveChangesAsync();
+                if (isMatch)
+                {
+                    Match match = new Match
+                    {
+                        AnimalOneId = request.AnimalOneId,
+                        AnimalTwoId = request.AnimalTwoId,
+                        MatchOn = DateTime.Now
+                    };
+
+                    await repository.AddAsync(match);
+                    await repository.SaveChangesAsync();
+                }
 
                 return Unit.Value;
             }
@@ -73,7 +72,14 @@
                     swipe.SwiperAnimalId == animalTwoId &&
                     swipe.SwipeeAnimalId == animalOneId &&
                     swipe.SwipedRight &&
-                    swipedRight);
+                    swipedRight
+                );
+
+            private async Task<bool> IsPresentMatch(Guid animalOneId, Guid animalTwoId)
+                => await this.repository.AnyAsync<Match>(match =>
+                    (match.AnimalOneId == animalOneId && match.AnimalTwoId == animalTwoId) ||
+                    (match.AnimalOneId == animalTwoId && match.AnimalTwoId == animalOneId)
+                );
         }
     }
 }

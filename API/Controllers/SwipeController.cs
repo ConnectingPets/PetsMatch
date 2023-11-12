@@ -17,11 +17,15 @@
         }
 
         [Route("swipe")]
+        [HttpPost]
         public async Task<ActionResult> Swipe([FromBody] SwipeDto swipe)
         {
             try
             {
-                await this.swipeService.Swipe(swipe.SwiperAnimalId, swipe.SwipeeAnimalId, swipe.SwipedRight);
+                await this.swipeService.Swipe(
+                    Guid.Parse(swipe.SwiperAnimalId),
+                    Guid.Parse(swipe.SwipeeAnimalId),
+                    swipe.SwipedRight);
             }
             catch (Exception)
             {

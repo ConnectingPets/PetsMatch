@@ -38,11 +38,10 @@
                     throw new InvalidOperationException(AnimalNotFound);
                 }
 
-                Match? existingMatch = await this.repository.GetByIds<Match>(new
-                {
+                Match? existingMatch = await GetExistingMatch(
                     request.AnimalOneId,
                     request.AnimalTwoId
-                });
+                );
 
                 if (existingMatch == null)
                 {
@@ -54,6 +53,12 @@
 
                 return Unit.Value;
             }
+
+            private async Task<Match?> GetExistingMatch(Guid animalOneId, Guid animalTwoId)
+                => await this.repository.FirstOrDefaultAsync<Match>(match =>
+                (match.AnimalOneId == animalOneId && match.AnimalTwoId == animalTwoId) ||
+                (match.AnimalOneId == animalTwoId && match.AnimalTwoId == animalOneId)
+            );
         }
     }
 }

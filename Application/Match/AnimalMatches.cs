@@ -42,7 +42,7 @@
                 return animal.Matches
                     .Select(m => new AnimalMatchDto
                     {
-                        AnimalId = m.AnimalTwoId
+                        MatchOn = m.MatchOn
                     })
                     .ToList();
             }

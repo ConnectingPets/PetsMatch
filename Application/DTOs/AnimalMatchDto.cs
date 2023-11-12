@@ -2,6 +2,6 @@
 {
     public class AnimalMatchDto
     {
-        public Guid AnimalId { get; set; }
+        public required DateTime MatchOn { get; set; }
     }
 }
