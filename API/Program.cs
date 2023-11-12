@@ -1,9 +1,12 @@
-using API.Infrastructure;
-using Application.Service;
-using Application.Service.Interfaces;
-using MediatR;
 using System.Reflection;
+
+using MediatR;
+
+using API.Infrastructure;
+using Application.DTOs;
 using static Application.Animal.AddAnimal;
+using static Application.Animal.AllAnimal;
+using static Application.Animal.ShowAnimalToAdd;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -32,8 +35,9 @@ builder.Services.AddCors(options =>
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
 
 builder.Services.AddControllers();
-builder.Services.AddScoped<IAnimalService, AnimalService>();
 builder.Services.AddScoped<IRequestHandler<AddAnimalCommand, Unit>, AddAnimalCommandHandler>();
+builder.Services.AddScoped<IRequestHandler<AllAnimalQuery, IEnumerable<AnimalDto>>, AllAnimalQueryHandler>();
+builder.Services.AddScoped<IRequestHandler<ShowAnimalToAddQuery, ShowAnimalToAddDto>, ShowAnimalToAddQueryHandler>();
 
 WebApplication app = builder.Build();
 

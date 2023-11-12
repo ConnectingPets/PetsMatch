@@ -38,6 +38,6 @@
 
         public required int BreedId { get; set; }
 
-        public required Guid OwnerId { get; set; }
+        public string? OwnerId { get; set; }
     }
 }
