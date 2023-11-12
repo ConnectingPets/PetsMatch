@@ -2,6 +2,6 @@
 {
     public interface ISwipeService
     {
-        Task<bool> Swipe(Guid swiperAnimalId, Guid swipeeAnimalId, bool swipedRight);
+        Task Swipe(Guid swiperAnimalId, Guid swipeeAnimalId, bool swipedRight);
     }
 }

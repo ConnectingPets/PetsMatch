@@ -9,9 +9,9 @@
     using Persistence.Repositories;
     using static Common.ExceptionMessages.Animal;
 
-    public class SwipeUser
+    public class SwipeAnimal
     {
-        public class SwipeUserCommand : IRequest<bool>
+        public class SwipeAnimalCommand : IRequest<Unit>
         {
             public Guid SwiperAnimalId { get; set; }
 
@@ -20,16 +20,16 @@
             public bool SwipedRight { get; set; }
         }
 
-        public class SwipeUserHandler : IRequestHandler<SwipeUserCommand, bool>
+        public class SwipeAnimalHandler : IRequestHandler<SwipeAnimalCommand, Unit>
         {
             private readonly IRepository repository;
 
-            public SwipeUserHandler(IRepository repository)
+            public SwipeAnimalHandler(IRepository repository)
             {
                 this.repository = repository;
             }
 
-            public async Task<bool> Handle(SwipeUserCommand request, CancellationToken cancellationToken)
+            public async Task<Unit> Handle(SwipeAnimalCommand request, CancellationToken cancellationToken)
             {
                 if (await this.repository.AnyAsync<Animal>(animal => animal.AnimalId == request.SwiperAnimalId) == false)
                 {
@@ -52,11 +52,7 @@
                 await this.repository.AddAsync(swipe);
                 await this.repository.SaveChangesAsync();
 
-                return await this.repository.AnyAsync<Swipe>(swipe => 
-                    swipe.SwiperAnimalId == request.SwipeeAnimalId &&
-                    swipe.SwipeeAnimalId == request.SwiperAnimalId &&
-                    swipe.SwipedRight &&
-                    request.SwipedRight);
+                return Unit.Value;
             }
         }
     }

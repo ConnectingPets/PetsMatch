@@ -13,12 +13,12 @@
 
     public class AnimalMatches
     {
-        public class AnimalMatchesQuery : IRequest<IEnumerable<UserMatchDto>>
+        public class AnimalMatchesQuery : IRequest<IEnumerable<AnimalMatchDto>>
         {
             public Guid AnimalId { get; set; }
         }
 
-        public class AnimalMatchesHandler : IRequestHandler<AnimalMatchesQuery, IEnumerable<UserMatchDto>>
+        public class AnimalMatchesHandler : IRequestHandler<AnimalMatchesQuery, IEnumerable<AnimalMatchDto>>
         {
             private readonly IRepository repository;
 
@@ -27,7 +27,7 @@
                 this.repository = repository;
             }
 
-            public async Task<IEnumerable<UserMatchDto>> Handle(AnimalMatchesQuery request, CancellationToken cancellationToken)
+            public async Task<IEnumerable<AnimalMatchDto>> Handle(AnimalMatchesQuery request, CancellationToken cancellationToken)
             {
                 Animal? animal = await this.repository
                     .AllReadonly<Animal>(animal => animal.AnimalId == request.AnimalId)
@@ -40,7 +40,7 @@
                 }
 
                 return animal.Matches
-                    .Select(m => new UserMatchDto
+                    .Select(m => new AnimalMatchDto
                     {
                         AnimalId = m.AnimalTwoId
                     })
