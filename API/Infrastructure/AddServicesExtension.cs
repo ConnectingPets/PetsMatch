@@ -3,7 +3,7 @@
     using Application.Animal;
     using Persistence.Repositories;
 
-    public static class AddServicesExtenstion
+    public static class AddServicesExtension
     {
         public static IServiceCollection ConfigurateServices(this IServiceCollection services)
         {

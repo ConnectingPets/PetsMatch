@@ -23,7 +23,7 @@
         }
 
         /// <summary>
-        /// Representaion of table in the database
+        /// Representation of table in the database
         /// </summary>
         protected DbSet<T> Set<T>() where T : class
             => this.context.Set<T>();

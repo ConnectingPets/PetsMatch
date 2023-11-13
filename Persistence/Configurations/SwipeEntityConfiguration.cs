@@ -1,4 +1,4 @@
-﻿namespace Persistence.Configuarations
+﻿namespace Persistence.Configurations
 {
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;

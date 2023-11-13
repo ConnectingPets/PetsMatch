@@ -6,7 +6,7 @@
     using static Common.EntityValidationConstants.Animal;
     using static Common.ExceptionMessages.Animal;
 
-    public class AddAnimalDto
+    public class EditOrAddAnimalDto
     {
         [StringLength(NameMaxLength,
             MinimumLength = NameMinLength, ErrorMessage = InvalidNameLength)]
@@ -31,13 +31,11 @@
 
         public string? SocialMedia { get; set; }
 
-        [Range(typeof(double), WeigthMinValue, WeigthMaxValue)]
+        [Range(typeof(double), WeightMinValue, WeightMaxValue)]
         public double? Weight { get; set; }
 
         public required bool IsHavingValidDocuments { get; set; }
 
         public required int BreedId { get; set; }
-
-        public string? OwnerId { get; set; }
     }
 }

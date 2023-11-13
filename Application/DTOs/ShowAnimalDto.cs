@@ -1,11 +1,15 @@
 ﻿namespace Application.DTOs
 {
+    using Domain.Enum;
+
     public class ShowAnimalDto
     {
         public ShowAnimalDto()
         {
             Breeds = new HashSet<BreedDto>();
             AnimalCategories = new HashSet<AnimalCategoryDto>();
+            Gender = new HashSet<Gender>();
+            HealthStatus = new HashSet<HealthStatus>();
         }
 
         public string? Name { get; set; }
@@ -20,9 +24,9 @@
 
         public byte[]? Photo { get; set; }
 
-        public string? HealthStatus { get; set; }
+        public IEnumerable<HealthStatus> HealthStatus { get; set; }
 
-        public string? Gender { get; set; }
+        public IEnumerable<Gender> Gender { get; set; }
 
         public string? SocialMedia { get; set; }
 

@@ -49,18 +49,6 @@
                     {
                         Id = a.AnimalId.ToString(),
                         Name = a.Name,
-                        Age = a.Age,
-                        Description = a.Description,
-                        Weight = a.Weight,
-                        SocialMedia = a.SocialMedia,
-                        BirthDate = a.BirthDate.ToString(),
-                        Gender = a.Gender.ToString(),
-                        HealthStatus = a.HealthStatus.ToString(),
-                        Photo = a.Photo,
-                        IsEducated = a.IsEducated,
-                        IsHavingValidDocuments = a.IsHavingValidDocuments,
-                        Breed = a.Breed.Name,
-                        Category = a.Breed.Category.Name
                     }).ToListAsync();
 
                 return Result<IEnumerable<AllAnimalDto>>.Success(userAnimals);

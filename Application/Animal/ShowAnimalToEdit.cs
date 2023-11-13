@@ -10,6 +10,7 @@
     using Domain;
     using Response;
     using Persistence.Repositories;
+    using Domain.Enum;
 
     public class ShowAnimalToEdit
     {
@@ -62,8 +63,9 @@
                     Age = animal.Age,
                     BirthDate = animal.BirthDate.ToString(),
                     Description = animal.Description,
-                    Gender = animal.Gender.ToString(),
-                    HealthStatus = animal.HealthStatus.ToString(),
+                    Gender = Enum.GetValues(typeof(Gender)).Cast<Gender>().ToList(),
+                    HealthStatus = 
+                    Enum.GetValues(typeof(HealthStatus)).Cast<HealthStatus>().ToList(),
                     IsEducated = animal.IsEducated,
                     IsHavingValidDocuments = animal.IsHavingValidDocuments,
                     Name = animal.Name,

@@ -10,8 +10,8 @@
             public const string AgeMinValue = "1";
             public const string AgeMaxValue = "20";
             public const int SocialMediaMinLength = 4;
-            public const string WeigthMinValue = "1";
-            public const string WeigthMaxValue = "100";
+            public const string WeightMinValue = "1";
+            public const string WeightMaxValue = "100";
         }
 
         public static class User

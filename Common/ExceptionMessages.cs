@@ -30,7 +30,7 @@
             public const string InvalidEducationLength = "The user education should be with length between 5 and 50";
             public const string InvalidJobTitleLength = "The user job title should be with length between 5 and 50";
             public const string InvalidAddressLength = "The user address should be with length between 10 and 150";
-            public const string InvalidCityLength = "The user city should be with length betweeen 3 and 50";
+            public const string InvalidCityLength = "The user city should be with length between 3 and 50";
         }
 
         public static class Message

@@ -10,6 +10,7 @@
     using Domain;
     using Response;
     using Persistence.Repositories;
+    using Domain.Enum;
 
     public class ShowAnimalToAdd
     {
@@ -44,7 +45,10 @@
                     {
                         AnimalCategoryId = ac.AnimalCategoryId,
                         Name = ac.Name
-                    }).ToArrayAsync()
+                    }).ToArrayAsync(),
+                    Gender = Enum.GetValues(typeof(Gender)).Cast<Gender>().ToList(),
+                    HealthStatus = 
+                    Enum.GetValues(typeof(HealthStatus)).Cast<HealthStatus>().ToList(),
                 };
 
                 return Result<ShowAnimalDto>.Success(animal);
