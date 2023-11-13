@@ -16,7 +16,7 @@
             this.swipeService = swipeService;
         }
 
-        [Route("swipe")]
+        [Route("/swipe")]
         [HttpPost]
         public async Task<ActionResult> Swipe([FromBody] SwipeDto swipe)
         {

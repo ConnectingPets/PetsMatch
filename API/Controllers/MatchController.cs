@@ -16,7 +16,7 @@ namespace API.Controllers
             this.matchService = matchService;
         }
 
-        [Route("match")]
+        [Route("/match")]
         [HttpPost]
         public async Task<ActionResult> Match([FromBody] MatchDto matchDto)
         {
@@ -35,7 +35,7 @@ namespace API.Controllers
             return Ok();
         }
 
-        [Route("unmatch")]
+        [Route("/unmatch")]
         [HttpPost]
         public async Task<ActionResult> UnMatch([FromBody] UnMatchDto unMatchDto)
         {
@@ -54,7 +54,7 @@ namespace API.Controllers
             return Ok();
         }
 
-        [Route("animal-matches")]
+        [Route("/animal-matches")]
         [HttpGet]
         public async Task<ActionResult> AnimalMatches([FromQuery] string animalId)
         {
