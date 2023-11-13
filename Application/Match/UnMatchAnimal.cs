@@ -49,6 +49,7 @@
                 }
 
                 this.repository.Delete(existingMatch);
+                this.repository.DeleteRange(existingMatch.AnimalMatches.ToArray());
                 await this.repository.SaveChangesAsync();
 
                 return Unit.Value;
@@ -56,9 +57,10 @@
 
             private async Task<Match?> GetExistingMatch(Guid animalOneId, Guid animalTwoId)
                 => await this.repository.FirstOrDefaultAsync<Match>(match =>
-                (match.AnimalOneId == animalOneId && match.AnimalTwoId == animalTwoId) ||
-                (match.AnimalOneId == animalTwoId && match.AnimalTwoId == animalOneId)
-            );
+                    match.AnimalMatches.Count(am =>
+                        am.AnimalId == animalOneId ||
+                        am.AnimalId == animalTwoId) == 2
+                    );
         }
     }
 }

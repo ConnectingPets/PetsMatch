@@ -31,7 +31,8 @@
             {
                 Animal? animal = await this.repository
                     .AllReadonly<Animal>(animal => animal.AnimalId == request.AnimalId)
-                    .Include(animal => animal.Matches)
+                    .Include(animal => animal.AnimalMatches)
+                    .ThenInclude(animalMatch => animalMatch.Match)
                     .FirstOrDefaultAsync();
 
                 if (animal == null)
@@ -39,10 +40,10 @@
                     throw new InvalidOperationException(AnimalNotFound);
                 }
 
-                return animal.Matches
-                    .Select(m => new AnimalMatchDto
+                return animal.AnimalMatches
+                    .Select(am => new AnimalMatchDto
                     {
-                        MatchOn = m.MatchOn
+                        MatchOn = am.Match.MatchOn
                     })
                     .ToList();
             }

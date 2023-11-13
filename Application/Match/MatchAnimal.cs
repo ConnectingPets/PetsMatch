@@ -9,6 +9,7 @@
     using Persistence.Repositories;
     using static Common.ExceptionMessages.Match;
     using static Common.ExceptionMessages.Animal;
+    using Azure.Core;
 
     public class MatchAnimal
     {
@@ -53,15 +54,7 @@
 
                 if (isMatch)
                 {
-                    Match match = new Match
-                    {
-                        AnimalOneId = request.AnimalOneId,
-                        AnimalTwoId = request.AnimalTwoId,
-                        MatchOn = DateTime.Now
-                    };
-
-                    await repository.AddAsync(match);
-                    await repository.SaveChangesAsync();
+                    await CreateMatch(request.AnimalOneId, request.AnimalTwoId);
                 }
 
                 return Unit.Value;
@@ -75,11 +68,33 @@
                     swipedRight
                 );
 
+            private async Task CreateMatch(Guid animalOneId, Guid animalTwoId)
+            {
+                Match match = new Match
+                {
+                    MatchOn = DateTime.Now
+                };
+
+                match.AnimalMatches.Add(new AnimalMatch
+                {
+                    AnimalId = animalOneId
+                });
+
+                match.AnimalMatches.Add(new AnimalMatch
+                {
+                    AnimalId = animalTwoId
+                });
+
+                await repository.AddAsync(match);
+                await repository.SaveChangesAsync();
+            }
+
             private async Task<bool> IsPresentMatch(Guid animalOneId, Guid animalTwoId)
                 => await this.repository.AnyAsync<Match>(match =>
-                    (match.AnimalOneId == animalOneId && match.AnimalTwoId == animalTwoId) ||
-                    (match.AnimalOneId == animalTwoId && match.AnimalTwoId == animalOneId)
-                );
+                    match.AnimalMatches.Count(am => 
+                        am.AnimalId == animalOneId ||
+                        am.AnimalId == animalTwoId) == 2
+                    );
         }
     }
 }
