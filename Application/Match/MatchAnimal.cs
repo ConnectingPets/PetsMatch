@@ -61,12 +61,10 @@
             }
 
             private async Task<bool> IsMatch(Guid animalOneId, Guid animalTwoId, bool swipedRight)
-                => await this.repository.AnyAsync<Swipe>(swipe =>
-                    swipe.SwiperAnimalId == animalTwoId &&
-                    swipe.SwipeeAnimalId == animalOneId &&
-                    swipe.SwipedRight &&
-                    swipedRight
-                );
+                => await this.repository.CountAsync<Swipe>(swipe =>
+                    (swipe.SwiperAnimalId == animalTwoId && swipe.SwipeeAnimalId == animalOneId && swipe.SwipedRight) ||
+                    (swipe.SwiperAnimalId == animalOneId && swipe.SwipeeAnimalId == animalTwoId && swipe.SwipedRight)
+                   ) == 2;
 
             private async Task CreateMatch(Guid animalOneId, Guid animalTwoId)
             {
@@ -91,10 +89,9 @@
 
             private async Task<bool> IsPresentMatch(Guid animalOneId, Guid animalTwoId)
                 => await this.repository.AnyAsync<Match>(match =>
-                    match.AnimalMatches.Count(am => 
-                        am.AnimalId == animalOneId ||
-                        am.AnimalId == animalTwoId) == 2
-                    );
+                    match.AnimalMatches.Count(am => am.AnimalId == animalOneId) == 1 &&
+                    match.AnimalMatches.Count(am => am.AnimalId == animalTwoId) == 1
+                   );
         }
     }
 }

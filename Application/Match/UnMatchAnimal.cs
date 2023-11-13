@@ -57,10 +57,9 @@
 
             private async Task<Match?> GetExistingMatch(Guid animalOneId, Guid animalTwoId)
                 => await this.repository.FirstOrDefaultAsync<Match>(match =>
-                    match.AnimalMatches.Count(am =>
-                        am.AnimalId == animalOneId ||
-                        am.AnimalId == animalTwoId) == 2
-                    );
+                    match.AnimalMatches.Count(am => am.AnimalId == animalOneId) == 1 &&
+                    match.AnimalMatches.Count(am => am.AnimalId == animalTwoId) == 1
+                   );
         }
     }
 }
