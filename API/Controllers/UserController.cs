@@ -1,7 +1,9 @@
 ﻿using Domain;
+using Domain.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace API.Controllers
@@ -21,12 +23,14 @@ namespace API.Controllers
         [HttpGet]
         public IActionResult Register()
         {
-           return View(); 
+            return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(User model)
+        public async Task<IActionResult> Register(RegisterUserViewModel model)
         {
+
+
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -34,26 +38,25 @@ namespace API.Controllers
 
             User user = new Domain.User()
             {
-               Address = model.Address,
-               Age = model.Age,
-               Email = model.Email,
-               City = model.City,
-               Description = model.Description,
-               Education = model.Education,
-               Gender = model.Gender,
-               JobTitle = model.JobTitle,
-               Name = model.Name,
-               PhoneNumber = model.PhoneNumber,
-               Photo = model.Photo,
-               UserName = model.UserName
-
+                Address = model.Address,
+                Age = model.Age,
+                Email = model.Email,
+                City = model.City,
+                Description = model.Description,
+                Education = model.Education,
+                Gender = model.Gender,
+                JobTitle = model.JobTitle,
+                Name = model.Name,
+                Photo = model.Photo,
+                Animals = model.Animals,
+                UsersPassions = model.UsersPassions
             };
 
-            await userManager.SetEmailAsync(user, model.Email);
-            await userManager.SetUserNameAsync(user, model.Email);
+            await userManager.SetEmailAsync(user, user.Email);
+            await userManager.SetUserNameAsync(user, user.Name);
 
             IdentityResult result =
-                await userManager.CreateAsync(user, "test"); // the "test" must be password of the user but there is no password property in the User model.
+                await userManager.CreateAsync(user, model.Password);
 
             if (!result.Succeeded)
             {
@@ -62,44 +65,31 @@ namespace API.Controllers
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
 
-                return View(model);
+                return BadRequest();
             }
 
             await signInManager.SignInAsync(user, false);
 
-            return RedirectToAction("Index", "Home");
+            return Ok(new { Message = "Registration successful" });
         }
 
 
         [HttpGet]
         public async Task<IActionResult> Login(string? returnUrl = null)
         {
-            await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
-
-           
-           /* User model = new User()
-            {
-                ReturnUrl = returnUrl
-            };*/ //In the model there is no ReturnUrl Property
-
-            return View(/*model*/);
+            return Ok(new { Message = "Login successful" });
         }
 
 
         [HttpPost]
-        public async Task<IActionResult> Login(User model)
+        public async Task<IActionResult> Login(LoginUserViewModel model)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                return View(model);
+                return Ok(new { Message = "Login successful" });
             }
 
-            var result =
-                await signInManager.PasswordSignInAsync(model.Email!, "test", /*model.RememberMe*/true, false);
-
-
-            return View(); //this is just for succesfull building we will make it later
-           // return Redirect(/*model.ReturnUrl ?? "/Home/Index"*/);//this should happen later
+            return Unauthorized(new { Message = "Invalid username or password" });
         }
     }
 }
