@@ -1,7 +1,96 @@
 @use '../../global-styles/' as gs;
 
-.matches{
-    &__page{
-        
+.matches {
+    &__page {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        @include gs.display-grid(4, 0, center);
+        grid-template-areas: 'matches chat chat profile';
+        border: 1px solid gs.$card-hover-color;
+
+        &>section {
+            border: 1px solid #e3dcdc;
+            height: 100vh;
+        }
+
+        .matches {
+            grid-area: matches;
+        }
+
+        .chat {
+            grid-area: chat;
+        }
+
+        .profile {
+            grid-area: profile;
+        }
+
+        &>section {
+            width: 100%;
+            min-height: 100vh;
+        }
+
+        &__theme__button {
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+        }
+
+        &__matches {
+            position: relative;
+            width: 100%;
+            @include gs.display-flex(column, none, center);
+
+            &__links {
+                @include gs.display-flex(row, space-between, center);
+                width: 10rem;
+                padding-bottom: 0.3rem;
+
+                &>h4 {
+                    position: relative;
+                    @include gs.display-flex(column, none, center);
+                    text-transform: capitalize;
+                    margin: 0.5rem 0;
+                    cursor: pointer;
+                }
+            }
+
+            &__cards{
+                width: 100%;
+                padding: 1.2rem 0;
+                overflow: auto;
+                @include gs.display-grid(2,1rem,center);
+            }
+        }
+    }
+
+    &__messages__option {
+        &::after {
+            content: '';
+            width: 110%;
+            border-radius: 20%;
+            height: 0.2rem;
+            background: gs.$light-blue;
+            position: absolute;
+            opacity: 1;
+            bottom: -0.6rem;
+            margin: 0.1rem;
+            animation: opacityShow 0.5 forwards;
+            -webkit-animation: opacityShow 0.5s forwards;
+            -moz-animation: opacityShow 0.5s forwards;
+        }
+    }
+}
+
+@keyframes opacityShow {
+    0% {
+        opacity: 0;
+        transform: scale(0);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1.1);
     }
 }

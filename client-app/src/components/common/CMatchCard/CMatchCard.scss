@@ -1,0 +1,60 @@
+@use '../../../global-styles/' as gs;
+
+.match__card {
+    width: 7.5rem;
+    height: 12rem;
+    @include gs.shadow(gs.$dark-shadow);
+    @include gs.display-flex(column, center, center);
+    transition: 0.5s;
+    cursor: pointer;
+
+    &:hover {
+        transform: scale(1.07);
+    }
+
+    &__light {
+        background:  linear-gradient(220deg, gs.$light-gradient-first 0%, gs.$light-gradient-second 77%);
+    }
+
+    &__dark {
+        background: linear-gradient(220deg, gs.$dark-primary 0%, gs.$dark-secondary 77%);
+    }
+
+    &__image__wrapper {
+        width: calc(100% - 4px);
+        height: calc(100% - 4px);
+        position: relative;
+
+        &>div {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, #00000000 2%, #00000018 32%, #00000072 68%, #00000085 72%, #000000cb 98%);
+            ;
+        }
+
+        &>img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        &>h4 {
+            text-transform: capitalize;
+            font-size: 1rem;
+            text-align: center;
+            margin: 0;
+            // color: gs.$light-background-color;
+            font-weight: 800;
+            // -webkit-text-stroke: 1px #000;
+            position: absolute;
+            bottom: 0.4rem;
+            left: 50%;
+            transform: translate(-50%);
+            color: gs.$white-text;
+            z-index: 2;
+        }
+    }
+
+}
