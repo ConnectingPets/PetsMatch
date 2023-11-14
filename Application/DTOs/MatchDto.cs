@@ -5,7 +5,5 @@
         public required string AnimalOneId { get; set; }
 
         public required string AnimalTwoId { get; set; }
-
-        public required bool SwipedRight { get; set; }
     }
 }

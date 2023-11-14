@@ -26,12 +26,11 @@
                 AnimalId = animalId
             });
 
-        public async Task Match(Guid animalOneId, Guid animalTwoId, bool swipedRight)
+        public async Task Match(Guid animalOneId, Guid animalTwoId)
             => await this.mediator.Send(new MatchAnimalCommand
             {
                 AnimalOneId = animalOneId,
-                AnimalTwoId = animalTwoId,
-                SwipedRight = swipedRight
+                AnimalTwoId = animalTwoId
             });
 
         public async Task UnMatch(Guid animalOneId, Guid animalTwoId)

@@ -24,8 +24,8 @@ namespace API.Controllers
             {
                 await this.matchService.Match(
                     Guid.Parse(matchDto.AnimalOneId),
-                    Guid.Parse(matchDto.AnimalTwoId),
-                    matchDto.SwipedRight);
+                    Guid.Parse(matchDto.AnimalTwoId)
+                );
             }
             catch (Exception)
             {

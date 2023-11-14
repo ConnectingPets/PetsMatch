@@ -48,17 +48,18 @@
                     throw new InvalidOperationException(NotMatched);
                 }
 
+                this.repository.DeleteRange<AnimalMatch>(am => am.MatchId == existingMatch.MatchId);
                 this.repository.Delete(existingMatch);
-                this.repository.DeleteRange(existingMatch.AnimalMatches.ToArray());
                 await this.repository.SaveChangesAsync();
 
                 return Unit.Value;
             }
 
             private async Task<Match?> GetExistingMatch(Guid animalOneId, Guid animalTwoId)
-                => await this.repository.FirstOrDefaultAsync<Match>(match =>
-                    match.AnimalMatches.Count(am => am.AnimalId == animalOneId) == 1 &&
-                    match.AnimalMatches.Count(am => am.AnimalId == animalTwoId) == 1
+                => await this.repository.FirstOrDefaultAsync<Match>(m =>
+                    m.AnimalMatches.Count == 2 &&
+                    m.AnimalMatches.Any(am => am.AnimalId == animalOneId) &&
+                    m.AnimalMatches.Any(am => am.AnimalId == animalTwoId)
                    );
         }
     }

@@ -8,6 +8,6 @@
 
         Task UnMatch(Guid animalOneId, Guid animalTwoId);
 
-        Task Match(Guid animalOneId, Guid animalTwoId, bool swipedRight);
+        Task Match(Guid animalOneId, Guid animalTwoId);
     }
 }

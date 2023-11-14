@@ -18,8 +18,6 @@
             public Guid AnimalOneId { get; set; }
 
             public Guid AnimalTwoId { get; set; }
-
-            public bool SwipedRight { get; set; }
         }
 
         public class MatchAnimalHandler : IRequestHandler<MatchAnimalCommand, Unit>
@@ -50,7 +48,7 @@
                     throw new InvalidOperationException(AlreadyMatched);
                 }
 
-                bool isMatch = await IsMatch(request.AnimalOneId, request.AnimalTwoId, request.SwipedRight);
+                bool isMatch = await IsMatch(request.AnimalOneId, request.AnimalTwoId);
 
                 if (isMatch)
                 {
@@ -60,7 +58,7 @@
                 return Unit.Value;
             }
 
-            private async Task<bool> IsMatch(Guid animalOneId, Guid animalTwoId, bool swipedRight)
+            private async Task<bool> IsMatch(Guid animalOneId, Guid animalTwoId)
                 => await this.repository.CountAsync<Swipe>(swipe =>
                     (swipe.SwiperAnimalId == animalTwoId && swipe.SwipeeAnimalId == animalOneId && swipe.SwipedRight) ||
                     (swipe.SwiperAnimalId == animalOneId && swipe.SwipeeAnimalId == animalTwoId && swipe.SwipedRight)
@@ -88,9 +86,10 @@
             }
 
             private async Task<bool> IsPresentMatch(Guid animalOneId, Guid animalTwoId)
-                => await this.repository.AnyAsync<Match>(match =>
-                    match.AnimalMatches.Count(am => am.AnimalId == animalOneId) == 1 &&
-                    match.AnimalMatches.Count(am => am.AnimalId == animalTwoId) == 1
+                => await this.repository.AnyAsync<Match>(m =>
+                    m.AnimalMatches.Count == 2 &&
+                    m.AnimalMatches.Any(am => am.AnimalId == animalOneId) &&
+                    m.AnimalMatches.Any(am => am.AnimalId == animalTwoId)
                    );
         }
     }
