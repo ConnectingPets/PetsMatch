@@ -61,7 +61,7 @@ namespace API.Controllers
             }
             catch (MatchNotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return Conflict(ex.Message);
             }
             catch
             {
