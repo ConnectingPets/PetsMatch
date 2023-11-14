@@ -12,6 +12,7 @@
     using static Application.Animal.ShowAnimalToEdit;
     using static Application.Animal.EditAnimal;
 
+
     public class AnimalController : BaseApiController
     {
         private readonly IMediator mediator;
@@ -29,7 +30,7 @@
             AddAnimalCommand command = new AddAnimalCommand()
             {
                 AnimalDto = animalDto,
-                OwnerId = this.User.GetById()
+                OwnerId = ownerId
             };
 
             var result = await mediator.Send(command);
@@ -58,7 +59,7 @@
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAnimal(string id)
+        public async Task<IActionResult> DeleteAnimal([FromRoute]string id)
         {
             DeleteAnimalCommand command = new DeleteAnimalCommand()
             {

@@ -4,7 +4,7 @@
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
     using Domain;
-
+        
     public class SwipeEntityConfiguration : IEntityTypeConfiguration<Swipe>
     {
         public void Configure(EntityTypeBuilder<Swipe> builder)
