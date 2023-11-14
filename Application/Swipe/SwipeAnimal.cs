@@ -8,6 +8,7 @@
 
     using Persistence.Repositories;
     using static Common.ExceptionMessages.Animal;
+    using Application.Exceptions;
 
     public class SwipeAnimal
     {
@@ -33,12 +34,12 @@
             {
                 if (await this.repository.AnyAsync<Animal>(animal => animal.AnimalId == request.SwiperAnimalId) == false)
                 {
-                    throw new InvalidOperationException(AnimalNotFound);
+                    throw new AnimalNotFoundException(AnimalNotFound);
                 }
 
                 if (await this.repository.AnyAsync<Animal>(animal => animal.AnimalId == request.SwipeeAnimalId) == false)
                 {
-                    throw new InvalidOperationException(AnimalNotFound);
+                    throw new AnimalNotFoundException(AnimalNotFound);
                 }
 
                 Swipe swipe = new Swipe

@@ -4,6 +4,7 @@ namespace API.Controllers
 
     using Application.DTOs;
     using Application.Service.Interfaces;
+    using Application.Exceptions;
 
     [Route("api/[controller]")]
     [ApiController]
@@ -27,9 +28,17 @@ namespace API.Controllers
                     Guid.Parse(matchDto.AnimalTwoId)
                 );
             }
-            catch (Exception)
+            catch (AnimalNotFoundException ex)
             {
-                throw;
+                return NotFound(ex.Message);
+            }
+            catch (AlreadyMatchedException ex)
+            {
+                return Conflict(ex.Message);
+            }
+            catch
+            {
+                return StatusCode(500, "Internal Server Error");
             }
 
             return Ok();
@@ -46,9 +55,17 @@ namespace API.Controllers
                     Guid.Parse(unMatchDto.AnimalTwoId)
                 );
             }
-            catch (Exception)
+            catch (AnimalNotFoundException ex)
             {
-                throw;
+                return NotFound(ex.Message);
+            }
+            catch (MatchNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch
+            {
+                return StatusCode(500, "Internal Server Error");
             }
 
             return Ok();
@@ -65,9 +82,13 @@ namespace API.Controllers
                     Guid.Parse(animalId)
                 );
             }
-            catch (Exception)
+            catch (AnimalNotFoundException ex)
             {
-                throw;
+                return NotFound(ex.Message);
+            }
+            catch
+            {
+                return StatusCode(500, "Internal Server Error");
             }
 
             return Ok(matches);

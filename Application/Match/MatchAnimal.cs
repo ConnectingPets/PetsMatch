@@ -10,6 +10,7 @@
     using static Common.ExceptionMessages.Match;
     using static Common.ExceptionMessages.Animal;
     using Azure.Core;
+    using Application.Exceptions;
 
     public class MatchAnimal
     {
@@ -33,19 +34,19 @@
             {
                 if (await this.repository.AnyAsync<Animal>(animal => animal.AnimalId == request.AnimalOneId) == false)
                 {
-                    throw new InvalidOperationException(AnimalNotFound);
+                    throw new AnimalNotFoundException(AnimalNotFound);
                 }
 
                 if (await this.repository.AnyAsync<Animal>(animal => animal.AnimalId == request.AnimalTwoId) == false)
                 {
-                    throw new InvalidOperationException(AnimalNotFound);
+                    throw new AnimalNotFoundException(AnimalNotFound);
                 }
 
                 bool isPresentMatch = await IsPresentMatch(request.AnimalOneId, request.AnimalTwoId);
 
                 if (isPresentMatch)
                 {
-                    throw new InvalidOperationException(AlreadyMatched);
+                    throw new AlreadyMatchedException(AlreadyMatched);
                 }
 
                 bool isMatch = await IsMatch(request.AnimalOneId, request.AnimalTwoId);

@@ -7,6 +7,7 @@
     using Domain;
     using static Common.ExceptionMessages.Animal;
     using static Common.ExceptionMessages.Match;
+    using Application.Exceptions;
 
     public class UnMatchAnimal
     {
@@ -30,12 +31,12 @@
             {
                 if (await this.repository.AnyAsync<Animal>(animal => animal.AnimalId == request.AnimalOneId) == false)
                 {
-                    throw new InvalidOperationException(AnimalNotFound);
+                    throw new AnimalNotFoundException(AnimalNotFound);
                 }
 
                 if (await this.repository.AnyAsync<Animal>(animal => animal.AnimalId == request.AnimalTwoId) == false)
                 {
-                    throw new InvalidOperationException(AnimalNotFound);
+                    throw new AnimalNotFoundException(AnimalNotFound);
                 }
 
                 Match? existingMatch = await GetExistingMatch(
@@ -45,7 +46,7 @@
 
                 if (existingMatch == null)
                 {
-                    throw new InvalidOperationException(NotMatched);
+                    throw new MatchNotFoundException(NotMatched);
                 }
 
                 this.repository.DeleteRange<AnimalMatch>(am => am.MatchId == existingMatch.MatchId);

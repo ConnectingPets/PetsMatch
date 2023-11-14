@@ -10,6 +10,7 @@
     using Application.DTOs;
     using Persistence.Repositories;
     using static Common.ExceptionMessages.Animal;
+    using Application.Exceptions;
 
     public class AnimalMatches
     {
@@ -32,18 +33,20 @@
                 Animal? animal = await this.repository
                     .AllReadonly<Animal>(animal => animal.AnimalId == request.AnimalId)
                     .Include(animal => animal.AnimalMatches)
-                    .ThenInclude(animalMatch => animalMatch.Match)
+                    .ThenInclude(animalMatch => animalMatch.Animal)
                     .FirstOrDefaultAsync();
 
                 if (animal == null)
                 {
-                    throw new InvalidOperationException(AnimalNotFound);
+                    throw new AnimalNotFoundException(AnimalNotFound);
                 }
 
                 return animal.AnimalMatches
                     .Select(am => new AnimalMatchDto
                     {
-                        MatchOn = am.Match.MatchOn
+                        AnimalId = am.AnimalId.ToString(),
+                        Name = am.Animal.Name,
+                        Photo = Convert.ToBase64String(am.Animal.Photo)
                     })
                     .ToList();
             }

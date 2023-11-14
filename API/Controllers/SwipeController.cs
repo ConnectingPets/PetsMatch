@@ -4,6 +4,7 @@
     
     using Application.DTOs;
     using Application.Service.Interfaces;
+    using Application.Exceptions;
 
     [Route("api/[controller]")]
     [ApiController]
@@ -27,9 +28,13 @@
                     Guid.Parse(swipe.SwipeeAnimalId),
                     swipe.SwipedRight);
             }
-            catch (Exception)
+            catch (AnimalNotFoundException ex)
             {
-                throw;
+                return NotFound(ex.Message);
+            }
+            catch
+            {
+                return StatusCode(500, "Internal Server Error");
             }
 
             return Ok();
