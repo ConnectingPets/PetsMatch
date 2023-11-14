@@ -9,6 +9,10 @@
         grid-template-areas: 'matches chat chat profile';
         border: 1px solid gs.$card-hover-color;
 
+        &__dark {
+            @include gs.dark-theme(gs.$dark-background-color-second);
+        }
+
         &>section {
             border: 1px solid #e3dcdc;
             height: 100vh;
@@ -29,6 +33,13 @@
         &>section {
             width: 100%;
             min-height: 100vh;
+
+            ::-webkit-scrollbar {
+                display: none;
+            }
+
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
 
         &__theme__button {
@@ -43,24 +54,28 @@
             @include gs.display-flex(column, none, center);
 
             &__links {
-                @include gs.display-flex(row, space-between, center);
-                width: 10rem;
+                @include gs.display-flex(row, center, center);
+                width: 100%;
                 padding-bottom: 0.3rem;
+
+                &__dark {
+                    @include gs.dark-theme(gs.$dark-background-color);
+                }
 
                 &>h4 {
                     position: relative;
                     @include gs.display-flex(column, none, center);
                     text-transform: capitalize;
-                    margin: 0.5rem 0;
+                    margin: 0.5rem;
                     cursor: pointer;
                 }
             }
 
-            &__cards{
+            &__render {
                 width: 100%;
                 padding: 1.2rem 0;
                 overflow: auto;
-                @include gs.display-grid(2,1rem,center);
+                @include gs.display-grid(2, 1rem, center);
             }
         }
     }

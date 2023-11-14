@@ -4,6 +4,7 @@ import { CChangeThemeButton } from '../../components/common/CChangeThemeButton/C
 import themeStore from '../../stores/themeStore';
 import './MatchesChatPage.scss';
 import { CMatchCard } from '../../components/common/CMatchCard/CMatchCard';
+import { observer } from 'mobx-react';
 
 const pets = [
     {
@@ -20,7 +21,7 @@ const pets = [
     },
     {
         name: "snoop dogg",
-        photo: "https://www.cdc.gov/healthypets/images/pets/cute-dog-headshot.jpg?_=42445"
+        photo: "https://a-z-animals.com/media/2021/12/Prettiest-_-Cutest-Dogs-header.jpg"
     },
     {
         name: "BIG",
@@ -30,7 +31,7 @@ const pets = [
 
 interface MatchesChatPageProps { };
 
-export const MatchesChatPage: React.FC<MatchesChatPageProps> = () => {
+export const MatchesChatPage: React.FC<MatchesChatPageProps> = observer(() => {
 
     const [showMatches, setShowMatches] = useState(true);
 
@@ -43,18 +44,18 @@ export const MatchesChatPage: React.FC<MatchesChatPageProps> = () => {
     }
 
     return (
-        <section className='matches__page'>
+        <section className={themeStore.isLightTheme ? 'matches__page' : 'matches__page matches__page__dark'}>
             <div className='matches__page__theme__button'>
                 <CChangeThemeButton />
             </div>
             <section className='matches matches__page__matches'>
                 <CMatchesHeader />
-                <article className='matches__page__matches__links'>
+                <article className={themeStore.isLightTheme ? 'matches__page__matches__links' : 'matches__page__matches__links matches__page__matches__links__dark'}>
                     <h4 className={showMatches ? 'matches__messages__option' : ''} onClick={showMatchesHandler}>matches</h4>
                     <h4 className={!showMatches ? 'matches__messages__option' : ''} onClick={showMessagesHandler}>messages</h4>
                 </article>
 
-                <article className='matches__page__matches__cards'>
+                <article className='matches__page__matches__render' >
                     {
                         showMatches
                             ? <>{pets.map(x => <CMatchCard name={x.name} photo={x.photo} key={Math.random()} />)}</>
@@ -69,4 +70,4 @@ export const MatchesChatPage: React.FC<MatchesChatPageProps> = () => {
 
         </section>
     )
-}
+})

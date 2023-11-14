@@ -6,6 +6,12 @@
     background: linear-gradient(220deg, gs.$light-gradient-first 0%, gs.$light-gradient-second 77%);
     @include gs.display-flex(row, space-between, center);
     padding: 1rem 3rem;
+    transition: 0.5s;
+
+    &__dark {
+        transition: 0.5s;
+        @include gs.dark-theme(linear-gradient(220deg, gs.$dark-primary 0%, gs.$dark-secondary 77%));
+    }
 
     &__user {
         @include gs.display-flex(row, center, center);
