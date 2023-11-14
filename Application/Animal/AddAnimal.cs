@@ -11,7 +11,7 @@
     {
         public class AddAnimalCommand : IRequest<Result<Unit>>
         {
-            public EditOrAddAnimalDto AnimalDto { get; set; } = null!;
+            public AddAnimalDto AnimalDto { get; set; } = null!;
 
             public string OwnerId { get; set; } = null!;
         }
@@ -28,7 +28,7 @@
 
             public async Task<Result<Unit>> Handle(AddAnimalCommand request, CancellationToken cancellationToken)
             {
-                EditOrAddAnimalDto animalDto = request.AnimalDto;
+                AddAnimalDto animalDto = request.AnimalDto;
 
                 Animal animal = new Animal()
                 {
@@ -44,7 +44,7 @@
                     Photo = animalDto.Photo,
                     IsHavingValidDocuments = animalDto.IsHavingValidDocuments,
                     OwnerId = Guid.Parse(request.OwnerId),
-                    BreedId = animalDto.BreedId,
+                    BreedId = animalDto.BreedId
                 };
 
                 await repository.AddAsync(animal);

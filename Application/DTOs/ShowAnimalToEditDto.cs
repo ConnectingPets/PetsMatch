@@ -31,5 +31,7 @@
         public double? Weight { get; set; }
 
         public bool IsHavingValidDocuments { get; set; }
+
+        public bool CanEditAll { get; set; }
     }
 }

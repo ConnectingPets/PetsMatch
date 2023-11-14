@@ -14,7 +14,7 @@
     {
         public class EditAnimalCommand : IRequest<Result<Unit>>
         {
-            public EditOrAddAnimalDto AnimalDto { get; set; } = null!;
+            public EditAnimalDto AnimalDto { get; set; } = null!;
 
             public string AnimalId { get; set; } = null!;
 
@@ -33,7 +33,7 @@
 
             public async Task<Result<Unit>> Handle(EditAnimalCommand request, CancellationToken cancellationToken)
             {
-                EditOrAddAnimalDto dto = request.AnimalDto;
+                EditAnimalDto dto = request.AnimalDto;
                 Animal? animal =
                     await repository.GetById<Animal>(Guid.Parse(request.AnimalId));
 
@@ -44,6 +44,22 @@
                 if (animal.OwnerId.ToString() != request.UserId.ToLower())
                 {
                     return Result<Unit>.Failure("This pet does not belong to you!");
+                }
+
+                bool isSomethingEdit = animal.Name != dto.Name 
+                    || animal.BreedId != dto.BreedId 
+                    || animal.Gender != dto.Gender;
+
+                if (isSomethingEdit)
+                {
+                    animal.LastModified = DateTime.UtcNow;
+                }
+
+                int daysDifference = 29;
+
+                if (daysDifference < 30 && isSomethingEdit)
+                {
+                    return Result<Unit>.Failure($"Can not update pet name, breed and gender for another {30 - daysDifference} days.");
                 }
 
                 animal.BirthDate = dto.BirthDate;

@@ -6,7 +6,7 @@
     using static Common.EntityValidationConstants.Animal;
     using static Common.ExceptionMessages.Animal;
 
-    public class EditOrAddAnimalDto
+    public class AddAnimalDto 
     {
         [StringLength(NameMaxLength,
             MinimumLength = NameMinLength, ErrorMessage = InvalidNameLength)]

@@ -70,6 +70,11 @@
                     Weight = animal.Weight,
                 };
 
+                if (!((DateTime.UtcNow - animal.LastModified).Days < 30))
+                {
+                    animalDto.CanEditAll = true;
+                }
+
                 return Result<ShowAnimalToEditDto>.Success(animalDto);
             }
         }

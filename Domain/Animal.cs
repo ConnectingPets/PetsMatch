@@ -78,6 +78,10 @@ namespace Domain
         [ForeignKey(nameof(OwnerId))]
         public User Owner { get; set; } = null!;
 
+        public DateTime CreatedOn { get; set; }
+
+        public DateTime LastModified { get; set; }
+
         public ICollection<Swipe> Swipes { get; set; } = null!;
         
         public ICollection<Match> Matches { get; set; } = null!;

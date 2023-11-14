@@ -23,14 +23,14 @@
         }
 
         [HttpPost("Add")]
-        public async Task<IActionResult> AddAnimal([FromBody] EditOrAddAnimalDto animalDto)
+        public async Task<IActionResult> AddAnimal([FromBody] AddAnimalDto animalDto)
         {
             string ownerId = this.User.GetById();
 
             AddAnimalCommand command = new AddAnimalCommand()
             {
                 AnimalDto = animalDto,
-                OwnerId = ownerId
+                OwnerId = "F6E0FC1A-7726-4519-A599-0114A1EB1875"
             };
 
             var result = await mediator.Send(command);
@@ -64,20 +64,20 @@
             DeleteAnimalCommand command = new DeleteAnimalCommand()
             {
                 AnimalId = id,
-                UserId = this.User.GetById()
+                UserId = "F6E0FC1A-7726-4519-A599-0114A1EB1875"
             };
 
             return new JsonResult(await mediator.Send(command));
         }
 
         [HttpPatch("{id}")]
-        public async Task<IActionResult> UpdateAnimal([FromBody]EditOrAddAnimalDto animalDto, string id)
+        public async Task<IActionResult> UpdateAnimal([FromBody]EditAnimalDto animalDto, string id)
         {
             EditAnimalCommand command = new EditAnimalCommand()
             {
                 AnimalDto = animalDto,
                 AnimalId = id,
-                UserId = this.User.GetById()
+                UserId = "F6E0FC1A-7726-4519-A599-0114A1EB1875"
             };
 
             return new JsonResult(await mediator.Send(command));
@@ -89,7 +89,7 @@
             ShowAnimalToEditQuery query = new ShowAnimalToEditQuery()
             {
                 AnimalId = id,
-                UserId = this.User.GetById()
+                UserId = "F6E0FC1A-7726-4519-A599-0114A1EB1875"
             };
 
             return new JsonResult(await mediator.Send(query));
