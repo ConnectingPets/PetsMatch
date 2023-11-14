@@ -16,7 +16,7 @@
             public string OwnerId { get; set; } = null!;
         }
 
-        public class AddAnimalCommandHandler : 
+        public class AddAnimalCommandHandler :
             IRequestHandler<AddAnimalCommand, Result<Unit>>
         {
             private readonly IRepository repository;
@@ -48,15 +48,18 @@
                 };
 
                 await repository.AddAsync(animal);
-                var result = await repository.SaveChangesAsync() > 0;
 
-                if (!result)
+                try
                 {
-                    return 
+                    await repository.SaveChangesAsync();
+                    return Result<Unit>.Success(Unit.Value, $"You have successfully add {animal.Name} to your pet's list");
+                }
+                catch (Exception)
+                {
+                    return
                         Result<Unit>.Failure($"Failed to create pet - {animal.Name}");
                 }
 
-                return Result<Unit>.Success(Unit.Value, $"You have successfully add {animal.Name} to your pet's list");
             }
         }
     }

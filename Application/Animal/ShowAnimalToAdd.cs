@@ -10,17 +10,16 @@
     using Domain;
     using Response;
     using Persistence.Repositories;
-    using Domain.Enum;
 
     public class ShowAnimalToAdd
     {
-        public class ShowAnimalToAddQuery : IRequest<Result<ShowAnimalDto>>
+        public class ShowAnimalToAddQuery : IRequest<Result<ShowAnimalToAddDto>>
         {
 
         }
 
         public class ShowAnimalToAddQueryHandler :
-            IRequestHandler<ShowAnimalToAddQuery, Result<ShowAnimalDto>>
+            IRequestHandler<ShowAnimalToAddQuery, Result<ShowAnimalToAddDto>>
         {
             private readonly IRepository repository;
 
@@ -29,9 +28,9 @@
                 this.repository = repository;
             }
 
-            public async Task<Result<ShowAnimalDto>> Handle(ShowAnimalToAddQuery request, CancellationToken cancellationToken)
+            public async Task<Result<ShowAnimalToAddDto>> Handle(ShowAnimalToAddQuery request, CancellationToken cancellationToken)
             {
-                var animal = new ShowAnimalDto()
+                var animal = new ShowAnimalToEditDto()
                 {
                     Breeds = await repository.AllReadonly<Breed>().
                     Select(b => new BreedDto()
@@ -45,13 +44,10 @@
                     {
                         AnimalCategoryId = ac.AnimalCategoryId,
                         Name = ac.Name
-                    }).ToArrayAsync(),
-                    Gender = Enum.GetValues(typeof(Gender)).Cast<Gender>().ToList(),
-                    HealthStatus = 
-                    Enum.GetValues(typeof(HealthStatus)).Cast<HealthStatus>().ToList(),
+                    }).ToArrayAsync()
                 };
 
-                return Result<ShowAnimalDto>.Success(animal);
+                return Result<ShowAnimalToAddDto>.Success(animal);
             }
         }
     }

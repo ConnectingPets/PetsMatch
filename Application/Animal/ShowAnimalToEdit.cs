@@ -10,11 +10,10 @@
     using Domain;
     using Response;
     using Persistence.Repositories;
-    using Domain.Enum;
 
     public class ShowAnimalToEdit
     {
-        public class ShowAnimalToEditQuery : IRequest<Result<ShowAnimalDto>>
+        public class ShowAnimalToEditQuery : IRequest<Result<ShowAnimalToEditDto>>
         {
             public string AnimalId { get; set; } = null!;
 
@@ -22,7 +21,7 @@
         }
 
         public class ShowAnimalToEditQueryHandler :
-            IRequestHandler<ShowAnimalToEditQuery, Result<ShowAnimalDto>>
+            IRequestHandler<ShowAnimalToEditQuery, Result<ShowAnimalToEditDto>>
         {
             private readonly IRepository repository;
 
@@ -31,21 +30,21 @@
                 this.repository = repository;
             }
 
-            public async Task<Result<ShowAnimalDto>> Handle(ShowAnimalToEditQuery request, CancellationToken cancellationToken)
+            public async Task<Result<ShowAnimalToEditDto>> Handle(ShowAnimalToEditQuery request, CancellationToken cancellationToken)
             {
                 Animal? animal =
                     await repository.GetById<Animal>(Guid.Parse(request.AnimalId));
 
                 if (animal == null)
                 {
-                    return Result<ShowAnimalDto>.Failure("This pet does not exist! Please select existing one");
+                    return Result<ShowAnimalToEditDto>.Failure("This pet does not exist! Please select existing one");
                 }
                 if (animal.OwnerId.ToString() != request.UserId.ToLower())
                 {
-                    return Result<ShowAnimalDto>.Failure("This pet does not belong to you!");
+                    return Result<ShowAnimalToEditDto>.Failure("This pet does not belong to you!");
                 }
 
-                ShowAnimalDto animalDto = new ShowAnimalDto()
+                ShowAnimalToEditDto animalDto = new ShowAnimalToEditDto()
                 {
                     Breeds = await repository.AllReadonly<Breed>().
                     Select(b => new BreedDto()
@@ -63,9 +62,6 @@
                     Age = animal.Age,
                     BirthDate = animal.BirthDate.ToString(),
                     Description = animal.Description,
-                    Gender = Enum.GetValues(typeof(Gender)).Cast<Gender>().ToList(),
-                    HealthStatus = 
-                    Enum.GetValues(typeof(HealthStatus)).Cast<HealthStatus>().ToList(),
                     IsEducated = animal.IsEducated,
                     IsHavingValidDocuments = animal.IsHavingValidDocuments,
                     Name = animal.Name,
@@ -74,7 +70,7 @@
                     Weight = animal.Weight,
                 };
 
-                return Result<ShowAnimalDto>.Success(animalDto);
+                return Result<ShowAnimalToEditDto>.Success(animalDto);
             }
         }
     }

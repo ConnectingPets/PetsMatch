@@ -22,14 +22,14 @@
         }
 
         [HttpPost("Add")]
-        public async Task<IActionResult> AddAnimal(EditOrAddAnimalDto animalDto)
+        public async Task<IActionResult> AddAnimal([FromBody] EditOrAddAnimalDto animalDto)
         {
             string ownerId = this.User.GetById();
 
             AddAnimalCommand command = new AddAnimalCommand()
             {
                 AnimalDto = animalDto,
-                OwnerId = ownerId
+                OwnerId = this.User.GetById()
             };
 
             var result = await mediator.Send(command);
@@ -70,7 +70,7 @@
         }
 
         [HttpPatch("{id}")]
-        public async Task<IActionResult> UpdateAnimal(EditOrAddAnimalDto animalDto, string id)
+        public async Task<IActionResult> UpdateAnimal([FromBody]EditOrAddAnimalDto animalDto, string id)
         {
             EditAnimalCommand command = new EditAnimalCommand()
             {
@@ -83,7 +83,7 @@
         }
 
         [HttpGet("EditAnimal/{id}")]
-        public async Task<IActionResult> EditAnimal(string id)
+        public async Task<IActionResult> EditAnimal([FromRoute]string id)
         {
             ShowAnimalToEditQuery query = new ShowAnimalToEditQuery()
             {

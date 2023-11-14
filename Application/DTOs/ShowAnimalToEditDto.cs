@@ -2,14 +2,12 @@
 {
     using Domain.Enum;
 
-    public class ShowAnimalDto
+    public class ShowAnimalToEditDto : ShowAnimalToAddDto
     {
-        public ShowAnimalDto()
+        public ShowAnimalToEditDto()
         {
             Breeds = new HashSet<BreedDto>();
             AnimalCategories = new HashSet<AnimalCategoryDto>();
-            Gender = new HashSet<Gender>();
-            HealthStatus = new HashSet<HealthStatus>();
         }
 
         public string? Name { get; set; }
@@ -24,18 +22,14 @@
 
         public byte[]? Photo { get; set; }
 
-        public IEnumerable<HealthStatus> HealthStatus { get; set; }
+        public HealthStatus HealthStatus { get; set; }
 
-        public IEnumerable<Gender> Gender { get; set; }
+        public Gender Gender { get; set; }
 
         public string? SocialMedia { get; set; }
 
         public double? Weight { get; set; }
 
         public bool IsHavingValidDocuments { get; set; }
-
-        public IEnumerable<BreedDto> Breeds { get; set; } = null!;
-
-        public IEnumerable<AnimalCategoryDto> AnimalCategories { get; set; } = null!;
     }
 }

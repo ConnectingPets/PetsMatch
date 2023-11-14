@@ -7,8 +7,8 @@
 
     using DTOs;
     using Domain;
+    using Response;
     using Persistence.Repositories;
-    using Application.Response;
 
     public class EditAnimal
     {
@@ -59,14 +59,15 @@
                 animal.Name = dto.Name;
                 animal.Weight = dto.Weight;
 
-                var result = await repository.SaveChangesAsync() > 0;
-                if (!result)
+                try
                 {
-                   return 
-                        Result<Unit>.Failure($"Failed to update pet - {animal.Name}");
+                    await repository.SaveChangesAsync();
+                    return Result<Unit>.Success(Unit.Value, $"Successfully updated {animal.Name}");
                 }
-
-                return Result<Unit>.Success(Unit.Value, $"Successfully updated {animal.Name}");
+                catch (Exception)
+                {
+                    return Result<Unit>.Failure($"Failed to update pet - {animal.Name}");
+                }
             }
         }
     }

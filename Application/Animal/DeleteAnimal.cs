@@ -50,15 +50,17 @@
                     return Result<Unit>.Failure("This pet does not belong to you!");
                 }
 
-                var result =  await repository.SaveChangesAsync() > 0;
-
-                if (!result)
+                try
                 {
-                    return 
-                        Result<Unit>.Failure("Failed to delete pet - {animal.Name}");
+                    await repository.SaveChangesAsync();
+                    return Result<Unit>.Success(Unit.Value, $"You have successfully delete {animal!.Name} to your pet's list");
+                }
+                catch (Exception)
+                {
+                    return
+                        Result<Unit>.Failure($"Failed to delete pet - {animal.Name}");
                 }
 
-                return Result<Unit>.Success(Unit.Value, $"You have successfully delete {animal!.Name} to your pet's list");
             }
         }
     }
