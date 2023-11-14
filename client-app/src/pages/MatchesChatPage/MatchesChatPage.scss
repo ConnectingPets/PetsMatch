@@ -108,7 +108,7 @@
                 animation: opacityShow 1s;
 
                 &__hidden {
-                    animation: hideProfile 0.4s;
+                    animation: hideProfile 0.5s;
                 }
             }
         }
@@ -149,13 +149,13 @@
     0% {
         opacity: 1;
         transform: scale(1);
-        transition: 0.4s;
+        transition: 0.5s;
     }
 
     100% {
         opacity: 0;
         transform: scale(0.1);
-        transition: 0.4s;
+        transition: 0.5s;
         display: none;
     }
 }
