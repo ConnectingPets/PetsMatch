@@ -4,36 +4,20 @@
     &__page {
         position: relative;
         width: 100%;
-        height: 100%;
-        @include gs.display-grid(4, 0, center);
-        grid-template-areas: 'matches chat chat profile';
-        border: 1px solid gs.$card-hover-color;
+        height: 100vh;
+        @include gs.display-flex(row, none, none);
+        transition: 0.5s;
         overflow: hidden;
 
         &__dark {
             @include gs.dark-theme(gs.$dark-background-color-second);
+            transition: 0.5s;
         }
 
         &>section {
+            // width: 33%;
             border-right: 1px solid #e3dcdc;
             height: 100vh;
-        }
-
-        .matches {
-            grid-area: matches;
-        }
-
-        .chat {
-            grid-area: chat;
-        }
-
-        .profile {
-            grid-area: profile;
-        }
-
-        &>section {
-            width: 100%;
-            min-height: 100vh;
 
             ::-webkit-scrollbar {
                 display: none;
@@ -43,16 +27,22 @@
             scrollbar-width: none;
         }
 
+
+
+
+
         &__theme__button {
             position: absolute;
-            top: 1rem;
-            right: 1.5rem;
+            top: 0.5rem;
+            right: 1.25rem;
+            z-index: 3;
         }
 
         &__matches {
             position: relative;
-            width: 100%;
+            width: 25%;
             @include gs.display-flex(column, none, center);
+            transition: 0.5s;
 
             &__links {
                 @include gs.display-flex(row, center, center);
@@ -70,9 +60,9 @@
                     margin: 0.5rem 1rem;
                     cursor: pointer;
 
-                    &>span{
+                    &>span {
                         position: absolute;
-                        top:-0rem;
+                        top: -0rem;
                         right: -1rem;
                         background: gs.$light-button-color;
                         padding: 0.2rem;
@@ -83,10 +73,43 @@
             }
 
             &__render {
+                transition: 0.5s;
                 width: 100%;
                 padding: 1.2rem 0;
                 overflow: auto;
                 @include gs.display-grid(2, 1rem, center);
+                transition: 0.5s;
+            }
+
+        }
+
+        &__chat {
+            width: 50%;
+            transition: 0.5s;
+
+            &__large {
+                width: 75%;
+                transform: 0.5s;
+            }
+        }
+
+        &__profile {
+            width: 25%;
+            transition: 0.5s;
+
+            &__hidden {
+                width: 0%;
+                transform: 0.5;
+            }
+
+            &__content {
+                width: 80%;
+                margin-inline: auto;
+                animation: opacityShow 1s;
+
+                &__hidden {
+                    animation: hideProfile 0.4s;
+                }
             }
         }
     }
@@ -109,6 +132,7 @@
     }
 }
 
+
 @keyframes opacityShow {
     0% {
         opacity: 0;
@@ -117,6 +141,21 @@
 
     100% {
         opacity: 1;
-        transform: scale(1.1);
+        transform: scale(1);
+    }
+}
+
+@keyframes hideProfile {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+        transition: 0.4s;
+    }
+
+    100% {
+        opacity: 0;
+        transform: scale(0.1);
+        transition: 0.4s;
+        display: none;
     }
 }

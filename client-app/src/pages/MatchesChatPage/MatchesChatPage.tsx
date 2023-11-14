@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { CMatchesHeader } from '../../components/common/CMatchesHeader/CMatchesHeader';
 import { CChangeThemeButton } from '../../components/common/CChangeThemeButton/CChangeThemeButton';
 import themeStore from '../../stores/themeStore';
-import './MatchesChatPage.scss';
+import chatProfileStore from '../../stores/chatProfileStore';
 import { CMatchCard } from '../../components/common/CMatchCard/CMatchCard';
 import { observer } from 'mobx-react';
+import { CShowHideButton } from '../../components/common/CShowHideButton/CShowHideButton';
+import './MatchesChatPage.scss';
 
 const pets = [
     {
@@ -43,12 +45,17 @@ export const MatchesChatPage: React.FC<MatchesChatPageProps> = observer(() => {
         setShowMatches(false);
     }
 
+    const showProfileHandler = () => {
+        chatProfileStore.changeIsItShownState();
+    }
+
     return (
-        <section className={themeStore.isLightTheme ? 'matches__page' : 'matches__page matches__page__dark'}>
+        <section className={themeStore.isLightTheme ? 'matches__page' : 'matches__page  matches__page__dark'}>
             <div className='matches__page__theme__button'>
                 <CChangeThemeButton />
+                <CShowHideButton param='Profile' clickHandler={showProfileHandler} />
             </div>
-            <section className='matches matches__page__matches'>
+            <section className='matches__page__matches'>
                 <CMatchesHeader />
                 <article className={themeStore.isLightTheme ? 'matches__page__matches__links' : 'matches__page__matches__links matches__page__matches__links__dark'}>
                     <h4 className={showMatches ? 'matches__messages__option' : ''} onClick={showMatchesHandler}>matches <span>{pets.length}</span></h4>
@@ -64,9 +71,15 @@ export const MatchesChatPage: React.FC<MatchesChatPageProps> = observer(() => {
                 </article>
             </section>
 
-            <section className='chat matches__page__chat'></section>
+            <section className={chatProfileStore.isItShown ? ' matches__page__chat' : ' matches__page__chat  matches__page__chat__large'}>
+            </section>
 
-            <section className='profile matches__page__profile'> </section>
+            <section className={chatProfileStore.isItShown ? ' matches__page__profile' : 'matches__page__profile  matches__page__profile__hidden'}>
+                <article className={chatProfileStore.isItShown ?'matches__page__profile__content': 'matches__page__profile__content matches__page__profile__content__hidden'}>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti, doloremque earum? Quam voluptates nesciunt alias fugit! Incidunt atque doloribus excepturi nesciunt, cum velit provident id vitae deserunt vel corrupti aperiam?</p>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam inventore facilis dicta tenetur quo? Quibusdam totam veniam voluptas? Praesentium facilis voluptatibus cumque nam pariatur natus quod voluptatem quia officia tenetur.</p>
+                </article>
+            </section>
 
         </section>
     )
