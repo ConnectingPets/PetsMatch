@@ -51,8 +51,8 @@ export const MatchesChatPage: React.FC<MatchesChatPageProps> = observer(() => {
             <section className='matches matches__page__matches'>
                 <CMatchesHeader />
                 <article className={themeStore.isLightTheme ? 'matches__page__matches__links' : 'matches__page__matches__links matches__page__matches__links__dark'}>
-                    <h4 className={showMatches ? 'matches__messages__option' : ''} onClick={showMatchesHandler}>matches</h4>
-                    <h4 className={!showMatches ? 'matches__messages__option' : ''} onClick={showMessagesHandler}>messages</h4>
+                    <h4 className={showMatches ? 'matches__messages__option' : ''} onClick={showMatchesHandler}>matches <span>{pets.length}</span></h4>
+                    <h4 className={!showMatches ? 'matches__messages__option' : ''} onClick={showMessagesHandler}>messages<span>{3}</span></h4>
                 </article>
 
                 <article className='matches__page__matches__render' >
