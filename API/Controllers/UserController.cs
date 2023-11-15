@@ -1,10 +1,13 @@
-﻿using Domain;
+﻿using Application;
+using Domain;
 using Domain.ViewModels;
+using MediatR;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Caching.Memory;
+using System.Security.AccessControl;
 
 namespace API.Controllers
 {
@@ -12,59 +15,32 @@ namespace API.Controllers
     {
         private readonly SignInManager<User> signInManager;
         private readonly UserManager<User> userManager;
+        private readonly IMediator mediator;
 
         public UserController(SignInManager<User> signInManager,
-                              UserManager<User> userManager)
+                              UserManager<User> userManager,IMediator mediator)
         {
             this.signInManager = signInManager;
             this.userManager = userManager;
+            this.mediator = mediator;
         }
 
-        [HttpGet]
-        public IActionResult Register()
-        {
-            return View();
-        }
+     
 
         [HttpPost]
-        public async Task<IActionResult> Register(RegisterUserViewModel model)
+        public async Task<IActionResult> Register(RegisterUserViewModel model) //Here 
         {
-
-
             if (!ModelState.IsValid)
             {
-                return View(model);
+                return BadRequest(ModelState);
             }
 
-            User user = new Domain.User()
+            RegisterRequest request = new RegisterRequest(model);
+
+            User user =  await  mediator.Send(request,CancellationToken.None);
+
+            if (user == null)
             {
-                Address = model.Address,
-                Age = model.Age,
-                Email = model.Email,
-                City = model.City,
-                Description = model.Description,
-                Education = model.Education,
-                Gender = model.Gender,
-                JobTitle = model.JobTitle,
-                Name = model.Name,
-                Photo = model.Photo,
-                Animals = model.Animals,
-                UsersPassions = model.UsersPassions
-            };
-
-            await userManager.SetEmailAsync(user, user.Email);
-            await userManager.SetUserNameAsync(user, user.Name);
-
-            IdentityResult result =
-                await userManager.CreateAsync(user, model.Password);
-
-            if (!result.Succeeded)
-            {
-                foreach (IdentityError error in result.Errors)
-                {
-                    ModelState.AddModelError(string.Empty, error.Description);
-                }
-
                 return BadRequest();
             }
 
