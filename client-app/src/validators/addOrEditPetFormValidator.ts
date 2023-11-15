@@ -26,6 +26,16 @@ export const addOrEditPetFormValidator = combineValidators({
         isAlphabetic,
         hasLengthBetween(2, 50)('This field')
     )('Name'),
+    animalCategory: composeValidators(
+        isRequired,
+        isAlphabetic,
+        hasLengthBetween(3, 30)
+    )('Category'),
+    breed: composeValidators(
+        isRequired,
+        isAlphabetic,
+        hasLengthBetween(5, 30)
+    )('Breed'),
     description: hasLengthLessThan(151)('This field'),
     age: composeValidators(
         isRequired,

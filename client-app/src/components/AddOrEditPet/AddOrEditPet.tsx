@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { observer } from 'mobx-react';
-import { Form, Field } from 'react-final-form';
+import { Form, Field, FieldInputProps } from 'react-final-form';
 import { CgAsterisk } from 'react-icons/cg';
 
 import themeStore from '../../stores/themeStore';
@@ -21,6 +21,19 @@ interface AddOrEditPetProps {
 }
 
 const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAddPetSubmit, errors }) => {
+    const [image, setImage] = useState<string | null>(null);
+
+    const handleFile = (
+        e: React.ChangeEvent<HTMLInputElement>,
+        input: FieldInputProps<File, HTMLElement>
+    ) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            const imageUrl = URL.createObjectURL(file);
+            setImage(imageUrl);
+            input.onChange(file);
+        }
+    };
 
     return (
         <div className={themeStore.isLightTheme ? 'add-edit-pet__container' : 'add-edit-pet__container add-edit-pet__container__dark'}>
@@ -46,6 +59,19 @@ const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAd
                                         </div>
                                         <input type="text" {...input} name='name' id='name' placeholder='Rico' />
                                         {errors && <span>{errors.name}</span>}
+                                    </>
+                                )}
+                            </Field>
+
+                            <Field name='animalCategory'>
+                                {({ input }) => (
+                                    <>
+                                        <div className="required">
+                                            <CLabel inputName='animalCategory' title='Category' />
+                                            <CgAsterisk className="asterisk" />
+                                        </div>
+                                        <input type="text" {...input} name='animalCategory' id='animalCategory' placeholder='dog' />
+                                        {errors && <span>{errors.animalCategory}</span>}
                                     </>
                                 )}
                             </Field>
@@ -199,10 +225,15 @@ const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAd
                                             <CgAsterisk className="asterisk" />
                                         </div>
                                         <div className="fileInput">
-                                            <input type="file" {...input} name='photo' id='photo' />
+                                            <input type="file" accept="image/*" onChange={(e) => handleFile(e, input)} name='photo' id='photo' />
                                             <p className="fakeFileInput" >Upload Photo</p>
                                         </div>
-                                        {errors && <span>{errors.photo}</span>}
+                                        {errors && !image && <span>{errors.photo}</span>}
+                                        {image && (
+                                            <div className="image-preview">
+                                                <img src={image} alt="preview image" />
+                                            </div>
+                                        )}
                                     </>
                                 )}
                             </Field>

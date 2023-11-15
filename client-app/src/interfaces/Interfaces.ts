@@ -13,6 +13,7 @@ export interface IUser {
 
 export interface Animal {
     name: string | undefined,
+    animalCategory: string | undefined,
     breed: string | undefined,
     description?: string | undefined,
     age: string | undefined,

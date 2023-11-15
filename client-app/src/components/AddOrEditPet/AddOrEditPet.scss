@@ -229,12 +229,31 @@
                     position: absolute;
                     width: 100%;
                     text-align: center;
-                    background-color: gray;
+                    background-color: #bdbcbc;
                     color: gs.$black-text;
                     border-radius: 1.5rem;
                     padding: 0.3rem;
                     border: 1px solid lightgrey;
                     margin-bottom: unset;
+                }
+            }
+
+            &>.image-preview {
+                border: 1px solid gs.$dark-primary;
+                width: 15rem;
+                height: 15rem;
+                border-radius: 1.5rem;
+
+                @include gs.breakpoint(mobile-start, mobile-end) {
+                    width: 10rem;
+                    height: 10rem;
+                }
+
+                &>img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    border-radius: 1.5rem;
                 }
             }
 
