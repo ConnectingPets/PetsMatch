@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { observer } from 'mobx-react';
-import { Form, Field, FieldInputProps } from 'react-final-form';
+import { Form, Field } from 'react-final-form';
 import { CgAsterisk } from 'react-icons/cg';
 
 import themeStore from '../../stores/themeStore';
@@ -10,6 +10,7 @@ import { CLogo } from '../../components/common/CLogo/CLogo';
 import { CChangeThemeButton } from '../../components/common/CChangeThemeButton/CChangeThemeButton';
 import { CLabel } from '../../components/common/CLabel/CLabel';
 import { CSubmitButton } from '../../components/common/CSubmitButton/CSubmitButton';
+import PetImages from '../PetImages/PetImages';
 import Footer from '../../components/Footer/Footer';
 
 import './AddOrEditPet.scss';
@@ -23,19 +24,8 @@ interface AddOrEditPetProps {
 }
 
 const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAddPetSubmit, data, onEditPetSubmit, errors }) => {
-    const [image, setImage] = useState<string | null>(null);
 
-    const handleFile = (
-        e: React.ChangeEvent<HTMLInputElement>,
-        input: FieldInputProps<File, HTMLElement>
-    ) => {
-        const file = e.target.files?.[0];
-        if (file) {
-            const imageUrl = URL.createObjectURL(file);
-            setImage(imageUrl);
-            input.onChange(file);
-        }
-    };
+    // TO DO show images on edit-view
 
     const onRemoveClick = () => {
         console.log('Deleted');
@@ -232,27 +222,14 @@ const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAd
 
                             <Field name='photo'>
                                 {({ input }) => (
-                                    <>
-                                        <div className="required">
-                                            <CLabel inputName='photo' title='Photo' />
-                                            <CgAsterisk className="asterisk" />
-                                        </div>
-                                        <div className="fileInput">
-                                            <input type="file" accept="image/*" onChange={(e) => handleFile(e, input)} name='photo' id='photo' />
-                                            <p className="fakeFileInput" >Upload Photo</p>
-                                        </div>
-                                        {errors && !image && <span>{errors.photo}</span>}
-                                        {image && (
-                                            <div className="image-preview">
-                                                <img src={image} alt="preview image" />
-                                            </div>
-                                        )}
-                                    </>
+                                    <PetImages errors={errors} input={input} />
                                 )}
                             </Field>
 
                             <CSubmitButton textContent={addOrEditPet == 'add' ? 'Add Pet' : 'Edit'} />
-                            {addOrEditPet == 'edit' && <button type="button" onClick={onRemoveClick} className="deleteBtn">Remove</button> }
+                            {addOrEditPet == 'edit' && (
+                                <button type="button" onClick={onRemoveClick} className="deleteBtn">Remove</button>
+                            )}
                         </form>
                     )}
                 />
