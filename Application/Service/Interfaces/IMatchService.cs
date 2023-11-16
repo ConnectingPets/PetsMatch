@@ -4,10 +4,10 @@
 
     public interface IMatchService 
     {
-        Task<IEnumerable<AnimalMatchDto>> GetAnimalMatches(Guid animalId);
+        Task<IEnumerable<AnimalMatchDto>> GetAnimalMatches(string animalId);
 
-        Task UnMatch(Guid animalOneId, Guid animalTwoId);
+        Task UnMatch(string animalOneId, string animalTwoId);
 
-        Task Match(Guid animalOneId, Guid animalTwoId);
+        Task Match(string animalOneId, string animalTwoId);
     }
 }

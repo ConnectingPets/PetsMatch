@@ -5,6 +5,7 @@
     using Application.DTOs;
     using Application.Service.Interfaces;
     using Application.Exceptions;
+    using static Common.ExceptionMessages.Entity;
 
     [Route("api/[controller]")]
     [ApiController]
@@ -24,9 +25,13 @@
             try
             {
                 await this.swipeService.Swipe(
-                    Guid.Parse(swipe.SwiperAnimalId),
-                    Guid.Parse(swipe.SwipeeAnimalId),
+                    swipe.SwiperAnimalId,
+                    swipe.SwipeeAnimalId,
                     swipe.SwipedRight);
+            }
+            catch (InvalidGuidFormatException ex)
+            {
+                return BadRequest(ex.Message);
             }
             catch (AnimalNotFoundException ex)
             {
@@ -38,7 +43,7 @@
             }
             catch
             {
-                return StatusCode(500, "Internal Server Error");
+                return StatusCode(500, InternalServerError);
             }
 
             return Ok();

@@ -20,20 +20,20 @@
             this.mediator = mediator;
         }
 
-        public async Task<IEnumerable<AnimalMatchDto>> GetAnimalMatches(Guid animalId)
+        public async Task<IEnumerable<AnimalMatchDto>> GetAnimalMatches(string animalId)
             => await this.mediator.Send(new AnimalMatchesQuery
             {
                 AnimalId = animalId
             });
 
-        public async Task Match(Guid animalOneId, Guid animalTwoId)
+        public async Task Match(string animalOneId, string animalTwoId)
             => await this.mediator.Send(new MatchAnimalCommand
             {
                 AnimalOneId = animalOneId,
                 AnimalTwoId = animalTwoId
             });
 
-        public async Task UnMatch(Guid animalOneId, Guid animalTwoId)
+        public async Task UnMatch(string animalOneId, string animalTwoId)
             => await this.mediator.Send(new UnMatchAnimalCommand
             {
                 AnimalOneId = animalOneId,

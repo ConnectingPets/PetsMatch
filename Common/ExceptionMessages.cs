@@ -13,7 +13,7 @@
         public static class Match
         {
             public const string AlreadyMatched = "There is already a match between these animals";
-            public const string NotMatched = "The animals are not matched";
+            public const string MatchNotFound = "The animals are not matched";
         }
 
         public static class AnimalCategory
@@ -49,6 +49,12 @@
         public static class Repository
         {
             public const string EntityNotFound = "Entity not found";
+        }
+
+        public static class Entity
+        {
+            public const string InvalidGuidFormat = "The id is not a valid GUID format";
+            public const string InternalServerError = "Internal Server Error";
         }
     }
 }

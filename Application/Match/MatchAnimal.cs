@@ -7,17 +7,15 @@
     using Domain;
 
     using Persistence.Repositories;
-    using static Common.ExceptionMessages.Match;
-    using static Common.ExceptionMessages.Animal;
     using Application.Exceptions;
 
     public class MatchAnimal
     {
         public class MatchAnimalCommand : IRequest<Unit>
         {
-            public Guid AnimalOneId { get; set; }
+            public required string AnimalOneId { get; set; }
 
-            public Guid AnimalTwoId { get; set; }
+            public required string AnimalTwoId { get; set; }
         }
 
         public class MatchAnimalHandler : IRequestHandler<MatchAnimalCommand, Unit>
@@ -31,33 +29,43 @@
 
             public async Task<Unit> Handle(MatchAnimalCommand request, CancellationToken cancellationToken)
             {
-                if (await this.repository.AnyAsync<Animal>(animal => animal.AnimalId == request.AnimalOneId) == false)
+                if (!Guid.TryParse(request.AnimalOneId, out Guid animalOneId))
                 {
-                    throw new AnimalNotFoundException(AnimalNotFound);
+                    throw new InvalidGuidFormatException();
                 }
 
-                if (await this.repository.AnyAsync<Animal>(animal => animal.AnimalId == request.AnimalTwoId) == false)
+                if (!Guid.TryParse(request.AnimalTwoId, out Guid animalTwoId))
                 {
-                    throw new AnimalNotFoundException(AnimalNotFound);
+                    throw new InvalidGuidFormatException();
+                }
+
+                if (await this.repository.AnyAsync<Animal>(animal => animal.AnimalId == animalOneId) == false)
+                {
+                    throw new AnimalNotFoundException();
+                }
+
+                if (await this.repository.AnyAsync<Animal>(animal => animal.AnimalId == animalTwoId) == false)
+                {
+                    throw new AnimalNotFoundException();
                 }
 
                 if (request.AnimalOneId.ToString() == request.AnimalTwoId.ToString())
                 {
-                    throw new SameAnimalException(SameAnimal);
+                    throw new SameAnimalException();
                 }
 
-                bool isPresentMatch = await IsPresentMatch(request.AnimalOneId, request.AnimalTwoId);
+                bool isPresentMatch = await IsPresentMatch(animalOneId, animalTwoId);
 
                 if (isPresentMatch)
                 {
-                    throw new AlreadyMatchedException(AlreadyMatched);
+                    throw new AlreadyMatchedException();
                 }
 
-                bool isMatch = await IsMatch(request.AnimalOneId, request.AnimalTwoId);
+                bool isMatch = await IsMatch(animalOneId, animalTwoId);
 
                 if (isMatch)
                 {
-                    await CreateMatch(request.AnimalOneId, request.AnimalTwoId);
+                    await CreateMatch(animalOneId, animalTwoId);
                 }
 
                 return Unit.Value;

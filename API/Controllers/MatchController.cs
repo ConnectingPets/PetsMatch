@@ -5,6 +5,7 @@ namespace API.Controllers
     using Application.DTOs;
     using Application.Service.Interfaces;
     using Application.Exceptions;
+    using static Common.ExceptionMessages.Entity;
 
     [Route("api/[controller]")]
     [ApiController]
@@ -24,9 +25,13 @@ namespace API.Controllers
             try
             {
                 await this.matchService.Match(
-                    Guid.Parse(matchDto.AnimalOneId),
-                    Guid.Parse(matchDto.AnimalTwoId)
+                    matchDto.AnimalOneId,
+                    matchDto.AnimalTwoId
                 );
+            }
+            catch (InvalidGuidFormatException ex)
+            {
+                return BadRequest(ex.Message);
             }
             catch (AnimalNotFoundException ex)
             {
@@ -42,7 +47,7 @@ namespace API.Controllers
             }
             catch
             {
-                return StatusCode(500, "Internal Server Error");
+                return StatusCode(500, InternalServerError);
             }
 
             return Ok();
@@ -55,9 +60,13 @@ namespace API.Controllers
             try
             {
                 await this.matchService.UnMatch(
-                    Guid.Parse(unMatchDto.AnimalOneId),
-                    Guid.Parse(unMatchDto.AnimalTwoId)
+                    unMatchDto.AnimalOneId,
+                    unMatchDto.AnimalTwoId
                 );
+            }
+            catch (InvalidGuidFormatException ex)
+            {
+                return BadRequest(ex.Message);
             }
             catch (AnimalNotFoundException ex)
             {
@@ -73,7 +82,7 @@ namespace API.Controllers
             }
             catch
             {
-                return StatusCode(500, "Internal Server Error");
+                return StatusCode(500, InternalServerError);
             }
 
             return Ok();
@@ -86,9 +95,11 @@ namespace API.Controllers
             IEnumerable<AnimalMatchDto> matches;
             try
             {
-                matches = await this.matchService.GetAnimalMatches(
-                    Guid.Parse(animalId)
-                );
+                matches = await this.matchService.GetAnimalMatches(animalId);
+            }
+            catch (InvalidGuidFormatException ex)
+            {
+                return BadRequest(ex.Message);
             }
             catch (AnimalNotFoundException ex)
             {
@@ -96,7 +107,7 @@ namespace API.Controllers
             }
             catch
             {
-                return StatusCode(500, "Internal Server Error");
+                return StatusCode(500, InternalServerError);
             }
 
             return Ok(matches);
