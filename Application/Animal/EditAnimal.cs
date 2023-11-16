@@ -50,12 +50,13 @@
                     || animal.BreedId != dto.BreedId 
                     || animal.Gender != dto.Gender;
 
+
+                int daysDifference = (DateTime.UtcNow - animal.LastModified).Days;
+
                 if (isSomethingEdit)
                 {
                     animal.LastModified = DateTime.UtcNow;
                 }
-
-                int daysDifference = 29;
 
                 if (daysDifference < 30 && isSomethingEdit)
                 {

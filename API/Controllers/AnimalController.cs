@@ -11,8 +11,9 @@
     using static Application.Animal.DeleteAnimal;
     using static Application.Animal.ShowAnimalToEdit;
     using static Application.Animal.EditAnimal;
+    using Microsoft.AspNetCore.Authorization;
 
-
+    //[Authorize]
     public class AnimalController : BaseApiController
     {
         private readonly IMediator mediator;
@@ -31,6 +32,7 @@
             {
                 AnimalDto = animalDto,
                 OwnerId = "F6E0FC1A-7726-4519-A599-0114A1EB1875"
+               // OwnerId = this.User.GetById()
             };
 
             var result = await mediator.Send(command);
@@ -47,7 +49,8 @@
         [HttpGet("AllAnimals")]
         public async Task<IActionResult> GetAllAnimals()
         {
-            string ownerId = this.User.GetById();
+            string ownerId = "F6E0FC1A-7726-4519-A599-0114A1EB1875";
+           // string ownerId = this.User.GetById();
 
             AllAnimalQuery query = new AllAnimalQuery()
             {
@@ -65,6 +68,7 @@
             {
                 AnimalId = id,
                 UserId = "F6E0FC1A-7726-4519-A599-0114A1EB1875"
+                //UserId = this.User.GetById()
             };
 
             return new JsonResult(await mediator.Send(command));
@@ -78,6 +82,7 @@
                 AnimalDto = animalDto,
                 AnimalId = id,
                 UserId = "F6E0FC1A-7726-4519-A599-0114A1EB1875"
+                //UserId = this.User.GetById() 
             };
 
             return new JsonResult(await mediator.Send(command));
@@ -90,6 +95,7 @@
             {
                 AnimalId = id,
                 UserId = "F6E0FC1A-7726-4519-A599-0114A1EB1875"
+                //UserId = this.User.GetById()
             };
 
             return new JsonResult(await mediator.Send(query));

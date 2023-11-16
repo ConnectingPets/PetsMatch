@@ -53,10 +53,13 @@
                 repository.
                     DeleteRange<Swipe>(s => s.SwiperAnimalId.ToString() == animalId
                     || s.SwipeeAnimal.ToString() == animalId);
-                repository
-                    .DeleteRange<Match>(m => m.AnimalOneId.ToString() == animalId
-                    || m.AnimalTwoId.ToString() == animalId);
 
+                AnimalMatch[] animalMatches = await repository.
+                    All<AnimalMatch>(am => am.AnimalId.ToString() == animalId)
+                    .ToArrayAsync();
+                Guid[] matchesIds = animalMatches.
+                    Select(am => am.MatchId)
+                    .ToArray();
                 Message[] allMessages = await repository.
                     All<Message>(m => m.AnimalId.ToString() == animalId).
                     ToArrayAsync();
@@ -65,11 +68,17 @@
                     ToArray();
 
                 repository.DeleteRange(allMessages);
+                repository.DeleteRange(animalMatches);
 
                 foreach (var conversationId in allAnimalConversationId)
                 {
                     await repository.DeleteAsync<Conversation>(conversationId);
                 }
+                foreach (var animalMatchId in matchesIds)
+                {
+                    await repository.DeleteAsync<Match>(animalMatchId);
+                }
+
                 try
                 {
                     await repository.SaveChangesAsync();
