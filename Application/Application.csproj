@@ -11,13 +11,12 @@
 
   <ItemGroup>
     <Folder Include="AnimalCategory\" />
+    <Folder Include="Animal\" />
     <Folder Include="Breed\" />
     <Folder Include="Conversation\" />
-    <Folder Include="Match\" />
     <Folder Include="Message\" />
     <Folder Include="UserPassion\" />
     <Folder Include="User\" />
-    <Folder Include="Swipe\" />
     <Folder Include="Passion\" />
   </ItemGroup>
 

@@ -1,4 +1,5 @@
 using API.Infrastructure;
+using Application.Swipe;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -6,6 +7,7 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddControllers();
 
 builder.Services.ConfigurateDbContext(builder.Configuration);
 builder.Services.ConfigurateServices();
@@ -54,6 +56,12 @@ app.MapGet("/weatherforecast", () =>
 })
 .WithName("GetWeatherForecast")
 .WithOpenApi();
+
+app.UseRouting();
+
+app.MapControllerRoute(
+    name: "api",
+    pattern: "api/[controller]/{action}");
 
 app.UseCors("ReactPolicy");
 

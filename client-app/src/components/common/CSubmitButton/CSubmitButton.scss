@@ -3,3 +3,7 @@
 .form__submit__button {
     @include gs.set-button(gs.$light-gradient-first,gs.$light-gradient-second, gs.$white-text);
 }
+
+.form__submit__button__dark {
+    @include gs.set-button(gs.$dark-primary, gs.$dark-secondary, gs.$white-text);
+}

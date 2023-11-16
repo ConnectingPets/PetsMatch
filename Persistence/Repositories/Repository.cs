@@ -116,5 +116,9 @@
 
         public async Task<int> SaveChangesAsync()
             => await this.context.SaveChangesAsync();
+
+        public async Task<int> CountAsync<T>(Expression<Func<T, bool>> expression) where T : class
+            => await this.Set<T>()
+                    .CountAsync(expression);
     }
 }
