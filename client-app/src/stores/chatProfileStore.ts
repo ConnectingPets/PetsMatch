@@ -1,7 +1,7 @@
 import { action, makeAutoObservable, observable } from "mobx";
 
 class ChatProfileStore {
-    isItShown: boolean = true;
+    isItShown: boolean = false;
 
     constructor() {
         makeAutoObservable(this, {

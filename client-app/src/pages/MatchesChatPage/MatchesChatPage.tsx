@@ -35,50 +35,65 @@ interface MatchesChatPageProps { };
 
 export const MatchesChatPage: React.FC<MatchesChatPageProps> = observer(() => {
 
-    const [showMatches, setShowMatches] = useState(true);
+    const [matchesOrMessages, setMatchesOrMessages] = useState(true);
+    const [shownMatches, setShownMatches] = useState(true);
 
-    const showMatchesHandler = () => {
-        setShowMatches(true);
+    const matchesOption = () => {
+        setMatchesOrMessages(true);
     }
 
-    const showMessagesHandler = () => {
-        setShowMatches(false);
+    const messagesOption = () => {
+        setMatchesOrMessages(false);
     }
 
     const showProfileHandler = () => {
         chatProfileStore.changeIsItShownState();
     }
 
+    const showMatchesHandler = () => {
+        setShownMatches(!shownMatches)
+    }
+
     return (
         <section className={themeStore.isLightTheme ? 'matches__page' : 'matches__page  matches__page__dark'}>
             <div className='matches__page__theme__button'>
                 <CChangeThemeButton />
-                <CShowHideButton param='Profile' clickHandler={showProfileHandler} />
             </div>
-            <section className='matches__page__matches'>
+            <div className={!chatProfileStore.isItShown ? 'matches__page__matches__button' : 'matches__page__matches__button__hidden'}>
+                <CShowHideButton param='Matches' clickHandler={showMatchesHandler} state={shownMatches} />
+            </div>
+            <div className='matches__page__profile__button'>
+                <CShowHideButton param='Profile' clickHandler={showProfileHandler} state={chatProfileStore.isItShown} />
+            </div>
+            <section className={shownMatches ? 'matches__page__matches' : 'matches__page__matches matches__page__matches__hidden'}>
                 <CMatchesHeader />
                 <article className={themeStore.isLightTheme ? 'matches__page__matches__links' : 'matches__page__matches__links matches__page__matches__links__dark'}>
-                    <h4 className={showMatches ? 'matches__messages__option' : ''} onClick={showMatchesHandler}>matches <span>{pets.length}</span></h4>
-                    <h4 className={!showMatches ? 'matches__messages__option' : ''} onClick={showMessagesHandler}>messages<span>{3}</span></h4>
+                    <h4 className={matchesOrMessages ? 'matches__messages__option' : ''} onClick={matchesOption}>matches <span>{pets.length}</span></h4>
+                    <h4 className={!matchesOrMessages ? 'matches__messages__option' : ''} onClick={messagesOption}>messages<span>{3}</span></h4>
                 </article>
 
                 <article className='matches__page__matches__render' >
                     {
-                        showMatches
+                        matchesOrMessages
                             ? <>{pets.map(x => <CMatchCard name={x.name} photo={x.photo} key={Math.random()} />)}</>
                             : null
                     }
                 </article>
             </section>
 
-            <section className={chatProfileStore.isItShown ? ' matches__page__chat' : ' matches__page__chat  matches__page__chat__large'}>
+            <section className={chatProfileStore.isItShown || shownMatches ? ' matches__page__chat' : ' matches__page__chat  matches__page__chat__large'}>
+                <p style={{ padding: "0 5rem", lineHeight: "3rem" }}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit amet cumque rerum alias quasi? Tenetur, cum hic? Illo accusamus, amet enim, rerum at nostrum iste architecto cum velit nihil nulla!<br/>CHAT</p>
             </section>
 
             <section className={chatProfileStore.isItShown ? ' matches__page__profile' : 'matches__page__profile  matches__page__profile__hidden'}>
-                <article className={chatProfileStore.isItShown ?'matches__page__profile__content': 'matches__page__profile__content matches__page__profile__content__hidden'}>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti, doloremque earum? Quam voluptates nesciunt alias fugit! Incidunt atque doloribus excepturi nesciunt, cum velit provident id vitae deserunt vel corrupti aperiam?</p>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam inventore facilis dicta tenetur quo? Quibusdam totam veniam voluptas? Praesentium facilis voluptatibus cumque nam pariatur natus quod voluptatem quia officia tenetur.</p>
-                </article>
+                <p style={{ padding: "8rem" }}>PROFILE</p>
+            </section>
+
+            <section className={!chatProfileStore.isItShown ? 'matches__page__see__profile' : 'matches__page__see__profile__hidden'}>
+                <div className='matches__page__see__profile__image'>
+                    <img src="/images/cat-with-comp.avif" alt="" />
+                </div>
+                <h3><span>who am i?</span> <br />🐶 see my profile! 🐱</h3>
             </section>
 
         </section>

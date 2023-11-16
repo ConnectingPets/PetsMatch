@@ -5,15 +5,17 @@ import './CShowHideButton.scss';
 
 interface CShowHideButtonProps {
     param: string,
-    clickHandler: () => void
+    clickHandler: () => void,
+    state:boolean
 };
 
 export const CShowHideButton: React.FC<CShowHideButtonProps> = observer(({
     param,
-    clickHandler
+    clickHandler,
+    state
 }) => {
 
-    const [isShown, setIsShown] = useState(true);
+    const [isShown, setIsShown] = useState(state);
 
     const showHideHandler = () => {
         clickHandler();

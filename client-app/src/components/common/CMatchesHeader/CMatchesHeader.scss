@@ -8,6 +8,13 @@
     padding: 1rem 3rem;
     transition: 0.5s;
 
+    @include gs.breakpoint(tablet-start, tablet-end){
+        padding: 1rem 6.5rem;
+    }
+    @include gs.breakpoint(mobile-start, mobile-end){
+        padding: 1rem 4rem;
+    }
+
     &__dark {
         transition: 0.5s;
         @include gs.dark-theme(linear-gradient(220deg, gs.$dark-primary 0%, gs.$dark-secondary 77%));

@@ -25,6 +25,7 @@
 
             -ms-overflow-style: none;
             scrollbar-width: none;
+            overflow: auto;
         }
 
 
@@ -35,19 +36,66 @@
             position: absolute;
             top: 0.5rem;
             right: 1.25rem;
+            z-index: 4;
+        }
+
+        &__matches__button {
+            position: absolute;
+            top: 2rem;
+            left: 1.25rem;
             z-index: 3;
+            display: none;
+
+            &__hidden {
+                display: none;
+            }
+
+            @include gs.breakpoint(tablet-start, tablet-end) {
+                display: block;
+            }
+
+            @include gs.breakpoint(mobile-start, mobile-end) {
+                display: block;
+            }
+        }
+
+        &__profile__button {
+            position: absolute;
+            top: 2rem;
+            right: 1.25rem;
+            z-index: 1;
+            // display: none;
         }
 
         &__matches {
-            position: relative;
+            position: absolute;
             width: 25%;
             @include gs.display-flex(column, none, center);
             transition: 0.5s;
+            z-index: 2;
+            animation: showMatches 0.5s forwards;
+
+            @include gs.breakpoint(display-start, display-end) {
+                width: 33%;
+            }
+
+            @include gs.breakpoint(tablet-start, tablet-end) {
+                width: 100%;
+            }
+
+            @include gs.breakpoint(mobile-start, mobile-end) {
+                width: 100%;
+            }
+
+            &__hidden {
+                animation: hideMatches 0.5s forwards
+            }
 
             &__links {
                 @include gs.display-flex(row, center, center);
                 width: 100%;
                 padding-bottom: 0.3rem;
+
 
                 &__dark {
                     @include gs.dark-theme(gs.$dark-background-color);
@@ -59,6 +107,14 @@
                     text-transform: capitalize;
                     margin: 0.5rem 1rem;
                     cursor: pointer;
+
+                    @include gs.breakpoint(tablet-start, tablet-end) {
+                        margin: 0.5rem 2rem;
+                    }
+
+                    @include gs.breakpoint(mobile-start, mobile-end) {
+                        margin: 0.5rem 2rem;
+                    }
 
                     &>span {
                         position: absolute;
@@ -79,37 +135,124 @@
                 overflow: auto;
                 @include gs.display-grid(2, 1rem, center);
                 transition: 0.5s;
+
+                @include gs.breakpoint(tablet-start, tablet-end) {
+                    @include gs.display-grid(3, 1.2rem, center);
+                }
             }
 
         }
 
         &__chat {
+            position: relative;
             width: 50%;
             transition: 0.5s;
+            margin: 0 25%;
+
+            @include gs.breakpoint(display-start, display-end) {
+                width: 33%;
+                margin: 0 33%;
+            }
+
+            @include gs.breakpoint(tablet-start, tablet-end) {
+                width: 0%;
+                display: none;
+            }
+
+            @include gs.breakpoint(mobile-start, mobile-end) {
+                width: 0%;
+                display: none;
+            }
 
             &__large {
-                width: 75%;
+                width: 100%;
                 transform: 0.5s;
+                margin: 0;
+
+                @include gs.breakpoint(tablet-start, tablet-end) {
+                    width: 100%;
+                    display: block;
+                }
+
+                @include gs.breakpoint(mobile-start, mobile-end) {
+                    width: 100%;
+                    display: block;
+                }
             }
         }
 
         &__profile {
+            position: absolute;
+            right: 0;
             width: 25%;
+            border-left: 1px solid #e3dcdc;
             transition: 0.5s;
+            animation: showProfile 0.5s forwards;
 
-            &__hidden {
-                width: 0%;
-                transform: 0.5;
+            @include gs.breakpoint(display-start, display-end) {
+                width: 33%;
             }
 
-            &__content {
-                width: 80%;
-                margin-inline: auto;
-                animation: opacityShow 1s;
+            @include gs.breakpoint(tablet-start, tablet-end) {
+                width: 100%;
+            }
 
-                &__hidden {
-                    animation: hideProfile 0.5s;
+            @include gs.breakpoint(mobile-start, mobile-end) {
+                width: 100%;
+            }
+
+            &__hidden {
+                animation: hideProfile 0.5s forwards;
+            }
+        }
+
+        &__see__profile {
+            position: absolute;
+            width: 25%;
+            right: 0;
+            @include gs.display-flex(column, center, center);
+            border: none !important;
+
+            @include gs.breakpoint(display-start, display-end) {
+                width: 33%;
+            }
+
+            @include gs.breakpoint(tablet-start, tablet-end) {
+                display: none;
+            }
+
+            @include gs.breakpoint(mobile-start, mobile-end) {
+                display: none;
+            }
+
+            &__hidden {
+                display: none;
+            }
+
+            &__image {
+                transform: rotate(12deg);
+                width: 70%;
+                height: auto;
+                border: 6px solid gs.$dark-background-color;
+                @include gs.shadow(gs.$light-shadow);
+
+
+                &>img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: contain;
+                    border: 5px solid gs.$white-text;
                 }
+            }
+
+            &>h3 {
+                text-transform: capitalize;
+                margin-top: 1.5rem;
+
+                &>span {
+                    color: gs.$light-blue;
+                }
+
             }
         }
     }
@@ -136,26 +279,66 @@
 @keyframes opacityShow {
     0% {
         opacity: 0;
-        transform: scale(0);
+
     }
 
     100% {
         opacity: 1;
-        transform: scale(1);
     }
 }
 
 @keyframes hideProfile {
     0% {
         opacity: 1;
-        transform: scale(1);
+        transform: translateX(0%);
         transition: 0.5s;
     }
 
     100% {
         opacity: 0;
-        transform: scale(0.1);
+        transform: translateX(110%);
         transition: 0.5s;
-        display: none;
+    }
+}
+
+@keyframes showProfile {
+    0% {
+        opacity: 0;
+        transform: translateX(110%);
+        transition: 0.5s;
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+        transition: 0.5s;
+    }
+}
+
+@keyframes showMatches {
+    0% {
+        opacity: 0.5;
+        transform: translateX(-110%);
+        transition: 0.5s;
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+        transition: 0.5s;
+    }
+}
+
+@keyframes hideMatches {
+    0% {
+        opacity: 1;
+        transform: translateX(0);
+        transition: 0.5s;
+    }
+
+    100% {
+        opacity: 0.5;
+        transform: translateX(-110%);
+        transition: 0.5s;
     }
 }
