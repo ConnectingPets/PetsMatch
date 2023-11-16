@@ -42,6 +42,11 @@
                     throw new AnimalNotFoundException(AnimalNotFound);
                 }
 
+                if (request.SwiperAnimalId.ToString() == request.SwipeeAnimalId.ToString())
+                {
+                    throw new SameAnimalException(SameAnimal);
+                }
+
                 Swipe swipe = new Swipe
                 {
                     SwiperAnimalId = request.SwiperAnimalId,

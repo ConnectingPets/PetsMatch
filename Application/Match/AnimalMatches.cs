@@ -31,9 +31,11 @@
             public async Task<IEnumerable<AnimalMatchDto>> Handle(AnimalMatchesQuery request, CancellationToken cancellationToken)
             {
                 Animal? animal = await this.repository
-                    .AllReadonly<Animal>(animal => animal.AnimalId == request.AnimalId)
+                    .All<Animal>(animal => animal.AnimalId == request.AnimalId)
                     .Include(animal => animal.AnimalMatches)
-                    .ThenInclude(animalMatch => animalMatch.Animal)
+                    .ThenInclude(am => am.Match)
+                    .ThenInclude(m => m.AnimalMatches)
+                    .ThenInclude(am => am.Animal)
                     .FirstOrDefaultAsync();
 
                 if (animal == null)
@@ -41,7 +43,11 @@
                     throw new AnimalNotFoundException(AnimalNotFound);
                 }
 
-                return animal.AnimalMatches
+                IEnumerable<AnimalMatch> matches = animal.AnimalMatches
+                    .Select(am => am.Match.AnimalMatches
+                        .FirstOrDefault(am => am.AnimalId != request.AnimalId))!;
+
+                return matches
                     .Select(am => new AnimalMatchDto
                     {
                         AnimalId = am.AnimalId.ToString(),
