@@ -32,6 +32,10 @@
             {
                 return NotFound(ex.Message);
             }
+            catch (SameAnimalException ex)
+            {
+                return BadRequest(ex.Message);
+            }
             catch
             {
                 return StatusCode(500, "Internal Server Error");
