@@ -7,7 +7,7 @@
             public const string InvalidNameLength = "The animal name should be with length between 2 and 50";
             public const string InvalidDescriptionLength = "The animal description has max length of 150";
             public const string AnimalNotFound = "The animal is not found";
-            public const string SameAnimal = "The two animals are the same";
+            public const string SameAnimal = "Animal IDs must be different.";
         }
 
         public static class Match
