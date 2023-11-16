@@ -188,6 +188,7 @@
                         color: red;
                         display: inline-block;
                         width: 100%;
+                        margin-top: 0.2rem;
                     }
                 }
 
@@ -266,6 +267,17 @@
 
                 @include gs.breakpoint(mobile-start, mobile-end) {
                     width: 40%;
+                }
+            }
+
+            &>.deleteBtn {
+                background-color: red;
+                padding: 0.3rem 0.5rem;
+                border-radius: 1.5rem;
+                cursor: pointer;
+
+                &:hover {
+                    color: gs.$white-text;
                 }
             }
         }

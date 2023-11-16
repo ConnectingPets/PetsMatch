@@ -16,11 +16,13 @@ import './AddOrEditPet.scss';
 
 interface AddOrEditPetProps {
     addOrEditPet: string,
-    onAddPetSubmit: (values: Animal) => void,
+    onAddPetSubmit?: (values: Animal) => void,
+    data: Animal,
+    onEditPetSubmit?: (values: Animal) => void,
     errors: Animal | null
 }
 
-const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAddPetSubmit, errors }) => {
+const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAddPetSubmit, data, onEditPetSubmit, errors }) => {
     const [image, setImage] = useState<string | null>(null);
 
     const handleFile = (
@@ -35,6 +37,10 @@ const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAd
         }
     };
 
+    const onRemoveClick = () => {
+        console.log('Deleted');
+    };
+
     return (
         <div className={themeStore.isLightTheme ? 'add-edit-pet__container' : 'add-edit-pet__container add-edit-pet__container__dark'}>
             <header>
@@ -47,7 +53,14 @@ const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAd
                 <p>Fields with "<CgAsterisk className="asterisk" />" are required!</p>
 
                 <Form
-                    onSubmit={onAddPetSubmit}
+                    initialValues={data}
+                    onSubmit={(values: Animal) => {
+                        if (addOrEditPet === 'add' && onAddPetSubmit) {
+                            onAddPetSubmit(values);
+                        } else if (addOrEditPet === 'edit' && onEditPetSubmit) {
+                            onEditPetSubmit(values);
+                        }
+                    }}
                     render={({ handleSubmit }) => (
                         <form className={themeStore.isLightTheme ? '' : 'dark'} onSubmit={handleSubmit}>
                             <Field name='name'>
@@ -238,7 +251,8 @@ const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAd
                                 )}
                             </Field>
 
-                            <CSubmitButton textContent='Add Pet' />
+                            <CSubmitButton textContent={addOrEditPet == 'add' ? 'Add Pet' : 'Edit'} />
+                            {addOrEditPet == 'edit' && <button type="button" onClick={onRemoveClick} className="deleteBtn">Remove</button> }
                         </form>
                     )}
                 />
