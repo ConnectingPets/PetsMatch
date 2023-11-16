@@ -4,9 +4,9 @@ namespace Persistence
 
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.AspNetCore.Identity;
 
     using Domain;
-    using Microsoft.AspNetCore.Identity;
 
     public class DataContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     {
