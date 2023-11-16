@@ -17,7 +17,7 @@ namespace Domain
         {
             this.AnimalId = Guid.NewGuid();
             this.Swipes = new HashSet<Swipe>();
-            this.Matches = new HashSet<Match>();
+            this.AnimalMatches = new HashSet<AnimalMatch>();
             this.Messages = new HashSet<Message>();
         }
 
@@ -80,7 +80,7 @@ namespace Domain
 
         public ICollection<Swipe> Swipes { get; set; } = null!;
         
-        public ICollection<Match> Matches { get; set; } = null!;
+        public ICollection<AnimalMatch> AnimalMatches { get; set; } = null!;
 
         public ICollection<Message> Messages { get; set; } = null!;
     }
