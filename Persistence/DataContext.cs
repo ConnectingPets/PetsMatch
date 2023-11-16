@@ -25,6 +25,8 @@ namespace Persistence
         
         public DbSet<Passion> Passions { get; set; } = null!;
 
+        public DbSet<Match> Matches { get; set; } = null!;
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             Assembly assembly = Assembly.GetAssembly(typeof(DataContext)) ??

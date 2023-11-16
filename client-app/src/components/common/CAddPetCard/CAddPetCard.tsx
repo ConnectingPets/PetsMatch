@@ -10,7 +10,7 @@ export const CAddPetCard: React.FC<CAddPetCardProps> = () => {
     return (
         <article className={themeStore.isLightTheme ?'add__pet__card' : 'add__pet__card add__pet__card__dark'}>
             <section className={themeStore.isLightTheme ? 'add__pet__card__cover': 'add__pet__card__cover  add__pet__card__cover__dark'}>
-                <Link className={themeStore.isLightTheme ?'add__pet__card__cover__content' : 'add__pet__card__cover__content  add__pet__card__cover__content__dark'} to={"#"}>
+                <Link className={themeStore.isLightTheme ?'add__pet__card__cover__content' : 'add__pet__card__cover__content  add__pet__card__cover__content__dark'} to="/add-pet">
                     <BsPlusCircleFill />
                     <h3>add pet</h3>
                 </Link>
