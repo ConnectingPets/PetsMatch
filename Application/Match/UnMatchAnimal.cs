@@ -39,6 +39,11 @@
                     throw new AnimalNotFoundException(AnimalNotFound);
                 }
 
+                if (request.AnimalOneId.ToString() == request.AnimalTwoId.ToString())
+                {
+                    throw new SameAnimalException(SameAnimal);
+                }
+
                 Match? existingMatch = await GetExistingMatch(
                     request.AnimalOneId,
                     request.AnimalTwoId

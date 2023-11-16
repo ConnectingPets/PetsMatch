@@ -9,7 +9,6 @@
     using Persistence.Repositories;
     using static Common.ExceptionMessages.Match;
     using static Common.ExceptionMessages.Animal;
-    using Azure.Core;
     using Application.Exceptions;
 
     public class MatchAnimal
@@ -40,6 +39,11 @@
                 if (await this.repository.AnyAsync<Animal>(animal => animal.AnimalId == request.AnimalTwoId) == false)
                 {
                     throw new AnimalNotFoundException(AnimalNotFound);
+                }
+
+                if (request.AnimalOneId.ToString() == request.AnimalTwoId.ToString())
+                {
+                    throw new SameAnimalException(SameAnimal);
                 }
 
                 bool isPresentMatch = await IsPresentMatch(request.AnimalOneId, request.AnimalTwoId);

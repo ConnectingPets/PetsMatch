@@ -36,6 +36,10 @@ namespace API.Controllers
             {
                 return Conflict(ex.Message);
             }
+            catch (SameAnimalException ex)
+            {
+                return BadRequest(ex.Message);
+            }
             catch
             {
                 return StatusCode(500, "Internal Server Error");
@@ -62,6 +66,10 @@ namespace API.Controllers
             catch (MatchNotFoundException ex)
             {
                 return Conflict(ex.Message);
+            }
+            catch (SameAnimalException ex)
+            {
+                return BadRequest(ex.Message);
             }
             catch
             {
