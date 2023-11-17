@@ -1,27 +1,25 @@
 ﻿namespace Domain
 {
-    using System.ComponentModel.DataAnnotations.Schema;
+    using System.ComponentModel.DataAnnotations;
 
     using Microsoft.EntityFrameworkCore;
 
     [Comment("match table")]
     public class Match
     {
-        [Comment("match animal one id")]
-        public required Guid AnimalOneId { get; set; }
+        public Match()
+        {
+            this.MatchId = Guid.NewGuid();
+            this.AnimalMatches = new HashSet<AnimalMatch>();
+        }
 
-        [Comment("match animal one")]
-        [ForeignKey(nameof(AnimalOneId))]
-        public Animal AnimalOne { get; set; } = null!;
-
-        [Comment("match animal two id")]
-        public required Guid AnimalTwoId { get; set; }
-
-        [Comment("match animal one")]
-        [ForeignKey(nameof(AnimalTwoId))]
-        public Animal AnimalTwo { get; set; } = null!;
+        [Comment("match id")]
+        [Key]
+        public Guid MatchId {  get; set; }
 
         [Comment("timestamp when the match is done")]
         public required DateTime MatchOn { get; set; }
+
+        public ICollection<AnimalMatch> AnimalMatches { get; set; } = null!;
     }
 }

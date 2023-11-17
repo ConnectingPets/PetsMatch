@@ -108,5 +108,10 @@
         /// </summary>
         /// <param name="entity">Entity to be detached</param>
         void Detach<T>(T entity) where T : class;
+
+        /// <summary>
+        /// Count of entities
+        /// </summary>
+        Task<int> CountAsync<T>(Expression<Func<T, bool>> expression) where T : class;
     }
 }

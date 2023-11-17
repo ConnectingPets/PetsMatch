@@ -4,9 +4,9 @@ namespace Persistence
 
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.AspNetCore.Identity;
 
     using Domain;
-    using Microsoft.AspNetCore.Identity;
 
     public class DataContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     {
@@ -24,6 +24,8 @@ namespace Persistence
         public DbSet<Conversation> Conversations { get; set; } = null!;
         
         public DbSet<Passion> Passions { get; set; } = null!;
+
+        public DbSet<Match> Matches { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

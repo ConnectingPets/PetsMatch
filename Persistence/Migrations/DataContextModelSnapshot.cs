@@ -41,6 +41,11 @@ namespace Persistence.Migrations
                         .HasColumnType("int")
                         .HasComment("animal breed id");
 
+                    b.Property<DateTime>("CreatedOn")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
                     b.Property<string>("Description")
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)")
@@ -61,6 +66,9 @@ namespace Persistence.Migrations
                     b.Property<bool>("IsHavingValidDocuments")
                         .HasColumnType("bit")
                         .HasComment("it stores if the animal has valid documents");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -120,6 +128,26 @@ namespace Persistence.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Domain.AnimalMatch", b =>
+                {
+                    b.Property<Guid>("AnimalId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasComment("animal id");
+
+                    b.Property<Guid>("MatchId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasComment("match id");
+
+                    b.HasKey("AnimalId", "MatchId");
+
+                    b.HasIndex("MatchId");
+
+                    b.ToTable("AnimalMatches", null, t =>
+                        {
+                            t.HasComment("animal match table");
+                        });
+                });
+
             modelBuilder.Entity("Domain.Breed", b =>
                 {
                     b.Property<int>("BreedId")
@@ -170,23 +198,18 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Match", b =>
                 {
-                    b.Property<Guid>("AnimalOneId")
+                    b.Property<Guid>("MatchId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
-                        .HasComment("match animal one id");
-
-                    b.Property<Guid>("AnimalTwoId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasComment("match animal two id");
+                        .HasComment("match id");
 
                     b.Property<DateTime>("MatchOn")
                         .HasColumnType("datetime2")
                         .HasComment("timestamp when the match is done");
 
-                    b.HasKey("AnimalOneId", "AnimalTwoId");
+                    b.HasKey("MatchId");
 
-                    b.HasIndex("AnimalTwoId");
-
-                    b.ToTable("Matches", null, t =>
+                    b.ToTable("Matches", t =>
                         {
                             t.HasComment("match table");
                         });
@@ -559,6 +582,25 @@ namespace Persistence.Migrations
                     b.Navigation("Owner");
                 });
 
+            modelBuilder.Entity("Domain.AnimalMatch", b =>
+                {
+                    b.HasOne("Domain.Animal", "Animal")
+                        .WithMany("AnimalMatches")
+                        .HasForeignKey("AnimalId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Match", "Match")
+                        .WithMany("AnimalMatches")
+                        .HasForeignKey("MatchId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Animal");
+
+                    b.Navigation("Match");
+                });
+
             modelBuilder.Entity("Domain.Breed", b =>
                 {
                     b.HasOne("Domain.AnimalCategory", "Category")
@@ -568,25 +610,6 @@ namespace Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("Domain.Match", b =>
-                {
-                    b.HasOne("Domain.Animal", "AnimalOne")
-                        .WithMany("Matches")
-                        .HasForeignKey("AnimalOneId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Animal", "AnimalTwo")
-                        .WithMany()
-                        .HasForeignKey("AnimalTwoId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("AnimalOne");
-
-                    b.Navigation("AnimalTwo");
                 });
 
             modelBuilder.Entity("Domain.Message", b =>
@@ -699,7 +722,7 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Animal", b =>
                 {
-                    b.Navigation("Matches");
+                    b.Navigation("AnimalMatches");
 
                     b.Navigation("Messages");
 
@@ -719,6 +742,11 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.Conversation", b =>
                 {
                     b.Navigation("Messages");
+                });
+
+            modelBuilder.Entity("Domain.Match", b =>
+                {
+                    b.Navigation("AnimalMatches");
                 });
 
             modelBuilder.Entity("Domain.Passion", b =>

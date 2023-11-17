@@ -23,7 +23,7 @@ const pets = [
     },
     {
         name: "snoop dogg",
-        photo: "https://www.cdc.gov/healthypets/images/pets/cute-dog-headshot.jpg?_=42445"
+        photo: "https://a-z-animals.com/media/2021/12/Prettiest-_-Cutest-Dogs-header.jpg"
     },
     {
         name: "BIG",
