@@ -20,6 +20,16 @@ const weightRange = createValidator(
     field => `${field} must be between 1 and 100`
 );
 
+const photoRequired = createValidator(
+    message => images => {
+        if (!images || images.length === 0) {
+            return message;
+        }
+    },
+
+    field => `${field} is required`
+);
+
 export const addOrEditPetFormValidator = combineValidators({
     name: composeValidators(
         isRequired,
@@ -43,7 +53,10 @@ export const addOrEditPetFormValidator = combineValidators({
         ageRange
     )('Age'),
     isEducated: isRequired('This field'),
-    photo: isRequired('Photo'),
+    photo: composeValidators(
+        isRequired,
+        photoRequired
+    )('Photo'),
     healthStatus: isRequired('This field'),
     gender: isRequired('Gender'),
     socialMedia: hasLengthGreaterThan(3)('This field'),

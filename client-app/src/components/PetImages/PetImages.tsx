@@ -60,7 +60,7 @@ const PetImages: React.FC<PetImagesProps> = ({ errors, input }) => {
                 <p className="limit-message">Only up to 6 images can be uploaded.</p>
             )}
 
-            {errors && !images.length && <span>{errors.photo}</span>}
+            {errors && <span>{errors.photo}</span>}
 
             {images.length > 0 && (
                 <div id="images">
