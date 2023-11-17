@@ -1,6 +1,5 @@
 ﻿namespace Application.Service
 {
-    using System;
     using System.Threading.Tasks;
 
     using MediatR;
@@ -17,7 +16,7 @@
             this.mediator = mediator;
         }
 
-        public async Task Swipe(Guid swiperAnimalId, Guid swipeeAnimalId, bool swipedRight)
+        public async Task Swipe(string swiperAnimalId, string swipeeAnimalId, bool swipedRight)
             => await this.mediator.Send(new SwipeAnimalCommand
             {
                 SwiperAnimalId = swiperAnimalId,

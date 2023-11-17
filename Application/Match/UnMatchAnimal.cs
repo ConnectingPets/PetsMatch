@@ -1,21 +1,21 @@
 ﻿namespace Application.Match
 {
-    using MediatR;
-    using Persistence.Repositories;
     using System.Threading;
     using System.Threading.Tasks;
+
+    using MediatR;
+
     using Domain;
-    using static Common.ExceptionMessages.Animal;
-    using static Common.ExceptionMessages.Match;
+    using Persistence.Repositories;
     using Application.Exceptions;
 
     public class UnMatchAnimal
     {
         public class UnMatchAnimalCommand : IRequest<Unit>
         {
-            public Guid AnimalOneId { get; set; }
+            public required string AnimalOneId { get; set; }
 
-            public Guid AnimalTwoId { get; set; }
+            public required string AnimalTwoId { get; set; }
         }
 
         public class UnMatchAnimalHandler : IRequestHandler<UnMatchAnimalCommand, Unit>
@@ -29,24 +29,39 @@
 
             public async Task<Unit> Handle(UnMatchAnimalCommand request, CancellationToken cancellationToken)
             {
-                if (await this.repository.AnyAsync<Animal>(animal => animal.AnimalId == request.AnimalOneId) == false)
+                if (!Guid.TryParse(request.AnimalOneId, out Guid animalOneId))
                 {
-                    throw new AnimalNotFoundException(AnimalNotFound);
+                    throw new InvalidGuidFormatException();
                 }
 
-                if (await this.repository.AnyAsync<Animal>(animal => animal.AnimalId == request.AnimalTwoId) == false)
+                if (!Guid.TryParse(request.AnimalTwoId, out Guid animalTwoId))
                 {
-                    throw new AnimalNotFoundException(AnimalNotFound);
+                    throw new InvalidGuidFormatException();
+                }
+
+                if (await this.repository.AnyAsync<Animal>(animal => animal.AnimalId == animalOneId) == false)
+                {
+                    throw new AnimalNotFoundException();
+                }
+
+                if (await this.repository.AnyAsync<Animal>(animal => animal.AnimalId == animalTwoId) == false)
+                {
+                    throw new AnimalNotFoundException();
+                }
+
+                if (request.AnimalOneId.ToString() == request.AnimalTwoId.ToString())
+                {
+                    throw new SameAnimalException();
                 }
 
                 Match? existingMatch = await GetExistingMatch(
-                    request.AnimalOneId,
-                    request.AnimalTwoId
+                    animalOneId,
+                    animalTwoId
                 );
 
                 if (existingMatch == null)
                 {
-                    throw new MatchNotFoundException(NotMatched);
+                    throw new MatchNotFoundException();
                 }
 
                 this.repository.DeleteRange<AnimalMatch>(am => am.MatchId == existingMatch.MatchId);

@@ -7,18 +7,17 @@
     using Domain;
 
     using Persistence.Repositories;
-    using static Common.ExceptionMessages.Animal;
     using Application.Exceptions;
 
     public class SwipeAnimal
     {
         public class SwipeAnimalCommand : IRequest<Unit>
         {
-            public Guid SwiperAnimalId { get; set; }
+            public required string SwiperAnimalId { get; set; }
 
-            public Guid SwipeeAnimalId { get; set; }
+            public required string SwipeeAnimalId { get; set; }
 
-            public bool SwipedRight { get; set; }
+            public required bool SwipedRight { get; set; }
         }
 
         public class SwipeAnimalHandler : IRequestHandler<SwipeAnimalCommand, Unit>
@@ -32,20 +31,35 @@
 
             public async Task<Unit> Handle(SwipeAnimalCommand request, CancellationToken cancellationToken)
             {
-                if (await this.repository.AnyAsync<Animal>(animal => animal.AnimalId == request.SwiperAnimalId) == false)
+                if (!Guid.TryParse(request.SwiperAnimalId, out Guid swiperAnimalId))
                 {
-                    throw new AnimalNotFoundException(AnimalNotFound);
+                    throw new InvalidGuidFormatException();
                 }
 
-                if (await this.repository.AnyAsync<Animal>(animal => animal.AnimalId == request.SwipeeAnimalId) == false)
+                if (!Guid.TryParse(request.SwipeeAnimalId, out Guid swipeeAnimalId))
                 {
-                    throw new AnimalNotFoundException(AnimalNotFound);
+                    throw new InvalidGuidFormatException();
+                }
+
+                if (await this.repository.AnyAsync<Animal>(animal => animal.AnimalId == swiperAnimalId) == false)
+                {
+                    throw new AnimalNotFoundException();
+                }
+
+                if (await this.repository.AnyAsync<Animal>(animal => animal.AnimalId == swipeeAnimalId) == false)
+                {
+                    throw new AnimalNotFoundException();
+                }
+
+                if (request.SwiperAnimalId.ToString() == request.SwipeeAnimalId.ToString())
+                {
+                    throw new SameAnimalException();
                 }
 
                 Swipe swipe = new Swipe
                 {
-                    SwiperAnimalId = request.SwiperAnimalId,
-                    SwipeeAnimalId = request.SwipeeAnimalId,
+                    SwiperAnimalId = swiperAnimalId,
+                    SwipeeAnimalId = swipeeAnimalId,
                     SwipedRight = request.SwipedRight,
                     SwipedOn = DateTime.Now
                 };

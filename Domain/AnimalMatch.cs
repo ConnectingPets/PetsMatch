@@ -1,8 +1,9 @@
 ﻿namespace Domain
 {
-    using Microsoft.EntityFrameworkCore;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
+
+    using Microsoft.EntityFrameworkCore;
 
     [Comment("animal match table")]
     public class AnimalMatch

@@ -1,8 +1,12 @@
 ﻿namespace API.Controllers
 {
+    using System.Security.Claims;
+
     using Microsoft.AspNetCore.Mvc;
     using MediatR;
 
+    using Application;
+    using Domain.ViewModels;
     using Infrastructure;
     using Application.DTOs;
     using static Application.Animal.AddAnimal;
@@ -13,7 +17,7 @@
     using static Application.Animal.EditAnimal;
     using Microsoft.AspNetCore.Authorization;
 
-    //[Authorize]
+    [Authorize]
     public class AnimalController : BaseApiController
     {
         private readonly IMediator mediator;
@@ -31,8 +35,7 @@
             AddAnimalCommand command = new AddAnimalCommand()
             {
                 AnimalDto = animalDto,
-                OwnerId = "F6E0FC1A-7726-4519-A599-0114A1EB1875"
-               // OwnerId = this.User.GetById()
+                OwnerId = this.User.GetById()
             };
 
             var result = await mediator.Send(command);
@@ -49,8 +52,7 @@
         [HttpGet("AllAnimals")]
         public async Task<IActionResult> GetAllAnimals()
         {
-            string ownerId = "F6E0FC1A-7726-4519-A599-0114A1EB1875";
-           // string ownerId = this.User.GetById();
+            string ownerId = this.User.GetById();
 
             AllAnimalQuery query = new AllAnimalQuery()
             {
@@ -62,43 +64,60 @@
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAnimal([FromRoute]string id)
+        public async Task<IActionResult> DeleteAnimal([FromRoute] string id)
         {
             DeleteAnimalCommand command = new DeleteAnimalCommand()
             {
                 AnimalId = id,
-                UserId = "F6E0FC1A-7726-4519-A599-0114A1EB1875"
-                //UserId = this.User.GetById()
+                UserId = this.User.GetById()
             };
 
             return new JsonResult(await mediator.Send(command));
         }
 
         [HttpPatch("{id}")]
-        public async Task<IActionResult> UpdateAnimal([FromBody]EditAnimalDto animalDto, string id)
+        public async Task<IActionResult> UpdateAnimal([FromBody] EditAnimalDto animalDto, string id)
         {
             EditAnimalCommand command = new EditAnimalCommand()
             {
                 AnimalDto = animalDto,
                 AnimalId = id,
-                UserId = "F6E0FC1A-7726-4519-A599-0114A1EB1875"
-                //UserId = this.User.GetById() 
+                UserId = this.User.GetById() 
             };
 
             return new JsonResult(await mediator.Send(command));
         }
 
         [HttpGet("EditAnimal/{id}")]
-        public async Task<IActionResult> EditAnimal([FromRoute]string id)
+        public async Task<IActionResult> EditAnimal([FromRoute] string id)
         {
             ShowAnimalToEditQuery query = new ShowAnimalToEditQuery()
             {
                 AnimalId = id,
-                UserId = "F6E0FC1A-7726-4519-A599-0114A1EB1875"
-                //UserId = this.User.GetById()
+                UserId = this.User.GetById()
             };
 
             return new JsonResult(await mediator.Send(query));
+        }
+        public async Task<IActionResult> AddAnimal(AnimalViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(model);
+            }
+
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+
+            CreateAnimalRequest request = new CreateAnimalRequest(model, userId);
+
+            bool result = await mediator.Send(request, CancellationToken.None);
+
+            if (result == false)
+            {
+                return BadRequest(model);
+            }
+
+            return Ok(model);
         }
 
     }

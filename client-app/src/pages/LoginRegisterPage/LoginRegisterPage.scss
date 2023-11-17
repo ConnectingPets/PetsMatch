@@ -33,35 +33,32 @@
                 flex-direction: column;
                 position: relative;
                 cursor: pointer;
-
-                &::after {
-                    content: '';
-                    width: 100%;
-                    border-radius: 20%;
-                    height: 0.2rem;
-                    background: #000;
-                    position: absolute;
-                    opacity: 0;
-                    bottom: -0.6rem;
-                    margin: 0.1rem;
-                    transform: scale(0);
-                }
-
-                &:hover::after {
-                    width: 100%;
-                    animation: opacityShow 0.5 forwards;
-                    -webkit-animation: opacityShow 0.5s forwards;
-                    -moz-animation: opacityShow 0.5s forwards;
-                    opacity: 1;
-                }
             }
         }
-
-
     }
 
     &__forms__wrapper {
         @include gs.display-flex(column, center, center);
+    }
+
+    &__option {
+        position: relative;
+        @include gs.display-flex(column, center, center);
+
+        &::after {
+            content: '';
+            width: 110%;
+            border-radius: 20%;
+            height: 0.2rem;
+            background: #000;
+            position: absolute;
+            opacity: 1;
+            bottom: -0.6rem;
+            margin: 0.1rem;
+            animation: opacityShow 0.5 forwards;
+            -webkit-animation: opacityShow 0.5s forwards;
+            -moz-animation: opacityShow 0.5s forwards;
+        }
     }
 }
 

@@ -1,8 +1,8 @@
 import React from 'react';
 import { CCardMatchesButton } from '../CCardMatchesButton/CCardMatchesButton';
-import './CPetCard.scss';
 import { CCardEditButton } from '../CCardEditButton/CCardEditButton';
 import themeStore from '../../../stores/themeStore';
+import './CPetCard.scss';
 
 interface CPetCardProps {
     name: string,
