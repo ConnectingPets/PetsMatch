@@ -18,7 +18,7 @@ import './AddOrEditPet.scss';
 interface AddOrEditPetProps {
     addOrEditPet: string,
     onAddPetSubmit?: (values: Animal) => void,
-    data: Animal,
+    data?: Animal,
     onEditPetSubmit?: (values: Animal) => void,
     errors: Animal | null
 }
