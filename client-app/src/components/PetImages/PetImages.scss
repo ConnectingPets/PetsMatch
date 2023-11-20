@@ -88,6 +88,7 @@
             border-radius: 100%;
             border: none;
             cursor: pointer;
+            transition: background-color 0.5s ease-in-out;
 
             &:hover {
                 background-color: red;
