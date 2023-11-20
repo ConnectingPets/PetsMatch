@@ -1,6 +1,6 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { IUser } from '../../interfaces/Interfaces';
-import { CCardEditButton } from '../common/CCardEditButton/CCardEditButton';
 import themeStore from '../../stores/themeStore';
 import './UserProfile.scss';
 
@@ -57,9 +57,8 @@ export const UserProfile: React.FC<UserProfileProps> = () => {
             </ul>
 
             <div className='dashboard__user__profile__buttons__wrapper'>
-                <CCardEditButton />
-                <CCardEditButton />
-                <CCardEditButton />
+                <Link to="/user/123abc/edit-profile" className={themeStore.isLightTheme ? '' : 'dark'}>Edit Profile</Link>
+                <button className={themeStore.isLightTheme ? '' : 'dark'}>Delete Profile</button>
             </div>
         </section>
     )
