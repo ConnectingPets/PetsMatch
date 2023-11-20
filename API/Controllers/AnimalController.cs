@@ -15,7 +15,7 @@ namespace API.Controllers
             this.mediator = mediator;
         }
 
-        public async Task<IActionResult> AddAnimal(AnimalViewModel model)
+        public async Task<IActionResult> AddAnimal(AnimalDto model)
         {
             if (!ModelState.IsValid)
             {

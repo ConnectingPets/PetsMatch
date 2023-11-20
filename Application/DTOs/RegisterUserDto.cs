@@ -13,13 +13,8 @@ namespace Domain.ViewModels
     using Domain.Enum;
     using Microsoft.AspNetCore.Identity;
 
-    public class RegisterUserViewModel
+    public class RegisterUserDto
     {
-        public RegisterUserViewModel()
-        {
-            this.UsersPassions = new HashSet<UserPassion>();
-            this.Animals = new HashSet<Animal>();
-        }
 
         [Comment("user name")]
         [StringLength(NameMaxLength, ErrorMessage = InvalidNameLength)]
@@ -55,9 +50,6 @@ namespace Domain.ViewModels
         [StringLength(CityMaxLength, ErrorMessage = InvalidCityLength)]
         public required string City { get; set; }
 
-        public ICollection<UserPassion> UsersPassions { get; set; } = null!;
-
-        public ICollection<Animal> Animals { get; set; } = null!;
 
         [Required]
         public string Password { get; set; } = null!;
