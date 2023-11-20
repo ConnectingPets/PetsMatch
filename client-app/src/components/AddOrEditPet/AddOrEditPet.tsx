@@ -6,8 +6,7 @@ import { CgAsterisk } from 'react-icons/cg';
 import themeStore from '../../stores/themeStore';
 import { Animal } from '../../interfaces/Interfaces';
 
-import { CLogo } from '../../components/common/CLogo/CLogo';
-import { CChangeThemeButton } from '../../components/common/CChangeThemeButton/CChangeThemeButton';
+import FormsHeader from '../FormsHeader/FormsHeader';
 import { CLabel } from '../../components/common/CLabel/CLabel';
 import { CSubmitButton } from '../../components/common/CSubmitButton/CSubmitButton';
 import PetImages from '../PetImages/PetImages';
@@ -33,11 +32,7 @@ const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAd
 
     return (
         <div className={themeStore.isLightTheme ? 'add-edit-pet__container' : 'add-edit-pet__container add-edit-pet__container__dark'}>
-            <header>
-                <CLogo />
-                <h1 className={themeStore.isLightTheme ? '' : 'dark'}>{addOrEditPet == 'add' ? 'Add Pet' : 'Edit Info'}</h1>
-                <CChangeThemeButton />
-            </header>
+            <FormsHeader title={addOrEditPet == 'add' ? 'Add Pet' : 'Edit Pet Info'} />
 
             <section className="add-edit-pet__container__form-wrapper">
                 <p>Fields with "<CgAsterisk className="asterisk" />" are required!</p>
