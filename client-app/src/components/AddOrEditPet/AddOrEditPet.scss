@@ -218,13 +218,24 @@
             }
 
             &>.deleteBtn {
-                background-color: red;
-                padding: 0.3rem 0.5rem;
+                margin-top: 0.5rem;
+                font-size: 1rem;
+                background-color: #ffffff;
+                color: #ff0000;
+                padding: 0.3rem 1rem;
+                border: 1px solid #808080;
                 border-radius: 1.5rem;
                 cursor: pointer;
-
+                transition: 0.5s;
+                transition: background-color 0.5s ease-in-out;
+                
                 &:hover {
-                    color: gs.$white-text;
+                    background-color: #ff0000;
+                    color: #ffffff;
+                    
+                    &::after {
+                        content: ' Delete';
+                    }
                 }
             }
         }
