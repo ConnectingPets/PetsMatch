@@ -6,6 +6,14 @@
         {
             public const string InvalidNameLength = "The animal name should be with length between 2 and 50";
             public const string InvalidDescriptionLength = "The animal description has max length of 150";
+            public const string AnimalNotFound = "The animal is not found";
+            public const string SameAnimal = "Animal IDs must be different.";
+        }
+
+        public static class Match
+        {
+            public const string AlreadyMatched = "There is already a match between these animals";
+            public const string MatchNotFound = "The animals are not matched";
         }
 
         public static class AnimalCategory
@@ -30,7 +38,7 @@
             public const string InvalidEducationLength = "The user education should be with length between 5 and 50";
             public const string InvalidJobTitleLength = "The user job title should be with length between 5 and 50";
             public const string InvalidAddressLength = "The user address should be with length between 10 and 150";
-            public const string InvalidCityLength = "The user city should be with length betweeen 3 and 50";
+            public const string InvalidCityLength = "The user city should be with length between 3 and 50";
         }
 
         public static class Message
@@ -41,6 +49,12 @@
         public static class Repository
         {
             public const string EntityNotFound = "Entity not found";
+        }
+
+        public static class Entity
+        {
+            public const string InvalidGuidFormat = "The id is not a valid GUID format";
+            public const string InternalServerError = "Internal Server Error";
         }
     }
 }

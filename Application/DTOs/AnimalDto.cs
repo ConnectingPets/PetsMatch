@@ -55,7 +55,7 @@ namespace Domain.ViewModels
         public string? SocialMedia { get; set; }
 
         [Comment("animal weight")]
-        [Range(typeof(double), WeigthMinValue, WeigthMaxValue)]
+        [Range(typeof(double), WeightMinValue, WeightMaxValue)]
         public double? Weight { get; set; }
 
         [Comment("it stores if the animal has valid documents")]

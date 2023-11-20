@@ -23,7 +23,7 @@
         }
 
         /// <summary>
-        /// Representaion of table in the database
+        /// Representation of table in the database
         /// </summary>
         protected DbSet<T> Set<T>() where T : class
             => this.context.Set<T>();
@@ -116,5 +116,9 @@
 
         public async Task<int> SaveChangesAsync()
             => await this.context.SaveChangesAsync();
+
+        public async Task<int> CountAsync<T>(Expression<Func<T, bool>> expression) where T : class
+            => await this.Set<T>()
+                    .CountAsync(expression);
     }
 }

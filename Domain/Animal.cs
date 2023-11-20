@@ -17,7 +17,7 @@ namespace Domain
         {
             this.AnimalId = Guid.NewGuid();
             this.Swipes = new HashSet<Swipe>();
-            this.Matches = new HashSet<Match>();
+            this.AnimalMatches = new HashSet<AnimalMatch>();
             this.Messages = new HashSet<Message>();
         }
 
@@ -58,7 +58,7 @@ namespace Domain
         public string? SocialMedia { get; set; }
 
         [Comment("animal weight")]
-        [Range(typeof(double), WeigthMinValue, WeigthMaxValue)]
+        [Range(typeof(double), WeightMinValue, WeightMaxValue)]
         public double? Weight { get; set; }
 
         [Comment("it stores if the animal has valid documents")]
@@ -78,9 +78,13 @@ namespace Domain
         [ForeignKey(nameof(OwnerId))]
         public User Owner { get; set; } = null!;
 
+        public DateTime CreatedOn { get; set; }
+
+        public DateTime LastModified { get; set; }
+
         public ICollection<Swipe> Swipes { get; set; } = null!;
         
-        public ICollection<Match> Matches { get; set; } = null!;
+        public ICollection<AnimalMatch> AnimalMatches { get; set; } = null!;
 
         public ICollection<Message> Messages { get; set; } = null!;
     }
