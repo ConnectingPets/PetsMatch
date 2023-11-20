@@ -1,51 +1,8 @@
-@use '../../global-styles/' as gs;
+@use './index.scss' as gs;
 
-.add-edit-pet__container {
+.forms__container {
     @include gs.page-center(column, none, center);
     background-color: gs.$light-background-color;
-
-    &>header {
-        @include gs.display-flex(row, space-between, center);
-        width: 100%;
-        max-width: 93rem;
-        padding: 2rem;
-        margin-bottom: 1rem;
-
-        &>h1 {
-            @include gs.display-flex(column, center, center);
-            margin: 0;
-            text-align: center;
-            text-transform: capitalize;
-            letter-spacing: 0.19rem;
-            font-weight: 900;
-            background-image: linear-gradient(220deg, gs.$light-gradient-first 0%, gs.$light-gradient-second 77%);
-            background-size: 100%;
-            background-repeat: repeat;
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            -moz-background-clip: text;
-            -moz-text-fill-color: transparent;
-
-            &::after {
-                content: '';
-                background: linear-gradient(220deg, gs.$light-gradient-first 0%, gs.$light-gradient-second 77%);
-                width: 110%;
-                height: 0.5rem;
-                display: block;
-                border-radius: 50%;
-                margin-top: 0.6rem;
-            }
-        }
-
-        &>.dark {
-            background-image: linear-gradient(220deg, gs.$dark-primary 0%, gs.$dark-secondary 77%) !important;
-
-            &::after {
-                background: linear-gradient(220deg, gs.$dark-primary 0%, gs.$dark-secondary 77%) !important;
-            }
-        }
-    }
 
     &__form-wrapper {
         width: 100%;
@@ -228,11 +185,11 @@
                 cursor: pointer;
                 transition: 0.5s;
                 transition: background-color 0.5s ease-in-out;
-                
+
                 &:hover {
                     background-color: #ff0000;
                     color: #ffffff;
-                    
+
                     &::after {
                         content: ' Delete';
                     }

@@ -14,7 +14,7 @@ import PetImages from '../PetImages/PetImages';
 import DeleteModal from '../DeleteModal/DeleteModal';
 import Footer from '../../components/Footer/Footer';
 
-import './AddOrEditPet.scss';
+import '../../global-styles/forms.scss';
 
 interface AddOrEditPetProps {
     addOrEditPet: string,
@@ -41,10 +41,10 @@ const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAd
     };
 
     return (
-        <div className={themeStore.isLightTheme ? 'add-edit-pet__container' : 'add-edit-pet__container add-edit-pet__container__dark'}>
+        <div className={themeStore.isLightTheme ? 'forms__container' : 'forms__container forms__container__dark'}>
             <FormsHeader title={addOrEditPet == 'add' ? 'Add Pet' : 'Edit Pet Info'} />
 
-            <section className="add-edit-pet__container__form-wrapper">
+            <section className="forms__container__form-wrapper">
                 <p>Fields with "<CgAsterisk className="asterisk" />" are required!</p>
 
                 <Form
