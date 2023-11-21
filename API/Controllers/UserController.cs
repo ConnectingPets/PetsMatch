@@ -27,27 +27,27 @@ namespace API.Controllers
 
      
 
-        [HttpPost]
-        public async Task<IActionResult> Register(RegisterUserViewModel model) //Here 
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+        //[HttpPost]
+        //public async Task<IActionResult> Register(RegisterUserViewModel model) //Here 
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
 
-            RegisterRequest request = new RegisterRequest(model);
+        //    RegisterRequest request = new RegisterRequest(model);
 
-            User user =  await  mediator.Send(request,CancellationToken.None);
+        //    User user =  await  mediator.Send(request,CancellationToken.None);
 
-            if (user == null)
-            {
-                return BadRequest();
-            }
+        //    if (user == null)
+        //    {
+        //        return BadRequest();
+        //    }
 
-            await signInManager.SignInAsync(user, false);
+        //    await signInManager.SignInAsync(user, false);
 
-            return Ok(new { Message = "Registration successful" });
-        }
+        //    return Ok(new { Message = "Registration successful" });
+        //}
 
 
         [HttpGet]

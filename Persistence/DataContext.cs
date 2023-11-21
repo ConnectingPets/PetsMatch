@@ -20,12 +20,12 @@ namespace Persistence
         public DbSet<AnimalCategory> AnimalCategories { get; set; } = null!;
 
         public DbSet<Breed> Breeds { get; set; } = null!;
-
-        public DbSet<Conversation> Conversations { get; set; } = null!;
         
         public DbSet<Passion> Passions { get; set; } = null!;
 
         public DbSet<Match> Matches { get; set; } = null!;
+
+        public DbSet<Message> Messages { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

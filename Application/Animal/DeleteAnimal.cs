@@ -64,16 +64,16 @@
                     All<Message>(m => m.AnimalId.ToString() == animalId).
                     ToArrayAsync();
                 Guid[] allAnimalConversationId = allMessages.
-                    Select(m => m.ConversationId).
+                    Select(m => m.MatchId).
                     ToArray();
 
                 repository.DeleteRange(allMessages);
                 repository.DeleteRange(animalMatches);
 
-                foreach (var conversationId in allAnimalConversationId)
-                {
-                    await repository.DeleteAsync<Conversation>(conversationId);
-                }
+                //foreach (var conversationId in allAnimalConversationId)
+                //{
+                //    await repository.DeleteAsync<Conversation>(conversationId);
+                //}
                 foreach (var animalMatchId in matchesIds)
                 {
                     await repository.DeleteAsync<Match>(animalMatchId);
