@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace Domain.ViewModels
 {
-    public class AnimalViewModel
+    public class AnimalDto
     { 
 
         [Comment("animal id")]

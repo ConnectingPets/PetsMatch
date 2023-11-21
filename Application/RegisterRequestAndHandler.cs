@@ -9,12 +9,12 @@ namespace Application
 {
     public class RegisterRequest : IRequest<Domain.User>
     {
-        public RegisterRequest(RegisterUserViewModel user)
+        public RegisterRequest(RegisterUserDto user)
         {
             User = user;
         }
 
-        public RegisterUserViewModel User { get; set; } = null!;
+        public RegisterUserDto User { get; set; } = null!;
     }
 
     public class RegisterHandler : IRequestHandler<RegisterRequest, Domain.User>
@@ -44,13 +44,8 @@ namespace Application
                 JobTitle = request.User.JobTitle,
                 Name = request.User.Name,
                 Photo = request.User.Photo,
-                Animals = request.User.Animals,
-                UsersPassions = request.User.UsersPassions
+                UserName = request.User.Email
             };
-
-            await userManager.SetEmailAsync(user, user.Email);
-
-            await userManager.SetUserNameAsync(user, user.Name);
 
             IdentityResult result =
                 await userManager.CreateAsync(user, request.User.Password);
