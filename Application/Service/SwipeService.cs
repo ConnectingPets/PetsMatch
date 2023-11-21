@@ -16,7 +16,7 @@
             this.mediator = mediator;
         }
 
-        public async Task Swipe(string swiperAnimalId, string swipeeAnimalId, bool swipedRight)
+        public async Task<bool> Swipe(string swiperAnimalId, string swipeeAnimalId, bool swipedRight)
             => await this.mediator.Send(new SwipeAnimalCommand
             {
                 SwiperAnimalId = swiperAnimalId,
