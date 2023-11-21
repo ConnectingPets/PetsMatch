@@ -1,3 +1,4 @@
+using API.Hubs;
 using API.Infrastructure;
 using Application.Swipe;
 
@@ -64,6 +65,8 @@ app.MapControllerRoute(
     pattern: "api/[controller]/{action}");
 
 app.UseCors("ReactPolicy");
+
+app.MapHub<ChatHub>("/chat");
 
 app.UseRouting();
 
