@@ -16,7 +16,8 @@ namespace Domain
         public Animal()
         {
             this.AnimalId = Guid.NewGuid();
-            this.Swipes = new HashSet<Swipe>();
+            this.SwiperSwipes = new HashSet<Swipe>();
+            this.SwipeeSwipes = new HashSet<Swipe>();
             this.AnimalMatches = new HashSet<AnimalMatch>();
             this.Messages = new HashSet<Message>();
         }
@@ -78,7 +79,9 @@ namespace Domain
         [ForeignKey(nameof(OwnerId))]
         public User Owner { get; set; } = null!;
 
-        public ICollection<Swipe> Swipes { get; set; } = null!;
+        public ICollection<Swipe> SwiperSwipes { get; set; } = null!;
+
+        public ICollection<Swipe> SwipeeSwipes { get; set; } = null!;  
         
         public ICollection<AnimalMatch> AnimalMatches { get; set; } = null!;
 
