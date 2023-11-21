@@ -42,7 +42,7 @@ namespace Domain
         public DateTime? BirthDate { get; set; }
 
         [Comment("animal last modified")]
-        public DateTime? LastModified { get; set; }
+        public DateTime LastModified { get; set; }
 
         [Comment("animal created on")]
         public DateTime CreatedOn { get; set; }
