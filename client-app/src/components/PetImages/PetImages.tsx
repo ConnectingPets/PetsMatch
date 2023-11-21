@@ -6,7 +6,7 @@ import { Animal } from '../../interfaces/Interfaces';
 import { CLabel } from '../common/CLabel/CLabel';
 import { CgAsterisk } from 'react-icons/cg';
 
-import './PetImages.scss';
+import '../../global-styles/forms-images.scss';
 
 interface PetImagesProps {
     errors: Animal | null
