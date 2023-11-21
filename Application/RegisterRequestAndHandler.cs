@@ -44,11 +44,8 @@ namespace Application
                 JobTitle = request.User.JobTitle,
                 Name = request.User.Name,
                 Photo = request.User.Photo,
+                UserName = request.User.Email
             };
-
-            await userManager.SetEmailAsync(user, user.Email);
-
-            await userManager.SetUserNameAsync(user, user.Name);
 
             IdentityResult result =
                 await userManager.CreateAsync(user, request.User.Password);

@@ -14,6 +14,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
+
 builder.Services.ConfigurateDbContext(builder.Configuration);
 builder.Services.ConfigurateServices();
 

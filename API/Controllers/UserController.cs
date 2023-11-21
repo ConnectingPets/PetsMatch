@@ -12,6 +12,8 @@ using System.Security.AccessControl;
 
 namespace API.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class UserController : Controller
     {
         private readonly SignInManager<User> signInManager;
@@ -28,7 +30,7 @@ namespace API.Controllers
 
 
 
-        [HttpPost("/register")]
+        [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody]RegisterUserDto model) 
         {
             if (!ModelState.IsValid)
@@ -53,7 +55,7 @@ namespace API.Controllers
 
 
 
-        [HttpPost("/login")]
+        [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody]LoginUserDto model)
         {
             if (ModelState.IsValid)
@@ -72,6 +74,14 @@ namespace API.Controllers
             {
                 return BadRequest(model);
             }
+        }
+
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            await signInManager.SignOutAsync();
+
+            return Ok(new { Message = "Logout successful" });
         }
     }
 }
