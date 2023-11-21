@@ -41,6 +41,9 @@ namespace Domain
         [Comment("animal birth date")]
         public DateTime? BirthDate { get; set; }
 
+        [Comment("animal last modified")]
+        public DateTime? LastModified { get; set; }
+
         [Comment("stores if the animal is educated")]
         public required bool IsEducated { get; set; }
 
