@@ -11,7 +11,7 @@
 
     public class SwipeAnimal
     {
-        public class SwipeAnimalCommand : IRequest<Unit>
+        public class SwipeAnimalCommand : IRequest<bool>
         {
             public required string SwiperAnimalId { get; set; }
 
@@ -20,7 +20,7 @@
             public required bool SwipedRight { get; set; }
         }
 
-        public class SwipeAnimalHandler : IRequestHandler<SwipeAnimalCommand, Unit>
+        public class SwipeAnimalHandler : IRequestHandler<SwipeAnimalCommand, bool>
         {
             private readonly IRepository repository;
 
@@ -29,7 +29,7 @@
                 this.repository = repository;
             }
 
-            public async Task<Unit> Handle(SwipeAnimalCommand request, CancellationToken cancellationToken)
+            public async Task<bool> Handle(SwipeAnimalCommand request, CancellationToken cancellationToken)
             {
                 if (!Guid.TryParse(request.SwiperAnimalId, out Guid swiperAnimalId))
                 {
@@ -67,7 +67,14 @@
                 await this.repository.AddAsync(swipe);
                 await this.repository.SaveChangesAsync();
 
-                return Unit.Value;
+                return await IsMatch(swiperAnimalId, swipeeAnimalId, request.SwipedRight);
+            }
+
+            private async Task<bool> IsMatch(Guid swiperAnimalId, Guid swipeeAnimalId, bool swipedRight)
+            {
+                Animal? animal = await this.repository.GetById<Animal>(swiperAnimalId);
+
+                return animal!.SwipesFrom.Any(s => s.SwiperAnimalId == swipeeAnimalId && s.SwipedRight) && swipedRight;
             }
         }
     }

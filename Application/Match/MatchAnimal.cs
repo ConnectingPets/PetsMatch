@@ -61,21 +61,10 @@
                     throw new AlreadyMatchedException();
                 }
 
-                bool isMatch = await IsMatch(animalOneId, animalTwoId);
-
-                if (isMatch)
-                {
-                    await CreateMatch(animalOneId, animalTwoId);
-                }
+                await CreateMatch(animalOneId, animalTwoId);
 
                 return Unit.Value;
             }
-
-            private async Task<bool> IsMatch(Guid animalOneId, Guid animalTwoId)
-                => await this.repository.CountAsync<Swipe>(swipe =>
-                    (swipe.SwiperAnimalId == animalTwoId && swipe.SwipeeAnimalId == animalOneId && swipe.SwipedRight) ||
-                    (swipe.SwiperAnimalId == animalOneId && swipe.SwipeeAnimalId == animalTwoId && swipe.SwipedRight)
-                   ) == 2;
 
             private async Task CreateMatch(Guid animalOneId, Guid animalTwoId)
             {
@@ -99,11 +88,9 @@
             }
 
             private async Task<bool> IsPresentMatch(Guid animalOneId, Guid animalTwoId)
-                => await this.repository.AnyAsync<Match>(m =>
-                    m.AnimalMatches.Count == 2 &&
-                    m.AnimalMatches.Any(am => am.AnimalId == animalOneId) &&
-                    m.AnimalMatches.Any(am => am.AnimalId == animalTwoId)
-                   );
+                => await this.repository.AnyAsync<AnimalMatch>(am => am.AnimalId == animalOneId &&
+                                                               am.Match.AnimalMatches
+                                                                   .Any(m => m.AnimalId == animalTwoId));
         }
     }
 }

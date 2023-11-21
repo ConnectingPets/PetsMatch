@@ -14,13 +14,13 @@ namespace Application
 {
     public class CreateAnimalRequest : IRequest<bool>
     {
-        public CreateAnimalRequest(AnimalViewModel model, string id)
+        public CreateAnimalRequest(AnimalDto model, string id)
         {
             Animal = model;
             UserId = id;
         }
 
-        public Domain.ViewModels.AnimalViewModel Animal { get; set; } = null!;
+        public Domain.ViewModels.AnimalDto Animal { get; set; } = null!;
 
         public string UserId { get; set; } 
     }
