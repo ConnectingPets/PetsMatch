@@ -34,16 +34,14 @@ namespace Application
 
             Domain.User user = new Domain.User()
             {
-                Address = request.User.Address,
-                Age = request.User.Age,
+                Address = string.Empty,
+                Age = 0,
                 Email = request.User.Email,
-                City = request.User.City,
-                Description = request.User.Description,
-                Education = request.User.Education,
-                Gender = request.User.Gender,
-                JobTitle = request.User.JobTitle,
+                Education = string.Empty,
+                City = string.Empty,
+                JobTitle = string.Empty,
                 Name = request.User.Name,
-                Photo = request.User.Photo,
+                Gender = Domain.Enum.Gender.Male,
                 UserName = request.User.Email
             };
 
