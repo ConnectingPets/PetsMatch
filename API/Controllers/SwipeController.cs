@@ -22,9 +22,10 @@
         [HttpPost]
         public async Task<ActionResult> Swipe([FromBody] SwipeDto swipe)
         {
+            bool isMatch = false;
             try
             {
-                await this.swipeService.Swipe(
+                isMatch = await this.swipeService.Swipe(
                     swipe.SwiperAnimalId,
                     swipe.SwipeeAnimalId,
                     swipe.SwipedRight);
@@ -46,7 +47,7 @@
                 return StatusCode(500, InternalServerError);
             }
 
-            return Ok();
+            return Ok(isMatch);
         }
     }
 }

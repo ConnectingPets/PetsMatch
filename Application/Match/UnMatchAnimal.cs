@@ -8,6 +8,7 @@
     using Domain;
     using Persistence.Repositories;
     using Application.Exceptions;
+    using Microsoft.EntityFrameworkCore;
 
     public class UnMatchAnimal
     {
@@ -64,7 +65,7 @@
                     throw new MatchNotFoundException();
                 }
 
-                this.repository.DeleteRange<AnimalMatch>(am => am.MatchId == existingMatch.MatchId);
+                this.repository.DeleteRange(existingMatch.AnimalMatches.ToArray());
                 this.repository.Delete(existingMatch);
                 await this.repository.SaveChangesAsync();
 
@@ -72,11 +73,13 @@
             }
 
             private async Task<Match?> GetExistingMatch(Guid animalOneId, Guid animalTwoId)
-                => await this.repository.FirstOrDefaultAsync<Match>(m =>
-                    m.AnimalMatches.Count == 2 &&
-                    m.AnimalMatches.Any(am => am.AnimalId == animalOneId) &&
-                    m.AnimalMatches.Any(am => am.AnimalId == animalTwoId)
-                   );
+                => await this.repository.All<AnimalMatch>(am => am.AnimalId == animalOneId &&
+                                            am.Match.AnimalMatches
+                                                .Any(m => m.AnimalId == animalTwoId))
+                                        .Include(am => am.Match)
+                                        .ThenInclude(m => m.AnimalMatches)
+                                        .Select(am => am.Match)
+                                        .FirstOrDefaultAsync();
         }
     }
 }
