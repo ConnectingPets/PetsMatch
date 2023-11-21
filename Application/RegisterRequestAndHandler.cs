@@ -34,15 +34,17 @@ namespace Application
 
             Domain.User user = new Domain.User()
             {
-                Address = string.Empty,
+                Address = null,
                 Age = 0,
-                Email = request.User.Email,
-                Education = string.Empty,
-                City = string.Empty,
-                JobTitle = string.Empty,
+                Email = string.Empty,
+                City = null,
+                Description =null,
                 Name = request.User.Name,
-                Gender = Domain.Enum.Gender.Male,
-                UserName = request.User.Email
+                Photo = null,
+                Gender = null,
+                JobTitle = null,
+                UserName = request.User.Email,
+                Education = null
             };
 
             IdentityResult result =
