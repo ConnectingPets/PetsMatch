@@ -3,13 +3,13 @@ export interface IUser {
     Name: string,
     Email: string,
     Description?: string,
-    Age: number,
-    Education: string,
+    Age?: number,
+    Education?: string,
     Photo?: string,
-    JobTitle: string,
-    Gender: string,
-    Address: string,
-    City: string
+    JobTitle?: string,
+    Gender?: string,
+    Address?: string,
+    City?: string
 }
 
 export interface IAnimal {
