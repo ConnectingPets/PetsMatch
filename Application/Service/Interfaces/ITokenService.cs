@@ -6,6 +6,6 @@
     {
         string CreateToken(User user);
 
-        string GenerateRefreshToken();
+        string GenerateKey();
     }
 }

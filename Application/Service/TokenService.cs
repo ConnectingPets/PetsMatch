@@ -29,10 +29,11 @@
                 new Claim(ClaimTypes.Email, user.Email!)
             };
 
-            byte[] bytes = Encoding.UTF8.GetBytes(configuration["TokenKey"]!);
-            SymmetricSecurityKey key = new SymmetricSecurityKey(bytes);
+            string secretKey = GenerateKey();
+            byte[] bytes = Encoding.UTF8.GetBytes(secretKey);
+            SymmetricSecurityKey securityKey = new SymmetricSecurityKey(bytes);
 
-            SigningCredentials credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            SigningCredentials credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             SecurityTokenDescriptor descriptor = new SecurityTokenDescriptor
             {
@@ -48,7 +49,7 @@
             return handler.WriteToken(token);
         }
 
-        public string GenerateRefreshToken()
+        public string GenerateKey()
         {
             byte[] rdmNumber = new byte[32];
             using (RandomNumberGenerator generator = RandomNumberGenerator.Create())

@@ -27,24 +27,13 @@ namespace Application
             this.userManager = userManager;
         }
 
-
         public async Task<Domain.User> Handle(RegisterRequest request, CancellationToken cancellationToken)
         {
-
-
             Domain.User user = new Domain.User()
             {
-                Address = null,
-                Age = 0,
-                Email = string.Empty,
-                City = null,
-                Description =null,
+                Email = request.User.Email,
                 Name = request.User.Name,
-                Photo = null,
-                Gender = null,
-                JobTitle = null,
                 UserName = request.User.Email,
-                Education = null
             };
 
             IdentityResult result =
@@ -55,10 +44,7 @@ namespace Application
                 return null;
             }
 
-
             return user;
-
-
         }
     }
 }
