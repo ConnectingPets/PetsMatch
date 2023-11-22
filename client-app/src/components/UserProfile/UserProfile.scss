@@ -78,11 +78,12 @@
     }
 
     &__buttons__wrapper {
-        @include gs.display-flex(row, center, center);
+        @include gs.display-flex(row, space-between, center);
         width: 60%;
         flex-wrap: wrap;
 
-        &>a {
+        &>a,
+        button {
             margin: 0.5rem;
             @include gs.set-button(gs.$light-gradient-first, gs.$light-gradient-second, gs.$white-text);
             font-size: 1rem;

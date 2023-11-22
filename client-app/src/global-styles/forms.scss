@@ -111,7 +111,6 @@
                             margin-top: 1rem;
                         }
 
-                        &>input,
                         &>input {
                             border-radius: 1.5rem;
                             padding: 0.3rem;
@@ -125,7 +124,7 @@
                         }
 
                         &>select {
-                            padding: 0.2rem 0rem 0.2rem 0.4rem;
+                            padding: 0.3rem 0rem 0.3rem 0.8rem;
                             border-radius: 1.5rem;
                             border: 1px solid lightgrey;
                             cursor: pointer;
@@ -136,9 +135,29 @@
                         margin-bottom: unset;
                     }
 
-                    &>.content>label {
+                    &>.content>label,
+                    &>label {
                         padding-right: 0.5rem;
                         margin-bottom: unset;
+                    }
+
+                    &>input {
+                        border-radius: 1.5rem;
+                        padding: 0.3rem;
+                        border: 1px solid lightgrey;
+                        text-align: center;
+                        width: 20%;
+
+                        @include gs.breakpoint(mobile-start, tablet-end) {
+                            width: 30%;
+                        }
+                    }
+
+                    &>select {
+                        padding: 0.3rem 0rem 0.3rem 0.8rem;
+                        border-radius: 1.5rem;
+                        border: 1px solid lightgrey;
+                        cursor: pointer;
                     }
 
                     &>span {
