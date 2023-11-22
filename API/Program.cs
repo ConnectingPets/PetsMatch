@@ -1,5 +1,10 @@
 using API.Infrastructure;
-using Application.Swipe;
+using static Common.EntityValidationConstants;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Persistence;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Identity;
+using Common;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -9,8 +14,20 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
+
 builder.Services.ConfigurateDbContext(builder.Configuration);
 builder.Services.ConfigurateServices();
+
+builder.Services.AddIdentity<Domain.User,IdentityRole<Guid>>(options =>
+{
+    options.SignIn.RequireConfirmedAccount = false;
+    options.Password.RequiredLength = 5;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireDigit = false;
+})
+   .AddEntityFrameworkStores<DataContext>();
 
 string reactBaseUrl = builder.Configuration.GetValue<string>("ReactApp:BaseUrl") ?? 
     throw new InvalidOperationException("The react base url is not found.");
@@ -26,9 +43,8 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.Services.AddControllers();
-
 WebApplication app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -57,20 +73,10 @@ app.MapGet("/weatherforecast", () =>
 .WithName("GetWeatherForecast")
 .WithOpenApi();
 
-app.UseRouting();
 
-app.MapControllerRoute(
-    name: "api",
-    pattern: "api/[controller]/{action}");
+app.MapControllers();
 
 app.UseCors("ReactPolicy");
-
-app.UseRouting();
-
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllers();
-});
 
 await app.RunAsync();
 

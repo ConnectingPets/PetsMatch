@@ -7,10 +7,13 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Win32;
 using System.Security.AccessControl;
 
 namespace API.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class UserController : Controller
     {
         private readonly SignInManager<User> signInManager;
@@ -18,17 +21,17 @@ namespace API.Controllers
         private readonly IMediator mediator;
 
         public UserController(SignInManager<User> signInManager,
-                              UserManager<User> userManager,IMediator mediator)
+                              UserManager<User> userManager, IMediator mediator)
         {
             this.signInManager = signInManager;
             this.userManager = userManager;
             this.mediator = mediator;
         }
 
-     
 
-        [HttpPost]
-        public async Task<IActionResult> Register(RegisterUserViewModel model) //Here 
+
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody]RegisterUserDto model) 
         {
             if (!ModelState.IsValid)
             {
@@ -37,7 +40,7 @@ namespace API.Controllers
 
             RegisterRequest request = new RegisterRequest(model);
 
-            User user =  await  mediator.Send(request,CancellationToken.None);
+            User user = await mediator.Send(request, CancellationToken.None);
 
             if (user == null)
             {
@@ -50,22 +53,35 @@ namespace API.Controllers
         }
 
 
-        [HttpGet]
-        public async Task<IActionResult> Login(string? returnUrl = null)
-        {
-            return Ok(new { Message = "Login successful" });
-        }
 
 
-        [HttpPost]
-        public async Task<IActionResult> Login(LoginUserViewModel model)
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody]LoginUserDto model)
         {
             if (ModelState.IsValid)
             {
+                var result = await signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
+
+                if (!result.Succeeded)
+                {
+                    return Unauthorized(new { Message = "Invalid username or password" });
+                }
+
                 return Ok(new { Message = "Login successful" });
             }
 
-            return Unauthorized(new { Message = "Invalid username or password" });
+            else
+            {
+                return BadRequest(model);
+            }
+        }
+
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            await signInManager.SignOutAsync();
+
+            return Ok(new { Message = "Logout successful" });
         }
     }
 }

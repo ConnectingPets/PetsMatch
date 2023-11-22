@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { observer } from 'mobx-react';
 import { Form, Field } from 'react-final-form';
 import { CgAsterisk } from 'react-icons/cg';
+import { FaTrashAlt } from 'react-icons/fa';
 
 import themeStore from '../../stores/themeStore';
 import { Animal } from '../../interfaces/Interfaces';
@@ -11,6 +12,7 @@ import { CChangeThemeButton } from '../../components/common/CChangeThemeButton/C
 import { CLabel } from '../../components/common/CLabel/CLabel';
 import { CSubmitButton } from '../../components/common/CSubmitButton/CSubmitButton';
 import PetImages from '../PetImages/PetImages';
+import DeleteModal from '../DeleteModal/DeleteModal';
 import Footer from '../../components/Footer/Footer';
 
 import './AddOrEditPet.scss';
@@ -24,11 +26,19 @@ interface AddOrEditPetProps {
 }
 
 const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAddPetSubmit, data, onEditPetSubmit, errors }) => {
+    const [isDeleteClick, setIsDeleteClick] = useState<boolean>(false);
 
     // TO DO show images on edit-view
 
-    const onRemoveClick = () => {
-        console.log('Deleted');
+    const subjectForDelete = 'Tutsy';
+
+    const onDeleteOrCancelClick = () => {
+        setIsDeleteClick(state => !state);
+    };
+
+    const onConfirmDelete = () => {
+
+       // TO DO .....
     };
 
     return (
@@ -228,12 +238,16 @@ const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAd
 
                             <CSubmitButton textContent={addOrEditPet == 'add' ? 'Add Pet' : 'Edit'} />
                             {addOrEditPet == 'edit' && (
-                                <button type="button" onClick={onRemoveClick} className="deleteBtn">Remove</button>
+                                <button type="button" onClick={onDeleteOrCancelClick} className="deleteBtn"><FaTrashAlt /></button>
                             )}
                         </form>
                     )}
                 />
             </section>
+
+            {isDeleteClick && (
+                <DeleteModal subjectForDelete={subjectForDelete} onDeleteOrCancelClick={onDeleteOrCancelClick} onConfirmDelete={onConfirmDelete} />
+            )}
 
             <Footer />
         </div>

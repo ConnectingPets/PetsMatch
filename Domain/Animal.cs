@@ -16,7 +16,8 @@ namespace Domain
         public Animal()
         {
             this.AnimalId = Guid.NewGuid();
-            this.Swipes = new HashSet<Swipe>();
+            this.SwipesFrom = new HashSet<Swipe>();
+            this.SwipesTo = new HashSet<Swipe>();
             this.AnimalMatches = new HashSet<AnimalMatch>();
             this.Messages = new HashSet<Message>();
         }
@@ -39,6 +40,12 @@ namespace Domain
 
         [Comment("animal birth date")]
         public DateTime? BirthDate { get; set; }
+
+        [Comment("animal last modified")]
+        public DateTime LastModified { get; set; }
+
+        [Comment("animal created on")]
+        public DateTime CreatedOn { get; set; }
 
         [Comment("stores if the animal is educated")]
         public required bool IsEducated { get; set; }
@@ -78,11 +85,9 @@ namespace Domain
         [ForeignKey(nameof(OwnerId))]
         public User Owner { get; set; } = null!;
 
-        public DateTime CreatedOn { get; set; }
+        public ICollection<Swipe> SwipesTo { get; set; } = null!;
 
-        public DateTime LastModified { get; set; }
-
-        public ICollection<Swipe> Swipes { get; set; } = null!;
+        public ICollection<Swipe> SwipesFrom { get; set; } = null!;  
         
         public ICollection<AnimalMatch> AnimalMatches { get; set; } = null!;
 
