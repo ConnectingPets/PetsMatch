@@ -31,38 +31,38 @@ const photoRequired = createValidator(
 );
 
 export const addOrEditPetFormValidator = combineValidators({
-    name: composeValidators(
+    Name: composeValidators(
         isRequired,
         isAlphabetic,
         hasLengthBetween(2, 50)('This field')
     )('Name'),
-    animalCategory: composeValidators(
+    AnimalCategory: composeValidators(
         isRequired,
         isAlphabetic,
         hasLengthBetween(3, 30)
     )('Category'),
-    breed: composeValidators(
+    Breed: composeValidators(
         isRequired,
         isAlphabetic,
         hasLengthBetween(5, 30)
     )('Breed'),
-    description: hasLengthLessThan(151)('This field'),
-    age: composeValidators(
+    Description: hasLengthLessThan(151)('This field'),
+    Age: composeValidators(
         isRequired,
         isNumeric('This field'),
         ageRange
     )('Age'),
-    isEducated: isRequired('This field'),
-    photo: composeValidators(
+    IsEducated: isRequired('This field'),
+    Photo: composeValidators(
         isRequired,
         photoRequired
     )('Photo'),
-    healthStatus: isRequired('This field'),
-    gender: isRequired('Gender'),
-    socialMedia: hasLengthGreaterThan(3)('This field'),
-    weight: composeValidators(
+    HealthStatus: isRequired('This field'),
+    Gender: isRequired('Gender'),
+    SocialMedia: hasLengthGreaterThan(3)('This field'),
+    Weight: composeValidators(
         isNumeric,
         weightRange
     )('This field'),
-    isHavingValidDocuments: isRequired('This field')
+    IsHavingValidDocuments: isRequired('This field')
 });

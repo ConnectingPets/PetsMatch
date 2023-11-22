@@ -58,7 +58,6 @@ export const UserProfile: React.FC<UserProfileProps> = () => {
 
             <div className='dashboard__user__profile__buttons__wrapper'>
                 <Link to="/user/123abc/edit-profile" className={themeStore.isLightTheme ? '' : 'dark'}>Edit Profile</Link>
-                <button className={themeStore.isLightTheme ? '' : 'dark'}>Delete Profile</button>
             </div>
         </section>
     )

@@ -38,15 +38,15 @@ const UserPhoto: React.FC<UserPhotoProps> = ({ errors, input }) => {
         <>
             {!photo && (
                 <>
-                    <CLabel inputName='photo' title='Photo' />
+                    <CLabel inputName='Photo' title='Photo' />
                     <div id="fileInput">
-                        <input type="file" accept="image/*" onChange={(e) => handleFile(e, input)} name='photo' id='photo' />
+                        <input type="file" accept="image/*" onChange={(e) => handleFile(e, input)} name='Photo' id='Photo' />
                         <p className="fakeFileInput" >Upload Photo</p>
                     </div>
                 </>
             )}
 
-            {errors && <span>{errors.photo}</span>}
+            {errors && <span>{errors.Photo}</span>}
 
             {photo && (
                 <div id="images">
