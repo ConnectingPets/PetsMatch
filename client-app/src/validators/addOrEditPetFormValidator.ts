@@ -1,4 +1,15 @@
-import { combineValidators, composeValidators, isRequired, isAlphabetic, hasLengthBetween, hasLengthLessThan, isNumeric, createValidator, hasLengthGreaterThan } from 'revalidate';
+import { combineValidators, composeValidators, isRequired, hasLengthBetween, hasLengthLessThan, isNumeric, createValidator, hasLengthGreaterThan } from 'revalidate';
+
+const isAlphabeticWithSpaces = createValidator(
+    message => value => {
+        const pattern = /^[A-Za-z\s]+$/;
+        if (!pattern.test(value)) {
+            return message;
+        }
+    },
+
+    field => `${field} must be alphabetic`
+);
 
 const ageRange = createValidator(
     message => value => {
@@ -33,17 +44,17 @@ const photoRequired = createValidator(
 export const addOrEditPetFormValidator = combineValidators({
     Name: composeValidators(
         isRequired,
-        isAlphabetic,
+        isAlphabeticWithSpaces,
         hasLengthBetween(2, 50)('This field')
     )('Name'),
     AnimalCategory: composeValidators(
         isRequired,
-        isAlphabetic,
+        isAlphabeticWithSpaces,
         hasLengthBetween(3, 30)
     )('Category'),
     Breed: composeValidators(
         isRequired,
-        isAlphabetic,
+        isAlphabeticWithSpaces,
         hasLengthBetween(5, 30)
     )('Breed'),
     Description: hasLengthLessThan(151)('This field'),
