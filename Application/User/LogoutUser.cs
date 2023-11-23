@@ -2,6 +2,7 @@
 {
     using Domain;
     using MediatR;
+    using Microsoft.AspNetCore.Identity;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -21,7 +22,9 @@
 
             public async Task<Unit> Handle(LogoutUserCommand request, CancellationToken cancellationToken)
             {
-                return await this.signInManager.SignOutAsync();
+                await this.signInManager.SignOutAsync();
+
+                return Unit.Value;
             }
         }
     }
