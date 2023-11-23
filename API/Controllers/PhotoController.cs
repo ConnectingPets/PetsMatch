@@ -1,8 +1,13 @@
 ﻿namespace API.Controllers
 {
-    using MediatR;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
+
+    using MediatR;
+
+    using Infrastructure;
+    using static Application.Photo.AddUserPhoto;
+    using static Application.Photo.AddAnimalPhoto;
 
     public class PhotoController : BaseApiController
     {
@@ -16,7 +21,14 @@
         [HttpPost("AddUserPhoto")]
         public async Task<IActionResult> AddUserPhoto(IFormFile file)
         {
-            return Ok();
+            AddUserPhotoCommand command = new AddUserPhotoCommand()
+            {
+                File = file,
+                UserId = this.User.GetById()
+            };
+
+            var result = await mediator.Send(command);
+            return new JsonResult(result);
         }
 
         [HttpPost("SetUserMain")]
@@ -34,7 +46,14 @@
         [HttpPost("AddAnimalPhoto")]
         public async Task<IActionResult> AddAnimalPhoto(IFormFile file, string animalId)
         {
-            return Ok();
+            AddAnimalPhotoCommand command = new AddAnimalPhotoCommand()
+            {
+                File = file,
+                AnimalId = animalId
+            };
+
+            var result = await mediator.Send(command);
+            return new JsonResult(result);
         }
 
         [HttpPost("SetAnimalMain")]
