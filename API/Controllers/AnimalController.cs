@@ -1,21 +1,17 @@
 ﻿namespace API.Controllers
 {
-    using System.Security.Claims;
-
-    using Microsoft.AspNetCore.Mvc;
     using MediatR;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
 
-    using Application;
-    using Domain.ViewModels;
     using Infrastructure;
     using Application.DTOs;
     using static Application.Animal.AddAnimal;
     using static Application.Animal.AllAnimal;
-    using static Application.Animal.ShowAnimalToAdd;
     using static Application.Animal.DeleteAnimal;
-    using static Application.Animal.ShowAnimalToEdit;
     using static Application.Animal.EditAnimal;
-    using Microsoft.AspNetCore.Authorization;
+    using static Application.Animal.ShowAnimalToAdd;
+    using static Application.Animal.ShowAnimalToEdit;
 
     [Authorize]
     public class AnimalController : BaseApiController
@@ -82,7 +78,7 @@
             {
                 AnimalDto = animalDto,
                 AnimalId = id,
-                UserId = this.User.GetById() 
+                UserId = this.User.GetById()
             };
 
             return new JsonResult(await mediator.Send(command));
@@ -98,26 +94,6 @@
             };
 
             return new JsonResult(await mediator.Send(query));
-        }
-        public async Task<IActionResult> AddAnimal(AnimalViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(model);
-            }
-
-            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
-
-            CreateAnimalRequest request = new CreateAnimalRequest(model, userId);
-
-            bool result = await mediator.Send(request, CancellationToken.None);
-
-            if (result == false)
-            {
-                return BadRequest(model);
-            }
-
-            return Ok(model);
         }
 
     }
