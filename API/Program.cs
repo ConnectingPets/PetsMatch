@@ -16,7 +16,7 @@ builder.Services.AddControllers();
 builder.Services.ConfigurateDbContext(builder.Configuration);
 builder.Services.ConfigurateServices();
 
-builder.Services.AddIdentity<Domain.User, IdentityRole<Guid>>(options =>
+builder.Services.AddIdentity<User, IdentityRole<Guid>>(options =>
 {
     options.SignIn.RequireConfirmedAccount = false;
     options.Password.RequiredLength = 5;
