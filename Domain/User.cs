@@ -29,29 +29,29 @@ namespace Domain
 
         [Comment("user age")]
         [Range(typeof(int), AgeMinValue, AgeMaxValue)]
-        public required int? Age { get; set; }
+        public int? Age { get; set; }
 
         [Comment("user education")]
         [StringLength(EducationMaxLength, ErrorMessage = InvalidEducationLength)]
-        public required string? Education { get; set; }
+        public string? Education { get; set; }
 
         [Comment("user photo")]
         public byte[]? Photo { get; set; }
 
         [Comment("user job title")]
         [StringLength(JobTitleMaxLength, ErrorMessage = InvalidJobTitleLength)]
-        public required string? JobTitle { get; set; }
+        public string? JobTitle { get; set; }
 
         [Comment("user gender")]
-        public required Gender? Gender { get; set; }
+        public Gender? Gender { get; set; }
 
         [Comment("user address")]
         [StringLength(AddressMaxLength, ErrorMessage = InvalidAddressLength)]
-        public required string? Address { get; set; }
+        public string? Address { get; set; }
 
         [Comment("user city")]
         [StringLength(CityMaxLength, ErrorMessage = InvalidCityLength)]
-        public required string? City { get; set; }
+        public string? City { get; set; }
 
         public ICollection<UserPassion> UsersPassions { get; set; } = null!;
 

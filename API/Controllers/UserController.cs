@@ -1,4 +1,6 @@
 ﻿using Application;
+using Application.DTOs;
+using Application.Service.Interfaces;
 using Domain;
 using Domain.ViewModels;
 using MediatR;
@@ -13,14 +15,19 @@ namespace API.Controllers
     {
         private readonly SignInManager<User> signInManager;
         private readonly UserManager<User> userManager;
+        private readonly ITokenService tokenService;
         private readonly IMediator mediator;
 
-        public UserController(SignInManager<User> signInManager,
-                              UserManager<User> userManager, IMediator mediator)
+        public UserController(
+            SignInManager<User> signInManager,
+            UserManager<User> userManager,
+            IMediator mediator,
+            ITokenService tokenService)
         {
             this.signInManager = signInManager;
             this.userManager = userManager;
             this.mediator = mediator;
+            this.tokenService = tokenService;
         }
 
         [HttpPost("register")]
@@ -43,28 +50,37 @@ namespace API.Controllers
 
             await signInManager.SignInAsync(user, false);
 
-            return Ok(new { Message = "Registration successful" });
+            UserDto userObj = CreateUserObject(user);
+
+            return Ok(userObj);
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody]LoginUserDto model)
         {
-            if (ModelState.IsValid)
-            {
-                var result = await signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
-
-                if (!result.Succeeded)
-                {
-                    return Unauthorized(new { Message = "Invalid username or password" });
-                }
-
-                return Ok(new { Message = "Login successful" });
-            }
-
-            else
+            if (!ModelState.IsValid)
             {
                 return BadRequest(model);
             }
+
+            User? user = await this.userManager
+                   .FindByEmailAsync(model.Email);
+
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            var result = await signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, false);
+
+            if (!result.Succeeded)
+            {
+                return Unauthorized(new { Message = "Invalid username or password" });
+            }
+
+            UserDto userObj = CreateUserObject(user);
+
+            return Ok(userObj);
         }
 
         [HttpPost("logout")]
@@ -74,5 +90,15 @@ namespace API.Controllers
 
             return Ok(new { Message = "Logout successful" });
         }
+
+        private UserDto CreateUserObject(User user)
+            => new UserDto
+            {
+                Photo = user.Photo != null 
+                    ? Convert.ToBase64String(user.Photo)
+                    : null,
+                Name = user.Name,
+                Token = this.tokenService.CreateToken(user)
+            };
     }
 }
