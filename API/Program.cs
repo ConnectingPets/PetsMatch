@@ -1,11 +1,8 @@
 using API.Hubs;
 using API.Infrastructure;
-using static Common.EntityValidationConstants;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Persistence;
-using Microsoft.Extensions.DependencyInjection;
+using Domain;
 using Microsoft.AspNetCore.Identity;
-using Common;
+using Persistence;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -19,7 +16,7 @@ builder.Services.AddControllers();
 builder.Services.ConfigurateDbContext(builder.Configuration);
 builder.Services.ConfigurateServices();
 
-builder.Services.AddIdentity<Domain.User,IdentityRole<Guid>>(options =>
+builder.Services.AddIdentity<Domain.User, IdentityRole<Guid>>(options =>
 {
     options.SignIn.RequireConfirmedAccount = false;
     options.Password.RequiredLength = 5;
@@ -28,7 +25,8 @@ builder.Services.AddIdentity<Domain.User,IdentityRole<Guid>>(options =>
     options.Password.RequireUppercase = false;
     options.Password.RequireDigit = false;
 })
-   .AddEntityFrameworkStores<DataContext>();
+   .AddEntityFrameworkStores<DataContext>()
+   .AddSignInManager<SignInManager<User>>();
 
 string reactBaseUrl = builder.Configuration.GetValue<string>("ReactApp:BaseUrl") ?? 
     throw new InvalidOperationException("The react base url is not found.");

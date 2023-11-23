@@ -1,10 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Domain.ViewModels
+﻿namespace Application.DTOs
 {
+    using System.ComponentModel.DataAnnotations;
+
     public class LoginUserDto
     {
         [Required]
+        [DataType(DataType.EmailAddress)]
         public string Email { get; set; } = null!;
 
         [Required]
