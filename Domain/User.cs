@@ -17,6 +17,7 @@ namespace Domain
             base.Id = Guid.NewGuid();
             this.UsersPassions = new HashSet<UserPassion>();
             this.Animals = new HashSet<Animal>();
+            this.Photos = new HashSet<Photo>();
         }
 
         [Comment("user name")]
@@ -56,5 +57,7 @@ namespace Domain
         public ICollection<UserPassion> UsersPassions { get; set; } = null!;
 
         public ICollection<Animal> Animals { get; set; } = null!;
+
+        public ICollection<Photo> Photos { get; set; } = null!;
     }
 }

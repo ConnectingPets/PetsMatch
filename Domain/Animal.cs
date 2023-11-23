@@ -20,6 +20,7 @@ namespace Domain
             this.SwipesTo = new HashSet<Swipe>();
             this.AnimalMatches = new HashSet<AnimalMatch>();
             this.Messages = new HashSet<Message>();
+            this.Photos = new HashSet<Photo>();
         }
 
         [Comment("animal id")]
@@ -92,5 +93,7 @@ namespace Domain
         public ICollection<AnimalMatch> AnimalMatches { get; set; } = null!;
 
         public ICollection<Message> Messages { get; set; } = null!;
+
+        public ICollection<Photo> Photos { get; set; } = null!;
     }
 }
