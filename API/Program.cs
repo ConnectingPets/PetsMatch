@@ -43,6 +43,7 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddCloudinary(builder.Configuration);
 WebApplication app = builder.Build();
 
 
