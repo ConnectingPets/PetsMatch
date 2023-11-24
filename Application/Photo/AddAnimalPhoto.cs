@@ -5,6 +5,8 @@
 
     using Response;
     using Service.Interfaces;
+    using Domain;
+    using Persistence.Repositories;
 
     public class AddAnimalPhoto
     {
@@ -18,15 +20,19 @@
             IRequestHandler<AddAnimalPhotoCommand, Result<Unit>>
         {
             private readonly IPhotoService photoService;
+            private readonly IRepository repository;
 
-            public AddAnimalPhotoCommandHandler(IPhotoService photoService)
+            public AddAnimalPhotoCommandHandler(IPhotoService photoService,
+                                                IRepository repository)
             {
                 this.photoService = photoService;
+                this.repository = repository;
             }
 
             public async Task<Result<Unit>> Handle(AddAnimalPhotoCommand request, CancellationToken cancellationToken)
             {
                 IFormFile file = request.File;
+                string animalId = request.AnimalId;
 
                 if (file == null || file.Length == 0)
                 {
@@ -40,7 +46,16 @@
                         Result<Unit>.Failure("This file is not an image");
                 }
 
-                var result = await photoService.AddAnimalPhotoAsync(file, request.AnimalId);
+                Animal? animal = await repository.
+                FirstOrDefaultAsync<Animal>(a =>
+                a.AnimalId.ToString() == animalId);
+
+                if (animal == null)
+                {
+                    return Result<Unit>.Failure("This animal does not exist! please select existing one");
+                }
+
+                var result = await photoService.AddAnimalPhotoAsync(file, animalId, animal);
 
                 return result;
             }

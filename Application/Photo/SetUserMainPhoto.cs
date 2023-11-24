@@ -5,8 +5,10 @@
 
     using MediatR;
 
+    using Domain;
     using Response;
     using Service.Interfaces;
+    using Persistence.Repositories;
 
     public class SetUserMainPhoto
     {
@@ -18,15 +20,27 @@
         public class SetUserMainPhotoCommandHandler : IRequestHandler<SetUserMainPhotoCommand, Result<Unit>>
         {
             private readonly IPhotoService photoService;
+            private readonly IRepository repository;
 
-            public SetUserMainPhotoCommandHandler(IPhotoService photoService)
+            public SetUserMainPhotoCommandHandler(IPhotoService photoService,
+                                                  IRepository repository)
             {
                 this.photoService = photoService;
+                this.repository = repository;
             }
 
             public async Task<Result<Unit>> Handle(SetUserMainPhotoCommand request, CancellationToken cancellationToken)
             {
-                return await photoService.SetUserMainPhotoAsync(request.PhotoId);
+                string photoId = request.PhotoId;
+                Photo? photo = await repository.
+                FirstOrDefaultAsync<Photo>(p => p.Id == photoId);
+
+                if (photo == null)
+                {
+                    return Result<Unit>.Failure("This photo does not exist! Please select existing one");
+                }
+                return
+                    await photoService.SetUserMainPhotoAsync(photoId, photo);
             }
         }
     }

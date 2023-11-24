@@ -7,6 +7,8 @@
 
     using Response;
     using Service.Interfaces;
+    using Domain;
+    using Persistence.Repositories;
 
     public class SetAnimaMainPhoto
     {
@@ -18,15 +20,28 @@
         public class SetAnimalMainPhotoCommandHandler : IRequestHandler<SetAnimalMainPhotoCommand, Result<Unit>>
         {
             private readonly IPhotoService photoService;
+            private readonly IRepository repository;
 
-            public SetAnimalMainPhotoCommandHandler(IPhotoService photoService)
+            public SetAnimalMainPhotoCommandHandler(
+                IPhotoService photoService,
+                IRepository repository)
             {
                 this.photoService = photoService;
+                this.repository = repository;
             }
 
             public async Task<Result<Unit>> Handle(SetAnimalMainPhotoCommand request, CancellationToken cancellationToken)
             {
-                return await photoService.SetAnimalMainPhotoAsync(request.PhotoId);
+                string photoId = request.PhotoId;
+                Photo? photo = await repository.
+                    FirstOrDefaultAsync<Photo>(p => p.Id == photoId);
+
+                if (photo == null)
+                {
+                    return Result<Unit>.Failure("This photo does not exist! Please select existing one");
+                }
+                return await photoService.
+                    SetAnimalMainPhotoAsync(photoId, photo);
             }
         }
     }

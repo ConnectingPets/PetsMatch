@@ -51,7 +51,7 @@
         {
             DeletePhotoCommand command = new DeletePhotoCommand()
             {
-                publicId = photoId
+                PublicId = photoId
             };
 
             var result = await mediator.Send(command);

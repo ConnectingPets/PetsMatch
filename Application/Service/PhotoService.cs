@@ -23,17 +23,9 @@
             this.repository = repository;
         }
 
-        public async Task<Result<Unit>> AddAnimalPhotoAsync(IFormFile file, string animalId)
+        public async Task<Result<Unit>> AddAnimalPhotoAsync(IFormFile file, string animalId, Animal animal)
         {
             var imageUploadResult = new ImageUploadResult();
-            Animal? animal = await repository.
-                FirstOrDefaultAsync<Animal>(a =>
-                a.AnimalId.ToString() == animalId);
-
-            if (animal == null)
-            {
-                return Result<Unit>.Failure("This animal does not exist! please select existing one");
-            }
 
             using (var stream = file.OpenReadStream())
             {
@@ -115,21 +107,9 @@
             }
         }
 
-        public async Task<Result<Unit>> DeletePhotoAsync(string photoId)
+        public async Task<Result<Unit>> DeletePhotoAsync(string photoId,
+            Photo photo)
         {
-            Photo? photo = await repository.
-                FirstOrDefaultAsync<Photo>(p => p.Id == photoId);
-
-            if (photo == null)
-            {
-                return Result<Unit>.Failure("This photo does not exist! Please select existing one");
-            }
-
-            if (photo.IsMain)
-            {
-                return Result<Unit>.Failure("This is your main photo! You can not delete it");
-            }
-
             var deleteParams = new DeletionParams(photoId);
 
             try
@@ -154,18 +134,10 @@
             }
         }
 
-        public async Task<Result<Unit>> SetAnimalMainPhotoAsync(string photoId)
+        public async Task<Result<Unit>> SetAnimalMainPhotoAsync(string photoId, Photo photo)
         {
-            Photo? photo = await repository.
-                FirstOrDefaultAsync<Photo>(p => p.Id == photoId);
-
-            if (photo == null)
-            {
-                return Result<Unit>.Failure("This photo does not exist! Please select existing one");
-            }
-
             Photo? oldMainPhoto = await repository
-                .FirstOrDefaultAsync<Photo>(p => p.IsMain 
+                .FirstOrDefaultAsync<Photo>(p => p.IsMain
                 && p.AnimalId == photo.AnimalId);
 
             if (oldMainPhoto != null)
@@ -186,18 +158,10 @@
             }
         }
 
-        public async Task<Result<Unit>> SetUserMainPhotoAsync(string photoId)
+        public async Task<Result<Unit>> SetUserMainPhotoAsync(string photoId, Photo photo)
         {
-            Photo? photo = await repository.
-                FirstOrDefaultAsync<Photo>(p => p.Id == photoId);
-
-            if (photo == null)
-            {
-                return Result<Unit>.Failure("This photo does not exist! Please select existing one");
-            }
-
             Photo? oldMainPhoto = await repository
-                .FirstOrDefaultAsync<Photo>(p => p.IsMain && 
+                .FirstOrDefaultAsync<Photo>(p => p.IsMain &&
                 p.UserId == photo.UserId);
 
             if (oldMainPhoto != null)
