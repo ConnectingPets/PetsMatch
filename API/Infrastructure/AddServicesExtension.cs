@@ -12,6 +12,7 @@
             services.AddScoped<ISwipeService, SwipeService>();
             services.AddScoped<IMatchService, MatchService>();
             services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IUserService, UserService>();
             services.AddSignalR();
 
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(SwipeAnimal).Assembly));
