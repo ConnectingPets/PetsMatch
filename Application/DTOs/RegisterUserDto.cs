@@ -6,15 +6,19 @@
 
     public class RegisterUserDto
     {
-        [StringLength(NameMaxLength, ErrorMessage = InvalidNameLength, MinimumLength = NameMinLength)]
+        [StringLength(NameMaxLength, MinimumLength = NameMinLength, ErrorMessage = InvalidNameLength)]
         public required string Name { get; set; }
 
         [Required]
-        [DataType(DataType.Password)]
+        [DataType(DataType.Password, ErrorMessage = InvalidPassword)]
+        [MinLength(PasswordMinLength, ErrorMessage = InvalidPasswordLength)]
         public string Password { get; set; } = null!;
 
+        [Compare(nameof(Password), ErrorMessage = PasswordsDoNotMatch)]
+        public string ConfirmPassword { get; set; } = null!;
+
         [Required]
-        [DataType(DataType.EmailAddress)]
+        [EmailAddress(ErrorMessage = InvalidEmail)]
         public string Email { get; set; } = null!;
     }
 }

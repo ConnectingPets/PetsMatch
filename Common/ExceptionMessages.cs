@@ -39,6 +39,14 @@
             public const string InvalidJobTitleLength = "The user job title should be with length between 5 and 50";
             public const string InvalidAddressLength = "The user address should be with length between 10 and 150";
             public const string InvalidCityLength = "The user city should be with length between 3 and 50";
+            public const string UserNotFound = "The user is not found";
+            public const string UserResultNotSucceeded = "The user result is not succeeded";
+            public const string InvalidLogin = "Invalid email or password";
+            public const string InvalidPassword = "THe password is invalid";
+            public const string InvalidPasswordLength = "The password must be at least 5 characters long";
+            public const string PasswordsDoNotMatch = "Passwords do not match";
+            public const string InvalidEmail = "The email is invalid";
+            public const string InvalidRegister = "User registration failed";
         }
 
         public static class Message

@@ -24,13 +24,8 @@
 
         [Route("register")]
         [HttpPost]
-        public async Task<IActionResult> Register([FromBody]RegisterUserDto model) 
+        public async Task<IActionResult> Register([FromBody] RegisterUserDto model) 
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             User user;
             try
             {
@@ -57,11 +52,6 @@
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] LoginUserDto model)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(model);
-            }
-
             User user;
             try
             {

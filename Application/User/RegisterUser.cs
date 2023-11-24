@@ -6,6 +6,7 @@
     using Microsoft.AspNetCore.Identity;
     using System.Threading;
     using System.Threading.Tasks;
+    using static Common.ExceptionMessages.User;
 
     public class RegisterUser
     {
@@ -45,7 +46,7 @@
 
                 if (!result.Succeeded)
                 {
-                    throw new UserResultNotSucceededException();
+                    throw new UserResultNotSucceededException(InvalidRegister);
                 }
 
                 await signInManager.SignInAsync(user, false);

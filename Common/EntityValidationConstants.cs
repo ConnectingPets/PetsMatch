@@ -16,6 +16,7 @@
 
         public static class User
         {
+            public const int PasswordMinLength = 5;
             public const string AgeMinValue = "16";
             public const string AgeMaxValue = "90";
             public const int NameMinLength = 2;
