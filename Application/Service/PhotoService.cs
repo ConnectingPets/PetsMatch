@@ -26,6 +26,14 @@
         public async Task<Result<Unit>> AddAnimalPhotoAsync(IFormFile file, string animalId)
         {
             var imageUploadResult = new ImageUploadResult();
+            Animal? animal = await repository.
+                FirstOrDefaultAsync<Animal>(a =>
+                a.AnimalId.ToString() == animalId);
+
+            if (animal == null)
+            {
+                return Result<Unit>.Failure("This animal does not exist! please select existing one");
+            }
 
             using (var stream = file.OpenReadStream())
             {
@@ -39,7 +47,7 @@
                     imageUploadResult =
                         await cloudinary.UploadAsync(uploadParams);
                 }
-                catch
+                catch (Exception)
                 {
                     return Result<Unit>.Failure("Error occurred during image upload");
                 }
@@ -59,7 +67,7 @@
                 await repository.SaveChangesAsync();
                 return Result<Unit>.Success(Unit.Value, "Successfully upload image");
             }
-            catch
+            catch (Exception)
             {
                 return Result<Unit>.Failure("Error occurred during saving changes");
             }
@@ -81,7 +89,7 @@
                     imageUploadResult =
                         await cloudinary.UploadAsync(uploadParams);
                 }
-                catch
+                catch (Exception)
                 {
                     return Result<Unit>.Failure("Error occurred during image upload");
                 }
@@ -101,30 +109,113 @@
                 await repository.SaveChangesAsync();
                 return Result<Unit>.Success(Unit.Value, "Successfully upload image");
             }
-            catch 
+            catch (Exception)
             {
                 return Result<Unit>.Failure("Error occurred during saving changes");
             }
         }
 
-        public Task<Result<Unit>> DeleteAnimalPhotoAsync(string photoId, string animalId)
+        public async Task<Result<Unit>> DeletePhotoAsync(string photoId)
         {
-            throw new NotImplementedException();
+            Photo? photo = await repository.
+                FirstOrDefaultAsync<Photo>(p => p.Id == photoId);
+
+            if (photo == null)
+            {
+                return Result<Unit>.Failure("This photo does not exist! Please select existing one");
+            }
+
+            if (photo.IsMain)
+            {
+                return Result<Unit>.Failure("This is your main photo! You can not delete it");
+            }
+
+            var deleteParams = new DeletionParams(photoId);
+
+            try
+            {
+                await cloudinary.DestroyAsync(deleteParams);
+            }
+            catch (Exception)
+            {
+                return Result<Unit>.Failure("Failed to delete photo");
+            }
+
+            repository.Delete(photo);
+
+            try
+            {
+                await repository.SaveChangesAsync();
+                return Result<Unit>.Success(Unit.Value, "Successfully delete photo");
+            }
+            catch
+            {
+                return Result<Unit>.Failure("Error occurred during saving changes");
+            }
         }
 
-        public Task<Result<Unit>> DeleteUserPhotoAsync(string photoId, string userId)
+        public async Task<Result<Unit>> SetAnimalMainPhotoAsync(string photoId)
         {
-            throw new NotImplementedException();
+            Photo? photo = await repository.
+                FirstOrDefaultAsync<Photo>(p => p.Id == photoId);
+
+            if (photo == null)
+            {
+                return Result<Unit>.Failure("This photo does not exist! Please select existing one");
+            }
+
+            Photo? oldMainPhoto = await repository
+                .FirstOrDefaultAsync<Photo>(p => p.IsMain 
+                && p.AnimalId == photo.AnimalId);
+
+            if (oldMainPhoto != null)
+            {
+                oldMainPhoto.IsMain = false;
+            }
+
+            photo.IsMain = true;
+
+            try
+            {
+                await repository.SaveChangesAsync();
+                return Result<Unit>.Success(Unit.Value, "You successfully set main photo");
+            }
+            catch (Exception)
+            {
+                return Result<Unit>.Failure("Error occurred during saving changes");
+            }
         }
 
-        public Task<Result<Unit>> SetMainAnimalPhotoAsync(string photoId, string animalId)
+        public async Task<Result<Unit>> SetUserMainPhotoAsync(string photoId)
         {
-            throw new NotImplementedException();
-        }
+            Photo? photo = await repository.
+                FirstOrDefaultAsync<Photo>(p => p.Id == photoId);
 
-        public Task<Result<Unit>> SetMainUserPhotoAsync(string photoId, string userId)
-        {
-            throw new NotImplementedException();
+            if (photo == null)
+            {
+                return Result<Unit>.Failure("This photo does not exist! Please select existing one");
+            }
+
+            Photo? oldMainPhoto = await repository
+                .FirstOrDefaultAsync<Photo>(p => p.IsMain && 
+                p.UserId == photo.UserId);
+
+            if (oldMainPhoto != null)
+            {
+                oldMainPhoto.IsMain = false;
+            }
+
+            photo.IsMain = true;
+
+            try
+            {
+                await repository.SaveChangesAsync();
+                return Result<Unit>.Success(Unit.Value, "You successfully set main photo");
+            }
+            catch (Exception)
+            {
+                return Result<Unit>.Failure("Error occurred during saving changes");
+            }
         }
     }
 }

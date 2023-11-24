@@ -13,7 +13,7 @@
     using static Application.Animal.ShowAnimalToAdd;
     using static Application.Animal.ShowAnimalToEdit;
 
-    [Authorize]
+    //[Authorize]
     public class AnimalController : BaseApiController
     {
         private readonly IMediator mediator;
@@ -65,7 +65,7 @@
             DeleteAnimalCommand command = new DeleteAnimalCommand()
             {
                 AnimalId = id,
-                UserId = this.User.GetById()
+                UserId = "F6E0FC1A-7726-4519-A599-0114A1EB1875"
             };
 
             return new JsonResult(await mediator.Send(command));

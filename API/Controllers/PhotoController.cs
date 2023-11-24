@@ -8,6 +8,9 @@
     using Infrastructure;
     using static Application.Photo.AddUserPhoto;
     using static Application.Photo.AddAnimalPhoto;
+    using static Application.Photo.DeletePhoto;
+    using static Application.Photo.SetUserMainPhoto;
+    using static Application.Photo.SetAnimaMainPhoto;
 
     public class PhotoController : BaseApiController
     {
@@ -31,19 +34,31 @@
             return new JsonResult(result);
         }
 
-        [HttpPost("SetUserMain")]
-        public async Task<IActionResult> SetMain(IFormFile file)
+        [HttpPost("SetUserMain/{photoId}")]
+        public async Task<IActionResult> SetUserMain(string photoId)
         {
-            return Ok();
+            SetUserMainPhotoCommand command = new SetUserMainPhotoCommand()
+            {
+                PhotoId = photoId
+            };
+
+            var result = await mediator.Send(command);
+            return new JsonResult(result);
         }
 
-        [HttpPost("DeleteUserPhoto")]
+        [HttpPost("DeletePhoto/{photoId}")]
         public async Task<IActionResult> Delete(string photoId)
         {
-            return Ok();
+            DeletePhotoCommand command = new DeletePhotoCommand()
+            {
+                publicId = photoId
+            };
+
+            var result = await mediator.Send(command);
+            return new JsonResult(result);
         }
 
-        [HttpPost("AddAnimalPhoto")]
+        [HttpPost("AddAnimalPhoto/{animalId}")]
         public async Task<IActionResult> AddAnimalPhoto(IFormFile file, string animalId)
         {
             AddAnimalPhotoCommand command = new AddAnimalPhotoCommand()
@@ -56,16 +71,17 @@
             return new JsonResult(result);
         }
 
-        [HttpPost("SetAnimalMain")]
-        public async Task<IActionResult> SetMain(IFormFile file, string animalId)
+        [HttpPost("SetAnimalMain/{photoId}")]
+        public async Task<IActionResult> SetAnimalMain(string photoId)
         {
-            return Ok();
-        }
+            SetAnimalMainPhotoCommand command =
+                new SetAnimalMainPhotoCommand()
+                {
+                    PhotoId = photoId
+                };
 
-        [HttpPost("DeleteAnimalPhoto")]
-        public async Task<IActionResult> Delete(string photoId, string animalId)
-        {
-            return Ok();
+            var result = await mediator.Send(command);
+            return new JsonResult(result);
         }
     }
 }

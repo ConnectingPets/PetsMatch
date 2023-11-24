@@ -8,10 +8,9 @@
     public interface IPhotoService
     {
         Task<Result<Unit>> AddUserPhotoAsync(IFormFile file, string userId);
-        Task<Result<Unit>> DeleteUserPhotoAsync(string photoId, string userId);
-        Task<Result<Unit>> SetMainUserPhotoAsync(string photoId, string userId);
         Task<Result<Unit>> AddAnimalPhotoAsync(IFormFile file, string animalId);
-        Task<Result<Unit>> DeleteAnimalPhotoAsync(string photoId, string animalId);
-        Task<Result<Unit>> SetMainAnimalPhotoAsync(string photoId, string animalId);
+        Task<Result<Unit>> DeletePhotoAsync(string photoId);
+        Task<Result<Unit>> SetUserMainPhotoAsync(string photoId);
+        Task<Result<Unit>> SetAnimalMainPhotoAsync(string photoId);
     }
 }
