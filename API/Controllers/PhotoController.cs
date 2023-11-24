@@ -2,7 +2,7 @@
 {
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
-
+    using Microsoft.AspNetCore.Authorization;
     using MediatR;
 
     using Infrastructure;
@@ -12,6 +12,7 @@
     using static Application.Photo.SetUserMainPhoto;
     using static Application.Photo.SetAnimaMainPhoto;
 
+    [Authorize]
     public class PhotoController : BaseApiController
     {
         private readonly IMediator mediator;
@@ -35,7 +36,7 @@
         }
 
         [HttpPost("SetUserMain/{photoId}")]
-        public async Task<IActionResult> SetUserMain(string photoId)
+        public async Task<IActionResult> SetUserMain([FromRoute]string photoId)
         {
             SetUserMainPhotoCommand command = new SetUserMainPhotoCommand()
             {
@@ -47,7 +48,7 @@
         }
 
         [HttpPost("DeletePhoto/{photoId}")]
-        public async Task<IActionResult> Delete(string photoId)
+        public async Task<IActionResult> Delete([FromRoute]string photoId)
         {
             DeletePhotoCommand command = new DeletePhotoCommand()
             {
@@ -59,7 +60,7 @@
         }
 
         [HttpPost("AddAnimalPhoto/{animalId}")]
-        public async Task<IActionResult> AddAnimalPhoto(IFormFile file, string animalId)
+        public async Task<IActionResult> AddAnimalPhoto(IFormFile file, [FromRoute] string animalId)
         {
             AddAnimalPhotoCommand command = new AddAnimalPhotoCommand()
             {
@@ -72,7 +73,7 @@
         }
 
         [HttpPost("SetAnimalMain/{photoId}")]
-        public async Task<IActionResult> SetAnimalMain(string photoId)
+        public async Task<IActionResult> SetAnimalMain([FromRoute] string photoId)
         {
             SetAnimalMainPhotoCommand command =
                 new SetAnimalMainPhotoCommand()

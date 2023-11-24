@@ -11,126 +11,154 @@
     using Response;
     using Persistence.Repositories;
     using Domain;
+    using Persistence;
 
     public class PhotoService : IPhotoService
     {
         private readonly Cloudinary cloudinary;
         private readonly IRepository repository;
+        private readonly DataContext dataContext;
 
-        public PhotoService(Cloudinary cloudinary, IRepository repository)
+        public PhotoService(Cloudinary cloudinary,
+                            IRepository repository,
+                            DataContext dataContext)
         {
             this.cloudinary = cloudinary;
             this.repository = repository;
+            this.dataContext = dataContext;
         }
 
         public async Task<Result<Unit>> AddAnimalPhotoAsync(IFormFile file, string animalId, Animal animal)
         {
-            var imageUploadResult = new ImageUploadResult();
-
-            using (var stream = file.OpenReadStream())
-            {
-                var uploadParams = new ImageUploadParams
-                {
-                    File = new FileDescription(file.FileName, stream)
-                };
-
-                try
-                {
-                    imageUploadResult =
-                        await cloudinary.UploadAsync(uploadParams);
-                }
-                catch (Exception)
-                {
-                    return Result<Unit>.Failure("Error occurred during image upload");
-                }
-            }
-
-            Photo photo = new Photo()
-            {
-                Id = imageUploadResult.PublicId,
-                IsMain = false,
-                Url = imageUploadResult.Url.AbsoluteUri,
-                AnimalId = Guid.Parse(animalId)
-            };
-
-            await repository.AddAsync(photo);
+            using var transaction =
+                await dataContext.Database.BeginTransactionAsync();
             try
             {
+                var imageUploadResult = new ImageUploadResult();
+
+                using (var stream = file.OpenReadStream())
+                {
+                    var uploadParams = new ImageUploadParams
+                    {
+                        File = new FileDescription(file.FileName, stream)
+                    };
+
+                    try
+                    {
+                        imageUploadResult =
+                            await cloudinary.UploadAsync(uploadParams);
+                    }
+                    catch (Exception)
+                    {
+                        return Result<Unit>.Failure("Error occurred during image upload");
+                    }
+                }
+
+                Photo photo = new Photo()
+                {
+                    Id = imageUploadResult.PublicId,
+                    IsMain = false,
+                    Url = imageUploadResult.Url.AbsoluteUri,
+                    AnimalId = Guid.Parse(animalId)
+                };
+
+                await repository.AddAsync(photo);
                 await repository.SaveChangesAsync();
+                await transaction.CommitAsync();
+
                 return Result<Unit>.Success(Unit.Value, "Successfully upload image");
             }
-            catch (Exception)
+            catch
             {
-                return Result<Unit>.Failure("Error occurred during saving changes");
+                await transaction.RollbackAsync();
+                return Result<Unit>.Failure("Error occurred during uploading photo");
             }
+
         }
 
         public async Task<Result<Unit>> AddUserPhotoAsync(IFormFile file, string userId)
         {
-            var imageUploadResult = new ImageUploadResult();
-
-            using (var stream = file.OpenReadStream())
-            {
-                var uploadParams = new ImageUploadParams
-                {
-                    File = new FileDescription(file.FileName, stream)
-                };
-
-                try
-                {
-                    imageUploadResult =
-                        await cloudinary.UploadAsync(uploadParams);
-                }
-                catch (Exception)
-                {
-                    return Result<Unit>.Failure("Error occurred during image upload");
-                }
-            }
-
-            Photo photo = new Photo()
-            {
-                Id = imageUploadResult.PublicId,
-                IsMain = false,
-                Url = imageUploadResult.Url.AbsoluteUri,
-                UserId = Guid.Parse(userId)
-            };
-
-            await repository.AddAsync(photo);
+            using var transaction =
+                await dataContext.Database.BeginTransactionAsync();
             try
             {
+                var imageUploadResult = new ImageUploadResult();
+
+                using (var stream = file.OpenReadStream())
+                {
+                    var uploadParams = new ImageUploadParams
+                    {
+                        File = new FileDescription(file.FileName, stream)
+                    };
+
+                    try
+                    {
+                        imageUploadResult =
+                            await cloudinary.UploadAsync(uploadParams);
+                    }
+                    catch (Exception)
+                    {
+                        return Result<Unit>.Failure("Error occurred during image upload");
+                    }
+                }
+
+                Photo photo = new Photo()
+                {
+                    Id = imageUploadResult.PublicId,
+                    IsMain = false,
+                    Url = imageUploadResult.Url.AbsoluteUri,
+                    UserId = Guid.Parse(userId)
+                };
+
+                await repository.AddAsync(photo);
                 await repository.SaveChangesAsync();
+                await transaction.CommitAsync();
+
                 return Result<Unit>.Success(Unit.Value, "Successfully upload image");
             }
             catch (Exception)
             {
-                return Result<Unit>.Failure("Error occurred during saving changes");
+                await transaction.RollbackAsync();
+                return Result<Unit>.Failure("Error occurred during uploading photo");
             }
         }
 
         public async Task<Result<Unit>> DeletePhotoAsync(string photoId,
             Photo photo)
         {
-            var deleteParams = new DeletionParams(photoId);
-
+            using var transaction =
+                await dataContext.Database.BeginTransactionAsync();
             try
             {
-                await cloudinary.DestroyAsync(deleteParams);
+                var deleteParams = new DeletionParams(photoId);
+
+                try
+                {
+                    await cloudinary.DestroyAsync(deleteParams);
+                }
+                catch (Exception)
+                {
+                    return Result<Unit>.Failure("Failed to delete photo");
+                }
+
+                repository.Delete(photo);
+
+                try
+                {
+                    await repository.SaveChangesAsync();
+                    await transaction.CommitAsync();
+                    return Result<Unit>.Success(Unit.Value, "Successfully delete photo");
+                }
+                catch
+                {
+                    await transaction.RollbackAsync();
+                    return Result<Unit>.Failure("Error occurred during saving changes");
+                }
             }
             catch (Exception)
             {
-                return Result<Unit>.Failure("Failed to delete photo");
-            }
-
-            repository.Delete(photo);
-
-            try
-            {
-                await repository.SaveChangesAsync();
-                return Result<Unit>.Success(Unit.Value, "Successfully delete photo");
-            }
-            catch
-            {
-                return Result<Unit>.Failure("Error occurred during saving changes");
+                await transaction.RollbackAsync();
+                return Result<Unit>.Failure("Error occurred during deleting photo");
             }
         }
 
