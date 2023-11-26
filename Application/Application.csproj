@@ -14,7 +14,6 @@
     <Folder Include="AnimalCategory\" />
     <Folder Include="Animal\" />
     <Folder Include="Breed\" />
-    <Folder Include="Message\" />
     <Folder Include="UserPassion\" />
     <Folder Include="Passion\" />
   </ItemGroup>
