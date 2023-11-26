@@ -1,4 +1,4 @@
-﻿namespace Application.DTOs
+﻿namespace Application.DTOs.User
 {
     using System.ComponentModel.DataAnnotations;
 
@@ -10,6 +10,6 @@
         public required string Name { get; set; }
 
         [Required]
-        public required string Token {  get; set; } 
+        public required string Token { get; set; }
     }
 }

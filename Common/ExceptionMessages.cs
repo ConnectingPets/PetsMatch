@@ -47,6 +47,7 @@
             public const string PasswordsDoNotMatch = "Passwords do not match";
             public const string InvalidEmail = "The email is invalid";
             public const string InvalidRegister = "User registration failed";
+            public const string NotAuthenticated = "The user is not authenticated";
         }
 
         public static class Message

@@ -11,6 +11,7 @@
     using Response;
     using Persistence.Repositories;
     using Persistence;
+    using Application.DTOs.Animal;
 
     public class AllAnimal
     {

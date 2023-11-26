@@ -1,4 +1,4 @@
-﻿namespace Application.DTOs
+﻿namespace Application.DTOs.Animal
 {
     using System.ComponentModel.DataAnnotations;
 
@@ -6,7 +6,7 @@
     using static Common.EntityValidationConstants.Animal;
     using static Common.ExceptionMessages.Animal;
 
-    public class AddAnimalDto 
+    public class AddAnimalDto
     {
         [StringLength(NameMaxLength,
             MinimumLength = NameMinLength, ErrorMessage = InvalidNameLength)]

@@ -1,4 +1,4 @@
-﻿namespace Application.DTOs
+﻿namespace Application.DTOs.Animal
 {
     public class AnimalMatchDto
     {
@@ -6,6 +6,6 @@
 
         public required string Name { get; set; }
 
-        public required string Photo {  get; set; }
+        public required string Photo { get; set; }
     }
 }

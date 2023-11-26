@@ -9,6 +9,6 @@
 
         Task<User> RegisterAsync(string email, string password, string name);
 
-        Task LogoutAsync();
+        Task LogoutAsync(string email);
     }
 }

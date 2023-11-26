@@ -4,12 +4,11 @@
     using System.Threading.Tasks;
 
     using MediatR;
-
-    using Application.DTOs;
     using Application.Service.Interfaces;
     using static Application.Match.AnimalMatches;
     using static Application.Match.UnMatchAnimal;
     using static Application.Matches.MatchAnimal;
+    using Application.DTOs.Animal;
 
     public class MatchService : IMatchService
     {

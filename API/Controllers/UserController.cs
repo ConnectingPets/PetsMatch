@@ -1,6 +1,7 @@
 ﻿namespace API.Controllers
 {
-    using Application.DTOs;
+    using API.Infrastructure;
+    using Application.DTOs.User;
     using Application.Exceptions;
     using Application.Service.Interfaces;
     using Domain;
@@ -24,15 +25,15 @@
 
         [Route("register")]
         [HttpPost]
-        public async Task<IActionResult> Register([FromBody] RegisterUserDto model) 
+        public async Task<IActionResult> Register([FromBody] RegisterUserDto registerDto) 
         {
             User user;
             try
             {
                 user = await this.userService.RegisterAsync(
-                    model.Email,
-                    model.Password,
-                    model.Name);
+                    registerDto.Email,
+                    registerDto.Password,
+                    registerDto.Name);
             }
             catch (UserResultNotSucceededException ex)
             {
@@ -50,15 +51,15 @@
 
         [Route("login")]
         [HttpPost]
-        public async Task<IActionResult> Login([FromBody] LoginUserDto model)
+        public async Task<IActionResult> Login([FromBody] LoginUserDto loginDto)
         {
             User user;
             try
             {
                 user = await this.userService.LoginAsync(
-                    model.Email,
-                    model.Password,
-                    model.RememberMe);
+                    loginDto.Email,
+                    loginDto.Password,
+                    loginDto.RememberMe);
             }
             catch (UserNotFoundException ex)
             {
@@ -84,7 +85,11 @@
         {
             try
             {
-                await this.userService.LogoutAsync();
+                await this.userService.LogoutAsync(User!.GetById());
+            }
+            catch (UserNotFoundException ex)
+            {
+                return Unauthorized(ex.Message);
             }
             catch
             {

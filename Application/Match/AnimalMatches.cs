@@ -7,9 +7,9 @@
     using MediatR;
 
     using Domain;
-    using Application.DTOs;
     using Persistence.Repositories;
     using Application.Exceptions;
+    using Application.DTOs.Animal;
 
     public class AnimalMatches
     {

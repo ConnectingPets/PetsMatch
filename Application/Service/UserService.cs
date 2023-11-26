@@ -25,8 +25,11 @@
                 RememberMe = rememberMe
             });
 
-        public async Task LogoutAsync()
-            => await this.mediator.Send(new LogoutUserCommand());
+        public async Task LogoutAsync(string userId)
+            => await this.mediator.Send(new LogoutUserCommand
+            {
+                UserId = userId
+            });
 
         public async Task<User> RegisterAsync(string email, string password, string name)
             => await this.mediator.Send(new RegisterUserCommand
