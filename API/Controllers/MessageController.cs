@@ -1,14 +1,14 @@
 ﻿namespace API.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Authorization;
     
     using Application.DTOs.Message;
     using Application.Exceptions;
     using Application.Service.Interfaces;
     using static Common.ExceptionMessages.Entity;
-    using Microsoft.AspNetCore.Authorization;
 
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class MessageController : ControllerBase
@@ -49,6 +49,27 @@
             }
 
             return Ok();
+        }
+
+        [Route("/chatHistory")]
+        [HttpGet]
+        public async Task<ActionResult> ChatHistory([FromQuery] string matchId)
+        {
+            IEnumerable<ChatMessageDto> messages;
+            try
+            {
+                messages = await this.messageService.GetChatHistory(matchId);
+            }
+            catch (MatchNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch
+            {
+                return StatusCode(500, InternalServerError);
+            }
+
+            return Ok(messages);
         }
     }
 }

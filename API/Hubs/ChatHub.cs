@@ -1,5 +1,6 @@
 ﻿namespace API.Hubs
 {
+    using Application.Service.Interfaces;
     using Microsoft.AspNetCore.SignalR;
 
     public class ChatHub : Hub
