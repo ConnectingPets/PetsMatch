@@ -1,6 +1,9 @@
 ﻿namespace Application.DTOs.Message
 {
     using System.ComponentModel.DataAnnotations;
+    
+    using static Common.EntityValidationConstants.Message;
+    using static Common.ExceptionMessages.Message;
 
     public class SaveMessageDto
     {
@@ -11,7 +14,7 @@
         public string AnimalId { get; set; } = null!;
 
         [Required]
-        []
+        [MaxLength(ContentMaxLength, ErrorMessage = InvalidContentLength)]
         public string Content { get; set; } = null!;
     }
 }
