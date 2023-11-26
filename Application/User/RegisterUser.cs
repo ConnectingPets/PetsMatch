@@ -1,11 +1,13 @@
 ﻿namespace Application.User
 {
-    using Application.Exceptions;
-    using Domain;
-    using MediatR;
-    using Microsoft.AspNetCore.Identity;
     using System.Threading;
     using System.Threading.Tasks;
+    
+    using MediatR;
+    using Microsoft.AspNetCore.Identity;
+    
+    using Domain;
+    using Application.Exceptions;
     using static Common.ExceptionMessages.User;
 
     public class RegisterUser

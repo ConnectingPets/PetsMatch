@@ -1,6 +1,5 @@
 ﻿namespace Application.Service.Interfaces
 {
-    using Microsoft.AspNetCore.Identity;
     using Domain;
 
     public interface IUserService

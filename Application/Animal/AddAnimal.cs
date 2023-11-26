@@ -2,7 +2,6 @@
 {
     using MediatR;
 
-    using DTOs;
     using Domain;
     using Response;
     using Persistence.Repositories;

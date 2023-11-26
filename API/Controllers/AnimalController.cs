@@ -5,13 +5,13 @@
     using Microsoft.AspNetCore.Mvc;
 
     using Infrastructure;
+    using Application.DTOs.Animal;
     using static Application.Animal.AddAnimal;
     using static Application.Animal.AllAnimal;
     using static Application.Animal.DeleteAnimal;
     using static Application.Animal.EditAnimal;
     using static Application.Animal.ShowAnimalToAdd;
     using static Application.Animal.ShowAnimalToEdit;
-    using Application.DTOs.Animal;
 
     [Authorize]
     public class AnimalController : BaseApiController

@@ -1,9 +1,9 @@
 ﻿namespace API.Infrastructure
 {
+    using Persistence.Repositories;
     using Application.Service;
     using Application.Service.Interfaces;
     using Application.Swipe;
-    using Persistence.Repositories;
     public static class AddServicesExtension
     {
         public static IServiceCollection ConfigurateServices(this IServiceCollection services)

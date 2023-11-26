@@ -1,8 +1,9 @@
 ﻿namespace Persistence.Configurations
 {
-    using Domain;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
+    
+    using Domain;
 
     public class MessageEntityConfiguration : IEntityTypeConfiguration<Message>
     {

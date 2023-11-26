@@ -1,7 +1,8 @@
 ﻿namespace API.Infrastructure
 {
-    using Domain;
     using Microsoft.AspNetCore.Identity;
+    
+    using Domain;
     using Persistence;
 
     public static class AddIdentityExtension

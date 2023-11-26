@@ -1,6 +1,7 @@
 ﻿namespace Application.DTOs.Animal
 {
     using System.Collections.Generic;
+
     using Application.DTOs.Breed;
 
     public class ShowAnimalToAddDto

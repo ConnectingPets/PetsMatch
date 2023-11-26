@@ -6,7 +6,6 @@
     using MediatR;
     using Microsoft.EntityFrameworkCore;
 
-    using DTOs;
     using Domain;
     using Response;
     using Persistence.Repositories;

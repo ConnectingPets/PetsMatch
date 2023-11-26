@@ -1,9 +1,11 @@
 ﻿namespace Application.Service
 {
-    using Application.Service.Interfaces;
-    using Domain;
-    using MediatR;
     using System.Threading.Tasks;
+    
+    using MediatR;
+    
+    using Domain;
+    using Application.Service.Interfaces;
     using static Application.User.LoginUser;
     using static Application.User.LogoutUser;
     using static Application.User.RegisterUser;

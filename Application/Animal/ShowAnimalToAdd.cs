@@ -1,14 +1,16 @@
 ﻿namespace Application.Animal
 {
-    using Application.DTOs.Animal;
-    using Application.DTOs.Breed;
-    using Domain;
-    using MediatR;
-    using Microsoft.EntityFrameworkCore;
-    using Persistence.Repositories;
-    using Response;
     using System.Threading;
     using System.Threading.Tasks;
+
+    using MediatR;
+    using Microsoft.EntityFrameworkCore;
+
+    using Domain;
+    using Response;
+    using Persistence.Repositories;
+    using Application.DTOs.Animal;
+    using Application.DTOs.Breed;
 
     public class ShowAnimalToAdd
     {

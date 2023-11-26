@@ -1,6 +1,7 @@
 ﻿namespace Application.DTOs.User
 {
     using System.ComponentModel.DataAnnotations;
+
     using static Common.ExceptionMessages.User;
     using static Common.EntityValidationConstants.User;
 
