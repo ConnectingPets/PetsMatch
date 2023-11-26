@@ -31,12 +31,12 @@
 
             public async Task<Unit> Handle(SaveMessageCommand request, CancellationToken cancellationToken)
             {
-                if (Guid.TryParse(request.AnimalId, out Guid guidAnimalId))
+                if (!Guid.TryParse(request.AnimalId, out Guid guidAnimalId))
                 {
                     throw new InvalidGuidFormatException();
                 }
 
-                if (Guid.TryParse(request.MatchId, out Guid guidMatchId))
+                if (!Guid.TryParse(request.MatchId, out Guid guidMatchId))
                 {
                     throw new MatchNotFoundException();
                 }
@@ -54,7 +54,7 @@
                 Message message = new Message
                 {
                     AnimalId = guidAnimalId,
-                    MatchId = guidAnimalId,
+                    MatchId = guidMatchId,
                     Content = request.Content,
                     SentOn = DateTime.Now
                 };

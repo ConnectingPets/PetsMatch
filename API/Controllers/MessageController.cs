@@ -43,7 +43,8 @@
             }
             catch
             {
-                return StatusCode(500, InternalServerError);
+                //return StatusCode(500, InternalServerError);
+                throw;
             }
 
             return Ok();
