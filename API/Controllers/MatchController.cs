@@ -7,7 +7,9 @@ namespace API.Controllers
     using Application.DTOs.Animal;
     using Application.DTOs.Match;
     using static Common.ExceptionMessages.Entity;
+    using Microsoft.AspNetCore.Authorization;
 
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class MatchController : ControllerBase 

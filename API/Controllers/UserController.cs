@@ -8,7 +8,9 @@
     using Application.Exceptions;
     using Application.Service.Interfaces;
     using static Common.ExceptionMessages.Entity;
+    using Microsoft.AspNetCore.Authorization;
 
+    [AllowAnonymous]
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : Controller

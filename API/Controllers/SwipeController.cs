@@ -6,7 +6,9 @@
     using Application.Exceptions;
     using Application.DTOs.Swipe;
     using static Common.ExceptionMessages.Entity;
+    using Microsoft.AspNetCore.Authorization;
 
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class SwipeController : ControllerBase
