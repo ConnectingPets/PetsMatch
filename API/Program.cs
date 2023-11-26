@@ -9,27 +9,12 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
-
 builder.Services.ConfigurateDbContext(builder.Configuration);
 builder.Services.ConfigurateIdentity(builder.Configuration);
+builder.Services.ConfigurateCors(builder.Configuration);
 builder.Services.ConfigurateServices();
 
-string reactBaseUrl = builder.Configuration.GetValue<string>("ReactApp:BaseUrl") ?? 
-    throw new InvalidOperationException("The react base url is not found.");
-
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("ReactPolicy", builder =>
-    {
-        builder.WithOrigins(reactBaseUrl)
-            .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowCredentials();
-    });
-});
-
 WebApplication app = builder.Build();
-
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
