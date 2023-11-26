@@ -48,7 +48,7 @@
 
                 if (await this.repository.AnyAsync<Match>(animal => animal.MatchId == guidMatchId) == false)
                 {
-                    throw new AnimalNotFoundException();
+                    throw new MatchNotFoundException();
                 }
 
                 Message message = new Message
