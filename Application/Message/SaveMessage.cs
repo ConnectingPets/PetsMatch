@@ -38,7 +38,7 @@
 
                 if (!Guid.TryParse(request.MatchId, out Guid guidMatchId))
                 {
-                    throw new MatchNotFoundException();
+                    throw new InvalidGuidFormatException();
                 }
 
                 if (await this.repository.AnyAsync<Animal>(animal => animal.AnimalId == guidAnimalId) == false)
