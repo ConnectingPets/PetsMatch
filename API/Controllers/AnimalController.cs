@@ -31,7 +31,7 @@
             AddAnimalCommand command = new AddAnimalCommand()
             {
                 AnimalDto = animalDto,
-                OwnerId = this.User.GetById()
+                OwnerId = ownerId
             };
 
             var result = await mediator.Send(command);
