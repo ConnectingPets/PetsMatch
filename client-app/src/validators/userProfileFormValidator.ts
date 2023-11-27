@@ -1,4 +1,4 @@
-import { combineValidators, composeValidators, isRequired, hasLengthBetween, hasLengthLessThan, isNumeric, createValidator } from 'revalidate';
+import { combineValidators, composeValidators, isRequired, hasLengthBetween, hasLengthLessThan, isNumeric, createValidator, hasLengthGreaterThan, matchesField } from 'revalidate';
 
 const isAlphabeticWithSpaces = createValidator(
     message => value => {
@@ -32,7 +32,7 @@ const ageRange = createValidator(
     field => `${field} must be between 16 and 90`
 );
 
-export const editUserProfileFormValidator = combineValidators({
+export const userProfileFormValidator = combineValidators({
     Name: composeValidators(
         isRequired,
         isAlphabeticWithSpaces,
@@ -42,6 +42,14 @@ export const editUserProfileFormValidator = combineValidators({
         isRequired,
         isValidEmail
     )('Email'),
+    Password: composeValidators(
+        isRequired,
+        hasLengthGreaterThan(4)
+    )('Password'),
+    RePassword: composeValidators(
+        isRequired,
+        matchesField('Password', 'Password')
+    )('Retype Password'),
     Description: hasLengthLessThan(501)('Description'),
     Age: composeValidators(
         isNumeric,
