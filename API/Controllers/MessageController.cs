@@ -8,7 +8,7 @@
     using Application.Service.Interfaces;
     using static Common.ExceptionMessages.Entity;
 
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class MessageController : ControllerBase
