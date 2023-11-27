@@ -66,6 +66,7 @@
                 }
 
                 this.repository.DeleteRange(existingMatch.AnimalMatches.ToArray());
+                this.repository.DeleteRange(existingMatch.Messages.ToArray());
                 this.repository.Delete(existingMatch);
                 await this.repository.SaveChangesAsync();
 
@@ -78,6 +79,7 @@
                                                 .Any(m => m.AnimalId == animalTwoId))
                                         .Include(am => am.Match)
                                         .ThenInclude(m => m.AnimalMatches)
+                                        .Include(m => m.Match.Messages)
                                         .Select(am => am.Match)
                                         .FirstOrDefaultAsync();
         }
