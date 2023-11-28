@@ -106,8 +106,7 @@
                 {
                     Id = imageUploadResult.PublicId,
                     IsMain = false,
-                    Url = imageUploadResult.Url.AbsoluteUri,
-                    UserId = Guid.Parse(userId)
+                    Url = imageUploadResult.Url.AbsoluteUri
                 };
 
                 await repository.AddAsync(photo);

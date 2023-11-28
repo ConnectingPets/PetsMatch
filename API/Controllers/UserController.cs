@@ -93,9 +93,9 @@ namespace API.Controllers
         private UserDto CreateUserObject(User user)
             => new UserDto
             {
-                Photo = user.Photo != null 
-                    ? Convert.ToBase64String(user.Photo)
-                    : null,
+                //Photo = user.Photo != null 
+                //    ? Convert.ToBase64String(user.Photo)
+                //    : null,
                 Name = user.Name,
                 Token = this.tokenService.CreateToken(user)
             };

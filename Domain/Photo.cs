@@ -18,19 +18,11 @@
         [Comment("stores if the photo is main")]
         public required bool IsMain { get; set; }
 
-        [Comment("photo user id")]
-        public Guid? UserId { get; set; }
-
-        [Comment("photo user owner")]
-        [ForeignKey(nameof(UserId))]
-        public User? User { get; set; }
-
         [Comment("photo animal id")]
         public Guid? AnimalId { get; set; }
 
         [Comment("photo animal owner")]
         [ForeignKey(nameof(AnimalId))]
         public Animal? Animal { get; set; }
-
     }
 }

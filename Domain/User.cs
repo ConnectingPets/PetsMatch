@@ -2,6 +2,7 @@ namespace Domain
 {
     using Domain.Enum;
     using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
 
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
@@ -17,7 +18,6 @@ namespace Domain
             base.Id = Guid.NewGuid();
             this.UsersPassions = new HashSet<UserPassion>();
             this.Animals = new HashSet<Animal>();
-            this.Photos = new HashSet<Photo>();
         }
 
         [Comment("user name")]
@@ -36,8 +36,12 @@ namespace Domain
         [StringLength(EducationMaxLength, ErrorMessage = InvalidEducationLength)]
         public string? Education { get; set; }
 
+        [Comment("user photo id")]
+        public string? PhotoId { get; set; }
+
         [Comment("user photo")]
-        public byte[]? Photo { get; set; }
+        [ForeignKey(nameof(PhotoId))]
+        public Photo? Photo { get; set; }
 
         [Comment("user job title")]
         [StringLength(JobTitleMaxLength, ErrorMessage = InvalidJobTitleLength)]
@@ -57,7 +61,5 @@ namespace Domain
         public ICollection<UserPassion> UsersPassions { get; set; } = null!;
 
         public ICollection<Animal> Animals { get; set; } = null!;
-
-        public ICollection<Photo> Photos { get; set; } = null!;
     }
 }
