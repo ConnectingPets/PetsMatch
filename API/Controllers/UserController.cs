@@ -82,6 +82,7 @@
             return Ok(userObj);
         }
 
+        [Authorize]
         [Route("logout")]
         [HttpPost]
         public async Task<IActionResult> Logout()
@@ -105,9 +106,7 @@
         private UserDto CreateUserObject(User user)
             => new UserDto
             {
-                Photo = user.Photo != null 
-                    ? Convert.ToBase64String(user.Photo)
-                    : null,
+                Photo = null,
                 Name = user.Name,
                 Token = this.tokenService.CreateToken(user)
             };

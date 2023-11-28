@@ -20,12 +20,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.MapControllers();
+app.UseRouting();
 
 app.UseCors("ReactPolicy");
 
-app.MapHub<ChatHub>("/chat");
+app.UseAuthentication();
+app.UseAuthorization();
 
-app.UseRouting();
+app.MapControllers();
+
+app.MapHub<ChatHub>("/chat");
 
 await app.RunAsync();

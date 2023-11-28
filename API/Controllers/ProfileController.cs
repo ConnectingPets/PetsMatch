@@ -4,9 +4,11 @@
     using Application.DTOs.User;
     using Application.Exceptions;
     using Application.Service.Interfaces;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using static Common.ExceptionMessages.Entity;
 
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ProfileController : ControllerBase
@@ -20,7 +22,7 @@
 
         [Route("")]
         [HttpGet]
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Profile()
         {
             UserProfileDto userProfileDto;
             try
@@ -49,9 +51,7 @@
         {
             try
             {
-                await this.profileService.EditUser(
-                    User.GetById(),
-                    editUserDto);
+                await this.profileService.EditUser(User.GetById(), editUserDto);
             }
             catch (InvalidGuidFormatException ex)
             {
