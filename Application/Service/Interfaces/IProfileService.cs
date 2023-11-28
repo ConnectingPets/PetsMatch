@@ -7,5 +7,7 @@
         Task<UserProfileDto> GetProfile(string userId);
 
         Task EditUser(string userId, EditUserDto editUserDto);
+
+        Task DeleteUser(string userId);
     }
 }

@@ -1,13 +1,13 @@
 ﻿namespace Application.User
 {
     using Application.DTOs.User;
+    using Application.Exceptions;
+    using Domain;
+    using Domain.Enum;
     using MediatR;
-    using Microsoft.AspNetCore.Identity;
+    using Persistence.Repositories;
     using System.Threading;
     using System.Threading.Tasks;
-    using Domain;
-    using Application.Exceptions;
-    using Persistence.Repositories;
 
     public class EditUser
     {
@@ -41,9 +41,37 @@
                     throw new UserNotFoundException();
                 }
 
+                Gender? gender = GetGender(request.User.Gender);
 
+                user.Name = request.User.Name;
+                user.Email = request.User.Email;
+                user.Address = request.User.Address;
+                user.City = request.User.City;
+                user.Age = request.User.Age;
+                user.Education = request.User.Education;
+                user.JobTitle = request.User.JobTitle;
+                user.Gender = gender;
+                user.Description = request.User.Description;
+                user.Photo = null;
+
+                await this.repository.SaveChangesAsync();
 
                 return Unit.Value;
+            }
+
+            private Gender? GetGender(string? gender)
+            {
+                if (gender == null)
+                {
+                    return null;
+                }
+
+                if (!Enum.TryParse(gender, out Gender enumValue))
+                {
+                    throw new InvalidEnumException(nameof(Gender));
+                }
+
+                return enumValue;
             }
         }
     }

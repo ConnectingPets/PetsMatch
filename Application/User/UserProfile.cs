@@ -42,12 +42,9 @@
                     throw new UserNotFoundException();
                 }
 
-                string? gender = null;
-                if (user.Gender.HasValue)
-                {
-                    Gender enumGender = (Gender)user.Gender;
-                    gender = enumGender.ToString();
-                }
+                string? gender = user.Gender.HasValue
+                    ? user.Gender.ToString()
+                    : null;
 
                 UserProfileDto userProfileDto = new UserProfileDto
                 {
@@ -59,7 +56,7 @@
                     City = user.City,
                     Education = user.Education,
                     JobTitle = user.JobTitle,
-                    Photo = Convert.ToBase64String(user.Photo)
+                    Photo = null
                 };
 
                 return userProfileDto;

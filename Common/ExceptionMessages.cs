@@ -64,6 +64,7 @@
         {
             public const string InvalidGuidFormat = "The id is not a valid GUID format";
             public const string InternalServerError = "Internal Server Error";
+            public const string InvalidEnum = "The value is invalid {0}";
         }
     }
 }

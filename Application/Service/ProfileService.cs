@@ -4,6 +4,7 @@
     using Application.Service.Interfaces;
     using MediatR;
     using System.Threading.Tasks;
+    using static Application.User.DeleteUser;
     using static Application.User.EditUser;
     using static Application.User.UserProfile;
 
@@ -15,6 +16,12 @@
         {
             this.mediator = mediator;
         }
+
+        public async Task DeleteUser(string userId)
+            => await this.mediator.Send(new DeleteUserCommand
+            {
+                UserId = userId
+            });
 
         public async Task EditUser(string userId, EditUserDto editUserDto)
             => await this.mediator.Send(new EditUserCommand
