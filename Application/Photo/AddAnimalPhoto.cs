@@ -55,6 +55,11 @@
                     return Result<Unit>.Failure("This animal does not exist! please select existing one");
                 }
 
+                if (animal.Photos.Count() == 6)
+                {
+                    return Result<Unit>.Failure("You already have 6 photos of this animal. You cannot add more");
+                }
+
                 var result = await photoService.AddAnimalPhotoAsync(file, animalId, animal);
 
                 return result;

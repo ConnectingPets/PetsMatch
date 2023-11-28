@@ -185,29 +185,5 @@
                 return Result<Unit>.Failure("Error occurred during saving changes");
             }
         }
-
-        public async Task<Result<Unit>> SetUserMainPhotoAsync(string photoId, Photo photo)
-        {
-            Photo? oldMainPhoto = await repository
-                .FirstOrDefaultAsync<Photo>(p => p.IsMain &&
-                p.UserId == photo.UserId);
-
-            if (oldMainPhoto != null)
-            {
-                oldMainPhoto.IsMain = false;
-            }
-
-            photo.IsMain = true;
-
-            try
-            {
-                await repository.SaveChangesAsync();
-                return Result<Unit>.Success(Unit.Value, "You successfully set main photo");
-            }
-            catch (Exception)
-            {
-                return Result<Unit>.Failure("Error occurred during saving changes");
-            }
-        }
     }
 }

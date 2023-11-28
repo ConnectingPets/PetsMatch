@@ -8,8 +8,7 @@
     using Infrastructure;
     using static Application.Photo.AddUserPhoto;
     using static Application.Photo.AddAnimalPhoto;
-    using static Application.Photo.DeletePhoto;
-    using static Application.Photo.SetUserMainPhoto;
+    using static Application.Photo.DeleteAnimalPhoto;    
     using static Application.Photo.SetAnimaMainPhoto;
 
     [Authorize]
@@ -35,22 +34,22 @@
             return new JsonResult(result);
         }
 
-        [HttpPost("SetUserMain/{photoId}")]
-        public async Task<IActionResult> SetUserMain([FromRoute]string photoId)
+        [HttpPost("DeleteAnimalPhoto/{photoId}")]
+        public async Task<IActionResult> DeleteAnimalPhoto([FromRoute]string photoId)
         {
-            SetUserMainPhotoCommand command = new SetUserMainPhotoCommand()
+            DeleteAnimalPhotoCommand command = new DeleteAnimalPhotoCommand()
             {
-                PhotoId = photoId
+                PublicId = photoId
             };
 
             var result = await mediator.Send(command);
             return new JsonResult(result);
         }
 
-        [HttpPost("DeletePhoto/{photoId}")]
-        public async Task<IActionResult> Delete([FromRoute]string photoId)
+        [HttpPost("DeleteUserPhoto/{photoId}")]
+        public async Task<IActionResult> DeleteUserPhoto([FromRoute] string photoId)
         {
-            DeletePhotoCommand command = new DeletePhotoCommand()
+            DeleteAnimalPhotoCommand command = new DeleteAnimalPhotoCommand()
             {
                 PublicId = photoId
             };

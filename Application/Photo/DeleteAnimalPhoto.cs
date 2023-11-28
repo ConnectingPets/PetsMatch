@@ -10,26 +10,26 @@
     using Domain;
     using Service.Interfaces;
 
-    public class DeletePhoto
+    public class DeleteAnimalPhoto
     {
-        public class DeletePhotoCommand : IRequest<Result<Unit>>
+        public class DeleteAnimalPhotoCommand : IRequest<Result<Unit>>
         {
             public string PublicId { get; set; } = null!;
         }
 
-        public class DeletePhotoCommandHandler : IRequestHandler<DeletePhotoCommand, Result<Unit>>
+        public class DeleteAnimalPhotoCommandHandler : IRequestHandler<DeleteAnimalPhotoCommand, Result<Unit>>
         {
             private readonly IPhotoService photoService;
             private readonly IRepository repository;
 
-            public DeletePhotoCommandHandler(IPhotoService photoService,
+            public DeleteAnimalPhotoCommandHandler(IPhotoService photoService,
                                              IRepository repository)
             {
                 this.photoService = photoService;
                 this.repository = repository;
             }
 
-            public async Task<Result<Unit>> Handle(DeletePhotoCommand request, CancellationToken cancellationToken)
+            public async Task<Result<Unit>> Handle(DeleteAnimalPhotoCommand request, CancellationToken cancellationToken)
             {
                 string photoId = request.PublicId;
                 Photo? photo = await repository.
