@@ -32,7 +32,7 @@ const ageRange = createValidator(
     field => `${field} must be between 16 and 90`
 );
 
-export const userProfileFormValidator = combineValidators({
+export const registerFormValidator = combineValidators({
     Name: composeValidators(
         isRequired,
         isAlphabeticWithSpaces,
@@ -49,7 +49,30 @@ export const userProfileFormValidator = combineValidators({
     RePassword: composeValidators(
         isRequired,
         matchesField('Password', 'Password')
-    )('Retype Password'),
+    )('Retype Password')
+});
+
+export const loginFormValidator = combineValidators({
+    Email: composeValidators(
+        isRequired,
+        isValidEmail
+    )('Email'),
+    Password: composeValidators(
+        isRequired,
+        hasLengthGreaterThan(4)
+    )('Password')
+});
+
+export const editUserProfileFormValidator = combineValidators({
+    Name: composeValidators(
+        isRequired,
+        isAlphabeticWithSpaces,
+        hasLengthBetween(2, 100)
+    )('Name'),
+    Email: composeValidators(
+        isRequired,
+        isValidEmail
+    )('Email'),
     Description: hasLengthLessThan(501)('Description'),
     Age: composeValidators(
         isNumeric,

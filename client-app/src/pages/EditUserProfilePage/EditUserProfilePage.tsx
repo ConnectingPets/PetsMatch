@@ -6,7 +6,7 @@ import { FaTrashAlt } from 'react-icons/fa';
 
 import themeStore from '../../stores/themeStore';
 import { IUser } from '../../interfaces/Interfaces';
-import { userProfileFormValidator } from '../../validators/userProfileFormValidator';
+import { editUserProfileFormValidator } from '../../validators/userProfileFormValidators';
 
 import FormsHeader from '../../components/FormsHeader/FormsHeader';
 import { CLabel } from '../../components/common/CLabel/CLabel';
@@ -42,7 +42,7 @@ const EditUserProfilePage: React.FC<EditUserProfilePageProps> = observer(() => {
 
     const onEditUserProfileSubmit = (values: IUser) => {
         setErrors(null);
-        const err = userProfileFormValidator(values);
+        const err = editUserProfileFormValidator(values);
 
         if (Object.keys(err).length != 0) {
             setErrors(err);
