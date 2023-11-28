@@ -33,22 +33,6 @@
             return Ok(userProfileDto);
         }
 
-        [HttpGet]
-        public async Task<ActionResult> Edit()
-        {
-            ShowEditUserDto userProfileDto;
-            try
-            {
-                userProfileDto = await this.profileService.GetEditModel(User.GetById());
-            }
-            catch
-            {
-                return StatusCode(500, InternalServerError);
-            }
-
-            return Ok();
-        }
-
         public async Task<ActionResult> Edit([FromBody] EditUserDto editUserDto)
         {
             try

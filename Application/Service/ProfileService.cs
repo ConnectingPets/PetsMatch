@@ -5,7 +5,6 @@
     using MediatR;
     using System.Threading.Tasks;
     using static Application.User.EditUser;
-    using static Application.User.ShowEditUser;
     using static Application.User.UserProfile;
 
     public class ProfileService : IProfileService
@@ -22,12 +21,6 @@
             {
                 UserId = userId,
                 User = editUserDto
-            });
-
-        public async Task<ShowEditUserDto> GetEditModel(string userId)
-            => await this.mediator.Send(new ShowEditUserQuery
-            {
-                UserId = userId
             });
 
         public async Task<UserProfileDto> GetProfile(string userId)
