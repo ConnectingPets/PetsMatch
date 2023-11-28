@@ -6,7 +6,7 @@
     using static Common.EntityValidationConstants.Animal;
     using static Common.ExceptionMessages.Animal;
 
-    public class AddAnimalDto 
+    public class AddOrEditAnimalDto 
     {
         [StringLength(NameMaxLength,
             MinimumLength = NameMinLength, ErrorMessage = InvalidNameLength)]
@@ -22,8 +22,6 @@
         public DateTime? BirthDate { get; set; }
 
         public required bool IsEducated { get; set; }
-
-        public required byte[] Photo { get; set; }
 
         public required HealthStatus HealthStatus { get; set; }
 

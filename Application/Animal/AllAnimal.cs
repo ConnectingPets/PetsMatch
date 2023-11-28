@@ -49,6 +49,9 @@
                     {
                         Id = a.AnimalId.ToString(),
                         Name = a.Name,
+                        MainPhotos = a.Photos.
+                        Where(p => p.IsMain).
+                        Select(p => p.Url).ToList(),
                     }).ToListAsync();
 
                 return Result<IEnumerable<AllAnimalDto>>.Success(userAnimals);

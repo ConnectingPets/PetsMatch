@@ -33,7 +33,9 @@
             public async Task<Result<ShowAnimalToEditDto>> Handle(ShowAnimalToEditQuery request, CancellationToken cancellationToken)
             {
                 Animal? animal =
-                    await repository.GetById<Animal>(Guid.Parse(request.AnimalId));
+                    await repository.All<Animal>().
+                    Include(a => a.Photos).
+                    FirstOrDefaultAsync(a => a.AnimalId.ToString() == request.AnimalId);
 
                 if (animal == null)
                 {
@@ -46,19 +48,6 @@
 
                 ShowAnimalToEditDto animalDto = new ShowAnimalToEditDto()
                 {
-                    Breeds = await repository.AllReadonly<Breed>().
-                    Select(b => new BreedDto()
-                    {
-                        BreedId = b.BreedId,
-                        Name = b.Name,
-                        AnimalCategoryId = b.CategoryId
-                    }).ToArrayAsync(),
-                    AnimalCategories = await repository.AllReadonly<AnimalCategory>().
-                    Select(ac => new AnimalCategoryDto()
-                    {
-                        AnimalCategoryId = ac.AnimalCategoryId,
-                        Name = ac.Name
-                    }).ToArrayAsync(),
                     Age = animal.Age,
                     BirthDate = animal.BirthDate.ToString(),
                     Description = animal.Description,
@@ -67,6 +56,14 @@
                     Name = animal.Name,
                     SocialMedia = animal.SocialMedia,
                     Weight = animal.Weight,
+                    Gender = animal.Gender,
+                    HealthStatus = animal.HealthStatus,
+                    Photos = animal.Photos.Select(p => new PhotoDto()
+                    {
+                        Id = p.Id,
+                        IsMain = p.IsMain,
+                        Url = p.Url,
+                    }).ToArray(),
                 };
 
                 if (!((DateTime.UtcNow - animal.LastModified).Days < 30))

@@ -10,10 +10,9 @@
     using static Application.Animal.AllAnimal;
     using static Application.Animal.DeleteAnimal;
     using static Application.Animal.EditAnimal;
-    using static Application.Animal.ShowAnimalToAdd;
     using static Application.Animal.ShowAnimalToEdit;
 
-    [Authorize]
+    //[Authorize]
     public class AnimalController : BaseApiController
     {
         private readonly IMediator mediator;
@@ -24,7 +23,7 @@
         }
 
         [HttpPost("Add")]
-        public async Task<IActionResult> AddAnimal([FromBody] AddAnimalDto animalDto)
+        public async Task<IActionResult> AddAnimal([FromBody] AddOrEditAnimalDto animalDto)
         {
             string ownerId = this.User.GetById();
 
@@ -36,13 +35,6 @@
 
             var result = await mediator.Send(command);
             return new JsonResult(result);
-        }
-
-        [HttpGet("AddAnimal")]
-        public async Task<IActionResult> AddAnimal()
-        {
-            var animal = await mediator.Send(new ShowAnimalToAddQuery());
-            return new JsonResult(animal);
         }
 
         [HttpGet("AllAnimals")]
@@ -72,7 +64,7 @@
         }
 
         [HttpPatch("{id}")]
-        public async Task<IActionResult> UpdateAnimal([FromBody] EditAnimalDto animalDto, string id)
+        public async Task<IActionResult> UpdateAnimal([FromBody] AddOrEditAnimalDto animalDto, string id)
         {
             EditAnimalCommand command = new EditAnimalCommand()
             {
@@ -95,6 +87,5 @@
 
             return new JsonResult(await mediator.Send(query));
         }
-
     }
 }
