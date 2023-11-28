@@ -1,8 +1,12 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Form, Field } from 'react-final-form';
+import { observer } from 'mobx-react';
 
 import { IUser } from '../../interfaces/Interfaces';
-import { userProfileFormValidator } from '../../validators/userProfileFormValidator';
+import { registerFormValidator } from '../../validators/userProfileFormValidators';
+import agent from '../../api/axiosAgent';
+import userStore from '../../stores/userStore';
 
 import { CLabel } from '../common/CLabel/CLabel';
 import { CSubmitButton } from '../common/CSubmitButton/CSubmitButton';
@@ -12,19 +16,32 @@ interface RegisterProps {
     showLogin: () => void;
 }
 
-export const Register: React.FC<RegisterProps> = ({
+export const Register: React.FC<RegisterProps> = observer(({
     showLogin
 }) => {
+    const navigate = useNavigate();
 
-    const onSubmit = (values: IUser) => {
-        console.log(values);
+    const onSubmit = async (values: IUser) => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { RePassword, ...userData } = values;
+
+        try {
+            const { name: Name, token } = await agent.apiUser.register(userData);
+            const Email = values.Email;
+            
+            userStore.setUser({ Name, Email }, token);
+
+            navigate('/dashboard');
+        } catch (err) {
+            console.log(err);
+        }
     };
 
     return (
         <section className='register__form__section'>
             <Form
                 onSubmit={onSubmit}
-                validate={userProfileFormValidator}
+                validate={registerFormValidator}
                 render={({ handleSubmit }) => (
                     <form className='register__form' onSubmit={handleSubmit}>
 
@@ -37,7 +54,7 @@ export const Register: React.FC<RegisterProps> = ({
                                 </div>
                             )}
                         </Field>
-                        
+
                         <Field name="Email">
                             {({ input, meta }) => (
                                 <div>
@@ -57,7 +74,7 @@ export const Register: React.FC<RegisterProps> = ({
                                 </div>
                             )}
                         </Field>
-                        
+
                         <Field name="RePassword">
                             {({ input, meta }) => (
                                 <div>
@@ -74,4 +91,4 @@ export const Register: React.FC<RegisterProps> = ({
                 )} />
         </section>
     );
-};
+});
