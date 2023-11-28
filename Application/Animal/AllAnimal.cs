@@ -49,7 +49,6 @@
                     {
                         Id = a.AnimalId.ToString(),
                         Name = a.Name,
-                        Photo = a.Photo,
                     }).ToListAsync();
 
                 return Result<IEnumerable<AllAnimalDto>>.Success(userAnimals);

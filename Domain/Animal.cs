@@ -51,9 +51,6 @@ namespace Domain
         [Comment("stores if the animal is educated")]
         public required bool IsEducated { get; set; }
 
-        [Comment("animal photo")]
-        public required byte[] Photo { get; set; }
-
         [Comment("animal health status")]
         [DisplayName("Health Status")]
         public required HealthStatus HealthStatus { get; set; }

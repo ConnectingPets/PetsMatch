@@ -51,9 +51,10 @@
                         Result<string>.Failure("This file is not an image");
                 }
 
-                Animal? animal = await dataContext.Animals.
+                Animal? animal = await repository.
+                    All<Animal>(a => a.AnimalId.ToString() == animalId).
                     Include(a => a.Photos).
-                FirstOrDefaultAsync(a => a.AnimalId.ToString() == animalId);
+                    FirstOrDefaultAsync();
 
                 if (animal == null)
                 {

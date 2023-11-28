@@ -68,7 +68,6 @@
                 animal.Description = dto.Description;
                 animal.HealthStatus = dto.HealthStatus;
                 animal.SocialMedia = dto.SocialMedia;
-                animal.Photo = dto.Photo;
                 animal.Age = dto.Age;
                 animal.BreedId = dto.BreedId;
                 animal.IsEducated = dto.IsEducated;

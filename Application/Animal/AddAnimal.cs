@@ -41,7 +41,6 @@
                     Weight = animalDto.Weight,
                     SocialMedia = animalDto.SocialMedia,
                     IsEducated = animalDto.IsEducated,
-                    Photo = animalDto.Photo,
                     IsHavingValidDocuments = animalDto.IsHavingValidDocuments,
                     OwnerId = Guid.Parse(request.OwnerId),
                     BreedId = animalDto.BreedId

@@ -65,7 +65,6 @@
                     IsEducated = animal.IsEducated,
                     IsHavingValidDocuments = animal.IsHavingValidDocuments,
                     Name = animal.Name,
-                    Photo = animal.Photo,
                     SocialMedia = animal.SocialMedia,
                     Weight = animal.Weight,
                 };

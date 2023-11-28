@@ -49,7 +49,6 @@ namespace Application
                 IsHavingValidDocuments = request.Animal.IsHavingValidDocuments,
                 Name = request.Animal.Name,
                 OwnerId = Guid.Parse(request.UserId),
-                Photo = request.Animal.Photo,
                 Weight = request.Animal.Weight,
                 BreedId = request.Animal.BreedId,
             };
