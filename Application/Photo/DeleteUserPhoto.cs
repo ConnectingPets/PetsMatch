@@ -15,6 +15,7 @@
         public class DeleteUserPhotoCommand : IRequest<Result<Unit>>
         {
             public string PublicId { get; set; } = null!;
+            public string UserId { get; set; } = null!;
         }
 
         public class DeleteUserPhotoCommandHandler : IRequestHandler<DeleteUserPhotoCommand, Result<Unit>>
@@ -40,7 +41,7 @@
                     return Result<Unit>.Failure("This photo does not exist! Please select existing one");
                 }
 
-                return await photoService.DeletePhotoAsync(photoId, photo);
+                return await photoService.DeleteUserPhotoAsync(photoId, photo, request.UserId);
             }
         }
     }

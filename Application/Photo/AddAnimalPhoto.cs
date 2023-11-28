@@ -7,29 +7,34 @@
     using Service.Interfaces;
     using Domain;
     using Persistence.Repositories;
+    using Persistence;
+    using Microsoft.EntityFrameworkCore;
 
     public class AddAnimalPhoto
     {
-        public class AddAnimalPhotoCommand : IRequest<Result<Unit>>
+        public class AddAnimalPhotoCommand : IRequest<Result<string>>
         {
             public string AnimalId { get; set; } = null!;
             public IFormFile File { get; set; } = null!;
         }
 
         public class AddAnimalPhotoCommandHandler :
-            IRequestHandler<AddAnimalPhotoCommand, Result<Unit>>
+            IRequestHandler<AddAnimalPhotoCommand, Result<string>>
         {
             private readonly IPhotoService photoService;
             private readonly IRepository repository;
+            private readonly DataContext dataContext;
 
             public AddAnimalPhotoCommandHandler(IPhotoService photoService,
-                                                IRepository repository)
+                                                IRepository repository,
+                                                DataContext dataContext)
             {
                 this.photoService = photoService;
                 this.repository = repository;
+                this.dataContext = dataContext;
             }
 
-            public async Task<Result<Unit>> Handle(AddAnimalPhotoCommand request, CancellationToken cancellationToken)
+            public async Task<Result<string>> Handle(AddAnimalPhotoCommand request, CancellationToken cancellationToken)
             {
                 IFormFile file = request.File;
                 string animalId = request.AnimalId;
@@ -37,27 +42,27 @@
                 if (file == null || file.Length == 0)
                 {
                     return
-                        Result<Unit>.Failure("File is not selected or empty");
+                        Result<string>.Failure("File is not selected or empty");
                 }
 
                 if (!file.ContentType.StartsWith("image"))
                 {
                     return
-                        Result<Unit>.Failure("This file is not an image");
+                        Result<string>.Failure("This file is not an image");
                 }
 
-                Animal? animal = await repository.
-                FirstOrDefaultAsync<Animal>(a =>
-                a.AnimalId.ToString() == animalId);
+                Animal? animal = await dataContext.Animals.
+                    Include(a => a.Photos).
+                FirstOrDefaultAsync(a => a.AnimalId.ToString() == animalId);
 
                 if (animal == null)
                 {
-                    return Result<Unit>.Failure("This animal does not exist! please select existing one");
+                    return Result<string>.Failure("This animal does not exist! please select existing one");
                 }
 
-                if (animal.Photos.Count() == 6)
+                if (animal.Photos.Count() >= 6)
                 {
-                    return Result<Unit>.Failure("You already have 6 photos of this animal. You cannot add more");
+                    return Result<string>.Failure("You already have 6 photos of this animal. You cannot add more");
                 }
 
                 var result = await photoService.AddAnimalPhotoAsync(file, animalId, animal);

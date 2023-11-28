@@ -10,8 +10,9 @@
     using static Application.Photo.AddAnimalPhoto;
     using static Application.Photo.DeleteAnimalPhoto;    
     using static Application.Photo.SetAnimaMainPhoto;
+    using static Application.Photo.DeleteUserPhoto;
 
-    [Authorize]
+    //[Authorize]
     public class PhotoController : BaseApiController
     {
         private readonly IMediator mediator;
@@ -34,7 +35,7 @@
             return new JsonResult(result);
         }
 
-        [HttpPost("DeleteAnimalPhoto/{photoId}")]
+        [HttpDelete("DeleteAnimalPhoto/{photoId}")]
         public async Task<IActionResult> DeleteAnimalPhoto([FromRoute]string photoId)
         {
             DeleteAnimalPhotoCommand command = new DeleteAnimalPhotoCommand()
@@ -46,12 +47,13 @@
             return new JsonResult(result);
         }
 
-        [HttpPost("DeleteUserPhoto/{photoId}")]
+        [HttpDelete("DeleteUserPhoto/{photoId}")]
         public async Task<IActionResult> DeleteUserPhoto([FromRoute] string photoId)
         {
-            DeleteAnimalPhotoCommand command = new DeleteAnimalPhotoCommand()
+            DeleteUserPhotoCommand command = new DeleteUserPhotoCommand()
             {
-                PublicId = photoId
+                PublicId = photoId,
+                UserId = this.User.GetById()
             };
 
             var result = await mediator.Send(command);
