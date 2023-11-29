@@ -11,9 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="AnimalCategory\" />
     <Folder Include="Animal\" />
-    <Folder Include="Breed\" />
     <Folder Include="Conversation\" />
     <Folder Include="Message\" />
     <Folder Include="UserPassion\" />

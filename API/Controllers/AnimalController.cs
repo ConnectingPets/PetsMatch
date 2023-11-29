@@ -11,6 +11,8 @@
     using static Application.Animal.DeleteAnimal;
     using static Application.Animal.EditAnimal;
     using static Application.Animal.ShowAnimalToEdit;
+    using static Application.AnimalCategory.AllAnimalCategories;
+    using static Application.Breed.AllBreeds;
 
     //[Authorize]
     public class AnimalController : BaseApiController
@@ -86,6 +88,27 @@
             };
 
             return new JsonResult(await mediator.Send(query));
+        }
+
+        [HttpGet("GetAllCategories")]
+        public async Task<IActionResult> GetAllCategories()
+        {
+            var allCategories = await 
+                mediator.Send(new AllAnimalCategoriesQuery());
+
+            return new JsonResult(allCategories);
+        }
+
+        [HttpGet("GetBreeds/{categoryId}")]
+        public async Task<IActionResult> GetBreeds(int categoryId)
+        {
+            AllBreedsQuery query = new AllBreedsQuery()
+            {
+                CategoryId = categoryId,
+            };
+
+            var allCategories = await mediator.Send(query);
+            return new JsonResult(allCategories);
         }
     }
 }
