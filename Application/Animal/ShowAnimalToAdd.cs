@@ -31,14 +31,14 @@
 
             public async Task<Result<ShowAnimalToAddDto>> Handle(ShowAnimalToAddQuery request, CancellationToken cancellationToken)
             {
-                var animal = new ShowAnimalToEditDto()
+                var animal = new ShowAnimalToAddDto()
                 {
                     Breeds = await repository.AllReadonly<Breed>().
                     Select(b => new BreedDto()
                     {
                         BreedId = b.BreedId,
-                        Name = b.Name,
-                        AnimalCategoryId = b.CategoryId
+                        Name = b.Name
+                        //AnimalCategoryId = b.CategoryId
                     }).ToArrayAsync(),
                     AnimalCategories = await repository.AllReadonly<AnimalCategory>().
                     Select(ac => new AnimalCategoryDto()

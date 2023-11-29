@@ -10,6 +10,7 @@
     using Domain;
     using Response;
     using Persistence.Repositories;
+    using Application.DTOs.Animal;
 
     public class AllAnimalCategories
     {

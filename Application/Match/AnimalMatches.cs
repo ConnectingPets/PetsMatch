@@ -56,7 +56,7 @@
                     {
                         AnimalId = am.AnimalId.ToString(),
                         Name = am.Animal.Name,
-                        //Photo = Convert.ToBase64String(am.Animal.Photo)
+                        Photo = null
                     })
                     .ToList();
             }
