@@ -8,6 +8,7 @@
 
     using Persistence.Repositories;
     using Application.Exceptions;
+    using Microsoft.EntityFrameworkCore;
 
     public class SwipeAnimal
     {
@@ -72,7 +73,9 @@
 
             private async Task<bool> IsMatch(Guid swiperAnimalId, Guid swipeeAnimalId, bool swipedRight)
             {
-                Animal? animal = await this.repository.GetById<Animal>(swiperAnimalId);
+                Animal? animal = await this.repository.All<Animal>(a => a.AnimalId == swiperAnimalId)
+                    .Include(a => a.SwipesFrom)
+                    .FirstOrDefaultAsync();
 
                 return animal!.SwipesFrom.Any(s => s.SwiperAnimalId == swipeeAnimalId && s.SwipedRight) && swipedRight;
             }

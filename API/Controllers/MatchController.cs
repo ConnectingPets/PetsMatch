@@ -1,10 +1,9 @@
 namespace API.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
-    
+
     using Application.Service.Interfaces;
     using Application.Exceptions;
-    using Application.DTOs.Animal;
     using Application.DTOs.Match;
     using static Common.ExceptionMessages.Entity;
     using Microsoft.AspNetCore.Authorization;

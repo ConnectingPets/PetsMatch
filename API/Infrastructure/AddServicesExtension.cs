@@ -14,6 +14,8 @@
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IMessageService, MessageService>();
+            services.AddScoped<IProfileService, ProfileService>();
+            services.AddScoped<IPhotoService, PhotoService>();
             services.AddSignalR();
 
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(SwipeAnimal).Assembly));

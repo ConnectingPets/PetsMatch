@@ -11,6 +11,7 @@ builder.Services.ConfigurateDbContext(builder.Configuration);
 builder.Services.ConfigurateIdentity(builder.Configuration);
 builder.Services.ConfigurateCors(builder.Configuration);
 builder.Services.ConfigurateServices();
+builder.Services.AddCloudinary(builder.Configuration);
 
 WebApplication app = builder.Build();
 
