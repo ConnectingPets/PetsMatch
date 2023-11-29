@@ -7,6 +7,7 @@
     using Application.DTOs.Swipe;
     using static Common.ExceptionMessages.Entity;
     using Microsoft.AspNetCore.Authorization;
+    using API.Infrastructure;
 
     [Authorize]
     [Route("api/[controller]")]
@@ -50,6 +51,25 @@
             }
 
             return Ok(isMatch);
+        }
+
+        [Route("animals")]
+        [HttpGet]
+        public async Task<ActionResult> AnimalsToSwipe([FromBody] string animalId)
+        {
+            IEnumerable<AnimalToSwipeDto> animalsToSwipe;
+            try
+            {
+                animalsToSwipe = await this.swipeService.GetAnimalsToSwipe(
+                    User.GetById(),
+                    animalId);
+            }
+            catch
+            {
+                return StatusCode(500, InternalServerError);
+            }
+
+            return Ok(animalsToSwipe);
         }
     }
 }

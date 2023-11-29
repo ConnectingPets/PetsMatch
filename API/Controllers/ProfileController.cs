@@ -51,7 +51,9 @@
         {
             try
             {
-                await this.profileService.EditUser(User.GetById(), editUserDto);
+                await this.profileService.EditUser(
+                    User.GetById(),
+                    editUserDto);
             }
             catch (InvalidGuidFormatException ex)
             {
