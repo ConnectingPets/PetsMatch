@@ -6,6 +6,6 @@
     {
         Task<bool> Swipe(string swiperAnimalId, string swipeeAnimalId, bool swipedRight);
 
-        Task<IEnumerable<AnimalToSwipeDto>> GetAnimalsToSwipe(string userId, string animalId);
+        Task<IEnumerable<AnimalToSwipeDto>> GetAnimalsToSwipe(string userId);
     }
 }

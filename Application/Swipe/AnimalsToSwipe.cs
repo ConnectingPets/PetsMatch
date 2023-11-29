@@ -14,8 +14,6 @@
         public class AnimalsToSwipeQuery : IRequest<IEnumerable<AnimalToSwipeDto>>
         {
             public string UserId { get; set; } = null!;
-
-            public string AnimalId { get; set; } = null!;
         }
 
         public class AnimalsToSwipeHandler : IRequestHandler<AnimalsToSwipeQuery, IEnumerable<AnimalToSwipeDto>>
@@ -32,16 +30,6 @@
                 if (!Guid.TryParse(request.UserId, out Guid guidUserId))
                 {
                     throw new InvalidGuidFormatException();
-                }
-
-                if (!Guid.TryParse(request.AnimalId, out Guid guidAnimalId))
-                {
-                    throw new InvalidGuidFormatException();
-                }
-
-                if (await this.repository.AnyAsync<Animal>(a => a.AnimalId == guidAnimalId) == false)
-                {
-                    throw new AnimalNotFoundException();
                 }
 
                 if (await this.repository.AnyAsync<User>(u => u.Id == guidUserId) == false)

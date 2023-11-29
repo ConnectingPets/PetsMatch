@@ -55,22 +55,16 @@
 
         [Route("animals")]
         [HttpGet]
-        public async Task<ActionResult> AnimalsToSwipe([FromBody] string animalId)
+        public async Task<ActionResult> AnimalsToSwipe()
         {
             IEnumerable<AnimalToSwipeDto> animalsToSwipe;
             try
             {
-                animalsToSwipe = await this.swipeService.GetAnimalsToSwipe(
-                    User.GetById(),
-                    animalId);
+                animalsToSwipe = await this.swipeService.GetAnimalsToSwipe(User.GetById());
             }
             catch (InvalidGuidFormatException ex)
             {
                 return BadRequest(ex.Message);
-            }
-            catch (AnimalNotFoundException ex)
-            {
-                return NotFound(ex.Message);
             }
             catch (UserNotFoundException ex)
             {
