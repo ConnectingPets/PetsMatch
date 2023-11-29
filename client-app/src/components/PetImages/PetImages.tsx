@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { FieldInputProps } from 'react-final-form';
 
-import { Animal } from '../../interfaces/Interfaces';
+import { IAnimal } from '../../interfaces/Interfaces';
 
 import { CLabel } from '../common/CLabel/CLabel';
 import { CgAsterisk } from 'react-icons/cg';
 
-import './PetImages.scss';
+import '../../global-styles/forms-images.scss';
 
 interface PetImagesProps {
-    errors: Animal | null
+    errors: IAnimal | null
     input: FieldInputProps<File[], HTMLElement>
 }
 
@@ -45,12 +45,12 @@ const PetImages: React.FC<PetImagesProps> = ({ errors, input }) => {
             {images.length < 6 && (
                 <>
                     <div className="required">
-                        <CLabel inputName='photo' title='Photo' />
+                        <CLabel inputName='Photo' title='Photo' />
                         <CgAsterisk className="asterisk" />
                     </div>
 
                     <div id="fileInput">
-                        <input type="file" accept="image/*" multiple onChange={(e) => handleFile(e, input)} name='photo' id='photo' />
+                        <input type="file" accept="image/*" multiple onChange={(e) => handleFile(e, input)} name='Photo' id='Photo' />
                         <p className="fakeFileInput" >Upload Photo</p>
                     </div>
                 </>
@@ -60,7 +60,7 @@ const PetImages: React.FC<PetImagesProps> = ({ errors, input }) => {
                 <p className="limit-message">Only up to 6 images can be uploaded.</p>
             )}
 
-            {errors && <span>{errors.photo}</span>}
+            {errors && <span>{errors.Photo}</span>}
 
             {images.length > 0 && (
                 <div id="images">

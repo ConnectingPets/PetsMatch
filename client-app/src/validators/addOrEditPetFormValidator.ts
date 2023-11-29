@@ -1,4 +1,15 @@
-import { combineValidators, composeValidators, isRequired, isAlphabetic, hasLengthBetween, hasLengthLessThan, isNumeric, createValidator, hasLengthGreaterThan } from 'revalidate';
+import { combineValidators, composeValidators, isRequired, hasLengthBetween, hasLengthLessThan, isNumeric, createValidator, hasLengthGreaterThan } from 'revalidate';
+
+const isAlphabeticWithSpaces = createValidator(
+    message => value => {
+        const pattern = /^[A-Za-z\s]+$/;
+        if (!pattern.test(value)) {
+            return message;
+        }
+    },
+
+    field => `${field} must be alphabetic`
+);
 
 const ageRange = createValidator(
     message => value => {
@@ -31,38 +42,38 @@ const photoRequired = createValidator(
 );
 
 export const addOrEditPetFormValidator = combineValidators({
-    name: composeValidators(
+    Name: composeValidators(
         isRequired,
-        isAlphabetic,
+        isAlphabeticWithSpaces,
         hasLengthBetween(2, 50)('This field')
     )('Name'),
-    animalCategory: composeValidators(
+    AnimalCategory: composeValidators(
         isRequired,
-        isAlphabetic,
+        isAlphabeticWithSpaces,
         hasLengthBetween(3, 30)
     )('Category'),
-    breed: composeValidators(
+    Breed: composeValidators(
         isRequired,
-        isAlphabetic,
+        isAlphabeticWithSpaces,
         hasLengthBetween(5, 30)
     )('Breed'),
-    description: hasLengthLessThan(151)('This field'),
-    age: composeValidators(
+    Description: hasLengthLessThan(501)('This field'),
+    Age: composeValidators(
         isRequired,
         isNumeric('This field'),
         ageRange
     )('Age'),
-    isEducated: isRequired('This field'),
-    photo: composeValidators(
+    IsEducated: isRequired('This field'),
+    Photo: composeValidators(
         isRequired,
         photoRequired
     )('Photo'),
-    healthStatus: isRequired('This field'),
-    gender: isRequired('Gender'),
-    socialMedia: hasLengthGreaterThan(3)('This field'),
-    weight: composeValidators(
+    HealthStatus: isRequired('This field'),
+    Gender: isRequired('Gender'),
+    SocialMedia: hasLengthGreaterThan(3)('This field'),
+    Weight: composeValidators(
         isNumeric,
         weightRange
     )('This field'),
-    isHavingValidDocuments: isRequired('This field')
+    IsHavingValidDocuments: isRequired('This field')
 });

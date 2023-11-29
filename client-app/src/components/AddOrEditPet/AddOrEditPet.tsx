@@ -5,24 +5,23 @@ import { CgAsterisk } from 'react-icons/cg';
 import { FaTrashAlt } from 'react-icons/fa';
 
 import themeStore from '../../stores/themeStore';
-import { Animal } from '../../interfaces/Interfaces';
+import { IAnimal } from '../../interfaces/Interfaces';
 
-import { CLogo } from '../../components/common/CLogo/CLogo';
-import { CChangeThemeButton } from '../../components/common/CChangeThemeButton/CChangeThemeButton';
+import FormsHeader from '../FormsHeader/FormsHeader';
 import { CLabel } from '../../components/common/CLabel/CLabel';
 import { CSubmitButton } from '../../components/common/CSubmitButton/CSubmitButton';
 import PetImages from '../PetImages/PetImages';
 import DeleteModal from '../DeleteModal/DeleteModal';
 import Footer from '../../components/Footer/Footer';
 
-import './AddOrEditPet.scss';
+import '../../global-styles/forms.scss';
 
 interface AddOrEditPetProps {
     addOrEditPet: string,
-    onAddPetSubmit?: (values: Animal) => void,
-    data?: Animal,
-    onEditPetSubmit?: (values: Animal) => void,
-    errors: Animal | null
+    onAddPetSubmit?: (values: IAnimal) => void,
+    data?: IAnimal,
+    onEditPetSubmit?: (values: IAnimal) => void,
+    errors: IAnimal | null
 }
 
 const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAddPetSubmit, data, onEditPetSubmit, errors }) => {
@@ -42,19 +41,15 @@ const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAd
     };
 
     return (
-        <div className={themeStore.isLightTheme ? 'add-edit-pet__container' : 'add-edit-pet__container add-edit-pet__container__dark'}>
-            <header>
-                <CLogo />
-                <h1 className={themeStore.isLightTheme ? '' : 'dark'}>{addOrEditPet == 'add' ? 'Add Pet' : 'Edit Info'}</h1>
-                <CChangeThemeButton />
-            </header>
+        <div className={themeStore.isLightTheme ? 'forms__container' : 'forms__container forms__container__dark'}>
+            <FormsHeader title={addOrEditPet == 'add' ? 'Add Pet' : 'Edit Pet Info'} />
 
-            <section className="add-edit-pet__container__form-wrapper">
+            <section className="forms__container__form-wrapper">
                 <p>Fields with "<CgAsterisk className="asterisk" />" are required!</p>
 
                 <Form
                     initialValues={data}
-                    onSubmit={(values: Animal) => {
+                    onSubmit={(values: IAnimal) => {
                         if (addOrEditPet === 'add' && onAddPetSubmit) {
                             onAddPetSubmit(values);
                         } else if (addOrEditPet === 'edit' && onEditPetSubmit) {
@@ -63,174 +58,174 @@ const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAd
                     }}
                     render={({ handleSubmit }) => (
                         <form className={themeStore.isLightTheme ? '' : 'dark'} onSubmit={handleSubmit}>
-                            <Field name='name'>
+                            <Field name='Name'>
                                 {({ input }) => (
                                     <>
                                         <div className="required">
-                                            <CLabel inputName='name' title='Name' />
+                                            <CLabel inputName='Name' title='Name' />
                                             <CgAsterisk className="asterisk" />
                                         </div>
-                                        <input type="text" {...input} name='name' id='name' placeholder='Rico' />
-                                        {errors && <span>{errors.name}</span>}
+                                        <input type="text" {...input} name='Name' id='Name' placeholder='Rico' />
+                                        {errors && <span>{errors.Name}</span>}
                                     </>
                                 )}
                             </Field>
 
-                            <Field name='animalCategory'>
+                            <Field name='AnimalCategory'>
                                 {({ input }) => (
                                     <>
                                         <div className="required">
-                                            <CLabel inputName='animalCategory' title='Category' />
+                                            <CLabel inputName='AnimalCategory' title='Category' />
                                             <CgAsterisk className="asterisk" />
                                         </div>
-                                        <input type="text" {...input} name='animalCategory' id='animalCategory' placeholder='dog' />
-                                        {errors && <span>{errors.animalCategory}</span>}
+                                        <input type="text" {...input} name='AnimalCategory' id='AnimalCategory' placeholder='dog' />
+                                        {errors && <span>{errors.AnimalCategory}</span>}
                                     </>
                                 )}
                             </Field>
 
-                            <Field name='breed'>
+                            <Field name='Breed'>
                                 {({ input }) => (
                                     <>
                                         <div className="required">
-                                            <CLabel inputName='breed' title='Breed' />
+                                            <CLabel inputName='Breed' title='Breed' />
                                             <CgAsterisk className="asterisk" />
                                         </div>
-                                        <input type="text" {...input} name='breed' id='breed' placeholder='Golden Retriever' />
-                                        {errors && <span>{errors.breed}</span>}
+                                        <input type="text" {...input} name='Breed' id='Breed' placeholder='Golden Retriever' />
+                                        {errors && <span>{errors.Breed}</span>}
                                     </>
                                 )}
                             </Field>
 
-                            <Field name='description'>
+                            <Field name='Description'>
                                 {({ input }) => (
                                     <>
-                                        <CLabel inputName='description' title='Description' />
-                                        <textarea {...input} name="description" id="description" placeholder='  .....' />
-                                        {errors && <span>{errors.description}</span>}
+                                        <CLabel inputName='Description' title='Description' />
+                                        <textarea {...input} name="Description" id="Description" placeholder='  .....' />
+                                        {errors && <span>{errors.Description}</span>}
                                     </>
                                 )}
                             </Field>
 
                             <div className="pairs">
-                                <Field name='age'>
+                                <Field name='Age'>
                                     {({ input }) => (
                                         <div className="wrapper">
                                             <div className="required">
-                                                <CLabel inputName='age' title='Age' />
+                                                <CLabel inputName='Age' title='Age' />
                                                 <CgAsterisk className="asterisk" />
-                                                <input type="text" {...input} name='age' id='age' placeholder='5' />
+                                                <input type="text" {...input} name='Age' id='Age' placeholder='5' />
                                             </div>
-                                            {errors && <span>{errors.age}</span>}
+                                            {errors && <span>{errors.Age}</span>}
                                         </div>
                                     )}
                                 </Field>
 
-                                <Field name='gender'>
+                                <Field name='Gender'>
                                     {({ input }) => (
                                         <div className="wrapper">
                                             <div className="required">
-                                                <CLabel inputName='gender' title='Gender' />
+                                                <CLabel inputName='Gender' title='Gender' />
                                                 <CgAsterisk className="asterisk" />
-                                                <select {...input} name="gender" id="gender">
+                                                <select {...input} name="Gender" id="Gender">
                                                     <option>  </option>
                                                     <option>Male</option>
                                                     <option>Female</option>
                                                 </select>
                                             </div>
-                                            {errors && <span>{errors.gender}</span>}
+                                            {errors && <span>{errors.Gender}</span>}
                                         </div>
                                     )}
                                 </Field>
                             </div>
 
                             <div className="pairs">
-                                <Field name='isEducated'>
+                                <Field name='IsEducated'>
                                     {({ input }) => (
                                         <div className="wrapper">
                                             <div className="required">
-                                                <CLabel inputName='isEducated' title='Educated' />
+                                                <CLabel inputName='IsEducated' title='Educated' />
                                                 <CgAsterisk className="asterisk" />
-                                                <select {...input} name="isEducated" id="isEducated">
+                                                <select {...input} name="IsEducated" id="IsEducated">
                                                     <option>  </option>
                                                     <option>No</option>
                                                     <option>Yes</option>
                                                 </select>
                                             </div>
-                                            {errors && <span>{errors.isEducated}</span>}
+                                            {errors && <span>{errors.IsEducated}</span>}
                                         </div>
                                     )}
                                 </Field>
 
-                                <Field name='weight'>
+                                <Field name='Weight'>
                                     {({ input }) => (
                                         <div className="wrapper">
                                             <div className="content">
-                                                <CLabel inputName='weight' title='Weight in kg' />
-                                                <input type="text" {...input} name='weight' id='weight' placeholder='15' />
+                                                <CLabel inputName='Weight' title='Weight in kg' />
+                                                <input type="text" {...input} name='Weight' id='Weight' placeholder='15' />
                                             </div>
-                                            {errors && <span>{errors.weight}</span>}
+                                            {errors && <span>{errors.Weight}</span>}
                                         </div>
                                     )}
                                 </Field>
                             </div>
 
                             <div className="pairs">
-                                <Field name='healthStatus'>
+                                <Field name='HealthStatus'>
                                     {({ input }) => (
                                         <div className="wrapper">
                                             <div className="required">
-                                                <CLabel inputName='healthStatus' title='Health Status' />
+                                                <CLabel inputName='HealthStatus' title='Health Status' />
                                                 <CgAsterisk className="asterisk" />
-                                                <select {...input} name="healthStatus" id="healthStatus">
+                                                <select {...input} name="HealthStatus" id="HealthStatus">
                                                     <option>  </option>
                                                     <option>Not vaccinated</option>
                                                     <option>Vaccinated</option>
                                                 </select>
                                             </div>
-                                            {errors && <span>{errors.healthStatus}</span>}
+                                            {errors && <span>{errors.HealthStatus}</span>}
                                         </div>
                                     )}
                                 </Field>
 
-                                <Field name='isHavingValidDocuments'>
+                                <Field name='IsHavingValidDocuments'>
                                     {({ input }) => (
                                         <div className="wrapper last-wrapper">
                                             <div className="required">
-                                                <CLabel inputName='isHavingValidDocuments' title='Valid Documents' />
+                                                <CLabel inputName='IsHavingValidDocuments' title='Valid Documents' />
                                                 <CgAsterisk className="asterisk" />
-                                                <select {...input} name="isHavingValidDocuments" id="isHavingValidDocuments">
+                                                <select {...input} name="IsHavingValidDocuments" id="IsHavingValidDocuments">
                                                     <option>  </option>
                                                     <option>No</option>
                                                     <option>Yes</option>
                                                 </select>
                                             </div>
-                                            {errors && <span>{errors.isHavingValidDocuments}</span>}
+                                            {errors && <span>{errors.IsHavingValidDocuments}</span>}
                                         </div>
                                     )}
                                 </Field>
                             </div>
 
-                            <Field name='birthDate'>
+                            <Field name='BirthDate'>
                                 {({ input }) => (
                                     <>
-                                        <CLabel inputName='birthDate' title='Birth Date' />
-                                        <input type="date" {...input} name='birthDate' id='birthDate' />
+                                        <CLabel inputName='BirthDate' title='Birth Date' />
+                                        <input type="date" {...input} name='BirthDate' id='BirthDate' />
                                     </>
                                 )}
                             </Field>
 
-                            <Field name='socialMedia'>
+                            <Field name='SocialMedia'>
                                 {({ input }) => (
                                     <>
-                                        <CLabel inputName='socialMedia' title='Social Media' />
-                                        <input type="url" {...input} name='socialMedia' id='socialMedia' placeholder='https://.......' />
-                                        {errors && <span>{errors.socialMedia}</span>}
+                                        <CLabel inputName='SocialMedia' title='Social Media' />
+                                        <input type="url" {...input} name='SocialMedia' id='SocialMedia' placeholder='https://.......' />
+                                        {errors && <span>{errors.SocialMedia}</span>}
                                     </>
                                 )}
                             </Field>
 
-                            <Field name='photo'>
+                            <Field name='Photo'>
                                 {({ input }) => (
                                     <PetImages errors={errors} input={input} />
                                 )}

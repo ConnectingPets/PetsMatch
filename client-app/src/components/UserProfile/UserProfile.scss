@@ -82,8 +82,16 @@
         width: 60%;
         flex-wrap: wrap;
 
-        &>a {
+        &>a,
+        button {
             margin: 0.5rem;
+            @include gs.set-button(gs.$light-gradient-first, gs.$light-gradient-second, gs.$white-text);
+            font-size: 1rem;
+            color: black;
+        }
+
+        &>.dark {
+            @include gs.set-button(gs.$dark-primary, gs.$dark-secondary, gs.$dark-primary-variant);
         }
 
         @include gs.breakpoint(tablet-start, tablet-end) {
