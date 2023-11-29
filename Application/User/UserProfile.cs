@@ -12,6 +12,7 @@
     using Domain.Enum;
     using Persistence.Repositories;
     using Application.Exceptions.Entity;
+    using Application.Exceptions.User;
 
     public class UserProfile
     {

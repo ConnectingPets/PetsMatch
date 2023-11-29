@@ -11,6 +11,7 @@
     using Application.Exceptions;
     using Application.DTOs.Match;
     using Application.Exceptions.Entity;
+    using Application.Exceptions.Animal;
 
     public class AnimalMatches
     {

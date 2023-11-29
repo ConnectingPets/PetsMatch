@@ -10,6 +10,7 @@
     using Persistence.Repositories;
     using Application.DTOs.Message;
     using Application.Exceptions;
+    using Application.Exceptions.Match;
 
     public class ChatHistory
     {

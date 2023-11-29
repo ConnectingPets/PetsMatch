@@ -10,6 +10,7 @@
     using Application.Exceptions;
     using Microsoft.EntityFrameworkCore;
     using Application.Exceptions.Entity;
+    using Application.Exceptions.Animal;
 
     public class SwipeAnimal
     {

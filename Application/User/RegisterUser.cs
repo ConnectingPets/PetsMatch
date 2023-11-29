@@ -9,6 +9,7 @@
     using Domain;
     using Application.Exceptions;
     using static Common.ExceptionMessages.User;
+    using Application.Exceptions.User;
 
     public class RegisterUser
     {

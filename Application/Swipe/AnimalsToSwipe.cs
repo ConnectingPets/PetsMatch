@@ -9,6 +9,7 @@
     using Domain;
     using Microsoft.EntityFrameworkCore;
     using Application.Exceptions.Entity;
+    using Application.Exceptions.User;
 
     public class AnimalsToSwipe
     {
