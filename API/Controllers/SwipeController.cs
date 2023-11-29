@@ -64,6 +64,18 @@
                     User.GetById(),
                     animalId);
             }
+            catch (InvalidGuidFormatException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (AnimalNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (UserNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
             catch
             {
                 return StatusCode(500, InternalServerError);
