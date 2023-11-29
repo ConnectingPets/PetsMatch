@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
 
@@ -11,9 +12,11 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20231123090941_AddPhotoTable")]
+    partial class AddPhotoTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -81,6 +84,11 @@ namespace Persistence.Migrations
                     b.Property<Guid>("OwnerId")
                         .HasColumnType("uniqueidentifier")
                         .HasComment("animal owner id");
+
+                    b.Property<byte[]>("Photo")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)")
+                        .HasComment("animal photo");
 
                     b.Property<string>("SocialMedia")
                         .HasColumnType("nvarchar(max)")
@@ -284,9 +292,15 @@ namespace Persistence.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasComment("photo url");
 
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasComment("photo user id");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AnimalId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Photos", t =>
                         {
@@ -404,9 +418,9 @@ namespace Persistence.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("PhotoId")
-                        .HasColumnType("nvarchar(450)")
-                        .HasComment("user photo id");
+                    b.Property<byte[]>("Photo")
+                        .HasColumnType("varbinary(max)")
+                        .HasComment("user photo");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
@@ -427,8 +441,6 @@ namespace Persistence.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.HasIndex("PhotoId");
 
                     b.ToTable("AspNetUsers", null, t =>
                         {
@@ -661,7 +673,13 @@ namespace Persistence.Migrations
                         .WithMany("Photos")
                         .HasForeignKey("AnimalId");
 
+                    b.HasOne("Domain.User", "User")
+                        .WithMany("Photos")
+                        .HasForeignKey("UserId");
+
                     b.Navigation("Animal");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Domain.Swipe", b =>
@@ -681,15 +699,6 @@ namespace Persistence.Migrations
                     b.Navigation("SwipeeAnimal");
 
                     b.Navigation("SwiperAnimal");
-                });
-
-            modelBuilder.Entity("Domain.User", b =>
-                {
-                    b.HasOne("Domain.Photo", "Photo")
-                        .WithMany()
-                        .HasForeignKey("PhotoId");
-
-                    b.Navigation("Photo");
                 });
 
             modelBuilder.Entity("Domain.UserPassion", b =>
@@ -803,6 +812,8 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.User", b =>
                 {
                     b.Navigation("Animals");
+
+                    b.Navigation("Photos");
 
                     b.Navigation("UsersPassions");
                 });

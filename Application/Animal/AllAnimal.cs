@@ -49,7 +49,7 @@
                     {
                         Id = a.AnimalId.ToString(),
                         Name = a.Name,
-                        Photo = a.Photo,
+                        MainPhoto = a.Photos.First(p => p.IsMain).Url
                     }).ToListAsync();
 
                 return Result<IEnumerable<AllAnimalDto>>.Success(userAnimals);
