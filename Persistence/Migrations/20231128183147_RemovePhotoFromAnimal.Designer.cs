@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
 
@@ -11,9 +12,11 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20231128183147_RemovePhotoFromAnimal")]
+    partial class RemovePhotoFromAnimal
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,8 +51,8 @@ namespace Persistence.Migrations
                         .HasComment("animal created on");
 
                     b.Property<string>("Description")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)")
                         .HasComment("animal description");
 
                     b.Property<int>("Gender")
@@ -174,6 +177,25 @@ namespace Persistence.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Domain.Conversation", b =>
+                {
+                    b.Property<Guid>("ConversationId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasComment("conversation id");
+
+                    b.Property<DateTime>("StartedOn")
+                        .HasColumnType("datetime2")
+                        .HasComment("timestamp when the conversation started");
+
+                    b.HasKey("ConversationId");
+
+                    b.ToTable("Conversations", t =>
+                        {
+                            t.HasComment("conversation table");
+                        });
+                });
+
             modelBuilder.Entity("Domain.Match", b =>
                 {
                     b.Property<Guid>("MatchId")
@@ -195,14 +217,13 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Message", b =>
                 {
-                    b.Property<Guid>("MessageId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasComment("message id");
-
                     b.Property<Guid>("AnimalId")
                         .HasColumnType("uniqueidentifier")
                         .HasComment("message animal id");
+
+                    b.Property<Guid>("ConversationId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasComment("message conversation id");
 
                     b.Property<string>("Content")
                         .IsRequired()
@@ -210,21 +231,15 @@ namespace Persistence.Migrations
                         .HasColumnType("nvarchar(350)")
                         .HasComment("message content");
 
-                    b.Property<Guid>("MatchId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasComment("message match id");
-
                     b.Property<DateTime>("SentOn")
                         .HasColumnType("datetime2")
                         .HasComment("timestamp when the message is sent");
 
-                    b.HasKey("MessageId");
+                    b.HasKey("AnimalId", "ConversationId");
 
-                    b.HasIndex("AnimalId");
+                    b.HasIndex("ConversationId");
 
-                    b.HasIndex("MatchId");
-
-                    b.ToTable("Messages", t =>
+                    b.ToTable("Messages", null, t =>
                         {
                             t.HasComment("message table");
                         });
@@ -338,8 +353,8 @@ namespace Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)")
                         .HasComment("user description");
 
                     b.Property<string>("Education")
@@ -632,15 +647,15 @@ namespace Persistence.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("Domain.Match", "Match")
+                    b.HasOne("Domain.Conversation", "Conversation")
                         .WithMany("Messages")
-                        .HasForeignKey("MatchId")
+                        .HasForeignKey("ConversationId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Animal");
 
-                    b.Navigation("Match");
+                    b.Navigation("Conversation");
                 });
 
             modelBuilder.Entity("Domain.Photo", b =>
@@ -773,11 +788,14 @@ namespace Persistence.Migrations
                     b.Navigation("Animals");
                 });
 
+            modelBuilder.Entity("Domain.Conversation", b =>
+                {
+                    b.Navigation("Messages");
+                });
+
             modelBuilder.Entity("Domain.Match", b =>
                 {
                     b.Navigation("AnimalMatches");
-
-                    b.Navigation("Messages");
                 });
 
             modelBuilder.Entity("Domain.Passion", b =>

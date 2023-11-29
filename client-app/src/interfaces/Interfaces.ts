@@ -1,28 +1,30 @@
 export interface IUser {
-    id?: string,
-    name: string,
-    email?: string,
-    age:number,
-    education:string,
-    photo:string,
-    jobTitle:string,
-    gender:string,
-    address:string,
-    city:string
+    Id: string,
+    Name: string,
+    Email: string,
+    Description?: string,
+    Age?: number,
+    Education?: string,
+    Photo?: string,
+    JobTitle?: string,
+    Gender?: string,
+    Address?: string,
+    City?: string
 }
 
-export interface Animal {
-    name: string | undefined,
-    animalCategory: string | undefined,
-    breed: string | undefined,
-    description?: string | undefined,
-    age: string | undefined,
-    birthDate?: string | undefined,
-    isEducated: string | undefined,
-    photo: string | undefined,
-    healthStatus: string | undefined,
-    gender: string | undefined,
-    socialMedia?: string | undefined,
-    weight?: string | undefined,
-    isHavingValidDocuments: string | undefined
+export interface IAnimal {
+    AnimalId: string | undefined,
+    Name: string | undefined,
+    AnimalCategory: string | undefined,
+    Breed: string | undefined,
+    Description?: string | undefined,
+    Age: string | undefined,
+    BirthDate?: string | undefined,
+    IsEducated: string | undefined,
+    Photo: string | undefined,
+    HealthStatus: string | undefined,
+    Gender: string | undefined,
+    SocialMedia?: string | undefined,
+    Weight?: string | undefined,
+    IsHavingValidDocuments: string | undefined
 }

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Animal } from '../../interfaces/Interfaces';
+import { IAnimal } from '../../interfaces/Interfaces';
 import { addOrEditPetFormValidator } from '../../validators/addOrEditPetFormValidator';
 
 import AddOrEditPet from '../../components/AddOrEditPet/AddOrEditPet';
@@ -8,11 +8,11 @@ import AddOrEditPet from '../../components/AddOrEditPet/AddOrEditPet';
 interface AddPetPageProps { }
 
 const AddPetPage: React.FC<AddPetPageProps> = () => {
-    const [errors, setErrors] = useState<Animal | null>(null);
+    const [errors, setErrors] = useState<IAnimal | null>(null);
 
     const addOrEditPet = 'add';
 
-    const onAddPetSubmit = (values: Animal) => {
+    const onAddPetSubmit = (values: IAnimal) => {
         setErrors(null);
         const err = addOrEditPetFormValidator(values);
 

@@ -10,8 +10,9 @@
     using static Application.Animal.AllAnimal;
     using static Application.Animal.DeleteAnimal;
     using static Application.Animal.EditAnimal;
-    using static Application.Animal.ShowAnimalToAdd;
     using static Application.Animal.ShowAnimalToEdit;
+    using static Application.AnimalCategory.AllAnimalCategories;
+    using static Application.Breed.AllBreeds;
 
     [Authorize]
     public class AnimalController : BaseApiController
@@ -24,7 +25,7 @@
         }
 
         [HttpPost("Add")]
-        public async Task<IActionResult> AddAnimal([FromBody] AddAnimalDto animalDto)
+        public async Task<IActionResult> AddAnimal([FromBody] AddOrEditAnimalDto animalDto)
         {
             string ownerId = this.User.GetById();
 
@@ -36,13 +37,6 @@
 
             var result = await mediator.Send(command);
             return new JsonResult(result);
-        }
-
-        [HttpGet("AddAnimal")]
-        public async Task<IActionResult> AddAnimal()
-        {
-            var animal = await mediator.Send(new ShowAnimalToAddQuery());
-            return new JsonResult(animal);
         }
 
         [HttpGet("AllAnimals")]
@@ -72,7 +66,7 @@
         }
 
         [HttpPatch("{id}")]
-        public async Task<IActionResult> UpdateAnimal([FromBody] EditAnimalDto animalDto, string id)
+        public async Task<IActionResult> UpdateAnimal([FromBody] AddOrEditAnimalDto animalDto, string id)
         {
             EditAnimalCommand command = new EditAnimalCommand()
             {
@@ -96,5 +90,25 @@
             return new JsonResult(await mediator.Send(query));
         }
 
+        [HttpGet("GetAllCategories")]
+        public async Task<IActionResult> GetAllCategories()
+        {
+            var allCategories = await 
+                mediator.Send(new AllAnimalCategoriesQuery());
+
+            return new JsonResult(allCategories);
+        }
+
+        [HttpGet("GetBreeds/{categoryId}")]
+        public async Task<IActionResult> GetBreeds(int categoryId)
+        {
+            AllBreedsQuery query = new AllBreedsQuery()
+            {
+                CategoryId = categoryId,
+            };
+
+            var allCategories = await mediator.Send(query);
+            return new JsonResult(allCategories);
+        }
     }
 }

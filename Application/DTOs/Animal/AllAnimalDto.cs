@@ -6,6 +6,6 @@
 
         public required string Name { get; set; }
 
-        public required byte[] Photo { get; set; }
+        public required string MainPhoto { get; set; }
     }
 }

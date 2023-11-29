@@ -1,4 +1,4 @@
-@use '../../global-styles/' as gs;
+@use './index.scss' as gs;
 
 #fileInput {
     position: relative;
@@ -12,7 +12,7 @@
         width: 100%;
     }
 
-    &>#photo {
+    &>#Photo {
         position: relative;
         width: 100%;
         opacity: 0;
