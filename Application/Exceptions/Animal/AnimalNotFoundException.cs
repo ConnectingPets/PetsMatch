@@ -1,13 +1,13 @@
-﻿namespace Application.Exceptions
+﻿namespace Application.Exceptions.Animal
 {
     using static Common.ExceptionMessages.Animal;
 
     public class AnimalNotFoundException : Exception
     {
-        public AnimalNotFoundException() 
-            :base(AnimalNotFound) { }
+        public AnimalNotFoundException()
+            : base(AnimalNotFound) { }
 
         public AnimalNotFoundException(string message)
-            :base(message) { }
+            : base(message) { }
     }
 }

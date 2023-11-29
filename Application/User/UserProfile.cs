@@ -11,6 +11,7 @@
     using Application.Exceptions;
     using Domain.Enum;
     using Persistence.Repositories;
+    using Application.Exceptions.Entity;
 
     public class UserProfile
     {

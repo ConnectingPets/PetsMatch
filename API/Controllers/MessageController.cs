@@ -2,11 +2,13 @@
 {
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Authorization;
-    
+
     using Application.DTOs.Message;
-    using Application.Exceptions;
     using Application.Service.Interfaces;
     using static Common.ExceptionMessages.Entity;
+    using Application.Exceptions.Entity;
+    using Application.Exceptions.Animal;
+    using Application.Exceptions.Match;
 
     [Authorize]
     [Route("api/[controller]")]

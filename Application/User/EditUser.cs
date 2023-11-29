@@ -2,6 +2,7 @@
 {
     using Application.DTOs.User;
     using Application.Exceptions;
+    using Application.Exceptions.Entity;
     using Domain;
     using Domain.Enum;
     using MediatR;

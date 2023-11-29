@@ -1,6 +1,7 @@
 ﻿namespace Application.DTOs.Animal
 {
     using Application.DTOs.Breed;
+    using Application.DTOs.Photo;
     using Domain.Enum;
 
     public class ShowAnimalToEditDto

@@ -1,14 +1,14 @@
 ﻿namespace API.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
-    
+
     using Domain;
     using API.Infrastructure;
     using Application.DTOs.User;
-    using Application.Exceptions;
     using Application.Service.Interfaces;
     using static Common.ExceptionMessages.Entity;
     using Microsoft.AspNetCore.Authorization;
+    using Application.Exceptions.User;
 
     [AllowAnonymous]
     [Route("api/[controller]")]

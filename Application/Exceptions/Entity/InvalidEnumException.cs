@@ -1,4 +1,4 @@
-﻿namespace Application.Exceptions
+﻿namespace Application.Exceptions.Entity
 {
     using static Common.ExceptionMessages.Entity;
 
@@ -9,8 +9,8 @@
 
         }
 
-        public InvalidEnumException(string enumName) 
-            :base(String.Format(InvalidEnum, enumName))
+        public InvalidEnumException(string enumName)
+            : base(string.Format(InvalidEnum, enumName))
         {
 
         }

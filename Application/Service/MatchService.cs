@@ -6,10 +6,10 @@
     using MediatR;
 
     using Application.Service.Interfaces;
-    using Application.DTOs.Animal;
     using static Application.Match.AnimalMatches;
     using static Application.Match.UnMatchAnimal;
     using static Application.Matches.MatchAnimal;
+    using Application.DTOs.Match;
 
     public class MatchService : IMatchService
     {

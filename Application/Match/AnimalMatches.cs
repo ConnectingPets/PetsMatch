@@ -9,7 +9,8 @@
     using Domain;
     using Persistence.Repositories;
     using Application.Exceptions;
-    using Application.DTOs.Animal;
+    using Application.DTOs.Match;
+    using Application.Exceptions.Entity;
 
     public class AnimalMatches
     {

@@ -2,7 +2,8 @@
 {
     using API.Infrastructure;
     using Application.DTOs.User;
-    using Application.Exceptions;
+    using Application.Exceptions.Entity;
+    using Application.Exceptions.User;
     using Application.Service.Interfaces;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;

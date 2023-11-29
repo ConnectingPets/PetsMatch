@@ -8,6 +8,7 @@
     using Domain;
     using Persistence.Repositories;
     using Application.Exceptions;
+    using Application.Exceptions.Entity;
 
     public class SaveMessage
     {

@@ -1,4 +1,4 @@
-﻿namespace Application.DTOs.Animal
+﻿namespace Application.DTOs.Match
 {
     public class AnimalMatchDto
     {

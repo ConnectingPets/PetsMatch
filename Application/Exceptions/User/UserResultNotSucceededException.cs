@@ -1,13 +1,13 @@
-﻿namespace Application.Exceptions
+﻿namespace Application.Exceptions.User
 {
     using static Common.ExceptionMessages.User;
 
     public class UserResultNotSucceededException : Exception
     {
         public UserResultNotSucceededException()
-            :base(UserResultNotSucceeded) { }
+            : base(UserResultNotSucceeded) { }
 
         public UserResultNotSucceededException(string message)
-            :base(message) { }
+            : base(message) { }
     }
 }

@@ -9,6 +9,7 @@
     using Persistence.Repositories;
     using Application.Exceptions;
     using Microsoft.EntityFrameworkCore;
+    using Application.Exceptions.Entity;
 
     public class UnMatchAnimal
     {
