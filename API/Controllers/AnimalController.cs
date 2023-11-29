@@ -14,7 +14,7 @@
     using static Application.AnimalCategory.AllAnimalCategories;
     using static Application.Breed.AllBreeds;
 
-    //[Authorize]
+    [Authorize]
     public class AnimalController : BaseApiController
     {
         private readonly IMediator mediator;

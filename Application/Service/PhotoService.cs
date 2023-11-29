@@ -181,9 +181,11 @@
                     return Result<Unit>.Failure("Failed to delete photo");
                 }
 
-                repository.Delete(photo);
-                User? user = await repository.FirstOrDefaultAsync<User>(u => u.Id.ToString() == userId);
+                User? user = await 
+                    repository.GetById<User>(Guid.Parse(userId));
                 user!.PhotoId = null;
+
+                repository.Delete(photo);
 
                 try
                 {

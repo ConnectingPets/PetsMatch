@@ -12,7 +12,7 @@
     using static Application.Photo.SetAnimaMainPhoto;
     using static Application.Photo.DeleteUserPhoto;
 
-    //[Authorize]
+    [Authorize]
     public class PhotoController : BaseApiController
     {
         private readonly IMediator mediator;

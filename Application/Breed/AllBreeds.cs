@@ -30,8 +30,17 @@
 
             public async Task<Result<IEnumerable<BreedDto>>> Handle(AllBreedsQuery request, CancellationToken cancellationToken)
             {
+                int categoryId = request.CategoryId;
+
+                AnimalCategory? category = await repository.GetById<AnimalCategory>(categoryId);
+
+                if (category == null)
+                {
+                    return Result<IEnumerable<BreedDto>>.Failure("This category does not exist. Please select existing one");
+                }
+
                 BreedDto[] breeds = await repository.
-                   All<Breed>().Where(b => b.CategoryId == request.CategoryId).
+                   All<Breed>().Where(b => b.CategoryId == categoryId).
                    Select(b => new BreedDto()
                    {
                        BreedId = b.BreedId,
