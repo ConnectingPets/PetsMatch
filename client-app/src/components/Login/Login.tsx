@@ -1,6 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Form, Field } from 'react-final-form';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import { IUser } from '../../interfaces/Interfaces';
 import { loginFormValidator } from '../../validators/userProfileFormValidators';
@@ -30,6 +32,8 @@ export const Login: React.FC<LoginProps> = ({
             navigate('/dashboard');
         } catch (err) {
             console.log(err);
+
+            toast.error('Login failed. Please check your credentials.');
         }
     };
 

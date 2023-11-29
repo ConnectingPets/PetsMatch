@@ -2,6 +2,8 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Form, Field } from 'react-final-form';
 import { observer } from 'mobx-react';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import { IUser } from '../../interfaces/Interfaces';
 import { registerFormValidator } from '../../validators/userProfileFormValidators';
@@ -34,6 +36,8 @@ export const Register: React.FC<RegisterProps> = observer(({
             navigate('/dashboard');
         } catch (err) {
             console.log(err);
+
+            toast.error('Register failed. Please check your credentials.');
         }
     };
 
