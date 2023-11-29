@@ -13,6 +13,7 @@
     using Persistence.Repositories;
     using Application.Exceptions.Entity;
     using Application.Exceptions.User;
+    using Microsoft.EntityFrameworkCore;
 
     public class UserProfile
     {
@@ -37,7 +38,10 @@
                     throw new InvalidGuidFormatException();
                 }
 
-                User? user = await this.repository.GetById<User>(guidUserId);
+                User? user = await this.repository
+                    .All<User>(u => u.Id == guidUserId)
+                    .Include(u => u.Photo)
+                    .FirstOrDefaultAsync();
 
                 if (user == null)
                 {
@@ -58,7 +62,7 @@
                     City = user.City,
                     Education = user.Education,
                     JobTitle = user.JobTitle,
-                    Photo = null
+                    Photo = user.Photo?.Url
                 };
 
                 return userProfileDto;

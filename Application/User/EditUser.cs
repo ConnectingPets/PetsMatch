@@ -54,7 +54,6 @@
                 user.JobTitle = request.User.JobTitle;
                 user.Gender = gender;
                 user.Description = request.User.Description;
-                user.Photo = null;
 
                 await this.repository.SaveChangesAsync();
 

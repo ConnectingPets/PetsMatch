@@ -19,7 +19,5 @@
         public string? City { get; set; } = null!;
 
         public string? Education { get; set; } = null!;
-
-        public string? Photo { get; set; } = null!;
     }
 }

@@ -44,7 +44,18 @@
                     .Include(a => a.Breed)
                     .Select(a => new AnimalToSwipeDto
                     {
-
+                        Name = a.Name,
+                        Description = a.Description,
+                        Age = a.Age,
+                        BirthDate = a.BirthDate,
+                        IsEducated = a.IsEducated,
+                        HealthStatus = a.HealthStatus.ToString(),
+                        Gender = a.Gender.ToString(),
+                        SocialMedia = a.SocialMedia,
+                        Weight = a.Weight,
+                        IsHavingValidDocuments = a.IsHavingValidDocuments,
+                        Breed = a.Breed.Name,
+                        Photo = a.Photos.First(p => p.IsMain).Url
                     })
                     .ToArrayAsync();
 

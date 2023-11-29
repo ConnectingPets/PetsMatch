@@ -42,6 +42,7 @@
                     .ThenInclude(am => am.Match)
                     .ThenInclude(m => m.AnimalMatches)
                     .ThenInclude(am => am.Animal)
+                    .Include(animal => animal.Photos)
                     .FirstOrDefaultAsync();
 
                 if (animal == null)
@@ -58,7 +59,7 @@
                     {
                         AnimalId = am.AnimalId.ToString(),
                         Name = am.Animal.Name,
-                        Photo = null
+                        Photo = am.Animal.Photos.First(p => p.IsMain).Url
                     })
                     .ToList();
             }
