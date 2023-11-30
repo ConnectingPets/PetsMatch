@@ -1,14 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import { IAnimal } from '../../interfaces/Interfaces';
-import { addOrEditPetFormValidator } from '../../validators/addOrEditPetFormValidator';
 
 import AddOrEditPet from '../../components/AddOrEditPet/AddOrEditPet';
 
 interface EditPetPageProps { }
 
 const EditPetPage: React.FC<EditPetPageProps> = () => {
-    const [errors, setErrors] = useState<IAnimal | null>(null);
 
     const addOrEditPet = 'edit';
 
@@ -34,22 +32,16 @@ const EditPetPage: React.FC<EditPetPageProps> = () => {
         SocialMedia: 'http://localhost:3000/add-pet',
         Weight: '20',
         IsHavingValidDocuments: 'Yes'
-};
+    };
 
-const onEditPetSubmit = (values: IAnimal) => {
-    setErrors(null);
-    const err = addOrEditPetFormValidator(values);
+    const onEditPetSubmit = (values: IAnimal) => {
 
-    if (Object.keys(err).length !== 0) {
-        setErrors(err);
-    } else {
         console.log(values);
-    }
-};
+    };
 
-return (
-    <AddOrEditPet addOrEditPet={addOrEditPet} data={data} onEditPetSubmit={onEditPetSubmit} errors={errors} />
-);
+    return (
+        <AddOrEditPet addOrEditPet={addOrEditPet} data={data} onEditPetSubmit={onEditPetSubmit} />
+    );
 };
 
 export default EditPetPage;

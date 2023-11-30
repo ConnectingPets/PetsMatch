@@ -1,19 +1,16 @@
 import React, { useState } from 'react';
 import { FieldInputProps } from 'react-final-form';
-
-import { IAnimal } from '../../interfaces/Interfaces';
+import { CgAsterisk } from 'react-icons/cg';
 
 import { CLabel } from '../common/CLabel/CLabel';
-import { CgAsterisk } from 'react-icons/cg';
 
 import '../../global-styles/forms-images.scss';
 
 interface PetImagesProps {
-    errors: IAnimal | null
     input: FieldInputProps<File[], HTMLElement>
 }
 
-const PetImages: React.FC<PetImagesProps> = ({ errors, input }) => {
+const PetImages: React.FC<PetImagesProps> = ({ input }) => {
     const [images, setImages] = useState<string[]>([]);
 
     const handleFile = (
@@ -59,8 +56,6 @@ const PetImages: React.FC<PetImagesProps> = ({ errors, input }) => {
             {images.length > 5 && (
                 <p className="limit-message">Only up to 6 images can be uploaded.</p>
             )}
-
-            {errors && <span>{errors.Photo}</span>}
 
             {images.length > 0 && (
                 <div id="images">

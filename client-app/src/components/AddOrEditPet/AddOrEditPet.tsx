@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { observer } from 'mobx-react';
 import { Form, Field } from 'react-final-form';
 import { CgAsterisk } from 'react-icons/cg';
-import { TbArrowBack } from "react-icons/tb";
+import { TbArrowBack } from 'react-icons/tb';
 import { FaTrashAlt } from 'react-icons/fa';
 
 import themeStore from '../../stores/themeStore';
 import { IAnimal } from '../../interfaces/Interfaces';
+import { addOrEditPetFormValidator } from '../../validators/addOrEditPetFormValidator';
 
 import FormsHeader from '../FormsHeader/FormsHeader';
 import { CLabel } from '../../components/common/CLabel/CLabel';
@@ -22,10 +23,9 @@ interface AddOrEditPetProps {
     onAddPetSubmit?: (values: IAnimal) => void,
     data?: IAnimal,
     onEditPetSubmit?: (values: IAnimal) => void,
-    errors: IAnimal | null
 }
 
-const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAddPetSubmit, data, onEditPetSubmit, errors }) => {
+const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAddPetSubmit, data, onEditPetSubmit }) => {
     const [breed, setBreed] = useState<boolean>(false);
     const [isDeleteClick, setIsDeleteClick] = useState<boolean>(false);
 
@@ -55,6 +55,7 @@ const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAd
 
                 <Form
                     initialValues={data}
+                    validate={addOrEditPetFormValidator}
                     onSubmit={(values: IAnimal) => {
                         if (addOrEditPet === 'add' && onAddPetSubmit) {
                             onAddPetSubmit(values);
@@ -65,14 +66,14 @@ const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAd
                     render={({ handleSubmit }) => (
                         <form className={themeStore.isLightTheme ? '' : 'dark'} onSubmit={handleSubmit}>
                             <Field name='Name'>
-                                {({ input }) => (
+                                {({ input, meta }) => (
                                     <>
                                         <div className="required">
                                             <CLabel inputName='Name' title='Name' />
                                             <CgAsterisk className="asterisk" />
                                         </div>
                                         <input type="text" {...input} name='Name' id='Name' placeholder='Rico' />
-                                        {errors && <span>{errors.Name}</span>}
+                                        {meta.touched && meta.error && <span>{meta.error}</span>}
                                     </>
                                 )}
                             </Field>
@@ -80,7 +81,7 @@ const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAd
                             <div className="pairs">
                                 {!breed && (
                                     <Field name='AnimalCategory'>
-                                        {({ input }) => (
+                                        {({ input, meta }) => (
                                             <div className="wrapper">
                                                 <div className="required">
                                                     <CLabel inputName='AnimalCategory' title='Category' />
@@ -91,7 +92,7 @@ const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAd
                                                         <option>Cat</option>
                                                     </select>
                                                 </div>
-                                                {errors && <span>{errors.AnimalCategory}</span>}
+                                                {meta.touched && meta.error && <span>{meta.error}</span>}
                                             </div>
                                         )}
                                     </Field>
@@ -99,7 +100,7 @@ const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAd
 
                                 {breed && (
                                     <Field name='Breed'>
-                                        {({ input }) => (
+                                        {({ input, meta }) => (
                                             <div className="wrapper">
                                                 <div className="required">
                                                     <CLabel inputName='Breed' title='Breed' />
@@ -118,7 +119,7 @@ const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAd
                                                     </select>
                                                     <button onClick={onBackToCategory}><TbArrowBack /> Back to Category</button>
                                                 </div>
-                                                {errors && <span>{errors.Breed}</span>}
+                                                {meta.touched && meta.error && <span>{meta.error}</span>}
                                             </div>
                                         )}
                                     </Field>
@@ -126,31 +127,31 @@ const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAd
                             </div>
 
                             <Field name='Description'>
-                                {({ input }) => (
+                                {({ input, meta }) => (
                                     <>
                                         <CLabel inputName='Description' title='Description' />
                                         <textarea {...input} name="Description" id="Description" placeholder='  .....' />
-                                        {errors && <span>{errors.Description}</span>}
+                                        {meta.touched && meta.error && <span>{meta.error}</span>}
                                     </>
                                 )}
                             </Field>
 
                             <div className="pairs">
                                 <Field name='Age'>
-                                    {({ input }) => (
+                                    {({ input, meta }) => (
                                         <div className="wrapper">
                                             <div className="required">
                                                 <CLabel inputName='Age' title='Age' />
                                                 <CgAsterisk className="asterisk" />
                                                 <input type="text" {...input} name='Age' id='Age' placeholder='5' />
                                             </div>
-                                            {errors && <span>{errors.Age}</span>}
+                                            {meta.touched && meta.error && <span>{meta.error}</span>}
                                         </div>
                                     )}
                                 </Field>
 
                                 <Field name='Gender'>
-                                    {({ input }) => (
+                                    {({ input, meta }) => (
                                         <div className="wrapper">
                                             <div className="required">
                                                 <CLabel inputName='Gender' title='Gender' />
@@ -161,7 +162,7 @@ const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAd
                                                     <option>Female</option>
                                                 </select>
                                             </div>
-                                            {errors && <span>{errors.Gender}</span>}
+                                            {meta.touched && meta.error && <span>{meta.error}</span>}
                                         </div>
                                     )}
                                 </Field>
@@ -169,7 +170,7 @@ const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAd
 
                             <div className="pairs">
                                 <Field name='IsEducated'>
-                                    {({ input }) => (
+                                    {({ input, meta }) => (
                                         <div className="wrapper">
                                             <div className="required">
                                                 <CLabel inputName='IsEducated' title='Educated' />
@@ -180,19 +181,19 @@ const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAd
                                                     <option>Yes</option>
                                                 </select>
                                             </div>
-                                            {errors && <span>{errors.IsEducated}</span>}
+                                            {meta.touched && meta.error && <span>{meta.error}</span>}
                                         </div>
                                     )}
                                 </Field>
 
                                 <Field name='Weight'>
-                                    {({ input }) => (
+                                    {({ input, meta }) => (
                                         <div className="wrapper">
                                             <div className="content">
                                                 <CLabel inputName='Weight' title='Weight in kg' />
                                                 <input type="text" {...input} name='Weight' id='Weight' placeholder='15' />
                                             </div>
-                                            {errors && <span>{errors.Weight}</span>}
+                                            {meta.touched && meta.error && <span>{meta.error}</span>}
                                         </div>
                                     )}
                                 </Field>
@@ -200,7 +201,7 @@ const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAd
 
                             <div className="pairs">
                                 <Field name='HealthStatus'>
-                                    {({ input }) => (
+                                    {({ input, meta }) => (
                                         <div className="wrapper">
                                             <div className="required">
                                                 <CLabel inputName='HealthStatus' title='Health Status' />
@@ -211,13 +212,13 @@ const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAd
                                                     <option>Vaccinated</option>
                                                 </select>
                                             </div>
-                                            {errors && <span>{errors.HealthStatus}</span>}
+                                            {meta.touched && meta.error && <span>{meta.error}</span>}
                                         </div>
                                     )}
                                 </Field>
 
                                 <Field name='IsHavingValidDocuments'>
-                                    {({ input }) => (
+                                    {({ input, meta }) => (
                                         <div className="wrapper last-wrapper">
                                             <div className="required">
                                                 <CLabel inputName='IsHavingValidDocuments' title='Valid Documents' />
@@ -228,7 +229,7 @@ const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAd
                                                     <option>Yes</option>
                                                 </select>
                                             </div>
-                                            {errors && <span>{errors.IsHavingValidDocuments}</span>}
+                                            {meta.touched && meta.error && <span>{meta.error}</span>}
                                         </div>
                                     )}
                                 </Field>
@@ -244,18 +245,21 @@ const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAd
                             </Field>
 
                             <Field name='SocialMedia'>
-                                {({ input }) => (
+                                {({ input, meta }) => (
                                     <>
                                         <CLabel inputName='SocialMedia' title='Social Media' />
                                         <input type="url" {...input} name='SocialMedia' id='SocialMedia' placeholder='https://.......' />
-                                        {errors && <span>{errors.SocialMedia}</span>}
+                                        {meta.touched && meta.error && <span>{meta.error}</span>}
                                     </>
                                 )}
                             </Field>
 
                             <Field name='Photo'>
-                                {({ input }) => (
-                                    <PetImages errors={errors} input={input} />
+                                {({ input, meta }) => (
+                                    <>
+                                        <PetImages input={input} />
+                                        {meta.touched && meta.error && <span>{meta.error}</span>}
+                                    </>
                                 )}
                             </Field>
 
