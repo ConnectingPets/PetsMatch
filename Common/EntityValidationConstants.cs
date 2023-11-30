@@ -6,7 +6,7 @@
         {
             public const int NameMinLength = 2;
             public const int NameMaxLength = 50;
-            public const int DescriptionMaxLength = 150;
+            public const int DescriptionMaxLength = 500;
             public const string AgeMinValue = "1";
             public const string AgeMaxValue = "20";
             public const int SocialMediaMinLength = 4;
@@ -16,11 +16,12 @@
 
         public static class User
         {
+            public const int PasswordMinLength = 5;
             public const string AgeMinValue = "16";
             public const string AgeMaxValue = "90";
             public const int NameMinLength = 2;
             public const int NameMaxLength = 100;
-            public const int DescriptionMaxLength = 150;
+            public const int DescriptionMaxLength = 500;
             public const int AddressMinLength = 10;
             public const int AddressMaxLength = 150;
             public const int CityMinLength = 3;

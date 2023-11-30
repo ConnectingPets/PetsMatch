@@ -4,11 +4,13 @@
     using System.Threading.Tasks;
 
     using MediatR;
+    using Microsoft.EntityFrameworkCore;
 
     using Domain;
     using Persistence.Repositories;
-    using Application.Exceptions;
-    using Microsoft.EntityFrameworkCore;
+    using Application.Exceptions.Entity;
+    using Application.Exceptions.Animal;
+    using Application.Exceptions.Match;
 
     public class UnMatchAnimal
     {
@@ -66,6 +68,7 @@
                 }
 
                 this.repository.DeleteRange(existingMatch.AnimalMatches.ToArray());
+                this.repository.DeleteRange(existingMatch.Messages.ToArray());
                 this.repository.Delete(existingMatch);
                 await this.repository.SaveChangesAsync();
 
@@ -78,6 +81,7 @@
                                                 .Any(m => m.AnimalId == animalTwoId))
                                         .Include(am => am.Match)
                                         .ThenInclude(m => m.AnimalMatches)
+                                        .Include(m => m.Match.Messages)
                                         .Select(am => am.Match)
                                         .FirstOrDefaultAsync();
         }

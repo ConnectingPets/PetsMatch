@@ -5,7 +5,7 @@
 
     using MediatR;
 
-    using Application.DTOs;
+    using Application.DTOs.Match;
     using Application.Service.Interfaces;
     using static Application.Match.AnimalMatches;
     using static Application.Match.UnMatchAnimal;

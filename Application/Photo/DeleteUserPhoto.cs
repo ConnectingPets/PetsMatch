@@ -5,10 +5,10 @@
 
     using MediatR;
 
-    using Persistence.Repositories;
-    using Response;
     using Domain;
+    using Persistence.Repositories;
     using Service.Interfaces;
+    using Response;
 
     public class DeleteUserPhoto
     {

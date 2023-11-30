@@ -1,14 +1,14 @@
 ﻿namespace Application.Photo
 {
-    using Microsoft.AspNetCore.Http;
     using MediatR;
-
-    using Response;
-    using Service.Interfaces;
-    using Domain;
-    using Persistence.Repositories;
-    using Persistence;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.EntityFrameworkCore;
+
+    using Domain;
+    using Persistence;
+    using Persistence.Repositories;
+    using Service.Interfaces;
+    using Response;
 
     public class AddAnimalPhoto
     {

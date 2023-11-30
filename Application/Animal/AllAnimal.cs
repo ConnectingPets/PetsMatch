@@ -6,11 +6,11 @@
     using MediatR;
     using Microsoft.EntityFrameworkCore;
 
-    using DTOs;
     using Domain;
-    using Response;
-    using Persistence.Repositories;
     using Persistence;
+    using Persistence.Repositories;
+    using Application.DTOs.Animal;
+    using Response;
 
     public class AllAnimal
     {

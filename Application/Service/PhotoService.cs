@@ -7,11 +7,11 @@
     using Microsoft.AspNetCore.Http;
     using MediatR;
 
+    using Domain;
+    using Persistence;
     using Interfaces;
     using Response;
     using Persistence.Repositories;
-    using Domain;
-    using Persistence;
 
     public class PhotoService : IPhotoService
     {
