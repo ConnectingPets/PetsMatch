@@ -7,8 +7,8 @@
     using Microsoft.EntityFrameworkCore;
 
     using Domain;
-    using Response;
     using Persistence.Repositories;
+    using Response;
 
     public class DeleteAnimal
     {

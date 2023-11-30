@@ -1,15 +1,16 @@
 ﻿namespace Application.User
 {
-    using Application.DTOs.User;
-    using Application.Exceptions;
-    using Application.Exceptions.Entity;
-    using Application.Exceptions.User;
-    using Domain;
-    using Domain.Enum;
-    using MediatR;
-    using Persistence.Repositories;
     using System.Threading;
     using System.Threading.Tasks;
+    
+    using MediatR;
+    
+    using Domain;
+    using Domain.Enum;
+    using Persistence.Repositories;
+    using Application.DTOs.User;
+    using Application.Exceptions.Entity;
+    using Application.Exceptions.User;
 
     public class EditUser
     {

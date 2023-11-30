@@ -3,8 +3,8 @@
     using MediatR;
     using Microsoft.AspNetCore.Http;
 
-    using Response;
     using Domain;
+    using Response;
 
     public interface IPhotoService
     {

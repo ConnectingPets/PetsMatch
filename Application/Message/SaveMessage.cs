@@ -7,7 +7,6 @@
 
     using Domain;
     using Persistence.Repositories;
-    using Application.Exceptions;
     using Application.Exceptions.Entity;
     using Application.Exceptions.Animal;
     using Application.Exceptions.Match;

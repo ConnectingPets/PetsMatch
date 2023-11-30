@@ -11,8 +11,8 @@
     using static Application.Animal.DeleteAnimal;
     using static Application.Animal.EditAnimal;
     using static Application.Animal.ShowAnimalToEdit;
-    using static Application.AnimalCategory.AllAnimalCategories;
     using static Application.Breed.AllBreeds;
+    using static Application.AnimalCategory.AllAnimalCategories;
 
     [Authorize]
     public class AnimalController : BaseApiController

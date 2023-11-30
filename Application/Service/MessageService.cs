@@ -5,8 +5,8 @@
 
     using MediatR;
 
-    using Application.Service.Interfaces;
     using Application.DTOs.Message;
+    using Application.Service.Interfaces;
     using static Application.Message.SaveMessage;
     using static Application.Message.ChatHistory;
 

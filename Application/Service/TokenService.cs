@@ -5,7 +5,6 @@
     using System.Security.Cryptography;
     using System.IdentityModel.Tokens.Jwt;
     
-    using Microsoft.Extensions.Configuration;
     using Microsoft.IdentityModel.Tokens;
     
     using Domain;

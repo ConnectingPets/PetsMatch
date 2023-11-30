@@ -4,16 +4,13 @@
     using System.Threading.Tasks;
     
     using MediatR;
-    using Microsoft.AspNetCore.Identity;
+    using Microsoft.EntityFrameworkCore;
     
     using Domain;
-    using Application.DTOs.User;
-    using Application.Exceptions;
-    using Domain.Enum;
     using Persistence.Repositories;
+    using Application.DTOs.User;
     using Application.Exceptions.Entity;
     using Application.Exceptions.User;
-    using Microsoft.EntityFrameworkCore;
 
     public class UserProfile
     {

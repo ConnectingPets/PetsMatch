@@ -1,9 +1,9 @@
 ﻿namespace API.Controllers
 {
+    using MediatR;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Authorization;
-    using MediatR;
 
     using Infrastructure;
     using static Application.Photo.AddUserPhoto;

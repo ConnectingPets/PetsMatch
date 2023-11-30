@@ -1,13 +1,13 @@
 ﻿namespace Application.Service
 {
     using System.Threading.Tasks;
+    using System.Collections.Generic;
 
     using MediatR;
 
+    using Application.DTOs.Swipe;
     using Application.Service.Interfaces;
     using static Application.Swipe.SwipeAnimal;
-    using System.Collections.Generic;
-    using Application.DTOs.Swipe;
     using static Application.Swipe.AnimalsToSwipe;
 
     public class SwipeService : ISwipeService

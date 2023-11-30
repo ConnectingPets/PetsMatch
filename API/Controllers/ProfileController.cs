@@ -1,12 +1,13 @@
 ﻿namespace API.Controllers
 {
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Authorization;
+    
     using API.Infrastructure;
     using Application.DTOs.User;
     using Application.Exceptions.Entity;
     using Application.Exceptions.User;
     using Application.Service.Interfaces;
-    using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Mvc;
     using static Common.ExceptionMessages.Entity;
 
     [Authorize]

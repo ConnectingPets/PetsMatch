@@ -1,13 +1,14 @@
 ﻿namespace Application.Swipe
 {
-    using Application.DTOs.Swipe;
-    using Application.Exceptions;
-    using MediatR;
-    using Persistence.Repositories;
     using System.Threading;
     using System.Threading.Tasks;
-    using Domain;
+    
+    using MediatR;
     using Microsoft.EntityFrameworkCore;
+    
+    using Domain;
+    using Persistence.Repositories;
+    using Application.DTOs.Swipe;
     using Application.Exceptions.Entity;
     using Application.Exceptions.User;
 

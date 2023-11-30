@@ -1,9 +1,11 @@
 ﻿namespace Application.Service
 {
+    using System.Threading.Tasks;
+    
+    using MediatR;
+    
     using Application.DTOs.User;
     using Application.Service.Interfaces;
-    using MediatR;
-    using System.Threading.Tasks;
     using static Application.User.DeleteUser;
     using static Application.User.EditUser;
     using static Application.User.UserProfile;

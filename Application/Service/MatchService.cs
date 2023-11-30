@@ -5,11 +5,11 @@
 
     using MediatR;
 
+    using Application.DTOs.Match;
     using Application.Service.Interfaces;
     using static Application.Match.AnimalMatches;
     using static Application.Match.UnMatchAnimal;
     using static Application.Matches.MatchAnimal;
-    using Application.DTOs.Match;
 
     public class MatchService : IMatchService
     {

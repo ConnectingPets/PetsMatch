@@ -5,10 +5,10 @@
 
     using MediatR;
 
-    using Response;
-    using Service.Interfaces;
     using Domain;
     using Persistence.Repositories;
+    using Service.Interfaces;
+    using Response;
 
     public class SetAnimaMainPhoto
     {

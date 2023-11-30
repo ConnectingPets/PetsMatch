@@ -4,11 +4,10 @@
     using System.Threading.Tasks;
 
     using MediatR;
+    using Microsoft.EntityFrameworkCore;
 
     using Domain;
     using Persistence.Repositories;
-    using Application.Exceptions;
-    using Microsoft.EntityFrameworkCore;
     using Application.Exceptions.Entity;
     using Application.Exceptions.Animal;
     using Application.Exceptions.Match;
