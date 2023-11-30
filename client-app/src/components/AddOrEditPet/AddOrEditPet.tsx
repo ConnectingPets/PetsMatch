@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { observer } from 'mobx-react';
 import { Form, Field } from 'react-final-form';
 import { CgAsterisk } from 'react-icons/cg';
+import { TbArrowBack } from "react-icons/tb";
 import { FaTrashAlt } from 'react-icons/fa';
 
 import themeStore from '../../stores/themeStore';
@@ -25,11 +26,16 @@ interface AddOrEditPetProps {
 }
 
 const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAddPetSubmit, data, onEditPetSubmit, errors }) => {
+    const [breed, setBreed] = useState<boolean>(false);
     const [isDeleteClick, setIsDeleteClick] = useState<boolean>(false);
 
     // TO DO show images on edit-view
 
     const subjectForDelete = 'Tutsy';
+
+    const onBackToCategory = () => {
+        setBreed(false);
+    };
 
     const onDeleteOrCancelClick = () => {
         setIsDeleteClick(state => !state);
@@ -37,7 +43,7 @@ const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAd
 
     const onConfirmDelete = () => {
 
-       // TO DO .....
+        // TO DO .....
     };
 
     return (
@@ -71,31 +77,53 @@ const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAd
                                 )}
                             </Field>
 
-                            <Field name='AnimalCategory'>
-                                {({ input }) => (
-                                    <>
-                                        <div className="required">
-                                            <CLabel inputName='AnimalCategory' title='Category' />
-                                            <CgAsterisk className="asterisk" />
-                                        </div>
-                                        <input type="text" {...input} name='AnimalCategory' id='AnimalCategory' placeholder='dog' />
-                                        {errors && <span>{errors.AnimalCategory}</span>}
-                                    </>
+                            <div className="pairs">
+                                {!breed && (
+                                    <Field name='AnimalCategory'>
+                                        {({ input }) => (
+                                            <div className="wrapper">
+                                                <div className="required">
+                                                    <CLabel inputName='AnimalCategory' title='Category' />
+                                                    <CgAsterisk className="asterisk" />
+                                                    <select {...input} name="AnimalCategory" id="AnimalCategory">
+                                                        <option>  </option>
+                                                        <option>Dog</option>
+                                                        <option>Cat</option>
+                                                    </select>
+                                                </div>
+                                                {errors && <span>{errors.AnimalCategory}</span>}
+                                            </div>
+                                        )}
+                                    </Field>
                                 )}
-                            </Field>
 
-                            <Field name='Breed'>
-                                {({ input }) => (
-                                    <>
-                                        <div className="required">
-                                            <CLabel inputName='Breed' title='Breed' />
-                                            <CgAsterisk className="asterisk" />
-                                        </div>
-                                        <input type="text" {...input} name='Breed' id='Breed' placeholder='Golden Retriever' />
-                                        {errors && <span>{errors.Breed}</span>}
-                                    </>
+                                {breed && (
+                                    <Field name='Breed'>
+                                        {({ input }) => (
+                                            <div className="wrapper">
+                                                <div className="required">
+                                                    <CLabel inputName='Breed' title='Breed' />
+                                                    <CgAsterisk className="asterisk" />
+                                                    <select {...input} name="Breed" id="Breed">
+                                                        <option>  </option>
+                                                        <option>Setter</option>
+                                                        <option>Golden Retriever</option>
+                                                        <option>Poodle</option>
+                                                        <option>Labrador</option>
+                                                        <option>Bulldog</option>
+                                                        <option>Beagle</option>
+                                                        <option>German Shorthaired Pointer</option>
+                                                        <option>Welsh Corgi</option>
+                                                        <option>Boxer</option>
+                                                    </select>
+                                                    <button onClick={onBackToCategory}><TbArrowBack /> Back to Category</button>
+                                                </div>
+                                                {errors && <span>{errors.Breed}</span>}
+                                            </div>
+                                        )}
+                                    </Field>
                                 )}
-                            </Field>
+                            </div>
 
                             <Field name='Description'>
                                 {({ input }) => (
