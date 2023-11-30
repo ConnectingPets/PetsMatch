@@ -5,6 +5,7 @@ import { IAnimal } from '../interfaces/Interfaces';
 
 const axiosInstance = axios.create({
     baseURL: 'http://localhost:5216',
+    withCredentials: true
 });
 
 const headers = {
@@ -30,7 +31,6 @@ const apiUser = {
 const apiAnimal = {
     getAllAnimals: () => requests.get('/api/animal/allanimals'),
     getAnimalById: (animalId: string) => requests.get(`/api/animal/editanimal/${animalId}`),
-    // getAnimalCategoryAndBreed: () => requests.get('/api/animal/addanimal'),
     addAnimal: (animalData: IAnimal) => requests.post('/api/animal/add', animalData, headers.multipart),
     editAnimalById: (animalId: string, animalData: IAnimal) => requests.patch(`/api/animal/${animalId}`, animalData, headers.multipart),
     deleteAnimal: (animalId: string) => requests.del(`/api/animal/${animalId}`)
