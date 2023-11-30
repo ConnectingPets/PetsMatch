@@ -27,6 +27,8 @@ namespace Persistence
 
         public DbSet<Message> Messages { get; set; } = null!;
 
+        public DbSet<Photo> Photos { get; set; } = null!;
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             Assembly assembly = Assembly.GetAssembly(typeof(DataContext)) ??

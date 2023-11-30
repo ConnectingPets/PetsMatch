@@ -42,6 +42,7 @@
                 IEnumerable<AnimalToSwipeDto> animalsToSwipeDto = await this.repository
                     .All<Animal>(a => a.OwnerId != guidUserId)
                     .Include(a => a.Breed)
+                    .Include(a => a.Photos)
                     .Select(a => new AnimalToSwipeDto
                     {
                         Name = a.Name,

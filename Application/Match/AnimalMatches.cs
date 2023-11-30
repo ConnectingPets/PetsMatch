@@ -42,7 +42,7 @@
                     .ThenInclude(am => am.Match)
                     .ThenInclude(m => m.AnimalMatches)
                     .ThenInclude(am => am.Animal)
-                    .Include(animal => animal.Photos)
+                    .ThenInclude(a => a.Photos)
                     .FirstOrDefaultAsync();
 
                 if (animal == null)
@@ -54,7 +54,7 @@
                     .Select(am => am.Match.AnimalMatches
                         .FirstOrDefault(am => am.AnimalId != animalId))!;
 
-                return matches
+                IEnumerable<AnimalMatchDto> animalMatches = matches
                     .Select(am => new AnimalMatchDto
                     {
                         AnimalId = am.AnimalId.ToString(),
@@ -62,6 +62,8 @@
                         Photo = am.Animal.Photos.First(p => p.IsMain).Url
                     })
                     .ToList();
+
+                return animalMatches;
             }
         }
     }

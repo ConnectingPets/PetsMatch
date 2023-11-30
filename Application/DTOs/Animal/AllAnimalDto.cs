@@ -6,6 +6,6 @@
 
         public required string Name { get; set; }
 
-        public required string MainPhoto { get; set; }
+        public /*required*/ string MainPhoto { get; set; }
     }
 }
