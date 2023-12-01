@@ -30,6 +30,8 @@ const apiUser = {
 
 const apiAnimal = {
     getAllAnimals: () => requests.get('/api/animal/allanimals'),
+    getAllCategories: () => requests.get('/api/animal/GetAllCategories'),
+    getAllBreeds: (categoryId: number) => requests.get(`/api/animal/GetBreeds/${categoryId}`),
     getAnimalById: (animalId: string) => requests.get(`/api/animal/editanimal/${animalId}`),
     addAnimal: (animalData: IAnimal) => requests.post('/api/animal/add', animalData, headers.multipart),
     editAnimalById: (animalId: string, animalData: IAnimal) => requests.patch(`/api/animal/${animalId}`, animalData, headers.multipart),

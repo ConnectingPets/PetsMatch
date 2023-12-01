@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { observer } from 'mobx-react';
 import { Form, Field } from 'react-final-form';
 import { CgAsterisk } from 'react-icons/cg';
@@ -8,6 +8,7 @@ import { FaTrashAlt } from 'react-icons/fa';
 import themeStore from '../../stores/themeStore';
 import { IAnimal } from '../../interfaces/Interfaces';
 import { addOrEditPetFormValidator } from '../../validators/addOrEditPetFormValidator';
+import agent from '../../api/axiosAgent';
 
 import FormsHeader from '../FormsHeader/FormsHeader';
 import { CLabel } from '../../components/common/CLabel/CLabel';
@@ -25,16 +26,50 @@ interface AddOrEditPetProps {
     onEditPetSubmit?: (values: IAnimal) => void,
 }
 
+interface Categories {
+    name: string,
+    animalCategoryId: number
+}
+
+interface Breeds {
+    name: string,
+    breedId: number
+}
+
 const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAddPetSubmit, data, onEditPetSubmit }) => {
-    const [breed, setBreed] = useState<boolean>(false);
+    const [categories, setCategories] = useState<Categories[]>([]);
+    const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+    const [showHideBreedField, setShowHideBreedField] = useState<boolean>(false);
+    const [breeds, setBreeds] = useState<Breeds[]>([]);
     const [isDeleteClick, setIsDeleteClick] = useState<boolean>(false);
-
-    // TO DO show images on edit-view
-
     const subjectForDelete = 'Tutsy';
 
+    useEffect(() => {
+        agent.apiAnimal.getAllCategories()
+            .then(res => {
+                setCategories(res.data);
+            });
+    }, []);
+
+    useEffect(() => {
+        if (selectedCategory) {
+            agent.apiAnimal.getAllBreeds(Number(selectedCategory))
+            .then(res => {
+                    setBreeds(res.data);
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        }
+    }, [selectedCategory]);
+
+    const loadBreeds = (categoryId: string) => {
+        setSelectedCategory(String(categoryId));
+        setShowHideBreedField(true);
+    };
+
     const onBackToCategory = () => {
-        setBreed(false);
+        setShowHideBreedField(false);
     };
 
     const onDeleteOrCancelClick = () => {
@@ -79,17 +114,16 @@ const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAd
                             </Field>
 
                             <div className="pairs">
-                                {!breed && (
+                                {!showHideBreedField && (
                                     <Field name='AnimalCategory'>
                                         {({ input, meta }) => (
                                             <div className="wrapper">
                                                 <div className="required">
                                                     <CLabel inputName='AnimalCategory' title='Category' />
                                                     <CgAsterisk className="asterisk" />
-                                                    <select {...input} name="AnimalCategory" id="AnimalCategory">
+                                                    <select {...input} onChange={(e) => loadBreeds(e.target.value)} name="AnimalCategory" id="AnimalCategory">
                                                         <option>  </option>
-                                                        <option>Dog</option>
-                                                        <option>Cat</option>
+                                                        {categories && categories.map(c => <option value={c.animalCategoryId} key={c.animalCategoryId}>{c.name}</option>)}
                                                     </select>
                                                 </div>
                                                 {meta.touched && meta.error && <span>{meta.error}</span>}
@@ -98,7 +132,7 @@ const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAd
                                     </Field>
                                 )}
 
-                                {breed && (
+                                {showHideBreedField && (
                                     <Field name='Breed'>
                                         {({ input, meta }) => (
                                             <div className="wrapper">
@@ -107,15 +141,7 @@ const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAd
                                                     <CgAsterisk className="asterisk" />
                                                     <select {...input} name="Breed" id="Breed">
                                                         <option>  </option>
-                                                        <option>Setter</option>
-                                                        <option>Golden Retriever</option>
-                                                        <option>Poodle</option>
-                                                        <option>Labrador</option>
-                                                        <option>Bulldog</option>
-                                                        <option>Beagle</option>
-                                                        <option>German Shorthaired Pointer</option>
-                                                        <option>Welsh Corgi</option>
-                                                        <option>Boxer</option>
+                                                        {breeds.map(b => <option key={b.breedId}>{b.name}</option>)}
                                                     </select>
                                                     <button onClick={onBackToCategory}><TbArrowBack /> Back to Category</button>
                                                 </div>
@@ -208,8 +234,8 @@ const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAd
                                                 <CgAsterisk className="asterisk" />
                                                 <select {...input} name="HealthStatus" id="HealthStatus">
                                                     <option>  </option>
-                                                    <option>Not vaccinated</option>
                                                     <option>Vaccinated</option>
+                                                    <option>Dewormed</option>
                                                 </select>
                                             </div>
                                             {meta.touched && meta.error && <span>{meta.error}</span>}
