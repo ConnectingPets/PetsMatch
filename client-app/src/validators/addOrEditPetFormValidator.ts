@@ -1,4 +1,4 @@
-import { combineValidators, composeValidators, isRequired, hasLengthBetween, hasLengthLessThan, isNumeric, createValidator, hasLengthGreaterThan } from 'revalidate';
+import { combineValidators, composeValidators, isRequired, hasLengthBetween, hasLengthLessThan, isNumeric, createValidator, hasLengthGreaterThan, isRequiredIf } from 'revalidate';
 
 const isAlphabeticWithSpaces = createValidator(
     message => value => {
@@ -47,15 +47,13 @@ export const addOrEditPetFormValidator = combineValidators({
         isAlphabeticWithSpaces,
         hasLengthBetween(2, 50)('This field')
     )('Name'),
-    AnimalCategory: composeValidators(
-        isRequired,
-        isAlphabeticWithSpaces,
-        hasLengthBetween(3, 30)
+    AnimalCategory: isRequiredIf(
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        values => !values.Breed
     )('Category'),
     Breed: composeValidators(
         isRequired,
-        isAlphabeticWithSpaces,
-        hasLengthBetween(5, 30)
     )('Breed'),
     Description: hasLengthLessThan(501)('This field'),
     Age: composeValidators(

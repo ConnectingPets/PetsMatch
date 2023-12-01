@@ -42,7 +42,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = observer(() => {
             <article className={themeStore.isLightTheme ?'dashboard__article ' : 'dashboard__article dashboard__article__dark '}>
                 <h3>my pets</h3>
                 <section className='dashboard__pets'>
-                    {pets.map(x => <CPetCard name={x.name} photo={x.mainPhoto} key={x.id} />)}
+                    {pets && pets.map(x => <CPetCard name={x.name} photo={x.mainPhoto} key={x.id} />)}
                     <CAddPetCard />
                 </section>
             </article>

@@ -6,7 +6,7 @@ import { TbArrowBack } from 'react-icons/tb';
 import { FaTrashAlt } from 'react-icons/fa';
 
 import themeStore from '../../stores/themeStore';
-import { IAnimal } from '../../interfaces/Interfaces';
+import { Breeds, Categories, IAnimal } from '../../interfaces/Interfaces';
 import { addOrEditPetFormValidator } from '../../validators/addOrEditPetFormValidator';
 import agent from '../../api/axiosAgent';
 
@@ -24,16 +24,6 @@ interface AddOrEditPetProps {
     onAddPetSubmit?: (values: IAnimal) => void,
     data?: IAnimal,
     onEditPetSubmit?: (values: IAnimal) => void,
-}
-
-interface Categories {
-    name: string,
-    animalCategoryId: number
-}
-
-interface Breeds {
-    name: string,
-    breedId: number
 }
 
 const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAddPetSubmit, data, onEditPetSubmit }) => {
@@ -139,9 +129,9 @@ const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAd
                                                 <div className="required">
                                                     <CLabel inputName='Breed' title='Breed' />
                                                     <CgAsterisk className="asterisk" />
-                                                    <select {...input} name="Breed" id="Breed">
+                                                    <select {...input} name="Breed.name" id="Breed">
                                                         <option>  </option>
-                                                        {breeds.map(b => <option key={b.breedId}>{b.name}</option>)}
+                                                        {breeds.map(b => <option value={b.name} key={b.breedId}>{b.name}</option>)}
                                                     </select>
                                                     <button onClick={onBackToCategory}><TbArrowBack /> Back to Category</button>
                                                 </div>
