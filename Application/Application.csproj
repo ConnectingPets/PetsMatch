@@ -8,14 +8,14 @@
   <ItemGroup>
     <PackageReference Include="CloudinaryDotNet" Version="1.23.0" />
     <PackageReference Include="MediatR" Version="12.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="AnimalCategory\" />
     <Folder Include="Animal\" />
-    <Folder Include="Conversation\" />
-    <Folder Include="Message\" />
+    <Folder Include="Breed\" />
     <Folder Include="UserPassion\" />
-    <Folder Include="User\" />
     <Folder Include="Passion\" />
   </ItemGroup>
 

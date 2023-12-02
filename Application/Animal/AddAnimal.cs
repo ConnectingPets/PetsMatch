@@ -2,14 +2,14 @@
 {
     using MediatR;
 
-    using DTOs;
     using Domain;
     using Response;
+    using DTOs.Animal;
     using Persistence.Repositories;
 
     public class AddAnimal
     {
-        public class AddAnimalCommand : IRequest<Result<Unit>>
+        public class AddAnimalCommand : IRequest<Result<string>>
         {
             public AddOrEditAnimalDto AnimalDto { get; set; } = null!;
 
@@ -17,7 +17,7 @@
         }
 
         public class AddAnimalCommandHandler :
-            IRequestHandler<AddAnimalCommand, Result<Unit>>
+            IRequestHandler<AddAnimalCommand, Result<string>>
         {
             private readonly IRepository repository;
 
@@ -26,7 +26,7 @@
                 this.repository = repository;
             }
 
-            public async Task<Result<Unit>> Handle(AddAnimalCommand request, CancellationToken cancellationToken)
+            public async Task<Result<string>> Handle(AddAnimalCommand request, CancellationToken cancellationToken)
             {
                 AddOrEditAnimalDto animalDto = request.AnimalDto;
 
@@ -51,12 +51,12 @@
                 try
                 {
                     await repository.SaveChangesAsync();
-                    return Result<Unit>.Success(Unit.Value, $"You have successfully add {animal.Name} to your pet's list");
+                    return Result<string>.Success(animal.AnimalId.ToString(), $"You have successfully add {animal.Name} to your pet's list");
                 }
                 catch (Exception)
                 {
                     return
-                        Result<Unit>.Failure($"Failed to create pet - {animal.Name}");
+                        Result<string>.Failure($"Failed to create pet - {animal.Name}");
                 }
 
             }

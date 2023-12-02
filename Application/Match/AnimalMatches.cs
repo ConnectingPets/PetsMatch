@@ -3,13 +3,14 @@
     using System.Threading;
     using System.Threading.Tasks;
 
-    using Microsoft.EntityFrameworkCore;
     using MediatR;
+    using Microsoft.EntityFrameworkCore;
 
     using Domain;
-    using Application.DTOs;
     using Persistence.Repositories;
-    using Application.Exceptions;
+    using Application.DTOs.Match;
+    using Application.Exceptions.Entity;
+    using Application.Exceptions.Animal;
 
     public class AnimalMatches
     {
@@ -40,6 +41,7 @@
                     .ThenInclude(am => am.Match)
                     .ThenInclude(m => m.AnimalMatches)
                     .ThenInclude(am => am.Animal)
+                    .ThenInclude(a => a.Photos)
                     .FirstOrDefaultAsync();
 
                 if (animal == null)
@@ -51,14 +53,16 @@
                     .Select(am => am.Match.AnimalMatches
                         .FirstOrDefault(am => am.AnimalId != animalId))!;
 
-                return matches
+                IEnumerable<AnimalMatchDto> animalMatches = matches
                     .Select(am => new AnimalMatchDto
                     {
                         AnimalId = am.AnimalId.ToString(),
                         Name = am.Animal.Name,
-                        //Photo = Convert.ToBase64String(am.Animal.Photo)
+                        Photo = am.Animal.Photos.First(p => p.IsMain).Url
                     })
                     .ToList();
+
+                return animalMatches;
             }
         }
     }

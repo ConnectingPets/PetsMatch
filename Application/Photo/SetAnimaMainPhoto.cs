@@ -5,10 +5,10 @@
 
     using MediatR;
 
-    using Response;
-    using Service.Interfaces;
     using Domain;
     using Persistence.Repositories;
+    using Service.Interfaces;
+    using Response;
 
     public class SetAnimaMainPhoto
     {
@@ -41,7 +41,7 @@
                     return Result<Unit>.Failure("This photo does not exist! Please select existing one");
                 }
                 return await photoService.
-                    SetAnimalMainPhotoAsync(photoId, photo);
+                    SetAnimalMainPhotoAsync(photo);
             }
         }
     }

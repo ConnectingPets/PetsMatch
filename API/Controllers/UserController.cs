@@ -1,80 +1,50 @@
-﻿using Application;
-using Application.DTOs;
-using Application.Service.Interfaces;
-using Domain;
-using Domain.ViewModels;
-using MediatR;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-
-namespace API.Controllers
+﻿namespace API.Controllers
 {
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Authorization;
+
+    using Domain;
+    using API.Infrastructure;
+    using Application.DTOs.User;
+    using Application.Service.Interfaces;
+    using Application.Exceptions.User;
+    using static Common.ExceptionMessages.Entity;
+
+    [AllowAnonymous]
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : Controller
     {
-        private readonly SignInManager<User> signInManager;
-        private readonly UserManager<User> userManager;
+        private readonly IUserService userService;
         private readonly ITokenService tokenService;
-        private readonly IMediator mediator;
 
         public UserController(
-            SignInManager<User> signInManager,
-            UserManager<User> userManager,
-            IMediator mediator,
+            IUserService userService,
             ITokenService tokenService)
         {
-            this.signInManager = signInManager;
-            this.userManager = userManager;
-            this.mediator = mediator;
+            this.userService = userService;
             this.tokenService = tokenService;
         }
 
-        [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody]RegisterUserDto model) 
+        [Route("register")]
+        [HttpPost]
+        public async Task<IActionResult> Register([FromBody] RegisterUserDto registerDto) 
         {
-            if (!ModelState.IsValid)
+            User user;
+            try
             {
-                return BadRequest(ModelState);
+                user = await this.userService.RegisterAsync(
+                    registerDto.Email,
+                    registerDto.Password,
+                    registerDto.Name);
             }
-
-            RegisterRequest request = new RegisterRequest(model);
-
-            User user = await mediator.Send(request, CancellationToken.None);
-
-            if (user == null)
+            catch (UserResultNotSucceededException ex)
             {
-                return BadRequest();
+                return Unauthorized(ex.Message);
             }
-
-            await signInManager.SignInAsync(user, false);
-
-            UserDto userObj = CreateUserObject(user);
-
-            return Ok(userObj);
-        }
-
-        [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody]LoginUserDto model)
-        {
-            if (!ModelState.IsValid)
+            catch
             {
-                return BadRequest(model);
-            }
-
-            User? user = await this.userManager
-                   .FindByEmailAsync(model.Email);
-
-            if (user == null)
-            {
-                return Unauthorized();
-            }
-
-            var result = await signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, false);
-
-            if (!result.Succeeded)
-            {
-                return Unauthorized(new { Message = "Invalid username or password" });
+                return StatusCode(500, InternalServerError);
             }
 
             UserDto userObj = CreateUserObject(user);
@@ -82,20 +52,61 @@ namespace API.Controllers
             return Ok(userObj);
         }
 
-        [HttpPost("logout")]
+        [Route("login")]
+        [HttpPost]
+        public async Task<IActionResult> Login([FromBody] LoginUserDto loginDto)
+        {
+            User user;
+            try
+            {
+                user = await this.userService.LoginAsync(
+                    loginDto.Email,
+                    loginDto.Password,
+                    loginDto.RememberMe);
+            }
+            catch (UserNotFoundException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
+            catch (UserResultNotSucceededException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
+            catch
+            {
+                return StatusCode(500, InternalServerError);
+            }
+
+            UserDto userObj = CreateUserObject(user);
+
+            return Ok(userObj);
+        }
+
+        [Authorize]
+        [Route("logout")]
+        [HttpPost]
         public async Task<IActionResult> Logout()
         {
-            await signInManager.SignOutAsync();
+            try
+            {
+                await this.userService.LogoutAsync(User!.GetById());
+            }
+            catch (UserNotFoundException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
+            catch
+            {
+                return StatusCode(500, InternalServerError);
+            }
 
-            return Ok(new { Message = "Logout successful" });
+            return Ok();
         }
 
         private UserDto CreateUserObject(User user)
             => new UserDto
             {
-                //Photo = user.Photo != null 
-                //    ? Convert.ToBase64String(user.Photo)
-                //    : null,
+                Photo = null,
                 Name = user.Name,
                 Token = this.tokenService.CreateToken(user)
             };

@@ -1,12 +1,17 @@
 ﻿namespace API.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
-    
-    using Application.DTOs;
+    using Microsoft.AspNetCore.Authorization;
+
+    using API.Infrastructure;
+    using Application.DTOs.Swipe;
     using Application.Service.Interfaces;
-    using Application.Exceptions;
+    using Application.Exceptions.Entity;
+    using Application.Exceptions.Animal;
+    using Application.Exceptions.User;
     using static Common.ExceptionMessages.Entity;
 
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class SwipeController : ControllerBase
@@ -48,6 +53,31 @@
             }
 
             return Ok(isMatch);
+        }
+
+        [Route("animals")]
+        [HttpGet]
+        public async Task<ActionResult> AnimalsToSwipe()
+        {
+            IEnumerable<AnimalToSwipeDto> animalsToSwipe;
+            try
+            {
+                animalsToSwipe = await this.swipeService.GetAnimalsToSwipe(User.GetById());
+            }
+            catch (InvalidGuidFormatException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (UserNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch
+            {
+                return StatusCode(500, InternalServerError);
+            }
+
+            return Ok(animalsToSwipe);
         }
     }
 }

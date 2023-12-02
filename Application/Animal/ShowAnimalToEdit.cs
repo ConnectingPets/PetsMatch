@@ -6,10 +6,11 @@
     using MediatR;
     using Microsoft.EntityFrameworkCore;
 
-    using DTOs;
     using Domain;
-    using Response;
     using Persistence.Repositories;
+    using Application.DTOs.Animal;
+    using Application.DTOs.Photo;
+    using Response;
 
     public class ShowAnimalToEdit
     {

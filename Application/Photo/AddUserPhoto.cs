@@ -6,10 +6,10 @@
     using Microsoft.AspNetCore.Http;
     using MediatR;
 
+    using Domain;
     using Response;
     using Service.Interfaces;
     using Persistence.Repositories;
-    using Domain;
 
     public class AddUserPhoto
     {

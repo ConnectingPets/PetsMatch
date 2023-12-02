@@ -6,11 +6,11 @@
     using MediatR;
     using Microsoft.EntityFrameworkCore;
 
-    using DTOs;
     using Domain;
-    using Response;
-    using Persistence.Repositories;
     using Persistence;
+    using Persistence.Repositories;
+    using Application.DTOs.Animal;
+    using Response;
 
     public class AllAnimal
     {
@@ -40,7 +40,7 @@
 
                 if (!(user!.Animals.Any()))
                 {
-                    return Result<IEnumerable<AllAnimalDto>>.Failure("You don't hav pets yet");
+                    return Result<IEnumerable<AllAnimalDto>>.Failure("You don't have pets yet");
                 }
 
                 var userAnimals = await repository.

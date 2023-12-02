@@ -1,6 +1,6 @@
 ﻿namespace Application.Service.Interfaces
 {
-    using Application.DTOs;
+    using Application.DTOs.Match;
 
     public interface IMatchService 
     {

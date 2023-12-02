@@ -5,16 +5,15 @@
 
     using MediatR;
 
-    using Persistence.Repositories;
-    using Response;
     using Domain;
+    using Persistence.Repositories;
     using Service.Interfaces;
+    using Response;
 
     public class DeleteUserPhoto
     {
         public class DeleteUserPhotoCommand : IRequest<Result<Unit>>
         {
-            public string PublicId { get; set; } = null!;
             public string UserId { get; set; } = null!;
         }
 
@@ -32,17 +31,27 @@
 
             public async Task<Result<Unit>> Handle(DeleteUserPhotoCommand request, CancellationToken cancellationToken)
             {
-                string photoId = request.PublicId;
-                Photo? photo = await repository.
-               FirstOrDefaultAsync<Photo>(p => p.Id == photoId);
+                string userId = request.UserId;
+
+                User? user = await repository.
+               FirstOrDefaultAsync<User>(u => u.Id.ToString() == userId);
+                string photoId = user!.PhotoId!;
+
+                Photo? photo = await repository.FirstOrDefaultAsync<Photo>(p => p.Id == photoId);
+
+                if (photoId == null)
+                {
+                    return Result<Unit>.Failure("You don't have photo yet!");
+                }
 
                 if (photo == null)
                 {
                     return Result<Unit>.Failure("This photo does not exist! Please select existing one");
                 }
 
-                return await photoService.DeleteUserPhotoAsync(photoId, photo, request.UserId);
+                return 
+                    await photoService.DeleteUserPhotoAsync(photo, userId);
             }
         }
-    }
+    }   
 }

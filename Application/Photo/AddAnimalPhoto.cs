@@ -1,14 +1,14 @@
 ﻿namespace Application.Photo
 {
-    using Microsoft.AspNetCore.Http;
     using MediatR;
-
-    using Response;
-    using Service.Interfaces;
-    using Domain;
-    using Persistence.Repositories;
-    using Persistence;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.EntityFrameworkCore;
+
+    using Domain;
+    using Persistence;
+    using Persistence.Repositories;
+    using Service.Interfaces;
+    using Response;
 
     public class AddAnimalPhoto
     {
@@ -66,7 +66,7 @@
                     return Result<string>.Failure("You already have 6 photos of this animal. You cannot add more");
                 }
 
-                var result = await photoService.AddAnimalPhotoAsync(file, animalId, animal);
+                var result = await photoService.AddAnimalPhotoAsync(file, animal);
 
                 return result;
             }

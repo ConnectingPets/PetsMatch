@@ -1,12 +1,16 @@
 namespace API.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Authorization;
 
-    using Application.DTOs;
+    using Application.DTOs.Match;
     using Application.Service.Interfaces;
-    using Application.Exceptions;
+    using Application.Exceptions.Entity;
+    using Application.Exceptions.Animal;
+    using Application.Exceptions.Match;
     using static Common.ExceptionMessages.Entity;
 
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class MatchController : ControllerBase 

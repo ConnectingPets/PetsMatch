@@ -11,6 +11,15 @@
     [Comment("message table")]
     public class Message
     {
+        public Message()
+        {
+            this.MessageId = Guid.NewGuid();
+        }
+
+        [Comment("message id")]
+        [Key]
+        public Guid MessageId { get; set; }
+
         [Comment("message animal id")]
         public required Guid AnimalId { get; set; }
 
@@ -18,12 +27,12 @@
         [ForeignKey(nameof(AnimalId))]
         public Animal Animal { get; set; } = null!;
 
-        [Comment("message conversation id")]
-        public required Guid ConversationId { get; set; }
+        [Comment("message match id")]
+        public required Guid MatchId { get; set; }
 
         [Comment("message conversation")]
-        [ForeignKey(nameof(ConversationId))]
-        public Conversation Conversation { get; set; } = null!;
+        [ForeignKey(nameof(MatchId))]
+        public Match Match { get; set; } = null!;
 
         [Comment("message content")]
         [StringLength(ContentMaxLength, ErrorMessage = InvalidContentLength)]

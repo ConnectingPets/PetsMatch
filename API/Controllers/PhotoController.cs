@@ -1,9 +1,9 @@
 ﻿namespace API.Controllers
 {
+    using MediatR;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Authorization;
-    using MediatR;
 
     using Infrastructure;
     using static Application.Photo.AddUserPhoto;
@@ -47,12 +47,11 @@
             return new JsonResult(result);
         }
 
-        [HttpDelete("DeleteUserPhoto/{photoId}")]
-        public async Task<IActionResult> DeleteUserPhoto([FromRoute] string photoId)
+        [HttpDelete("DeleteUserPhoto")]
+        public async Task<IActionResult> DeleteUserPhoto()
         {
             DeleteUserPhotoCommand command = new DeleteUserPhotoCommand()
             {
-                PublicId = photoId,
                 UserId = this.User.GetById()
             };
 

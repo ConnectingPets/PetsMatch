@@ -21,13 +21,15 @@ namespace Persistence
 
         public DbSet<Breed> Breeds { get; set; } = null!;
 
-        public DbSet<Conversation> Conversations { get; set; } = null!;
-        
         public DbSet<Passion> Passions { get; set; } = null!;
 
         public DbSet<Match> Matches { get; set; } = null!;
 
+        public DbSet<Message> Messages { get; set; } = null!;
+
         public DbSet<Photo> Photos { get; set; } = null!;
+
+        public DbSet<Swipe> Swipes { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

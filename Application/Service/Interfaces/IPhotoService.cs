@@ -3,15 +3,15 @@
     using MediatR;
     using Microsoft.AspNetCore.Http;
 
-    using Response;
     using Domain;
+    using Response;
 
     public interface IPhotoService
     {
         Task<Result<Unit>> AddUserPhotoAsync(IFormFile file, string userId);
-        Task<Result<string>> AddAnimalPhotoAsync(IFormFile file, string animalId, Animal animal);
-        Task<Result<Unit>> DeleteAnimalPhotoAsync(string photoId, Photo photo);
-        Task<Result<Unit>> DeleteUserPhotoAsync(string photoId, Photo photo, string userId);
-        Task<Result<Unit>> SetAnimalMainPhotoAsync(string photoId, Photo photo);
+        Task<Result<string>> AddAnimalPhotoAsync(IFormFile file, Animal animal);
+        Task<Result<Unit>> DeleteAnimalPhotoAsync(Photo photo);
+        Task<Result<Unit>> DeleteUserPhotoAsync(Photo photo, string userId);
+        Task<Result<Unit>> SetAnimalMainPhotoAsync(Photo photo);
     }
 }
