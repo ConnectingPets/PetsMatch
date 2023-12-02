@@ -15,20 +15,20 @@ export interface IUser {
 }
 
 export interface IAnimal {
-    AnimalId: string | undefined,
-    Name: string | undefined,
+    AnimalId: string,
+    Name: string,
     AnimalCategory?: Categories,
-    Breed: Breeds,
-    Description?: string | undefined,
-    Age: string | undefined,
-    BirthDate?: string | undefined,
-    IsEducated: string | undefined,
-    Photo: [] | undefined,
-    HealthStatus: string | undefined,
-    Gender: string | undefined,
-    SocialMedia?: string | undefined,
-    Weight?: string | undefined,
-    IsHavingValidDocuments: string | undefined
+    BreedId: Breeds,
+    Description?: string,
+    Age: number,
+    BirthDate?: Date,
+    IsEducated: string | boolean,
+    Photo: [],
+    HealthStatus: number,
+    Gender: number,
+    SocialMedia?: string,
+    Weight?: number,
+    IsHavingValidDocuments: string | boolean
 }
 
 export interface Categories {

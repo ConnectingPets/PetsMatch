@@ -50,9 +50,9 @@ export const addOrEditPetFormValidator = combineValidators({
     AnimalCategory: isRequiredIf(
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        values => !values.Breed
+        values => !values.BreedId
     )('Category'),
-    Breed: composeValidators(
+    BreedId: composeValidators(
         isRequired,
     )('Breed'),
     Description: hasLengthLessThan(501)('This field'),

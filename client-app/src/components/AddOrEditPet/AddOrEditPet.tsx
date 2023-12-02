@@ -123,15 +123,15 @@ const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAd
                                 )}
 
                                 {showHideBreedField && (
-                                    <Field name='Breed'>
+                                    <Field name='BreedId'>
                                         {({ input, meta }) => (
                                             <div className="wrapper">
                                                 <div className="required">
-                                                    <CLabel inputName='Breed' title='Breed' />
+                                                    <CLabel inputName='BreedId' title='Breed' />
                                                     <CgAsterisk className="asterisk" />
-                                                    <select {...input} name="Breed.name" id="Breed">
+                                                    <select {...input} name="BreedId.breedId" id="Breed">
                                                         <option>  </option>
-                                                        {breeds.map(b => <option value={b.name} key={b.breedId}>{b.name}</option>)}
+                                                        {breeds.map(b => <option value={b.breedId} key={b.breedId}>{b.name}</option>)}
                                                     </select>
                                                     <button onClick={onBackToCategory}><TbArrowBack /> Back to Category</button>
                                                 </div>
