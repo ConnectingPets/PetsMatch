@@ -40,7 +40,7 @@
 
                 if (!(user!.Animals.Any()))
                 {
-                    return Result<IEnumerable<AllAnimalDto>>.Failure("You don't hav pets yet");
+                    return Result<IEnumerable<AllAnimalDto>>.Failure("You don't have pets yet");
                 }
 
                 var userAnimals = await repository.

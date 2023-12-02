@@ -47,12 +47,11 @@
             return new JsonResult(result);
         }
 
-        [HttpDelete("DeleteUserPhoto/{photoId}")]
-        public async Task<IActionResult> DeleteUserPhoto([FromRoute] string photoId)
+        [HttpDelete("DeleteUserPhoto")]
+        public async Task<IActionResult> DeleteUserPhoto()
         {
             DeleteUserPhotoCommand command = new DeleteUserPhotoCommand()
             {
-                PublicId = photoId,
                 UserId = this.User.GetById()
             };
 

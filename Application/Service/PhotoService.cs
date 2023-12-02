@@ -164,7 +164,7 @@
             }
         }
 
-        public async Task<Result<Unit>> DeleteUserPhotoAsync(string photoId, Photo photo, string userId)
+        public async Task<Result<Unit>> DeleteUserPhotoAsync(Photo photo, string userId, string photoId)
         {
             using var transaction =
                 await dataContext.Database.BeginTransactionAsync();
