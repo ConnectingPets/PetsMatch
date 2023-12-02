@@ -49,7 +49,8 @@
                     return Result<Unit>.Failure("This photo does not exist! Please select existing one");
                 }
 
-                return await photoService.DeleteUserPhotoAsync(photo, userId, photoId);
+                return 
+                    await photoService.DeleteUserPhotoAsync(photo, userId);
             }
         }
     }   

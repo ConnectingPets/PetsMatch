@@ -45,7 +45,7 @@
                     return Result<Unit>.Failure("This is your main photo! You can not delete it");
                 }
 
-                return await photoService.DeleteAnimalPhotoAsync(photoId, photo);
+                return await photoService.DeleteAnimalPhotoAsync(photo);
             }
         }
     }

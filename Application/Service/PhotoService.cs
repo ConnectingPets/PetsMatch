@@ -28,7 +28,7 @@
             this.dataContext = dataContext;
         }
 
-        public async Task<Result<string>> AddAnimalPhotoAsync(IFormFile file, string animalId, Animal animal)
+        public async Task<Result<string>> AddAnimalPhotoAsync(IFormFile file, Animal animal)
         {
             using var transaction =
                 await dataContext.Database.BeginTransactionAsync();
@@ -59,7 +59,7 @@
                     Id = imageUploadResult.PublicId,
                     IsMain = false,
                     Url = imageUploadResult.Url.AbsoluteUri,
-                    AnimalId = Guid.Parse(animalId)
+                    AnimalId = animal.AnimalId
                 };
 
                 await repository.AddAsync(photo);
@@ -126,13 +126,13 @@
             }
         }
 
-        public async Task<Result<Unit>> DeleteAnimalPhotoAsync(string photoId, Photo photo)
+        public async Task<Result<Unit>> DeleteAnimalPhotoAsync(Photo photo)
         {
             using var transaction =
                 await dataContext.Database.BeginTransactionAsync();
             try
             {
-                var deleteParams = new DeletionParams(photoId);
+                var deleteParams = new DeletionParams(photo.Id);
 
                 try
                 {
@@ -164,13 +164,13 @@
             }
         }
 
-        public async Task<Result<Unit>> DeleteUserPhotoAsync(Photo photo, string userId, string photoId)
+        public async Task<Result<Unit>> DeleteUserPhotoAsync(Photo photo, string userId)
         {
             using var transaction =
                 await dataContext.Database.BeginTransactionAsync();
             try
             {
-                var deleteParams = new DeletionParams(photoId);
+                var deleteParams = new DeletionParams(photo.Id);
 
                 try
                 {
@@ -206,7 +206,7 @@
             }
         }
 
-        public async Task<Result<Unit>> SetAnimalMainPhotoAsync(string photoId, Photo photo)
+        public async Task<Result<Unit>> SetAnimalMainPhotoAsync(Photo photo)
         {
             Photo? oldMainPhoto = await repository
                 .FirstOrDefaultAsync<Photo>(p => p.IsMain

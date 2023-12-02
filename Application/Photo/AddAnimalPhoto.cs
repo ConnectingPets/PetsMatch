@@ -66,7 +66,7 @@
                     return Result<string>.Failure("You already have 6 photos of this animal. You cannot add more");
                 }
 
-                var result = await photoService.AddAnimalPhotoAsync(file, animalId, animal);
+                var result = await photoService.AddAnimalPhotoAsync(file, animal);
 
                 return result;
             }
