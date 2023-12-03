@@ -78,7 +78,12 @@ const EditPetPage: React.FC<EditPetPageProps> = () => {
                 const res = await agent.apiAnimal.editAnimalById(petId, newValues);
 
                 navigate('/dashboard');
-                toast.success(res.successMessage);
+
+                if (res.isSuccess) {
+                    toast.success(res.successMessage);
+                } else {
+                    toast.error(res.errorMessage);
+                }
             }
         } catch (err) {
             console.error(err);
@@ -86,7 +91,7 @@ const EditPetPage: React.FC<EditPetPageProps> = () => {
     };
 
     return (
-        <AddOrEditPet addOrEditPet={addOrEditPet} petData={petData} onEditPetSubmit={onEditPetSubmit} />
+        <AddOrEditPet addOrEditPet={addOrEditPet} petData={petData} onEditPetSubmit={onEditPetSubmit} petId={petId} />
     );
 };
 

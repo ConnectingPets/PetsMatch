@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import { Form, Field } from 'react-final-form';
 import { CgAsterisk } from 'react-icons/cg';
 import { TbArrowBack } from 'react-icons/tb';
 import { FaTrashAlt } from 'react-icons/fa';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import themeStore from '../../stores/themeStore';
 import { Breeds, Categories, IAnimal } from '../../interfaces/Interfaces';
@@ -24,15 +27,16 @@ interface AddOrEditPetProps {
     onAddPetSubmit?: (values: IAnimal) => void,
     petData?: IAnimal | null,
     onEditPetSubmit?: (values: IAnimal) => void,
+    petId?: string
 }
 
-const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAddPetSubmit, petData, onEditPetSubmit }) => {
+const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAddPetSubmit, petData, onEditPetSubmit, petId }) => {
+    const navigate = useNavigate();
     const [categories, setCategories] = useState<Categories[]>([]);
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
     const [showHideBreedField, setShowHideBreedField] = useState<boolean>(false);
     const [breeds, setBreeds] = useState<Breeds[]>([]);
     const [isDeleteClick, setIsDeleteClick] = useState<boolean>(false);
-    const subjectForDelete = 'Tutsy';
 
     useEffect(() => {
         agent.apiAnimal.getAllCategories()
@@ -44,7 +48,7 @@ const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAd
     useEffect(() => {
         if (selectedCategory) {
             agent.apiAnimal.getAllBreeds(Number(selectedCategory))
-            .then(res => {
+                .then(res => {
                     setBreeds(res.data);
                 })
                 .catch(error => {
@@ -66,9 +70,22 @@ const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAd
         setIsDeleteClick(state => !state);
     };
 
-    const onConfirmDelete = () => {
+    const onConfirmDelete = async () => {
+        try {
+            if (petId) {
+                const res = await agent.apiAnimal.deleteAnimal(petId);
 
-        // TO DO .....
+                navigate('/dashboard');
+
+                if (res.isSuccess) {
+                    toast.success(res.successMessage);
+                } else {
+                    toast.error(res.errorMessage);
+                }
+            }
+        } catch (err) {
+            console.error(err);
+        }
     };
 
     return (
@@ -289,7 +306,7 @@ const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAd
             </section>
 
             {isDeleteClick && (
-                <DeleteModal subjectForDelete={subjectForDelete} onDeleteOrCancelClick={onDeleteOrCancelClick} onConfirmDelete={onConfirmDelete} />
+                <DeleteModal subjectForDelete={petData?.Name} onDeleteOrCancelClick={onDeleteOrCancelClick} onConfirmDelete={onConfirmDelete} />
             )}
 
             <Footer />

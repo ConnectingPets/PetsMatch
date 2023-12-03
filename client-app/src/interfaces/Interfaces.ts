@@ -23,7 +23,7 @@ export interface IAnimal {
     Age: number,
     BirthDate?: Date,
     IsEducated: string | boolean,
-    Photo: [],
+    Photo: File[],
     HealthStatus: number,
     Gender: number,
     SocialMedia?: string,
