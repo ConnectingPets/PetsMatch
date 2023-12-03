@@ -1,46 +1,92 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import { IAnimal } from '../../interfaces/Interfaces';
+import { returnCorrectTypesForAddOrEditPetForm } from '../../utils/convertTypes';
+import { GenderEnum, HealthStatusEnum, genderEnum, healthStatusEnum } from '../../utils/constants';
+import agent from '../../api/axiosAgent';
 
 import AddOrEditPet from '../../components/AddOrEditPet/AddOrEditPet';
 
 interface EditPetPageProps { }
 
-const EditPetPage: React.FC<EditPetPageProps> = () => {
+interface PetValues {
+    age: number,
+    birthDate: string,
+    description: string,
+    gender: number,
+    healthStatus: number,
+    isEducated: boolean,
+    isHavingValidDocuments: boolean,
+    name: string,
+    socialMedia: string,
+    weight: number
+}
 
-    const addOrEditPet = 'edit';
+const returnCorrectTypes = (data: PetValues) => {
+    const genderValue = Object.keys(genderEnum).filter(x => genderEnum[x as keyof GenderEnum] == data.gender)[0];
+    const healthStatusValue = Object.keys(healthStatusEnum).filter(x => healthStatusEnum[x as keyof HealthStatusEnum] == data.healthStatus)[0];
 
-    const data = {
-        AnimalId: '123',
-        Name: 'Rumen',
-        AnimalCategory: 'dog',
-        Breed: 'setter',
-        Description: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sit, quis culpa molestiae modi et repellendus eum facere dolorem soluta quibusdam temporibus, vitae totam eligendi nesciunt atque! Ea commodi quae expedita!',
-        Age: '2',
-        BirthDate: '2023-11-16',
-        IsEducated: 'Yes',
-        Photo: '???',
-        // Photo: {
-        //     lastModified: 1699371298685,
-        //     name: 'dog-404.png',
-        //     size: 77796,
-        //     type: 'image/png',
-        //     webkitRelativePath: ''
-        // },
-        HealthStatus: 'Vaccinated',
-        Gender: 'Male',
-        SocialMedia: 'http://localhost:3000/add-pet',
-        Weight: '20',
-        IsHavingValidDocuments: 'Yes'
+    const inputDate = new Date(data.birthDate);
+    const year = inputDate.getFullYear();
+    const month = String(inputDate.getMonth() + 1).padStart(2, '0');
+    const day = String(inputDate.getDate()).padStart(2, '0');
+    const birthDateValue = `${year}-${month}-${day}`;
+
+    const isEducatedValue = data.isEducated == true ? 'Yes' : 'No';
+    const isHavingValidDocumentsValue = data.isHavingValidDocuments == true ? 'Yes' : 'No';
+
+    const petData = {
+        Age: data.age,
+        BirthDate: birthDateValue,
+        Description: data.description,
+        Gender: genderValue,
+        HealthStatus: healthStatusValue,
+        IsEducated: isEducatedValue,
+        IsHavingValidDocuments: isHavingValidDocumentsValue,
+        Name: data.name,
+        SocialMedia: data.socialMedia,
+        Weight: data.weight
     };
 
-    const onEditPetSubmit = (values: IAnimal) => {
+    return petData;
+};
 
-        console.log(values);
+const EditPetPage: React.FC<EditPetPageProps> = () => {
+    const { petId } = useParams();
+    const navigate = useNavigate();
+    const [petData, setPetData] = useState<IAnimal | null>(null);
+    const addOrEditPet = 'edit';
+
+    useEffect(() => {
+        if (petId) {
+            agent.apiAnimal.getAnimalById(petId)
+                .then(res => {
+                    const petValues = returnCorrectTypes(res.data);
+                    setPetData(petValues);
+                });
+        }
+    }, [petId]);
+
+    const onEditPetSubmit = async (values: IAnimal) => {
+        const newValues = returnCorrectTypesForAddOrEditPetForm(values);
+
+        try {
+            if (petId) {
+                const res = await agent.apiAnimal.editAnimalById(petId, newValues);
+
+                navigate('/dashboard');
+                toast.success(res.successMessage);
+            }
+        } catch (err) {
+            console.error(err);
+        }
     };
 
     return (
-        <AddOrEditPet addOrEditPet={addOrEditPet} data={data} onEditPetSubmit={onEditPetSubmit} />
+        <AddOrEditPet addOrEditPet={addOrEditPet} petData={petData} onEditPetSubmit={onEditPetSubmit} />
     );
 };
 

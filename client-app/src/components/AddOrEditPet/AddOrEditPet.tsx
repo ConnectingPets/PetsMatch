@@ -22,11 +22,11 @@ import '../../global-styles/forms.scss';
 interface AddOrEditPetProps {
     addOrEditPet: string,
     onAddPetSubmit?: (values: IAnimal) => void,
-    data?: IAnimal,
+    petData?: IAnimal | null,
     onEditPetSubmit?: (values: IAnimal) => void,
 }
 
-const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAddPetSubmit, data, onEditPetSubmit }) => {
+const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAddPetSubmit, petData, onEditPetSubmit }) => {
     const [categories, setCategories] = useState<Categories[]>([]);
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
     const [showHideBreedField, setShowHideBreedField] = useState<boolean>(false);
@@ -79,7 +79,7 @@ const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAd
                 <p>Fields with "<CgAsterisk className="asterisk" />" are required!</p>
 
                 <Form
-                    initialValues={data}
+                    initialValues={petData}
                     validate={addOrEditPetFormValidator}
                     onSubmit={(values: IAnimal) => {
                         if (addOrEditPet === 'add' && onAddPetSubmit) {
