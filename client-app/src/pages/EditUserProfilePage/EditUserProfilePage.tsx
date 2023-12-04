@@ -14,41 +14,20 @@ import UserPhoto from '../../components/UserPhoto/UserPhoto';
 import { CSubmitButton } from '../../components/common/CSubmitButton/CSubmitButton';
 import DeleteModal from '../../components/DeleteModal/DeleteModal';
 import Footer from '../../components/Footer/Footer';
+import userStore from '../../stores/userStore';
 
 interface EditUserProfilePageProps { }
 
 const EditUserProfilePage: React.FC<EditUserProfilePageProps> = observer(() => {
-    const [errors, setErrors] = useState<IUser | null>(null);
     const [isDeleteClick, setIsDeleteClick] = useState<boolean>(false);
 
     const title = 'Edit My Profile';
     const subjectForDelete = 'this profile';
 
-    const user: IUser = {
-        Id: '123',
-        Name: 'John Doe',
-        Email: 'john-doe@gmail.com',
-        Description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos, ea iure totam quibusdam officiis eius soluta vitae quidem nemo nostrum perspiciatis exercitationem blanditiis voluptatem magnam libero ratione assumenda quod doloremque?',
-        Age: 25,
-        Education: 'Economic',
-        Photo: '??',
-        JobTitle: 'Sales Manager',
-        Gender: 'Male',
-        Address: '72 Evesham Rd',
-        City: 'Liverpool'
-    };
-
     //  TO DO show user photo
 
     const onEditUserProfileSubmit = (values: IUser) => {
-        setErrors(null);
-        const err = editUserProfileFormValidator(values);
-
-        if (Object.keys(err).length != 0) {
-            setErrors(err);
-        } else {
-            console.log(values);
-        }
+        // TO DO .....
     };
 
     const onDeleteOrCancelClick = () => {
@@ -68,60 +47,61 @@ const EditUserProfilePage: React.FC<EditUserProfilePageProps> = observer(() => {
                 <p>Fields with "<CgAsterisk className="asterisk" />" are required!</p>
 
                 <Form
-                    initialValues={user}
+                    initialValues={userStore.user}
                     onSubmit={onEditUserProfileSubmit}
+                    validate={editUserProfileFormValidator}
                     render={({ handleSubmit }) => (
 
                         <form className={themeStore.isLightTheme ? '' : 'dark'} onSubmit={handleSubmit}>
                             <Field name='Name'>
-                                {({ input }) => (
+                                {({ input, meta }) => (
                                     <>
                                         <div className="required">
                                             <CLabel inputName='Name' title='Name' />
                                             <CgAsterisk className="asterisk" />
                                         </div>
                                         <input type="text" {...input} name='Name' id='Name' placeholder='John' />
-                                        {errors && <span>{errors.Name}</span>}
+                                        {meta.touched && meta.error && <span>{meta.error}</span>}
                                     </>
                                 )}
                             </Field>
 
                             <Field name='Email'>
-                                {({ input }) => (
+                                {({ input, meta }) => (
                                     <>
                                         <div className="required">
                                             <CLabel inputName='Email' title='Email' />
                                             <CgAsterisk className="asterisk" />
                                         </div>
                                         <input type="text" {...input} name='Email' id='Email' placeholder='john-doe@gmail.com' />
-                                        {errors && <span>{errors.Email}</span>}
+                                        {meta.touched && meta.error && <span>{meta.error}</span>}
                                     </>
                                 )}
                             </Field>
 
                             <Field name='Description'>
-                                {({ input }) => (
+                                {({ input, meta }) => (
                                     <>
                                         <CLabel inputName='Description' title='Description' />
                                         <textarea {...input} name="Description" id="Description" placeholder='  .....' />
-                                        {errors && <span>{errors.Description}</span>}
+                                        {meta.touched && meta.error && <span>{meta.error}</span>}
                                     </>
                                 )}
                             </Field>
 
                             <div className="pairs">
                                 <Field name='Age'>
-                                    {({ input }) => (
+                                    {({ input, meta }) => (
                                         <div className="wrapper">
                                             <CLabel inputName='Age' title='Age' />
                                             <input type="text" {...input} name='Age' id='Age' placeholder='25' />
-                                            {errors && <span>{errors.Age}</span>}
+                                            {meta.touched && meta.error && <span>{meta.error}</span>}
                                         </div>
                                     )}
                                 </Field>
 
                                 <Field name='Gender'>
-                                    {({ input }) => (
+                                    {({ input, meta }) => (
                                         <div className="wrapper">
                                             <CLabel inputName='Gender' title='Gender' />
                                             <select {...input} name="Gender" id="Gender">
@@ -130,55 +110,58 @@ const EditUserProfilePage: React.FC<EditUserProfilePageProps> = observer(() => {
                                                 <option>Female</option>
                                                 <option>Other</option>
                                             </select>
-                                            {errors && <span>{errors.Gender}</span>}
+                                            {meta.touched && meta.error && <span>{meta.error}</span>}
                                         </div>
                                     )}
                                 </Field>
                             </div>
 
                             <Field name='Education'>
-                                {({ input }) => (
+                                {({ input, meta }) => (
                                     <>
                                         <CLabel inputName='Education' title='Education' />
                                         <input type='text' {...input} name='Education' id='Education' placeholder='Economic' />
-                                        {errors && <span>{errors.Education}</span>}
+                                        {meta.touched && meta.error && <span>{meta.error}</span>}
                                     </>
                                 )}
                             </Field>
 
                             <Field name='JobTitle'>
-                                {({ input }) => (
+                                {({ input, meta }) => (
                                     <>
                                         <CLabel inputName='JobTitle' title='Job Title' />
                                         <input type="text" {...input} name='JobTitle' id='JobTitle' placeholder='Sales Manager' />
-                                        {errors && <span>{errors.JobTitle}</span>}
+                                        {meta.touched && meta.error && <span>{meta.error}</span>}
                                     </>
                                 )}
                             </Field>
 
                             <Field name='Address'>
-                                {({ input }) => (
+                                {({ input, meta }) => (
                                     <>
                                         <CLabel inputName='Address' title='Address' />
                                         <input type="text" {...input} name='Address' id='Address' placeholder='72 Evesham Rd' />
-                                        {errors && <span>{errors.Address}</span>}
+                                        {meta.touched && meta.error && <span>{meta.error}</span>}
                                     </>
                                 )}
                             </Field>
 
                             <Field name='City'>
-                                {({ input }) => (
+                                {({ input, meta }) => (
                                     <>
                                         <CLabel inputName='City' title='City' />
                                         <input type="text" {...input} name='City' id='City' placeholder='Liverpool' />
-                                        {errors && <span>{errors.City}</span>}
+                                        {meta.touched && meta.error && <span>{meta.error}</span>}
                                     </>
                                 )}
                             </Field>
 
                             <Field name='Photo'>
-                                {({ input }) => (
-                                    <UserPhoto errors={errors} input={input} />
+                                {({ input, meta }) => (
+                                    <>
+                                        <UserPhoto input={input} />
+                                        {meta.touched && meta.error && <span>{meta.error}</span>}
+                                    </>
                                 )}
                             </Field>
 
