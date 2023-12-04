@@ -181,6 +181,11 @@
                     }
                 }
 
+                &>.disabled {
+                    opacity: 0.3;
+                    pointer-events: none;
+                }
+
                 &>.last-wrapper {
                     @include gs.breakpoint(mobile-start, mobile-end) {
                         margin-bottom: 1rem;

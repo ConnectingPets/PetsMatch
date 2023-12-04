@@ -34,7 +34,7 @@ const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAd
     const navigate = useNavigate();
     const [categories, setCategories] = useState<Categories[]>([]);
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-    const [showHideBreedField, setShowHideBreedField] = useState<boolean>(false);
+    const [isCategoryDisabled, setIsCategoryDisabled] = useState<boolean>(false);
     const [breeds, setBreeds] = useState<Breeds[]>([]);
     const [isDeleteClick, setIsDeleteClick] = useState<boolean>(false);
 
@@ -59,11 +59,11 @@ const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAd
 
     const loadBreeds = (categoryId: string) => {
         setSelectedCategory(String(categoryId));
-        setShowHideBreedField(true);
+        setIsCategoryDisabled(true);
     };
 
     const onBackToCategory = () => {
-        setShowHideBreedField(false);
+        setIsCategoryDisabled(false);
     };
 
     const onDeleteOrCancelClick = () => {
@@ -121,42 +121,38 @@ const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAd
                             </Field>
 
                             <div className="pairs">
-                                {!showHideBreedField && (
-                                    <Field name='AnimalCategory'>
-                                        {({ input, meta }) => (
-                                            <div className="wrapper">
-                                                <div className="required">
-                                                    <CLabel inputName='AnimalCategory' title='Category' />
-                                                    <CgAsterisk className="asterisk" />
-                                                    <select {...input} onChange={(e) => loadBreeds(e.target.value)} name="AnimalCategory" id="AnimalCategory">
-                                                        <option>  </option>
-                                                        {categories && categories.map(c => <option value={c.animalCategoryId} key={c.animalCategoryId}>{c.name}</option>)}
-                                                    </select>
-                                                </div>
-                                                {meta.touched && meta.error && <span>{meta.error}</span>}
+                                <Field name='AnimalCategory'>
+                                    {({ input, meta }) => (
+                                        <div className={isCategoryDisabled ? 'wrapper disabled' : 'wrapper'}>
+                                            <div className="required">
+                                                <CLabel inputName='AnimalCategory' title='Category' />
+                                                <CgAsterisk className="asterisk" />
+                                                <select {...input} onChange={(e) => loadBreeds(e.target.value)} name="AnimalCategory" id="AnimalCategory">
+                                                    <option>  </option>
+                                                    {categories && categories.map(c => <option value={c.animalCategoryId} key={c.animalCategoryId}>{c.name}</option>)}
+                                                </select>
                                             </div>
-                                        )}
-                                    </Field>
-                                )}
+                                            {meta.touched && meta.error && !isCategoryDisabled && <span>{meta.error}</span>}
+                                        </div>
+                                    )}
+                                </Field>
 
-                                {showHideBreedField && (
-                                    <Field name='BreedId'>
-                                        {({ input, meta }) => (
-                                            <div className="wrapper">
-                                                <div className="required">
-                                                    <CLabel inputName='BreedId' title='Breed' />
-                                                    <CgAsterisk className="asterisk" />
-                                                    <select {...input} name="BreedId.breedId" id="Breed">
-                                                        <option>  </option>
-                                                        {breeds.map(b => <option value={b.breedId} key={b.breedId}>{b.name}</option>)}
-                                                    </select>
-                                                    <button onClick={onBackToCategory}><TbArrowBack /> Back to Category</button>
-                                                </div>
-                                                {meta.touched && meta.error && <span>{meta.error}</span>}
+                                <Field name='BreedId'>
+                                    {({ input, meta }) => (
+                                        <div className={!isCategoryDisabled ? 'wrapper disabled' : 'wrapper'}>
+                                            <div className="required">
+                                                <CLabel inputName='BreedId' title='Breed' />
+                                                <CgAsterisk className="asterisk" />
+                                                <select {...input} name="BreedId.breedId" id="Breed">
+                                                    {!isCategoryDisabled && <option>  </option>}
+                                                    {isCategoryDisabled && breeds.map(b => <option value={b.breedId} key={b.breedId}>{b.name}</option>)}
+                                                </select>
+                                                <button type="button" onClick={onBackToCategory}><TbArrowBack /> Reset</button>
                                             </div>
-                                        )}
-                                    </Field>
-                                )}
+                                            {meta.touched && meta.error && <span>{meta.error}</span>}
+                                        </div>
+                                    )}
+                                </Field>
                             </div>
 
                             <Field name='Description'>
