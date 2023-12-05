@@ -15,7 +15,7 @@
         public class AddAnimalPhotoCommand : IRequest<Result<string>>
         {
             public string AnimalId { get; set; } = null!;
-            public IFormFile File { get; set; } = null!;
+            public IFormFile[] Files { get; set; } = null!;
         }
 
         public class AddAnimalPhotoCommandHandler :
@@ -36,19 +36,13 @@
 
             public async Task<Result<string>> Handle(AddAnimalPhotoCommand request, CancellationToken cancellationToken)
             {
-                IFormFile file = request.File;
+                IFormFile[] files = request.Files;
                 string animalId = request.AnimalId;
 
-                if (file == null || file.Length == 0)
+                if (files == null || files.Length == 0)
                 {
                     return
                         Result<string>.Failure("File is not selected or empty");
-                }
-
-                if (!file.ContentType.StartsWith("image"))
-                {
-                    return
-                        Result<string>.Failure("This file is not an image");
                 }
 
                 Animal? animal = await repository.
@@ -61,12 +55,7 @@
                     return Result<string>.Failure("This animal does not exist! please select existing one");
                 }
 
-                if (animal.Photos.Count() >= 6)
-                {
-                    return Result<string>.Failure("You already have 6 photos of this animal. You cannot add more");
-                }
-
-                var result = await photoService.AddAnimalPhotoAsync(file, animal);
+                var result = await photoService.AddAnimalPhotosAsync(files, animal);
 
                 return result;
             }

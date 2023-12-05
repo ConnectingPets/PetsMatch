@@ -28,52 +28,59 @@
             this.dataContext = dataContext;
         }
 
-        public async Task<Result<string>> AddAnimalPhotoAsync(IFormFile file, Animal animal)
+        public async Task<Result<string>> AddAnimalPhotosAsync(IFormFile[] files, Animal animal)
         {
             using var transaction =
                 await dataContext.Database.BeginTransactionAsync();
             try
             {
-                var imageUploadResult = new ImageUploadResult();
-
-                using (var stream = file.OpenReadStream())
+                foreach (var file in files)
                 {
-                    var uploadParams = new ImageUploadParams
+                    if (animal.Photos.Count() == 6)
                     {
-                        File = new FileDescription(file.FileName, stream)
+                        await transaction.CommitAsync();
+                        return Result<string>.Failure("You already have 6 photos of this animal. You cannot add more");
+                    }
+
+                    var imageUploadResult = new ImageUploadResult();
+
+                    using (var stream = file.OpenReadStream())
+                    {
+                        var uploadParams = new ImageUploadParams
+                        {
+                            File = new FileDescription(file.FileName, stream)
+                        };
+
+                        try
+                        {
+                            imageUploadResult =
+                                await cloudinary.UploadAsync(uploadParams);
+                        }
+                        catch (Exception)
+                        {
+                            return Result<string>.Failure("Error occurred during images upload");
+                        }
+                    }
+
+                    Photo photo = new Photo()
+                    {
+                        Id = imageUploadResult.PublicId,
+                        IsMain = false,
+                        Url = imageUploadResult.Url.AbsoluteUri,
+                        AnimalId = animal.AnimalId
                     };
 
-                    try
-                    {
-                        imageUploadResult =
-                            await cloudinary.UploadAsync(uploadParams);
-                    }
-                    catch (Exception)
-                    {
-                        return Result<string>.Failure("Error occurred during image upload");
-                    }
+                    await repository.AddAsync(photo);
+                    await repository.SaveChangesAsync();
                 }
-
-                Photo photo = new Photo()
-                {
-                    Id = imageUploadResult.PublicId,
-                    IsMain = false,
-                    Url = imageUploadResult.Url.AbsoluteUri,
-                    AnimalId = animal.AnimalId
-                };
-
-                await repository.AddAsync(photo);
-                await repository.SaveChangesAsync();
                 await transaction.CommitAsync();
-
-                return Result<string>.Success(photo.Id, "Successfully upload image");
+                return Result<string>.Success("Successfully upload images");
             }
             catch
             {
                 await transaction.RollbackAsync();
                 return Result<string>.Failure("Error occurred during uploading photo");
             }
-
         }
 
         public async Task<Result<Unit>> AddUserPhotoAsync(IFormFile file, string userId)
@@ -117,7 +124,7 @@
                 await repository.SaveChangesAsync();
                 await transaction.CommitAsync();
 
-                return Result<Unit>.Success(Unit.Value,"Successfully upload image");
+                return Result<Unit>.Success(Unit.Value, "Successfully upload image");
             }
             catch (Exception)
             {
@@ -181,7 +188,7 @@
                     return Result<Unit>.Failure("Failed to delete photo");
                 }
 
-                User? user = await 
+                User? user = await
                     repository.GetById<User>(Guid.Parse(userId));
                 user!.PhotoId = null;
 
