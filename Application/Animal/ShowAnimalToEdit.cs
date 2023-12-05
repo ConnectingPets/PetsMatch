@@ -61,6 +61,9 @@
                     Weight = animal.Weight,
                     Gender = animal.Gender,
                     HealthStatus = animal.HealthStatus,
+                    LastModifiedBreed = animal.LastModifiedBreed,
+                    LastModifiedGender = animal.LastModifiedGender,
+                    LastModifiedName = animal.LastModifiedName,
                     Breed = new BreedDto()
                     {
                         BreedId = animal.BreedId,

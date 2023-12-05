@@ -31,6 +31,12 @@
 
         public bool IsHavingValidDocuments { get; set; }
 
+        public DateTime LastModifiedName { get; set; }
+
+        public DateTime LastModifiedBreed { get; set; }
+
+        public DateTime LastModifiedGender { get; set; }
+
         public ICollection<PhotoDto> Photos { get; set; }
 
         public BreedDto Breed { get; set; } = null!;
