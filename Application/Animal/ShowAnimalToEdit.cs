@@ -64,11 +64,9 @@
                     LastModifiedBreed = animal.LastModifiedBreed,
                     LastModifiedGender = animal.LastModifiedGender,
                     LastModifiedName = animal.LastModifiedName,
-                    Breed = new BreedDto()
-                    {
-                        BreedId = animal.BreedId,
-                        Name = animal.Name,
-                    },
+                    BreedId = animal.BreedId,
+                    BreedName = animal.Breed.Name,
+                    CategoryId = animal.Breed.CategoryId,
                     Photos = animal.Photos.Select(p => new PhotoDto()
                     {
                         Id = p.Id,

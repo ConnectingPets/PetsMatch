@@ -1,7 +1,6 @@
 ﻿namespace Application.DTOs.Animal
 {
     using Photo;
-    using Breed;
     using Domain.Enum;
 
     public class ShowAnimalToEditDto
@@ -39,6 +38,10 @@
 
         public ICollection<PhotoDto> Photos { get; set; }
 
-        public BreedDto Breed { get; set; } = null!;
+        public int BreedId { get; set; }
+
+        public string BreedName { get; set; } = null!;
+
+        public int CategoryId { get; set; }
     }
 }
