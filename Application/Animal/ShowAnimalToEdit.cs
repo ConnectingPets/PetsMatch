@@ -7,10 +7,11 @@
     using Microsoft.EntityFrameworkCore;
 
     using Domain;
-    using Persistence.Repositories;
-    using Application.DTOs.Animal;
-    using Application.DTOs.Photo;
     using Response;
+    using DTOs.Photo;
+    using DTOs.Breed;
+    using DTOs.Animal;
+    using Persistence.Repositories;
 
     public class ShowAnimalToEdit
     {
@@ -36,6 +37,7 @@
                 Animal? animal =
                     await repository.All<Animal>().
                     Include(a => a.Photos).
+                    Include(a => a.Breed).
                     FirstOrDefaultAsync(a => a.AnimalId.ToString() == request.AnimalId);
 
                 if (animal == null)
@@ -59,6 +61,11 @@
                     Weight = animal.Weight,
                     Gender = animal.Gender,
                     HealthStatus = animal.HealthStatus,
+                    Breed = new BreedDto()
+                    {
+                        BreedId = animal.BreedId,
+                        Name = animal.Name,
+                    },
                     Photos = animal.Photos.Select(p => new PhotoDto()
                     {
                         Id = p.Id,
@@ -69,7 +76,7 @@
 
                 if (!((DateTime.UtcNow - animal.LastModified).Days < 30))
                 {
-                    animalDto.CanEditAll = true;
+
                 }
 
                 return Result<ShowAnimalToEditDto>.Success(animalDto);
