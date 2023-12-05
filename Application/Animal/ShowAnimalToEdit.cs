@@ -74,11 +74,6 @@
                     }).ToArray(),
                 };
 
-                if (!((DateTime.UtcNow - animal.LastModified).Days < 30))
-                {
-
-                }
-
                 return Result<ShowAnimalToEditDto>.Success(animalDto);
             }
         }

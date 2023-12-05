@@ -51,17 +51,17 @@
                     || animal.Gender != dto.Gender;
 
 
-                int daysDifference = (DateTime.UtcNow - animal.LastModified).Days;
+                //int daysDifference = (DateTime.UtcNow - animal.LastModified).Days;
 
-                if (isSomethingEdit)
-                {
-                    animal.LastModified = DateTime.UtcNow;
-                }
+                //if (isSomethingEdit)
+                //{
+                //    animal.LastModified = DateTime.UtcNow;
+                //}
 
-                if (daysDifference < 30 && isSomethingEdit)
-                {
-                    return Result<Unit>.Failure($"Can not update pet name, breed and gender for another {30 - daysDifference} days.");
-                }
+                //if (daysDifference < 30 && isSomethingEdit)
+                //{
+                //    return Result<Unit>.Failure($"Can not update pet name, breed and gender for another {30 - daysDifference} days.");
+                //}
 
                 animal.BirthDate = dto.BirthDate;
                 animal.Gender = dto.Gender;
