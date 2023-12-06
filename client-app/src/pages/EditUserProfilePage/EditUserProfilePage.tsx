@@ -4,6 +4,7 @@ import { Form, Field } from 'react-final-form';
 import { CgAsterisk } from 'react-icons/cg';
 import { FaTrashAlt } from 'react-icons/fa';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 import themeStore from '../../stores/themeStore';
 import { IUser } from '../../interfaces/Interfaces';
@@ -21,6 +22,8 @@ import Footer from '../../components/Footer/Footer';
 interface EditUserProfilePageProps { }
 
 const EditUserProfilePage: React.FC<EditUserProfilePageProps> = observer(() => {
+    const navigate = useNavigate();
+
     const [isDeleteClick, setIsDeleteClick] = useState<boolean>(false);
 
     const title = 'Edit My Profile';
@@ -32,6 +35,8 @@ const EditUserProfilePage: React.FC<EditUserProfilePageProps> = observer(() => {
         try {
             await agent.apiUser.editUser(values);
             //What data to be stored on the user store
+
+            navigate('/dashboard');
         } catch(err) {
             console.log(err);
 
@@ -47,6 +52,10 @@ const EditUserProfilePage: React.FC<EditUserProfilePageProps> = observer(() => {
     const onConfirmDelete = async () => {
         try {
             await agent.apiUser.deleteUser();
+
+            await userStore.clearUser();
+
+            navigate('/');
         } catch (err) {
             console.log(err);
 
