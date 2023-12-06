@@ -25,7 +25,7 @@
         }
 
         [HttpPost("Add")]
-        public async Task<IActionResult> AddAnimal([FromForm]AddAnimalDto animal)
+        public async Task<IActionResult> AddAnimal([FromBody]AddAnimalDto animal)
         {
             string ownerId = this.User.GetById();
 
