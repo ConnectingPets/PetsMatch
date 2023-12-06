@@ -3,10 +3,13 @@ import { observer } from 'mobx-react';
 import { Form, Field } from 'react-final-form';
 import { CgAsterisk } from 'react-icons/cg';
 import { FaTrashAlt } from 'react-icons/fa';
+import { toast } from 'react-toastify';
 
 import themeStore from '../../stores/themeStore';
 import { IUser } from '../../interfaces/Interfaces';
 import { editUserProfileFormValidator } from '../../validators/userProfileFormValidators';
+import userStore from '../../stores/userStore';
+import agent from '../../api/axiosAgent';
 
 import FormsHeader from '../../components/FormsHeader/FormsHeader';
 import { CLabel } from '../../components/common/CLabel/CLabel';
@@ -23,32 +26,33 @@ const EditUserProfilePage: React.FC<EditUserProfilePageProps> = observer(() => {
     const title = 'Edit My Profile';
     const subjectForDelete = 'this profile';
 
-    const user: IUser = {
-        Id: '123',
-        Name: 'John Doe',
-        Email: 'john-doe@gmail.com',
-        Description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos, ea iure totam quibusdam officiis eius soluta vitae quidem nemo nostrum perspiciatis exercitationem blanditiis voluptatem magnam libero ratione assumenda quod doloremque?',
-        Age: 25,
-        Education: 'Economic',
-        Photo: '??',
-        JobTitle: 'Sales Manager',
-        Gender: 'Male',
-        Address: '72 Evesham Rd',
-        City: 'Liverpool'
-    };
-
     //  TO DO show user photo
 
-    const onEditUserProfileSubmit = (values: IUser) => {
-        //TO DO .....
+    const onEditUserProfileSubmit = async (values: IUser) => {
+        try {
+            await agent.apiUser.editUser(values);
+            //What data to be stored on the user store
+        } catch(err) {
+            console.log(err);
+
+            //Error message to be filled
+            toast.error('');
+        }
     }
 
     const onDeleteOrCancelClick = () => {
         setIsDeleteClick(state => !state);
     };
 
-    const onConfirmDelete = () => {
-        // TO DO .....
+    const onConfirmDelete = async () => {
+        try {
+            await agent.apiUser.deleteUser();
+        } catch (err) {
+            console.log(err);
+
+            //Error message to be filled
+            toast.error('');
+        }
     };
 
     return (
@@ -59,7 +63,7 @@ const EditUserProfilePage: React.FC<EditUserProfilePageProps> = observer(() => {
                 <p>Fields with "<CgAsterisk className="asterisk" />" are required!</p>
 
                 <Form
-                    initialValues={user}
+                    initialValues={userStore.user}
                     onSubmit={onEditUserProfileSubmit}
                     validate={editUserProfileFormValidator}
                     render={({ handleSubmit }) => (
