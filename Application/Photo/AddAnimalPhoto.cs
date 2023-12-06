@@ -5,7 +5,6 @@
     using Microsoft.EntityFrameworkCore;
 
     using Domain;
-    using Persistence;
     using Persistence.Repositories;
     using Service.Interfaces;
     using Response;
@@ -23,15 +22,12 @@
         {
             private readonly IPhotoService photoService;
             private readonly IRepository repository;
-            private readonly DataContext dataContext;
 
             public AddAnimalPhotoCommandHandler(IPhotoService photoService,
-                                                IRepository repository,
-                                                DataContext dataContext)
+                                                IRepository repository)
             {
                 this.photoService = photoService;
                 this.repository = repository;
-                this.dataContext = dataContext;
             }
 
             public async Task<Result<string>> Handle(AddAnimalPhotoCommand request, CancellationToken cancellationToken)

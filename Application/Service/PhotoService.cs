@@ -8,7 +8,6 @@
     using MediatR;
 
     using Domain;
-    using Persistence;
     using Interfaces;
     using Response;
     using Persistence.Repositories;
@@ -18,28 +17,22 @@
     {
         private readonly Cloudinary cloudinary;
         private readonly IRepository repository;
-        private readonly DataContext dataContext;
 
         public PhotoService(Cloudinary cloudinary,
-                            IRepository repository,
-                            DataContext dataContext)
+                            IRepository repository)
         {
             this.cloudinary = cloudinary;
             this.repository = repository;
-            this.dataContext = dataContext;
         }
 
         public async Task<Result<string>> AddAnimalPhotosAsync(IFormFile[] files, Animal animal)
         {
-            using var transaction =
-                await dataContext.Database.BeginTransactionAsync();
             try
             {
                 foreach (var file in files)
                 {
                     if (animal.Photos.Count() == 6)
                     {
-                        await transaction.CommitAsync();
                         return Result<string>.Failure("You already have 6 photos of this animal. You cannot add more");
                     }
 
@@ -74,12 +67,11 @@
                     await repository.AddAsync(photo);
                     await repository.SaveChangesAsync();
                 }
-                await transaction.CommitAsync();
+
                 return Result<string>.Success("Successfully upload images");
             }
             catch
             {
-                await transaction.RollbackAsync();
                 return Result<string>.Failure("Error occurred during uploading photo");
             }
         }
@@ -87,9 +79,6 @@
 
         public async Task<Result<Unit>> AddUserPhotoAsync(IFormFile file, string userId)
         {
-            using var transaction =
-                await dataContext.Database.BeginTransactionAsync();
-
             try
             {
                 var imageUploadResult = new ImageUploadResult();
@@ -125,21 +114,17 @@
 
                 await repository.AddAsync(photo);
                 await repository.SaveChangesAsync();
-                await transaction.CommitAsync();
 
                 return Result<Unit>.Success(Unit.Value, "Successfully upload image");
             }
             catch (Exception)
             {
-                await transaction.RollbackAsync();
                 return Result<Unit>.Failure("Error occurred during uploading photo");
             }
         }
 
         public async Task<Result<Unit>> DeleteAnimalPhotoAsync(Photo photo)
         {
-            using var transaction =
-                await dataContext.Database.BeginTransactionAsync();
             try
             {
                 var deleteParams = new DeletionParams(photo.Id);
@@ -158,26 +143,21 @@
                 try
                 {
                     await repository.SaveChangesAsync();
-                    await transaction.CommitAsync();
                     return Result<Unit>.Success(Unit.Value, "Successfully delete photo");
                 }
                 catch
                 {
-                    await transaction.RollbackAsync();
                     return Result<Unit>.Failure("Error occurred during saving changes");
                 }
             }
             catch (Exception)
             {
-                await transaction.RollbackAsync();
                 return Result<Unit>.Failure("Error occurred during deleting photo");
             }
         }
 
         public async Task<Result<Unit>> DeleteUserPhotoAsync(Photo photo, string userId)
         {
-            using var transaction =
-                await dataContext.Database.BeginTransactionAsync();
             try
             {
                 var deleteParams = new DeletionParams(photo.Id);
@@ -200,18 +180,15 @@
                 try
                 {
                     await repository.SaveChangesAsync();
-                    await transaction.CommitAsync();
                     return Result<Unit>.Success(Unit.Value, "Successfully delete photo");
                 }
                 catch
                 {
-                    await transaction.RollbackAsync();
                     return Result<Unit>.Failure("Error occurred during saving changes");
                 }
             }
             catch (Exception)
             {
-                await transaction.RollbackAsync();
                 return Result<Unit>.Failure("Error occurred during deleting photo");
             }
         }
@@ -243,8 +220,6 @@
         {
             bool hasMain = photos.Any(p => p.IsMain);
 
-            using var transaction =
-                await dataContext.Database.BeginTransactionAsync();
             try
             {
                 for (int i = 0; i < photos.Length; i++)
@@ -254,7 +229,6 @@
 
                     if (animal.Photos.Count() == 6)
                     {
-                        await transaction.CommitAsync();
                         return Result<string>.Failure("You already have 6 photos of this animal. You cannot add more");
                     }
 
@@ -299,12 +273,11 @@
                     await repository.AddAsync(photoToAdd);
                     await repository.SaveChangesAsync();
                 }
-                await transaction.CommitAsync();
+
                 return Result<string>.Success("Successfully upload images");
             }
             catch
             {
-                await transaction.RollbackAsync();
                 return Result<string>.Failure("Error occurred during uploading photo");
             }
         }
