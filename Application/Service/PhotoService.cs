@@ -12,6 +12,7 @@
     using Interfaces;
     using Response;
     using Persistence.Repositories;
+    using Application.DTOs.Photo;
 
     public class PhotoService : IPhotoService
     {
@@ -83,10 +84,12 @@
             }
         }
 
+
         public async Task<Result<Unit>> AddUserPhotoAsync(IFormFile file, string userId)
         {
             using var transaction =
                 await dataContext.Database.BeginTransactionAsync();
+
             try
             {
                 var imageUploadResult = new ImageUploadResult();
@@ -234,6 +237,75 @@
             catch (Exception)
             {
                 return Result<Unit>.Failure("Error occurred during saving changes");
+            }
+        }
+        public async Task<Result<string>> AddAnimalPhotosWithMainAsync(MainPhotoDto[] photos, Animal animal)
+        {
+            bool hasMain = photos.Any(p => p.IsMain);
+
+            using var transaction =
+                await dataContext.Database.BeginTransactionAsync();
+            try
+            {
+                for (int i = 0; i < photos.Length; i++)
+                {
+                    MainPhotoDto photo = photos[i];
+                    IFormFile file = photo.File;
+
+                    if (animal.Photos.Count() == 6)
+                    {
+                        await transaction.CommitAsync();
+                        return Result<string>.Failure("You already have 6 photos of this animal. You cannot add more");
+                    }
+
+                    var imageUploadResult = new ImageUploadResult();
+
+                    using (var stream = file.OpenReadStream())
+                    {
+                        var uploadParams = new ImageUploadParams
+                        {
+                            File = new FileDescription(file.FileName, stream)
+                        };
+
+                        try
+                        {
+                            imageUploadResult =
+                                await cloudinary.UploadAsync(uploadParams);
+                        }
+                        catch (Exception)
+                        {
+                            return Result<string>.Failure("Error occurred during images upload");
+                        }
+                    }
+
+                    Photo photoToAdd = new Photo()
+                    {
+                        Id = imageUploadResult.PublicId,
+                        IsMain = false,
+                        Url = imageUploadResult.Url.AbsoluteUri,
+                        AnimalId = animal.AnimalId
+                    };
+
+                    if (photo.IsMain)
+                    {
+                        photoToAdd.IsMain = true;
+                    }
+
+                    if (!hasMain && i == 0)
+                    {
+                        photoToAdd.IsMain = true;
+                    }
+
+                    await repository.AddAsync(photoToAdd);
+                    await repository.SaveChangesAsync();
+                }
+                await transaction.CommitAsync();
+                return Result<string>.Success("Successfully upload images");
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                return Result<string>.Failure("Error occurred during uploading photo");
             }
         }
     }

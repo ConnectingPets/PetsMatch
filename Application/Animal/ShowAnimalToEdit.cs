@@ -9,7 +9,6 @@
     using Domain;
     using Response;
     using DTOs.Photo;
-    using DTOs.Breed;
     using DTOs.Animal;
     using Persistence.Repositories;
 

@@ -25,13 +25,13 @@
         }
 
         [HttpPost("Add")]
-        public async Task<IActionResult> AddAnimal([FromBody] AddOrEditAnimalDto animalDto)
+        public async Task<IActionResult> AddAnimal([FromBody]AddAnimalDto animal)
         {
             string ownerId = this.User.GetById();
 
             AddAnimalCommand command = new AddAnimalCommand()
             {
-                AnimalDto = animalDto,
+                AnimalDto = animal,
                 OwnerId = ownerId
             };
 
@@ -66,7 +66,7 @@
         }
 
         [HttpPatch("{id}")]
-        public async Task<IActionResult> UpdateAnimal([FromBody] AddOrEditAnimalDto animalDto, string id)
+        public async Task<IActionResult> UpdateAnimal([FromBody] EditAnimalDto animalDto, string id)
         {
             EditAnimalCommand command = new EditAnimalCommand()
             {
@@ -93,7 +93,7 @@
         [HttpGet("GetAllCategories")]
         public async Task<IActionResult> GetAllCategories()
         {
-            var allCategories = await 
+            var allCategories = await
                 mediator.Send(new AllAnimalCategoriesQuery());
 
             return new JsonResult(allCategories);
