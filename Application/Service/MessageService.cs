@@ -21,18 +21,20 @@
             this.mediator = mediator;
         }
 
-        public async Task<Result<IEnumerable<ChatMessageDto>>> GetChatHistory(string matchId)
+        public async Task<Result<IEnumerable<ChatMessageDto>>> GetChatHistory(string matchId, string userId)
             => await this.mediator.Send(new ChatHistoryQuery
             {
-                MatchId = matchId
+                MatchId = matchId,
+                UserId = userId
             });
 
-        public async Task<Result<Unit>> SaveMessage(string matchId, string animalId, string message)
+        public async Task<Result<Unit>> SaveMessage(string matchId, string animalId, string message, string userId)
             => await this.mediator.Send(new SaveMessageCommand
             {
                 MatchId = matchId,
                 AnimalId = animalId,
-                Content = message
+                Content = message,
+                UserId = userId
             });
     }
 }

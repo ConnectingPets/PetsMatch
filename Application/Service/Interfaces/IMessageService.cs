@@ -6,8 +6,8 @@
 
     public interface IMessageService
     {
-        Task<Result<Unit>> SaveMessage(string matchId, string animalId, string message);
+        Task<Result<Unit>> SaveMessage(string matchId, string animalId, string message, string userId);
 
-        Task<Result<IEnumerable<ChatMessageDto>>> GetChatHistory(string matchId);
+        Task<Result<IEnumerable<ChatMessageDto>>> GetChatHistory(string matchId, string userId);
     }
 }

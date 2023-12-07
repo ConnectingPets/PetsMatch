@@ -12,6 +12,7 @@
 
     using static Common.ExceptionMessages.Animal;
     using static Common.ExceptionMessages.Swipe;
+    using static Common.ExceptionMessages.User;
     using static Common.FailMessages.Swipe;
 
     public class SwipeAnimal
@@ -23,6 +24,8 @@
             public required string SwipeeAnimalId { get; set; }
 
             public required bool SwipedRight { get; set; }
+
+            public required string UserId { get; set; }
         }
 
         public class SwipeAnimalHandler : IRequestHandler<SwipeAnimalCommand, Result<bool>>
@@ -36,28 +39,38 @@
 
             public async Task<Result<bool>> Handle(SwipeAnimalCommand request, CancellationToken cancellationToken)
             {
-                if (await this.repository.AnyAsync<Animal>(animal => animal.AnimalId.ToString() == request.SwiperAnimalId) == false)
+                Animal? swiper = await this.repository.FirstOrDefaultAsync<Animal>(a => a.AnimalId.ToString() == request.SwiperAnimalId.ToLower());
+
+                if (swiper == null)
                 {
                     return Result<bool>.Failure(AnimalNotFound);
                 }
 
-                if (await this.repository.AnyAsync<Animal>(animal => animal.AnimalId.ToString() == request.SwipeeAnimalId) == false)
+                Animal? swipee = await this.repository.FirstOrDefaultAsync<Animal>(a => a.AnimalId.ToString() == request.SwipeeAnimalId.ToLower());
+                if (swipee == null)
                 {
                     return Result<bool>.Failure(AnimalNotFound);
                 }
 
-                if (request.SwiperAnimalId.ToString() == request.SwipeeAnimalId.ToString())
+                if (await this.repository.AnyAsync<User>(u => u.Id.ToString() == request.UserId.ToLower()))
+                {
+                    return Result<bool>.Failure(UserNotFound);
+                }
+
+                if (request.SwiperAnimalId == request.SwipeeAnimalId)
                 {
                     return Result<bool>.Failure(SameAnimal);
                 }
 
-                Guid guidSwiper = Guid.Parse(request.SwiperAnimalId);
-                Guid guidSwipee = Guid.Parse(request.SwipeeAnimalId);
+                if (swiper.OwnerId.ToString() == request.UserId.ToLower())
+                {
+                    return Result<bool>.Failure(NotOwner);
+                }
 
                 Swipe swipe = new Swipe
                 {
-                    SwiperAnimalId = guidSwiper,
-                    SwipeeAnimalId = guidSwipee,
+                    SwiperAnimalId = Guid.Parse(request.SwiperAnimalId),
+                    SwipeeAnimalId = Guid.Parse(request.SwipeeAnimalId),
                     SwipedRight = request.SwipedRight,
                     SwipedOn = DateTime.Now
                 };
@@ -73,18 +86,18 @@
                     return Result<bool>.Failure(FailedSwipe);
                 }
 
-                bool isMatch = await IsMatch(guidSwiper, guidSwipee, request.SwipedRight);
+                bool isMatch = await IsMatch(request.SwiperAnimalId, request.SwipeeAnimalId, request.SwipedRight);
 
                 return Result<bool>.Success(isMatch);
             }
 
-            private async Task<bool> IsMatch(Guid swiperAnimalId, Guid swipeeAnimalId, bool swipedRight)
+            private async Task<bool> IsMatch(string swiperAnimalId, string swipeeAnimalId, bool swipedRight)
             {
-                Animal? animal = await this.repository.All<Animal>(a => a.AnimalId == swiperAnimalId)
+                Animal? animal = await this.repository.All<Animal>(a => a.AnimalId.ToString() == swiperAnimalId.ToLower())
                     .Include(a => a.SwipesFrom)
                     .FirstOrDefaultAsync();
 
-                return animal!.SwipesFrom.Any(s => s.SwiperAnimalId == swipeeAnimalId && s.SwipedRight) && swipedRight;
+                return animal!.SwipesFrom.Any(s => s.SwiperAnimalId.ToString() == swipeeAnimalId.ToLower() && s.SwipedRight) && swipedRight;
             }
         }
     }

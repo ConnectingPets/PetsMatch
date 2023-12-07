@@ -27,7 +27,8 @@
             Result<bool> result = await this.swipeService.Swipe(
                 swipe.SwiperAnimalId,
                 swipe.SwipeeAnimalId,
-                swipe.SwipedRight);
+                swipe.SwipedRight,
+                User.GetById());
 
             return Ok(result);
         }

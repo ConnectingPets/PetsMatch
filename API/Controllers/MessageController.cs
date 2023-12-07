@@ -7,6 +7,7 @@
     using Application.DTOs.Message;
     using Application.Service.Interfaces;
     using Application.Response;
+    using API.Infrastructure;
 
     [Authorize]
     [Route("api/[controller]")]
@@ -27,7 +28,8 @@
             Result<Unit> result = await this.messageService.SaveMessage(
                 saveMessageDto.MatchId,
                 saveMessageDto.AnimalId,
-                saveMessageDto.Content);
+                saveMessageDto.Content,
+                User.GetById());
 
             return Ok(result);
         }
@@ -36,7 +38,9 @@
         [HttpGet]
         public async Task<ActionResult> ChatHistory([FromQuery] string matchId)
         {
-            Result<IEnumerable<ChatMessageDto>> result = await this.messageService.GetChatHistory(matchId);
+            Result<IEnumerable<ChatMessageDto>> result = await this.messageService.GetChatHistory(
+                matchId,
+                User.GetById());
 
             return Ok(result);
         }

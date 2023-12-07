@@ -12,6 +12,7 @@
     using static Common.ExceptionMessages.Match;
     using static Common.ExceptionMessages.Animal;
     using static Common.FailMessages.Message;
+    using static Common.ExceptionMessages.User;
 
     public class SaveMessage
     {
@@ -22,6 +23,8 @@
             public string MatchId { get; set; } = null!;
 
             public string Content { get; set; } = null!;
+
+            public string UserId { get; set; } = null!;
         }
 
         public class SaveMessageHandler : IRequestHandler<SaveMessageCommand, Result<Unit>>
@@ -35,7 +38,8 @@
 
             public async Task<Result<Unit>> Handle(SaveMessageCommand request, CancellationToken cancellationToken)
             {
-                if (await this.repository.AnyAsync<Animal>(animal => animal.AnimalId.ToString() == request.AnimalId) == false)
+                Animal? animal = await this.repository.FirstOrDefaultAsync<Animal>(animal => animal.AnimalId.ToString() == request.AnimalId.ToLower());
+                if (animal == null)
                 {
                     return Result<Unit>.Failure(AnimalNotFound);
                 }
@@ -43,6 +47,16 @@
                 if (await this.repository.AnyAsync<Match>(animal => animal.MatchId.ToString() == request.MatchId) == false)
                 {
                     return Result<Unit>.Failure(MatchNotFound);
+                }
+
+                if (await this.repository.AnyAsync<User>(u => u.Id.ToString() == request.UserId.ToLower()))
+                {
+                    return Result<Unit>.Failure(UserNotFound);
+                }
+
+                if (animal.OwnerId.ToString() != request.UserId.ToLower())
+                {
+                    return Result<Unit>.Failure(NotOwner);
                 }
 
                 Message message = new Message

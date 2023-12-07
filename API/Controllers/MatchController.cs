@@ -7,6 +7,7 @@ namespace API.Controllers
     using Application.Response;
     using Application.DTOs.Match;
     using Application.Service.Interfaces;
+    using API.Infrastructure;
 
     [Authorize]
     [Route("api/[controller]")]
@@ -26,7 +27,8 @@ namespace API.Controllers
         {
             Result<Unit> result = await this.matchService.Match(
                 matchDto.AnimalOneId,
-                matchDto.AnimalTwoId);
+                matchDto.AnimalTwoId,
+                User.GetById());
 
             return Ok(result);
         }
@@ -37,7 +39,8 @@ namespace API.Controllers
         {
             Result<Unit> result = await this.matchService.UnMatch(
                 unMatchDto.AnimalOneId,
-                unMatchDto.AnimalTwoId);
+                unMatchDto.AnimalTwoId,
+                User.GetById());
 
             return Ok(result);
         }
@@ -46,7 +49,9 @@ namespace API.Controllers
         [HttpGet]
         public async Task<ActionResult> AnimalMatches([FromQuery] string animalId)
         {
-            Result<IEnumerable<AnimalMatchDto>> result = await this.matchService.GetAnimalMatches(animalId);
+            Result<IEnumerable<AnimalMatchDto>> result = await this.matchService.GetAnimalMatches(
+                animalId,
+                User.GetById());
 
             return Ok(result);
         }

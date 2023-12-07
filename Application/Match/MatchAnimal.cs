@@ -13,6 +13,7 @@
     using static Common.ExceptionMessages.Match;
     using static Common.SuccessMessages.Match;
     using static Common.FailMessages.Match;
+    using static Common.ExceptionMessages.User;
 
     public class MatchAnimal
     {
@@ -21,6 +22,8 @@
             public required string AnimalOneId { get; set; }
 
             public required string AnimalTwoId { get; set; }
+
+            public required string UserId { get; set; }
         }
 
         public class MatchAnimalHandler : IRequestHandler<MatchAnimalCommand, Result<Unit>>
@@ -34,19 +37,32 @@
 
             public async Task<Result<Unit>> Handle(MatchAnimalCommand request, CancellationToken cancellationToken)
             {
-                if (await this.repository.AnyAsync<Animal>(animal => animal.AnimalId.ToString() == request.AnimalOneId) == false)
+                Animal? animalOne = await this.repository.FirstOrDefaultAsync<Animal>(animal => animal.AnimalId.ToString() == request.AnimalOneId.ToLower());
+                if (animalOne == null)
                 {
                     return Result<Unit>.Failure(AnimalNotFound);
                 }
 
-                if (await this.repository.AnyAsync<Animal>(animal => animal.AnimalId.ToString() == request.AnimalTwoId) == false)
+                Animal? animalTwo = await this.repository.FirstOrDefaultAsync<Animal>(animal => animal.AnimalId.ToString() == request.AnimalTwoId.ToLower());
+                if (animalTwo == null)
                 {
                     return Result<Unit>.Failure(AnimalNotFound);
+                }
+
+                if (await this.repository.AnyAsync<User>(u => u.Id.ToString() == request.UserId))
+                {
+                    return Result<Unit>.Failure(UserNotFound);
                 }
 
                 if (request.AnimalOneId.ToString() == request.AnimalTwoId.ToString())
                 {
                     return Result<Unit>.Failure(SameAnimal);
+                }
+
+                if (animalOne.OwnerId.ToString() != request.UserId.ToLower() &&
+                    animalTwo.OwnerId.ToString() != request.UserId.ToLower())
+                {
+                    return Result<Unit>.Failure(NotOwner);
                 }
 
                 bool isPresentMatch = await IsPresentMatch(request.AnimalOneId, request.AnimalTwoId);
@@ -89,9 +105,9 @@
             }
 
             private async Task<bool> IsPresentMatch(string animalOneId, string animalTwoId)
-                => await this.repository.AnyAsync<AnimalMatch>(am => am.AnimalId.ToString() == animalOneId &&
+                => await this.repository.AnyAsync<AnimalMatch>(am => am.AnimalId.ToString() == animalOneId.ToLower() &&
                                                                am.Match.AnimalMatches
-                                                                   .Any(m => m.AnimalId.ToString() == animalTwoId));
+                                                                   .Any(m => m.AnimalId.ToString() == animalTwoId.ToLower()));
         }
     }
 }

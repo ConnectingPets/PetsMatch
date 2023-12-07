@@ -12,12 +12,15 @@
     using Application.Response;
 
     using static Common.ExceptionMessages.Animal;
+    using static Common.ExceptionMessages.User;
 
     public class AnimalMatches
     {
         public class AnimalMatchesQuery : IRequest<Result<IEnumerable<AnimalMatchDto>>>
         {
             public string AnimalId { get; set; } = null!;
+
+            public string UserId { get; set; } = null!;
         }
 
         public class AnimalMatchesHandler : IRequestHandler<AnimalMatchesQuery, Result<IEnumerable<AnimalMatchDto>>>
@@ -45,6 +48,16 @@
                     return Result<IEnumerable<AnimalMatchDto>>.Failure(AnimalNotFound);
                 }
 
+                if (await this.repository.AnyAsync<User>(u => u.Id.ToString() == request.UserId.ToLower()))
+                {
+                    return Result<IEnumerable<AnimalMatchDto>>.Failure(UserNotFound);
+                }
+
+                if (animal.OwnerId.ToString() != request.UserId.ToLower())
+                {
+                    return Result<IEnumerable<AnimalMatchDto>>.Failure(NotOwner);
+                }
+
                 IEnumerable<AnimalMatchDto> animalMatches = new List<AnimalMatchDto>();
                 if (animal.AnimalMatches.Count > 0)
                 {
@@ -57,7 +70,7 @@
                         {
                             AnimalId = am.AnimalId.ToString(),
                             Name = am.Animal.Name,
-                            Photo = null
+                            Photo = am.Animal.Photos.First(p => p.IsMain).Url
                         })
                         .ToList();
                 }

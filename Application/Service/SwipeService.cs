@@ -27,12 +27,13 @@
                 UserId = userId
             });
 
-        public async Task<Result<bool>> Swipe(string swiperAnimalId, string swipeeAnimalId, bool swipedRight)
+        public async Task<Result<bool>> Swipe(string swiperAnimalId, string swipeeAnimalId, bool swipedRight, string userId)
             => await this.mediator.Send(new SwipeAnimalCommand
             {
                 SwiperAnimalId = swiperAnimalId,
                 SwipeeAnimalId = swipeeAnimalId,
-                SwipedRight = swipedRight
+                SwipedRight = swipedRight,
+                UserId = userId
             });
     }
 }
