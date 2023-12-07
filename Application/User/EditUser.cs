@@ -35,7 +35,7 @@
 
             public async Task<Result<Unit>> Handle(EditUserCommand request, CancellationToken cancellationToken)
             {
-                User? user = await this.repository.GetById<User>(request.UserId);
+                User? user = await this.repository.GetById<User>(Guid.Parse(request.UserId));
 
                 if (user == null)
                 {

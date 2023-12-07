@@ -11,11 +11,13 @@
     using Application.DTOs.Match;
     using Application.Response;
 
+    using static Common.ExceptionMessages.Animal;
+
     public class AnimalMatches
     {
         public class AnimalMatchesQuery : IRequest<Result<IEnumerable<AnimalMatchDto>>>
         {
-            public required string AnimalId { get; set; }
+            public string AnimalId { get; set; } = null!;
         }
 
         public class AnimalMatchesHandler : IRequestHandler<AnimalMatchesQuery, Result<IEnumerable<AnimalMatchDto>>>
@@ -40,21 +42,25 @@
 
                 if (animal == null)
                 {
-                    return Result<IEnumerable<AnimalMatchDto>>.Failure("");
+                    return Result<IEnumerable<AnimalMatchDto>>.Failure(AnimalNotFound);
                 }
 
-                IEnumerable<AnimalMatch> matches = animal.AnimalMatches
-                    .Select(am => am.Match.AnimalMatches
-                        .FirstOrDefault(am => am.AnimalId.ToString() != request.AnimalId))!;
+                IEnumerable<AnimalMatchDto> animalMatches = new List<AnimalMatchDto>();
+                if (animal.AnimalMatches.Count > 0)
+                {
+                    IEnumerable<AnimalMatch> matches = animal.AnimalMatches
+                        .Select(am => am.Match.AnimalMatches
+                            .FirstOrDefault(am => am.AnimalId != Guid.Parse(request.AnimalId)))!;
 
-                IEnumerable<AnimalMatchDto> animalMatches = matches
-                    .Select(am => new AnimalMatchDto
-                    {
-                        AnimalId = am.AnimalId.ToString(),
-                        Name = am.Animal.Name,
-                        Photo = am.Animal.Photos.First(p => p.IsMain).Url
-                    })
-                    .ToList();
+                    animalMatches = matches
+                        .Select(am => new AnimalMatchDto
+                        {
+                            AnimalId = am.AnimalId.ToString(),
+                            Name = am.Animal.Name,
+                            Photo = null
+                        })
+                        .ToList();
+                }
 
                 return Result<IEnumerable<AnimalMatchDto>>.Success(animalMatches);
             }

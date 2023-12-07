@@ -51,10 +51,13 @@
                     return Result<bool>.Failure(SameAnimal);
                 }
 
+                Guid guidSwiper = Guid.Parse(request.SwiperAnimalId);
+                Guid guidSwipee = Guid.Parse(request.SwipeeAnimalId);
+
                 Swipe swipe = new Swipe
                 {
-                    SwiperAnimalId = Guid.Parse(request.SwiperAnimalId),
-                    SwipeeAnimalId = Guid.Parse(request.SwipeeAnimalId),
+                    SwiperAnimalId = guidSwiper,
+                    SwipeeAnimalId = guidSwipee,
                     SwipedRight = request.SwipedRight,
                     SwipedOn = DateTime.Now
                 };
@@ -70,18 +73,18 @@
                     return Result<bool>.Failure(FailedSwipe);
                 }
 
-                bool isMatch = await IsMatch(request.SwiperAnimalId, request.SwipeeAnimalId, request.SwipedRight);
+                bool isMatch = await IsMatch(guidSwiper, guidSwipee, request.SwipedRight);
 
                 return Result<bool>.Success(isMatch);
             }
 
-            private async Task<bool> IsMatch(string swiperAnimalId, string swipeeAnimalId, bool swipedRight)
+            private async Task<bool> IsMatch(Guid swiperAnimalId, Guid swipeeAnimalId, bool swipedRight)
             {
-                Animal? animal = await this.repository.All<Animal>(a => a.AnimalId.ToString() == swiperAnimalId)
+                Animal? animal = await this.repository.All<Animal>(a => a.AnimalId == swiperAnimalId)
                     .Include(a => a.SwipesFrom)
                     .FirstOrDefaultAsync();
 
-                return animal!.SwipesFrom.Any(s => s.SwiperAnimalId.ToString() == swipeeAnimalId && s.SwipedRight) && swipedRight;
+                return animal!.SwipesFrom.Any(s => s.SwiperAnimalId == swipeeAnimalId && s.SwipedRight) && swipedRight;
             }
         }
     }
