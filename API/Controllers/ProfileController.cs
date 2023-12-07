@@ -1,14 +1,13 @@
 ﻿namespace API.Controllers
 {
+    using MediatR;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Authorization;
     
     using API.Infrastructure;
     using Application.DTOs.User;
-    using Application.Exceptions.Entity;
-    using Application.Exceptions.User;
     using Application.Service.Interfaces;
-    using static Common.ExceptionMessages.Entity;
+    using Application.Response;
 
     [Authorize]
     [Route("api/[controller]")]
@@ -26,23 +25,7 @@
         [HttpGet]
         public async Task<ActionResult> Profile()
         {
-            UserProfileDto userProfileDto;
-            try
-            {
-                userProfileDto = await this.profileService.GetProfile(User.GetById());
-            }
-            catch (InvalidGuidFormatException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (UserNotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch
-            {
-                return StatusCode(500, InternalServerError);
-            }
+            Result<UserProfileDto> userProfileDto = await this.profileService.GetProfile(User.GetById());
 
             return Ok(userProfileDto);
         }
@@ -51,54 +34,20 @@
         [HttpPost]
         public async Task<ActionResult> Edit([FromBody] EditUserDto editUserDto)
         {
-            try
-            {
-                await this.profileService.EditUser(
-                    User.GetById(),
-                    editUserDto);
-            }
-            catch (InvalidGuidFormatException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (UserNotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch (InvalidEnumException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch
-            {
-                return StatusCode(500, InternalServerError);
-            }
+            Result<Unit> result = await this.profileService.EditUser(
+                User.GetById(),
+                editUserDto);
 
-            return Ok();
+            return Ok(result);
         }
 
         [Route("delete")]
         [HttpPost]
         public async Task<ActionResult> Delete()
         {
-            try
-            {
-                await this.profileService.DeleteUser(User.GetById());
-            }
-            catch (InvalidGuidFormatException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (UserNotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch
-            {
-                return StatusCode(500, InternalServerError);
-            }
+            Result<Unit> result = await this.profileService.DeleteUser(User.GetById());
 
-            return Ok();
+            return Ok(result);
         }
     }
 }

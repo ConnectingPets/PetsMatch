@@ -5,8 +5,10 @@
 
     using MediatR;
 
+    using Application.Response;
     using Application.DTOs.Message;
     using Application.Service.Interfaces;
+
     using static Application.Message.SaveMessage;
     using static Application.Message.ChatHistory;
 
@@ -19,13 +21,13 @@
             this.mediator = mediator;
         }
 
-        public async Task<IEnumerable<ChatMessageDto>> GetChatHistory(string matchId)
+        public async Task<Result<IEnumerable<ChatMessageDto>>> GetChatHistory(string matchId)
             => await this.mediator.Send(new ChatHistoryQuery
             {
                 MatchId = matchId
             });
 
-        public async Task SaveMessage(string matchId, string animalId, string message)
+        public async Task<Result<Unit>> SaveMessage(string matchId, string animalId, string message)
             => await this.mediator.Send(new SaveMessageCommand
             {
                 MatchId = matchId,

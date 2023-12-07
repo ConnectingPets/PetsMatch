@@ -1,11 +1,13 @@
 ﻿namespace Application.Service.Interfaces
 {
     using Application.DTOs.Message;
+    using Application.Response;
+    using MediatR;
 
     public interface IMessageService
     {
-        Task SaveMessage(string matchId, string animalId, string message);
+        Task<Result<Unit>> SaveMessage(string matchId, string animalId, string message);
 
-        Task<IEnumerable<ChatMessageDto>> GetChatHistory(string matchId);
+        Task<Result<IEnumerable<ChatMessageDto>>> GetChatHistory(string matchId);
     }
 }

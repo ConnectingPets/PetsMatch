@@ -9,17 +9,16 @@
     using Domain;
     using Persistence.Repositories;
     using Application.DTOs.Match;
-    using Application.Exceptions.Entity;
-    using Application.Exceptions.Animal;
+    using Application.Response;
 
     public class AnimalMatches
     {
-        public class AnimalMatchesQuery : IRequest<IEnumerable<AnimalMatchDto>>
+        public class AnimalMatchesQuery : IRequest<Result<IEnumerable<AnimalMatchDto>>>
         {
             public required string AnimalId { get; set; }
         }
 
-        public class AnimalMatchesHandler : IRequestHandler<AnimalMatchesQuery, IEnumerable<AnimalMatchDto>>
+        public class AnimalMatchesHandler : IRequestHandler<AnimalMatchesQuery, Result<IEnumerable<AnimalMatchDto>>>
         {
             private readonly IRepository repository;
 
@@ -28,15 +27,10 @@
                 this.repository = repository;
             }
 
-            public async Task<IEnumerable<AnimalMatchDto>> Handle(AnimalMatchesQuery request, CancellationToken cancellationToken)
+            public async Task<Result<IEnumerable<AnimalMatchDto>>> Handle(AnimalMatchesQuery request, CancellationToken cancellationToken)
             {
-                if (!Guid.TryParse(request.AnimalId, out Guid animalId))
-                {
-                    throw new InvalidGuidFormatException();
-                }
-
                 Animal? animal = await this.repository
-                    .All<Animal>(animal => animal.AnimalId == animalId)
+                    .All<Animal>(animal => animal.AnimalId.ToString() == request.AnimalId)
                     .Include(animal => animal.AnimalMatches)
                     .ThenInclude(am => am.Match)
                     .ThenInclude(m => m.AnimalMatches)
@@ -46,12 +40,12 @@
 
                 if (animal == null)
                 {
-                    throw new AnimalNotFoundException();
+                    return Result<IEnumerable<AnimalMatchDto>>.Failure("");
                 }
 
                 IEnumerable<AnimalMatch> matches = animal.AnimalMatches
                     .Select(am => am.Match.AnimalMatches
-                        .FirstOrDefault(am => am.AnimalId != animalId))!;
+                        .FirstOrDefault(am => am.AnimalId.ToString() != request.AnimalId))!;
 
                 IEnumerable<AnimalMatchDto> animalMatches = matches
                     .Select(am => new AnimalMatchDto
@@ -62,7 +56,7 @@
                     })
                     .ToList();
 
-                return animalMatches;
+                return Result<IEnumerable<AnimalMatchDto>>.Success(animalMatches);
             }
         }
     }

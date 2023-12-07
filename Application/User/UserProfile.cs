@@ -9,17 +9,18 @@
     using Domain;
     using Persistence.Repositories;
     using Application.DTOs.User;
-    using Application.Exceptions.Entity;
-    using Application.Exceptions.User;
+    using Application.Response;
+
+    using static Common.ExceptionMessages.User;
 
     public class UserProfile
     {
-        public class UserProfileQuery : IRequest<UserProfileDto>
+        public class UserProfileQuery : IRequest<Result<UserProfileDto>>
         {
             public string UserId { get; set; } = null!;
         }
 
-        public class UserProfileCommand : IRequestHandler<UserProfileQuery, UserProfileDto>
+        public class UserProfileCommand : IRequestHandler<UserProfileQuery, Result<UserProfileDto>>
         {
             private readonly IRepository repository;
 
@@ -28,21 +29,16 @@
                 this.repository = repository;
             }
 
-            public async Task<UserProfileDto> Handle(UserProfileQuery request, CancellationToken cancellationToken)
+            public async Task<Result<UserProfileDto>> Handle(UserProfileQuery request, CancellationToken cancellationToken)
             {
-                if (!Guid.TryParse(request.UserId, out Guid guidUserId))
-                {
-                    throw new InvalidGuidFormatException();
-                }
-
                 User? user = await this.repository
-                    .All<User>(u => u.Id == guidUserId)
+                    .All<User>(u => u.Id.ToString() == request.UserId)
                     .Include(u => u.Photo)
                     .FirstOrDefaultAsync();
 
                 if (user == null)
                 {
-                    throw new UserNotFoundException();
+                    return Result<UserProfileDto>.Failure(UserNotFound);
                 }
 
                 string? gender = user.Gender.HasValue
@@ -62,7 +58,7 @@
                     Photo = user.Photo?.Url
                 };
 
-                return userProfileDto;
+                return Result<UserProfileDto>.Success(userProfileDto);
             }
         }
     }

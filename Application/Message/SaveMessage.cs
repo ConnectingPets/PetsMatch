@@ -7,13 +7,15 @@
 
     using Domain;
     using Persistence.Repositories;
-    using Application.Exceptions.Entity;
-    using Application.Exceptions.Animal;
-    using Application.Exceptions.Match;
+    using Application.Response;
+
+    using static Common.ExceptionMessages.Match;
+    using static Common.ExceptionMessages.Animal;
+    using static Common.FailMessages.Message;
 
     public class SaveMessage
     {
-        public class SaveMessageCommand : IRequest<Unit>
+        public class SaveMessageCommand : IRequest<Result<Unit>>
         {
             public string AnimalId { get; set; } = null!;
 
@@ -22,7 +24,7 @@
             public string Content { get; set; } = null!;
         }
 
-        public class SaveMessageHandler : IRequestHandler<SaveMessageCommand, Unit>
+        public class SaveMessageHandler : IRequestHandler<SaveMessageCommand, Result<Unit>>
         {
             private readonly IRepository repository;
 
@@ -31,40 +33,38 @@
                 this.repository = repository;
             }
 
-            public async Task<Unit> Handle(SaveMessageCommand request, CancellationToken cancellationToken)
+            public async Task<Result<Unit>> Handle(SaveMessageCommand request, CancellationToken cancellationToken)
             {
-                if (!Guid.TryParse(request.AnimalId, out Guid guidAnimalId))
+                if (await this.repository.AnyAsync<Animal>(animal => animal.AnimalId.ToString() == request.AnimalId) == false)
                 {
-                    throw new InvalidGuidFormatException();
+                    return Result<Unit>.Failure(AnimalNotFound);
                 }
 
-                if (!Guid.TryParse(request.MatchId, out Guid guidMatchId))
+                if (await this.repository.AnyAsync<Match>(animal => animal.MatchId.ToString() == request.MatchId) == false)
                 {
-                    throw new InvalidGuidFormatException();
-                }
-
-                if (await this.repository.AnyAsync<Animal>(animal => animal.AnimalId == guidAnimalId) == false)
-                {
-                    throw new AnimalNotFoundException();
-                }
-
-                if (await this.repository.AnyAsync<Match>(animal => animal.MatchId == guidMatchId) == false)
-                {
-                    throw new MatchNotFoundException();
+                    return Result<Unit>.Failure(MatchNotFound);
                 }
 
                 Message message = new Message
                 {
-                    AnimalId = guidAnimalId,
-                    MatchId = guidMatchId,
+                    AnimalId = Guid.Parse(request.AnimalId),
+                    MatchId = Guid.Parse(request.MatchId),
                     Content = request.Content,
                     SentOn = DateTime.Now
                 };
 
                 await this.repository.AddAsync(message);
-                await this.repository.SaveChangesAsync();
 
-                return Unit.Value;
+                try
+                {
+                    await this.repository.SaveChangesAsync();
+                    // What data to return
+                    return Result<Unit>.Success(Unit.Value);
+                }
+                catch (Exception)
+                {
+                    return Result<Unit>.Failure(FailedSendMessage);
+                }
             }
         }
     }

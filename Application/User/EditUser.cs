@@ -9,19 +9,22 @@
     using Domain.Enum;
     using Persistence.Repositories;
     using Application.DTOs.User;
-    using Application.Exceptions.Entity;
-    using Application.Exceptions.User;
+    using Application.Response;
+
+    using static Common.ExceptionMessages.User;
+    using static Common.FailMessages.User;
+    using static Common.SuccessMessages.User;
 
     public class EditUser
     {
-        public class EditUserCommand : IRequest<Unit>
+        public class EditUserCommand : IRequest<Result<Unit>>
         {
             public string UserId { get; set; } = null!;
 
             public EditUserDto User { get; set; } = null!;
         }
 
-        public class EditUserHandler : IRequestHandler<EditUserCommand, Unit>
+        public class EditUserHandler : IRequestHandler<EditUserCommand, Result<Unit>>
         {
             private readonly IRepository repository;
 
@@ -30,21 +33,25 @@
                 this.repository = repository;
             }
 
-            public async Task<Unit> Handle(EditUserCommand request, CancellationToken cancellationToken)
+            public async Task<Result<Unit>> Handle(EditUserCommand request, CancellationToken cancellationToken)
             {
-                if (!Guid.TryParse(request.UserId, out Guid guidUserId))
-                {
-                    throw new InvalidGuidFormatException();
-                }
-
-                User? user = await this.repository.GetById<User>(guidUserId);
+                User? user = await this.repository.GetById<User>(request.UserId);
 
                 if (user == null)
                 {
-                    throw new UserNotFoundException();
+                    return Result<Unit>.Failure(UserNotFound);
                 }
 
-                Gender? gender = GetGender(request.User.Gender);
+                Gender? gender = null;
+                if (request.User.Gender != null)
+                {
+                    if (!Enum.TryParse(request.User.Gender, out Gender enumValue))
+                    {
+                        return Result<Unit>.Failure(InvalidGender);
+                    }
+
+                    gender = enumValue;
+                }
 
                 user.Name = request.User.Name;
                 user.Email = request.User.Email;
@@ -56,24 +63,15 @@
                 user.Gender = gender;
                 user.Description = request.User.Description;
 
-                await this.repository.SaveChangesAsync();
-
-                return Unit.Value;
-            }
-
-            private Gender? GetGender(string? gender)
-            {
-                if (gender == null)
+                try
                 {
-                    return null;
+                    await this.repository.SaveChangesAsync();
+                    return Result<Unit>.Success(Unit.Value, String.Format(SuccessEditUser, user.Name));
                 }
-
-                if (!Enum.TryParse(gender, out Gender enumValue))
+                catch (Exception)
                 {
-                    throw new InvalidEnumException(nameof(Gender));
+                    return Result<Unit>.Failure(String.Format(FailedEditUser, user.Name));
                 }
-
-                return enumValue;
             }
         }
     }

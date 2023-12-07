@@ -8,17 +8,20 @@
     
     using Domain;
     using Persistence.Repositories;
-    using Application.Exceptions.Entity;
-    using Application.Exceptions.User;
+    using Application.Response;
+
+    using static Common.ExceptionMessages.User;
+    using static Common.SuccessMessages.User;
+    using static Common.FailMessages.User;
 
     public class DeleteUser
     {
-        public class DeleteUserCommand : IRequest<Unit>
+        public class DeleteUserCommand : IRequest<Result<Unit>>
         {
             public string UserId { get; set; } = null!;
         }
 
-        public class DeleteUserHandler : IRequestHandler<DeleteUserCommand, Unit>
+        public class DeleteUserHandler : IRequestHandler<DeleteUserCommand, Result<Unit>>
         {
             private readonly IRepository repository;
 
@@ -27,15 +30,10 @@
                 this.repository = repository;
             }
 
-            public async Task<Unit> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
+            public async Task<Result<Unit>> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
             {
-                if (!Guid.TryParse(request.UserId, out Guid guidUserId))
-                {
-                    throw new InvalidGuidFormatException();
-                }
-
                 User? user = await this.repository
-                    .All<User>(u => u.Id == guidUserId)
+                    .All<User>(u => u.Id.ToString() == request.UserId)
                     .Include(u => u.UsersPassions)
                     .Include(u => u.Animals)
                         .ThenInclude(a => a.AnimalMatches)
@@ -44,14 +42,20 @@
 
                 if (user == null)
                 {
-                    throw new UserNotFoundException();
+                    return Result<Unit>.Failure(UserNotFound);
                 }
 
                 DeleteAllData(user);
 
-                await this.repository.SaveChangesAsync();
-
-                return Unit.Value;
+                try
+                {
+                    await this.repository.SaveChangesAsync();
+                    return Result<Unit>.Success(Unit.Value, String.Format(SuccessDeleteUser, user.Name));
+                }
+                catch (Exception)
+                {
+                    return Result<Unit>.Failure(String.Format(FailedDeleteUser, user.Name));
+                }
             }
 
             private void DeleteAllData(User user)

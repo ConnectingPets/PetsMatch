@@ -9,17 +9,18 @@
     using Domain;
     using Persistence.Repositories;
     using Application.DTOs.Swipe;
-    using Application.Exceptions.Entity;
-    using Application.Exceptions.User;
+    using Application.Response;
+
+    using static Common.ExceptionMessages.User;
 
     public class AnimalsToSwipe
     {
-        public class AnimalsToSwipeQuery : IRequest<IEnumerable<AnimalToSwipeDto>>
+        public class AnimalsToSwipeQuery : IRequest<Result<IEnumerable<AnimalToSwipeDto>>>
         {
             public string UserId { get; set; } = null!;
         }
 
-        public class AnimalsToSwipeHandler : IRequestHandler<AnimalsToSwipeQuery, IEnumerable<AnimalToSwipeDto>>
+        public class AnimalsToSwipeHandler : IRequestHandler<AnimalsToSwipeQuery, Result<IEnumerable<AnimalToSwipeDto>>>
         {
             private readonly IRepository repository;
 
@@ -28,20 +29,15 @@
                 this.repository = repository;
             }
 
-            public async Task<IEnumerable<AnimalToSwipeDto>> Handle(AnimalsToSwipeQuery request, CancellationToken cancellationToken)
+            public async Task<Result<IEnumerable<AnimalToSwipeDto>>> Handle(AnimalsToSwipeQuery request, CancellationToken cancellationToken)
             {
-                if (!Guid.TryParse(request.UserId, out Guid guidUserId))
+                if (await this.repository.AnyAsync<User>(u => u.Id.ToString() == request.UserId) == false)
                 {
-                    throw new InvalidGuidFormatException();
-                }
-
-                if (await this.repository.AnyAsync<User>(u => u.Id == guidUserId) == false)
-                {
-                    throw new UserNotFoundException();
+                    return Result<IEnumerable<AnimalToSwipeDto>>.Failure(UserNotFound);
                 }
 
                 IEnumerable<AnimalToSwipeDto> animalsToSwipeDto = await this.repository
-                    .All<Animal>(a => a.OwnerId != guidUserId)
+                    .All<Animal>(a => a.OwnerId.ToString() != request.UserId)
                     .Include(a => a.Breed)
                     .Include(a => a.Photos)
                     .Select(a => new AnimalToSwipeDto
@@ -61,7 +57,7 @@
                     })
                     .ToArrayAsync();
 
-                return animalsToSwipeDto;
+                return Result<IEnumerable<AnimalToSwipeDto>>.Success(animalsToSwipeDto);
             }
         }
     }
