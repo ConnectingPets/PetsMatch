@@ -9,10 +9,12 @@
     using Domain;
     using Persistence.Repositories;
     using Application.Response;
+    using Application.Service.Interfaces;
 
     using static Common.ExceptionMessages.User;
     using static Common.SuccessMessages.User;
     using static Common.FailMessages.User;
+    using static Common.FailMessages.Animal;
 
     public class DeleteUser
     {
@@ -24,10 +26,12 @@
         public class DeleteUserHandler : IRequestHandler<DeleteUserCommand, Result<Unit>>
         {
             private readonly IRepository repository;
+            private readonly IPhotoService photoService;
 
-            public DeleteUserHandler(IRepository repository)
+            public DeleteUserHandler(IRepository repository, IPhotoService photoService)
             {
                 this.repository = repository;
+                this.photoService = photoService;
             }
 
             public async Task<Result<Unit>> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
@@ -38,6 +42,8 @@
                     .Include(u => u.Animals)
                         .ThenInclude(a => a.AnimalMatches)
                             .ThenInclude(am => am.Match)
+                    .Include(u => u.Animals)
+                        .ThenInclude(a => a.Photos)
                     .FirstOrDefaultAsync();
 
                 if (user == null)
@@ -45,7 +51,12 @@
                     return Result<Unit>.Failure(UserNotFound);
                 }
 
-                DeleteAllData(user);
+                Result<Unit> result = await DeleteAllData(user);
+
+                if (!result.IsSuccess)
+                {
+                    return result;
+                }
 
                 try
                 {
@@ -58,12 +69,19 @@
                 }
             }
 
-            private void DeleteAllData(User user)
+            private async Task<Result<Unit>> DeleteAllData(User user)
             {
                 this.repository.DeleteRange(user.UsersPassions.ToArray());
 
                 foreach (var animal in user.Animals)
                 {
+                    Result<Unit> result = await DeleteAllAnimalPhotos(animal.Photos.ToArray(), user.Name);
+
+                    if (!result.IsSuccess)
+                    {
+                        return result;
+                    }
+
                     this.repository.DeleteRange<Swipe>(swipe => 
                         swipe.SwipeeAnimalId == animal.AnimalId ||
                         swipe.SwiperAnimalId == animal.AnimalId);
@@ -78,6 +96,8 @@
                 }
 
                 this.repository.Delete(user);
+
+                return Result<Unit>.Success(Unit.Value);
             }
 
             private void DeleteAllMatches(Match[] matches)
@@ -88,6 +108,28 @@
                     this.repository.DeleteRange<AnimalMatch>(m => m.MatchId == match.MatchId);
                     this.repository.Delete(match);
                 }
+            }
+
+            private async Task<Result<Unit>> DeleteAllAnimalPhotos(Photo[] photos, string name)
+            {
+                try
+                {
+                    foreach (var photo in photos)
+                    {
+                        Result<Unit> result = await this.photoService.DeleteAnimalPhotoAsync(photo);
+
+                        if (!result.IsSuccess)
+                        {
+                            return result;
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+                    return Result<Unit>.Failure(String.Format(FailedDeleteAnimalPhotos, name));
+                }
+
+                return Result<Unit>.Success(Unit.Value);
             }
         }
     }

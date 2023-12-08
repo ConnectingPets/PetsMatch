@@ -26,5 +26,10 @@
         {
             public const string FailedSwipe = "Failed to swipe on the animal";
         }
+
+        public static class Animal
+        {
+            public const string FailedDeleteAnimalPhotos = "Failed to delete {0}'s photos";
+        }
     }
 }
