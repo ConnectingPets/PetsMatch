@@ -60,11 +60,11 @@
         }
 
         [HttpPost("AddAnimalPhoto/{animalId}")]
-        public async Task<IActionResult> AddAnimalPhoto(IFormFile file, [FromRoute] string animalId)
+        public async Task<IActionResult> AddAnimalPhoto(IFormFile[] files, [FromRoute] string animalId)
         {
             AddAnimalPhotoCommand command = new AddAnimalPhotoCommand()
             {
-                File = file,
+                Files = files,
                 AnimalId = animalId
             };
 

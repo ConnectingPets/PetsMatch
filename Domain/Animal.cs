@@ -42,8 +42,14 @@ namespace Domain
         [Comment("animal birth date")]
         public DateTime? BirthDate { get; set; }
 
-        [Comment("animal last modified")]
-        public DateTime LastModified { get; set; }
+        [Comment("animal last modified name")]
+        public DateTime LastModifiedName { get; set; }
+
+        [Comment("animal last modified breed")]
+        public DateTime LastModifiedBreed { get; set; }
+
+        [Comment("animal last modified gender")]
+        public DateTime LastModifiedGender { get; set; }
 
         [Comment("animal created on")]
         public DateTime CreatedOn { get; set; }

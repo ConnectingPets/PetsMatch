@@ -1,7 +1,7 @@
 ﻿namespace Application.DTOs.Animal
 {
+    using Photo;
     using Domain.Enum;
-    using Application.DTOs.Photo;
 
     public class ShowAnimalToEditDto
     {
@@ -29,8 +29,19 @@
         public double? Weight { get; set; }
 
         public bool IsHavingValidDocuments { get; set; }
+
+        public DateTime LastModifiedName { get; set; }
+
+        public DateTime LastModifiedBreed { get; set; }
+
+        public DateTime LastModifiedGender { get; set; }
+
         public ICollection<PhotoDto> Photos { get; set; }
 
-        public bool CanEditAll { get; set; }
+        public int BreedId { get; set; }
+
+        public string BreedName { get; set; } = null!;
+
+        public int CategoryId { get; set; }
     }
 }
