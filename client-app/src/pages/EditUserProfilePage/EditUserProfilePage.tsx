@@ -29,19 +29,22 @@ const EditUserProfilePage: React.FC<EditUserProfilePageProps> = observer(() => {
     const title = 'Edit My Profile';
     const subjectForDelete = 'this profile';
 
-    //  TO DO show user photo
-
     const onEditUserProfileSubmit = async (values: IUser) => {
         try {
-            await agent.apiUser.editUser(values);
-            //What data to be stored on the user store
+            const result = await agent.apiUser.editUser(values);
+            userStore.setUser(values, userStore.authToken!);
 
             navigate('/dashboard');
+
+            if (result.isSuccess) {
+                toast.success(result.successMessage);
+            } else {
+                toast.error(result.errorMessage);
+            }
+
         } catch(err) {
             console.log(err);
-
-            //Error message to be filled
-            toast.error('');
+            toast.error("Unsuccessful user edit."); 
         }
     }
 
@@ -51,16 +54,20 @@ const EditUserProfilePage: React.FC<EditUserProfilePageProps> = observer(() => {
 
     const onConfirmDelete = async () => {
         try {
-            await agent.apiUser.deleteUser();
-
-            await userStore.clearUser();
+            const result = await agent.apiUser.deleteUser();
+            userStore.clearUser();
 
             navigate('/');
-        } catch (err) {
-            console.log(err);
 
-            //Error message to be filled
-            toast.error('');
+            if (result.isSuccess) {
+                toast.success(result.successMessage);
+            } else {
+                toast.error(result.errorMessage);
+            }
+
+        } catch(err) {
+            console.log(err);
+            toast.error("Unsuccessful user edit."); 
         }
     };
 

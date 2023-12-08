@@ -33,7 +33,7 @@ const pets = [
 ]
 
 
-interface DashboardPageProps { };
+interface DashboardPageProps { }
 
 export const DashboardPage: React.FC<DashboardPageProps> = observer(() => {
     return (
