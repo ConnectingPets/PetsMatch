@@ -7,6 +7,7 @@
     
     using Domain;
     using Domain.Enum;
+    using Application.Service.Interfaces;
     using Persistence.Repositories;
     using Application.DTOs.User;
     using Application.Response;
@@ -27,10 +28,12 @@
         public class EditUserHandler : IRequestHandler<EditUserCommand, Result<Unit>>
         {
             private readonly IRepository repository;
+            private readonly IPhotoService photoService;
 
-            public EditUserHandler(IRepository repository)
+            public EditUserHandler(IRepository repository, IPhotoService photoService)
             {
                 this.repository = repository;
+                this.photoService = photoService;
             }
 
             public async Task<Result<Unit>> Handle(EditUserCommand request, CancellationToken cancellationToken)
@@ -65,6 +68,11 @@
 
                 try
                 {
+                    if (request.User.Photo != null)
+                    {
+                        await this.photoService.AddUserPhotoAsync(request.User.Photo, request.UserId);
+                    }
+
                     await this.repository.SaveChangesAsync();
                     return Result<Unit>.Success(Unit.Value, String.Format(SuccessEditUser, user.Name));
                 }

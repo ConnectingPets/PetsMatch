@@ -1,5 +1,7 @@
 ﻿namespace Application.DTOs.User
 {
+    using Microsoft.AspNetCore.Http;
+
     public class EditUserDto
     {
         public string Name { get; set; } = null!;
@@ -19,5 +21,7 @@
         public string? City { get; set; } = null!;
 
         public string? Education { get; set; } = null!;
+
+        public IFormFile? Photo { get; set; } 
     }
 }
