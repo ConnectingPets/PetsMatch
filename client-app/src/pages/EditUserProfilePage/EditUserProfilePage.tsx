@@ -29,20 +29,8 @@ const EditUserProfilePage: React.FC<EditUserProfilePageProps> = observer(() => {
     const title = 'Edit My Profile';
     const subjectForDelete = 'this profile';
 
-    //  TO DO show user photo
-
     const onEditUserProfileSubmit = async (values: IUser) => {
-        try {
-            await agent.apiUser.editUser(values);
-            //What data to be stored on the user store
 
-            navigate('/dashboard');
-        } catch(err) {
-            console.log(err);
-
-            //Error message to be filled
-            toast.error('');
-        }
     }
 
     const onDeleteOrCancelClick = () => {
@@ -50,18 +38,7 @@ const EditUserProfilePage: React.FC<EditUserProfilePageProps> = observer(() => {
     };
 
     const onConfirmDelete = async () => {
-        try {
-            await agent.apiUser.deleteUser();
-
-            await userStore.clearUser();
-
-            navigate('/');
-        } catch (err) {
-            console.log(err);
-
-            //Error message to be filled
-            toast.error('');
-        }
+        
     };
 
     return (
