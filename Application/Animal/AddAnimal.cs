@@ -4,8 +4,9 @@
 
     using Domain;
     using Response;
-    using DTOs.Animal;
     using DTOs.Photo;
+    using DTOs.Animal;
+    using Domain.Enum;
     using Service.Interfaces;
     using Persistence.Repositories;
 
@@ -51,7 +52,8 @@
                     IsEducated = animalDto.IsEducated,
                     IsHavingValidDocuments = animalDto.IsHavingValidDocuments,
                     OwnerId = Guid.Parse(request.OwnerId),
-                    BreedId = animalDto.BreedId
+                    BreedId = animalDto.BreedId,
+                    AnimalStatus = AnimalStatus.ForSwiping 
                 };
 
                 await repository.AddAsync(animal);
