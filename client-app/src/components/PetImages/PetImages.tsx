@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { FieldInputProps } from 'react-final-form';
 import { CgAsterisk } from 'react-icons/cg';
+import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 
 import { CLabel } from '../common/CLabel/CLabel';
 
@@ -37,6 +38,18 @@ const PetImages: React.FC<PetImagesProps> = ({ input }) => {
         input.onChange(updateFiles);
     };
 
+    const handleOnDragEnd = (result: any) => {
+        if (!result.destination) {
+            return;
+        }
+
+        const updated = [...images];
+        const [reorderedItem] = updated.splice(result.source.index, 1);
+        updated.splice(result.destination.index, 0, reorderedItem);
+
+        setImages(updated);
+    };
+
     return (
         <>
             {images.length < 6 && (
@@ -58,14 +71,25 @@ const PetImages: React.FC<PetImagesProps> = ({ input }) => {
             )}
 
             {images.length > 0 && (
-                <div id="images">
-                    {images.map((imageUrl, index) => (
-                        <div key={index} className="image-preview">
-                            <img src={imageUrl} alt="preview image" />
-                            <button type="button" onClick={() => handleRemoveImage(index, input)}>X</button>
-                        </div>
-                    ))}
-                </div>
+                <DragDropContext onDragEnd={handleOnDragEnd}>
+                    <Droppable droppableId="images">
+                        {(provided) => (
+                            <div id="images" {...provided.droppableProps} ref={provided.innerRef} >
+                                {images.map((imageUrl, index) => (
+                                    <Draggable key={index} draggableId={`image-${index}`} index={index} >
+                                        {(provided) => (
+                                            <div {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef} className="image-preview">
+                                                <img src={imageUrl} alt="preview image" />
+                                                <button type="button" onClick={() => handleRemoveImage(index, input)}>X</button>
+                                            </div>
+                                        )}
+                                    </Draggable>
+                                ))}
+                                {provided.placeholder}
+                            </div>
+                        )}
+                    </Droppable>
+                </DragDropContext>
             )}
         </>
     );
