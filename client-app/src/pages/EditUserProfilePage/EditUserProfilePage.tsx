@@ -43,8 +43,7 @@ const EditUserProfilePage: React.FC<EditUserProfilePageProps> = observer(() => {
             }
 
         } catch(err) {
-            console.log(err);
-            toast.error("Unsuccessful user edit."); 
+            console.error(err);
         }
     }
 
@@ -66,8 +65,7 @@ const EditUserProfilePage: React.FC<EditUserProfilePageProps> = observer(() => {
             }
 
         } catch(err) {
-            console.log(err);
-            toast.error("Unsuccessful user edit."); 
+            console.error(err);
         }
     };
 
