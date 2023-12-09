@@ -9,6 +9,8 @@
             public const string FailedLogin = "Invalid email or password";
             public const string FailedRegister = "User registration failed";
             public const string FailedLogout = "Failed to logout";
+            public const string FailedAddUserPhoto = "Failed to add {0}'s photo";
+            public const string FailedDeleteUserPhoto = "Failed to delete {0}'s photo";
         }
 
         public static class Match

@@ -70,7 +70,12 @@
                 {
                     if (request.User.Photo != null)
                     {
-                        await this.photoService.AddUserPhotoAsync(request.User.Photo, request.UserId);
+                        Result<Unit> result = await this.photoService.AddUserPhotoAsync(request.User.Photo, request.UserId);
+
+                        if (!result.IsSuccess)
+                        {
+                            return Result<Unit>.Failure(String.Format(FailedAddUserPhoto, user.Name));
+                        }
                     }
 
                     await this.repository.SaveChangesAsync();

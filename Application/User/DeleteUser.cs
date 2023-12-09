@@ -39,6 +39,7 @@
                 User? user = await this.repository
                     .All<User>(u => u.Id.ToString() == request.UserId)
                     .Include(u => u.UsersPassions)
+                    .Include(u => u.Photo)
                     .Include(u => u.Animals)
                         .ThenInclude(a => a.AnimalMatches)
                             .ThenInclude(am => am.Match)
@@ -95,6 +96,16 @@
                     this.repository.Delete(animal);
                 }
 
+                if (user.Photo != null)
+                {
+                    Result<Unit> result = await this.photoService.DeleteUserPhotoAsync(user.Photo, user.Id.ToString());
+
+                    if (!result.IsSuccess)
+                    {
+                        return Result<Unit>.Failure(String.Format(FailedDeleteUserPhoto, user.Name));
+                    }
+                }
+
                 this.repository.Delete(user);
 
                 return Result<Unit>.Success(Unit.Value);
@@ -112,21 +123,14 @@
 
             private async Task<Result<Unit>> DeleteAllAnimalPhotos(Photo[] photos, string name)
             {
-                try
+                foreach (var photo in photos)
                 {
-                    foreach (var photo in photos)
-                    {
-                        Result<Unit> result = await this.photoService.DeleteAnimalPhotoAsync(photo);
+                    Result<Unit> result = await this.photoService.DeleteAnimalPhotoAsync(photo);
 
-                        if (!result.IsSuccess)
-                        {
-                            return result;
-                        }
+                    if (!result.IsSuccess)
+                    {
+                        return result;
                     }
-                }
-                catch (Exception)
-                {
-                    return Result<Unit>.Failure(String.Format(FailedDeleteAnimalPhotos, name));
                 }
 
                 return Result<Unit>.Success(Unit.Value);
