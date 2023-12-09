@@ -5,11 +5,11 @@
     using Microsoft.AspNetCore.Authorization;
 
     using Infrastructure;
-    using Application.DTOs.Animal;
-    using static Application.Animal.AddAnimalMarketplace;
-    using static Application.Animal.ShowAnimalMarketplaceToEdit;
-    using static Application.Animal.EditAnimalMarketplace;
-    using static Application.Animal.DeleteAnimalMarketplace;
+    using Application.DTOs.Marketplace;
+    using static Application.Marketplace.AddAnimalMarketplace;
+    using static Application.Marketplace.ShowAnimalMarketplaceToEdit;
+    using static Application.Marketplace.EditAnimalMarketplace;
+    using static Application.Marketplace.DeleteAnimalMarketplace;
 
     [Authorize]
     [ApiController]

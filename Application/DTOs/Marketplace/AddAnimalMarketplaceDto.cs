@@ -1,4 +1,6 @@
-﻿namespace Application.DTOs.Animal
+﻿using Application.DTOs.Animal;
+
+namespace Application.DTOs.Marketplace
 {
     public class AddAnimalMarketplaceDto : AddAnimalDto
     {

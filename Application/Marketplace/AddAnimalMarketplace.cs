@@ -1,4 +1,4 @@
-﻿namespace Application.Animal
+﻿namespace Application.Marketplace
 {
     using System.Threading;
     using System.Threading.Tasks;
@@ -8,10 +8,10 @@
     using Domain;
     using Response;
     using DTOs.Photo;
-    using DTOs.Animal;
     using Domain.Enum;
     using Service.Interfaces;
     using Persistence.Repositories;
+    using Application.DTOs.Marketplace;
 
     public class AddAnimalMarketplace
     {

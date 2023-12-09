@@ -1,4 +1,4 @@
-﻿namespace Application.Animal
+﻿namespace Application.Marketplace
 {
     using MediatR;
     using Microsoft.EntityFrameworkCore;
@@ -6,8 +6,8 @@
     using Domain;
     using Response;
     using DTOs.Photo;
-    using DTOs.Animal;
     using Persistence.Repositories;
+    using Application.DTOs.Marketplace;
 
     public class ShowAnimalMarketplaceToEdit
     {
@@ -54,7 +54,7 @@
                         BirthDate = animal.BirthDate.ToString(),
                         Description = animal.Description,
                         IsEducated = animal.IsEducated,
-                        IsHavingValidDocuments =                                  animal.IsHavingValidDocuments,
+                        IsHavingValidDocuments = animal.IsHavingValidDocuments,
                         Name = animal.Name,
                         SocialMedia = animal.SocialMedia,
                         Weight = animal.Weight,
