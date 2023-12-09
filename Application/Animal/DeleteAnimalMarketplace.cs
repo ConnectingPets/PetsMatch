@@ -7,33 +7,33 @@
     using Microsoft.EntityFrameworkCore;
 
     using Domain;
-    using Persistence.Repositories;
     using Response;
-    using Application.Service.Interfaces;
+    using Service.Interfaces;
+    using Persistence.Repositories;
 
-    public class DeleteAnimal
+    public class DeleteAnimalMarketplace
     {
-        public class DeleteAnimalCommand : IRequest<Result<Unit>>
+        public class DeleteAnimalMarketplaceCommand : IRequest<Result<Unit>>
         {
-            public string AnimalId { get; set; } = null!;
-
             public string UserId { get; set; } = null!;
+
+            public string AnimalId { get; set; } = null!;
         }
 
-        public class DeleteAnimalCommandHandler :
-            IRequestHandler<DeleteAnimalCommand, Result<Unit>>
+        public class DeleteAnimalMarketplaceCommandHandler : IRequestHandler<DeleteAnimalMarketplaceCommand, Result<Unit>>
         {
             private readonly IRepository repository;
             private readonly IPhotoService photoService;
 
-            public DeleteAnimalCommandHandler(IRepository repository,
-                                              IPhotoService photoService)
+            public DeleteAnimalMarketplaceCommandHandler(
+                IRepository repository,
+                IPhotoService photoService)
             {
                 this.repository = repository;
                 this.photoService = photoService;
             }
 
-            public async Task<Result<Unit>> Handle(DeleteAnimalCommand request, CancellationToken cancellationToken)
+            public async Task<Result<Unit>> Handle(DeleteAnimalMarketplaceCommand request, CancellationToken cancellationToken)
             {
                 string animalId = request.AnimalId;
                 Animal? animal =
@@ -60,29 +60,6 @@
                     return Result<Unit>.Failure("This pet does not belong to you!");
                 }
 
-                repository.
-                    DeleteRange<Swipe>(s => s.SwiperAnimalId.ToString() == animalId
-                    || s.SwipeeAnimalId.ToString() == animalId);
-
-                AnimalMatch[] animalMatch = await repository.
-                    All<AnimalMatch>(am => am.AnimalId.ToString() == animalId).ToArrayAsync();
-
-                foreach (AnimalMatch match in animalMatch)
-                {
-                    AnimalMatch[] animalMatches = await repository.All<AnimalMatch>(am => am.MatchId == match.MatchId).ToArrayAsync();
-
-                    Guid[] matchesIds = animalMatches.
-                        Select(am => am.MatchId)
-                        .ToArray();
-
-                    repository.DeleteRange(animalMatches);
-
-                    foreach (var animalMatchId in matchesIds)
-                    {
-                        await repository.DeleteAsync<Match>(animalMatchId);
-                    }
-                }
-
                 Message[] allMessages = await repository.
                     All<Message>(m => m.AnimalId.ToString() == animalId).
                     ToArrayAsync();
@@ -99,7 +76,9 @@
                     return
                         Result<Unit>.Failure($"Failed to delete pet - {animal.Name}");
                 }
+
             }
         }
     }
 }
+

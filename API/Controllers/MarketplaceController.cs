@@ -9,6 +9,7 @@
     using static Application.Animal.AddAnimalMarketplace;
     using static Application.Animal.ShowAnimalMarketplaceToEdit;
     using static Application.Animal.EditAnimalMarketplace;
+    using static Application.Animal.DeleteAnimalMarketplace;
 
     [Authorize]
     [ApiController]
@@ -58,6 +59,20 @@
                 new EditAnimalMarketplaceCommand()
                 {
                     AnimalDto = animalDto,
+                    AnimalId = id,
+                    UserId = this.User.GetById()
+                };
+
+            var result = await mediator.Send(command);
+            return new JsonResult(result);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteAnimal([FromRoute] string id)
+        {
+            DeleteAnimalMarketplaceCommand command =
+                new DeleteAnimalMarketplaceCommand()
+                {
                     AnimalId = id,
                     UserId = this.User.GetById()
                 };
