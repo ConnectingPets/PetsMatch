@@ -77,7 +77,7 @@
 
                 foreach (var animal in user.Animals)
                 {
-                    Result<Unit> result = await this.DeleteAllAnimalPhotos(animal.Photos.ToArray(), user.Name);
+                    Result<Unit> result = await this.DeleteAllAnimalPhotos(animal.Photos.ToArray());
 
                     if (!result.IsSuccess)
                     {
@@ -122,7 +122,7 @@
                 }
             }
 
-            private async Task<Result<Unit>> DeleteAllAnimalPhotos(Photo[] photos, string name)
+            private async Task<Result<Unit>> DeleteAllAnimalPhotos(Photo[] photos)
             {
                 foreach (var photo in photos)
                 {

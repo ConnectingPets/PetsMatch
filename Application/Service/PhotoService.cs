@@ -31,7 +31,7 @@
             {
                 foreach (var file in files)
                 {
-                    if (animal.Photos.Count() == 6)
+                    if (animal.Photos.Count == 6)
                     {
                         return Result<string>.Failure("You already have 6 photos of this animal. You cannot add more");
                     }
@@ -227,7 +227,7 @@
                     MainPhotoDto photo = photos[i];
                     IFormFile file = photo.File;
 
-                    if (animal.Photos.Count() == 6)
+                    if (animal.Photos.Count == 6)
                     {
                         return Result<string>.Failure("You already have 6 photos of this animal. You cannot add more");
                     }
