@@ -6,9 +6,10 @@
     using MediatR;
 
     using Domain;
-    using Persistence.Repositories;
-    using Application.DTOs.Animal;
     using Response;
+    using Application.DTOs.Animal;
+    using Persistence.Repositories;
+    using static Common.ExceptionMessages.Entity;
 
     public class EditAnimal
     {
@@ -33,9 +34,16 @@
 
             public async Task<Result<Unit>> Handle(EditAnimalCommand request, CancellationToken cancellationToken)
             {
+                string animalId = request.AnimalId;
                 EditAnimalDto dto = request.AnimalDto;
+
+                if (!Guid.TryParse(animalId,out Guid result))
+                {
+                    return Result<Unit>.Failure(InvalidGuidFormat);
+                }
+
                 Animal? animal =
-                    await repository.GetById<Animal>(Guid.Parse(request.AnimalId));
+                    await repository.GetById<Animal>(Guid.Parse(animalId));
 
                 if (animal == null)
                 {

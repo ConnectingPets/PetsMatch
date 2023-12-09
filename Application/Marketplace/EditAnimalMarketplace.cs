@@ -9,6 +9,7 @@
     using Response;
     using Persistence.Repositories;
     using Application.DTOs.Marketplace;
+    using static Common.ExceptionMessages.Entity;
 
     public class EditAnimalMarketplace
     {
@@ -31,9 +32,15 @@
 
             public async Task<Result<Unit>> Handle(EditAnimalMarketplaceCommand request, CancellationToken cancellationToken)
             {
+                string animalId = request.AnimalId;
                 EditAnimalMarketplaceDto dto = request.AnimalDto;
+
+                if (!Guid.TryParse(animalId, out Guid result))
+                {
+                    return Result<Unit>.Failure(InvalidGuidFormat);
+                }
                 Animal? animal =
-                    await repository.GetById<Animal>(Guid.Parse(request.AnimalId));
+                    await repository.GetById<Animal>(Guid.Parse(animalId));
 
                 if (animal == null)
                 {
