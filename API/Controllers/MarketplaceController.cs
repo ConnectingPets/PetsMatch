@@ -7,6 +7,7 @@
     using Infrastructure;
     using Application.DTOs.Animal;
     using static Application.Animal.AddAnimalMarketplace;
+    using static Application.Animal.ShowAnimalMarketplaceToEdit;
 
     [Authorize]
     [ApiController]
@@ -33,7 +34,20 @@
 
             var result = await mediator.Send(command);
             return new JsonResult(result);
+        }
 
+        [HttpGet("EditAnimal/{id}")]
+        public async Task<IActionResult> EditAnimal([FromRoute] string id)
+        {
+            ShowAnimalMarketplaceToEditQuery query =
+                new ShowAnimalMarketplaceToEditQuery()
+                {
+                    AnimalId = id,
+                    OwnerId = this.User.GetById()
+                };
+
+            var result = await mediator.Send(query);
+            return new JsonResult(result);
         }
     }
 }
