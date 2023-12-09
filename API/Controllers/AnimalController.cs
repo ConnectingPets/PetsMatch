@@ -15,7 +15,9 @@
     using static Application.AnimalCategory.AllAnimalCategories;
 
     [Authorize]
-    public class AnimalController : BaseApiController
+    [ApiController]
+    [Route("api/[controller]")]
+    public class AnimalController : ControllerBase
     {
         private readonly IMediator mediator;
 
@@ -25,7 +27,7 @@
         }
 
         [HttpPost("Add")]
-        public async Task<IActionResult> AddAnimal([FromBody]AddAnimalDto animal)
+        public async Task<IActionResult> AddAnimal([FromForm]AddAnimalDto animal)
         {
             string ownerId = this.User.GetById();
 

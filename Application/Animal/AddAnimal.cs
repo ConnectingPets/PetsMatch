@@ -5,8 +5,8 @@
     using Domain;
     using Response;
     using DTOs.Photo;
-    using DTOs.Animal;
     using Domain.Enum;
+    using DTOs.Animal;
     using Service.Interfaces;
     using Persistence.Repositories;
 
@@ -53,7 +53,7 @@
                     IsHavingValidDocuments = animalDto.IsHavingValidDocuments,
                     OwnerId = Guid.Parse(request.OwnerId),
                     BreedId = animalDto.BreedId,
-                    AnimalStatus = AnimalStatus.ForSwiping 
+                    AnimalStatus = AnimalStatus.ForSwiping
                 };
 
                 await repository.AddAsync(animal);
@@ -70,7 +70,6 @@
                     return
                         Result<Unit>.Failure($"Failed to create pet - {animal.Name}");
                 }
-
             }
         }
     }
