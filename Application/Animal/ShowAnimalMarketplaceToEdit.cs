@@ -16,7 +16,7 @@
         {
             public string AnimalId { get; set; } = null!;
 
-            public string OwnerId { get; set; } = null!;
+            public string UserId { get; set; } = null!;
         }
 
         public class ShowAnimalMarketplaceToEditQueryHandler :
@@ -42,7 +42,7 @@
                 {
                     return Result<ShowAnimalMarketplaceToEditDto>.Failure("This pet does not exist! Please select existing one");
                 }
-                if (animal.OwnerId.ToString() != request.OwnerId.ToLower())
+                if (animal.OwnerId.ToString() != request.UserId.ToLower())
                 {
                     return Result<ShowAnimalMarketplaceToEditDto>.Failure("This pet does not belong to you!");
                 }

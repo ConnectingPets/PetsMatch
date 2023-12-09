@@ -68,7 +68,7 @@
         }
 
         [HttpPatch("{id}")]
-        public async Task<IActionResult> UpdateAnimal([FromBody] EditAnimalDto animalDto, string id)
+        public async Task<IActionResult> UpdateAnimal([FromBody] EditAnimalDto animalDto, [FromRoute]string id)
         {
             EditAnimalCommand command = new EditAnimalCommand()
             {

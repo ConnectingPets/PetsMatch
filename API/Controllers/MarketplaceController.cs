@@ -8,6 +8,7 @@
     using Application.DTOs.Animal;
     using static Application.Animal.AddAnimalMarketplace;
     using static Application.Animal.ShowAnimalMarketplaceToEdit;
+    using static Application.Animal.EditAnimalMarketplace;
 
     [Authorize]
     [ApiController]
@@ -43,10 +44,25 @@
                 new ShowAnimalMarketplaceToEditQuery()
                 {
                     AnimalId = id,
-                    OwnerId = this.User.GetById()
+                    UserId = this.User.GetById()
                 };
 
             var result = await mediator.Send(query);
+            return new JsonResult(result);
+        }
+
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> UpdateAnimal([FromBody] EditAnimalMarketplaceDto animalDto, [FromRoute] string id)
+        {
+            EditAnimalMarketplaceCommand command =
+                new EditAnimalMarketplaceCommand()
+                {
+                    AnimalDto = animalDto,
+                    AnimalId = id,
+                    UserId = this.User.GetById()
+                };
+
+            var result = await mediator.Send(command);
             return new JsonResult(result);
         }
     }
