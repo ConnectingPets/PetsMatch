@@ -32,7 +32,7 @@
             public async Task<Result<UserProfileDto>> Handle(UserProfileQuery request, CancellationToken cancellationToken)
             {
                 User? user = await this.repository
-                    .All<User>(u => u.Id.ToString() == request.UserId)
+                    .All<User>(u => u.Id.ToString() == request.UserId.ToLower())
                     .Include(u => u.Photo)
                     .FirstOrDefaultAsync();
 

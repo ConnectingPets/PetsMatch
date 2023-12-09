@@ -38,8 +38,7 @@
 
             public async Task<Result<Unit>> Handle(EditUserCommand request, CancellationToken cancellationToken)
             {
-                User? user = await this.repository.GetById<User>(Guid.Parse(request.UserId));
-
+                User? user = await this.repository.FirstOrDefaultAsync<User>(u => u.Id.ToString() == request.UserId.ToLower());
                 if (user == null)
                 {
                     return Result<Unit>.Failure(UserNotFound);

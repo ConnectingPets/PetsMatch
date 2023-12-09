@@ -14,7 +14,6 @@
     using static Common.ExceptionMessages.User;
     using static Common.SuccessMessages.User;
     using static Common.FailMessages.User;
-    using static Common.FailMessages.Animal;
 
     public class DeleteUser
     {
@@ -28,7 +27,9 @@
             private readonly IRepository repository;
             private readonly IPhotoService photoService;
 
-            public DeleteUserHandler(IRepository repository, IPhotoService photoService)
+            public DeleteUserHandler(
+                IRepository repository,
+                IPhotoService photoService)
             {
                 this.repository = repository;
                 this.photoService = photoService;
@@ -37,13 +38,13 @@
             public async Task<Result<Unit>> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
             {
                 User? user = await this.repository
-                    .All<User>(u => u.Id.ToString() == request.UserId)
+                    .All<User>(u => u.Id.ToString() == request.UserId.ToLower())
                     .Include(u => u.UsersPassions)
                     .Include(u => u.Photo)
                     .Include(u => u.Animals)
                         .ThenInclude(a => a.AnimalMatches)
                             .ThenInclude(am => am.Match)
-                    .Include(u => u.Animals)
+                    .Include(u => u.Animals )
                         .ThenInclude(a => a.Photos)
                     .FirstOrDefaultAsync();
 
@@ -52,7 +53,7 @@
                     return Result<Unit>.Failure(UserNotFound);
                 }
 
-                Result<Unit> result = await DeleteAllData(user);
+                Result<Unit> result = await this.DeleteAllData(user);
 
                 if (!result.IsSuccess)
                 {
@@ -76,7 +77,7 @@
 
                 foreach (var animal in user.Animals)
                 {
-                    Result<Unit> result = await DeleteAllAnimalPhotos(animal.Photos.ToArray(), user.Name);
+                    Result<Unit> result = await this.DeleteAllAnimalPhotos(animal.Photos.ToArray(), user.Name);
 
                     if (!result.IsSuccess)
                     {

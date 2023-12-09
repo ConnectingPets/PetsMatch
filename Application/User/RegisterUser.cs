@@ -61,12 +61,13 @@
 
                     await signInManager.SignInAsync(user, false);
 
-                    return Result<UserDto>.Success(new UserDto
+                    UserDto userDto = new UserDto
                     {
                         Name = user.Name,
-                        Photo = null,
-                        Token = tokenService.CreateToken(user)
-                    });
+                        Token = this.tokenService.CreateToken(user)
+                    };
+
+                    return Result<UserDto>.Success(userDto);
                 }
                 catch (Exception)
                 {

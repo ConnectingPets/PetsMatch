@@ -44,7 +44,7 @@
                     return Result<Unit>.Failure(AnimalNotFound);
                 }
 
-                if (await this.repository.AnyAsync<Match>(animal => animal.MatchId.ToString() == request.MatchId) == false)
+                if (await this.repository.AnyAsync<Match>(animal => animal.MatchId.ToString() == request.MatchId.ToLower()) == false)
                 {
                     return Result<Unit>.Failure(MatchNotFound);
                 }

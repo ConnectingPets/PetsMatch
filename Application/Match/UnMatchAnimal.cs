@@ -50,7 +50,7 @@
                     return Result<Unit>.Failure(AnimalNotFound);
                 }
 
-                if (await this.repository.AnyAsync<User>(u => u.Id.ToString() == request.UserId))
+                if (await this.repository.AnyAsync<User>(u => u.Id.ToString() == request.UserId.ToLower()))
                 {
                     return Result<Unit>.Failure(UserNotFound);
                 }
@@ -92,9 +92,9 @@
             }
 
             private async Task<Match?> GetExistingMatch(string animalOneId, string animalTwoId)
-                => await this.repository.All<AnimalMatch>(am => am.AnimalId.ToString() == animalOneId &&
+                => await this.repository.All<AnimalMatch>(am => am.AnimalId.ToString() == animalOneId.ToLower() &&
                                             am.Match.AnimalMatches
-                                                .Any(m => m.AnimalId.ToString() == animalTwoId))
+                                                .Any(m => m.AnimalId.ToString() == animalTwoId.ToLower()))
                                         .Include(am => am.Match)
                                         .ThenInclude(m => m.AnimalMatches)
                                         .Include(m => m.Match.Messages)

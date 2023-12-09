@@ -31,7 +31,7 @@
 
             public async Task<Result<IEnumerable<AnimalToSwipeDto>>> Handle(AnimalsToSwipeQuery request, CancellationToken cancellationToken)
             {
-                if (await this.repository.AnyAsync<User>(u => u.Id.ToString() == request.UserId) == false)
+                if (await this.repository.AnyAsync<User>(u => u.Id.ToString() == request.UserId.ToLower()) == false)
                 {
                     return Result<IEnumerable<AnimalToSwipeDto>>.Failure(UserNotFound);
                 }

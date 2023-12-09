@@ -13,6 +13,8 @@
 
     using static Common.ExceptionMessages.User;
     using static Common.FailMessages.User;
+    using Persistence.Repositories;
+    using Microsoft.EntityFrameworkCore;
 
     public class LoginUser
     {
@@ -27,24 +29,26 @@
 
         public class LoginUserHandler : IRequestHandler<LoginUserCommand, Result<UserDto>>
         {
-            private readonly UserManager<User> userManager;
             private readonly SignInManager<User> signInManager;
+            private readonly IRepository repository;
             private readonly ITokenService tokenService;
 
             public LoginUserHandler(
-                UserManager<User> userManager,
                 SignInManager<User> signInManager,
+                IRepository repository,
                 ITokenService tokenService)
             {
-                this.userManager = userManager;
+                this.repository = repository;
                 this.signInManager = signInManager;
                 this.tokenService = tokenService;
             }
 
             public async Task<Result<UserDto>> Handle(LoginUserCommand request, CancellationToken cancellationToken)
             {
-                User? user = await this.userManager
-                   .FindByEmailAsync(request.Email);
+                User? user = await this.repository
+                    .All<User>(u => u.Email == request.Email)
+                    .Include(u => u.Photo)
+                    .FirstOrDefaultAsync();
 
                 if (user == null)
                 {
@@ -60,12 +64,14 @@
                         return Result<UserDto>.Failure(FailedLogin);
                     }
 
-                    return Result<UserDto>.Success(new UserDto
+                    UserDto userDto = new UserDto
                     {
                         Name = user.Name,
-                        Photo = null,
-                        Token = tokenService.CreateToken(user)
-                    });
+                        Photo = user.Photo?.Url,
+                        Token = this.tokenService.CreateToken(user)
+                    };
+
+                    return Result<UserDto>.Success(userDto);
                 }
                 catch (Exception)
                 {
