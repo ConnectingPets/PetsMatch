@@ -28,7 +28,8 @@ export const Register: React.FC<RegisterProps> = observer(({
         // const { ConfirmPassword, ...userData } = values;
 
         try {
-            const { name: Name, token } = await agent.apiUser.register(values);
+            const result = await agent.apiUser.register(values);
+            const { name: Name, token } = result.data;
             const Email = values.Email;
             
             userStore.setUser({ Name, Email }, token);
