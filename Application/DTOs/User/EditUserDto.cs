@@ -1,5 +1,6 @@
 ﻿namespace Application.DTOs.User
 {
+    using Domain.Enum;
     using Microsoft.AspNetCore.Http;
 
     public class EditUserDto
@@ -14,7 +15,7 @@
 
         public string? JobTitle { get; set; } = null!;
 
-        public string? Gender { get; set; } = null!;
+        public Gender? Gender { get; set; } = null!;
 
         public string? Address { get; set; } = null!;
 

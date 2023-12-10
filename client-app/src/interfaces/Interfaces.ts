@@ -7,9 +7,9 @@ export interface IUser {
     Description?: string,
     Age?: number,
     Education?: string,
-    Photo?: string,
+    Photo?: File,
     JobTitle?: string,
-    Gender?: string,
+    Gender?: number,
     Address?: string,
     City?: string
 }

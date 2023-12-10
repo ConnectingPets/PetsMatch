@@ -18,6 +18,7 @@ import UserPhoto from '../../components/UserPhoto/UserPhoto';
 import { CSubmitButton } from '../../components/common/CSubmitButton/CSubmitButton';
 import DeleteModal from '../../components/DeleteModal/DeleteModal';
 import Footer from '../../components/Footer/Footer';
+import { returnCorrecTypesForEditUser } from '../../utils/convertTypes';
 
 interface EditUserProfilePageProps { }
 
@@ -30,8 +31,11 @@ const EditUserProfilePage: React.FC<EditUserProfilePageProps> = observer(() => {
     const subjectForDelete = 'this profile';
 
     const onEditUserProfileSubmit = async (values: IUser) => {
+        const userData = returnCorrecTypesForEditUser(values);
+        console.log(userData);
+
         try {
-            const result = await agent.apiUser.editUser(values);
+            const result = await agent.apiUser.editUser(userData);
             userStore.setUser(values, userStore.authToken!);
 
             navigate('/dashboard');

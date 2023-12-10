@@ -5,6 +5,7 @@ import { IAnimal } from '../interfaces/Interfaces';
 
 const axiosInstance = axios.create({
     baseURL: 'http://localhost:5216',
+    withCredentials: true
 });
 
 const headers = {

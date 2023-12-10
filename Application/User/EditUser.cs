@@ -44,16 +44,16 @@
                     return Result<Unit>.Failure(UserNotFound);
                 }
 
-                Gender? gender = null;
-                if (request.User.Gender != null)
-                {
-                    if (!Enum.TryParse(request.User.Gender, out Gender enumValue))
-                    {
-                        return Result<Unit>.Failure(InvalidGender);
-                    }
+                //Gender? gender = null;
+                //if (request.User.Gender != null)
+                //{
+                //    if (!Enum.TryParse(request.User.Gender, out Gender enumValue))
+                //    {
+                //        return Result<Unit>.Failure(InvalidGender);
+                //    }
 
-                    gender = enumValue;
-                }
+                //    gender = enumValue;
+                //}
 
                 user.Name = request.User.Name;
                 user.Email = request.User.Email;
@@ -62,7 +62,7 @@
                 user.Age = request.User.Age;
                 user.Education = request.User.Education;
                 user.JobTitle = request.User.JobTitle;
-                user.Gender = gender;
+                user.Gender = request.User.Gender;
                 user.Description = request.User.Description;
 
                 try
