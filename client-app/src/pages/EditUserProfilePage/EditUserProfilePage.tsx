@@ -30,7 +30,20 @@ const EditUserProfilePage: React.FC<EditUserProfilePageProps> = observer(() => {
     const subjectForDelete = 'this profile';
 
     const onEditUserProfileSubmit = async (values: IUser) => {
+        try {
+            const result = await agent.apiUser.editUser(values);
+            userStore.setUser(values, userStore.authToken!);
 
+            navigate('/dashboard');
+
+            if (result.isSuccess) {
+                toast.success(result.successMessage);
+            } else {
+                toast.error(result.errorMessage);
+            }
+        } catch (err) {
+            console.error(err);
+        }
     }
 
     const onDeleteOrCancelClick = () => {
@@ -38,7 +51,20 @@ const EditUserProfilePage: React.FC<EditUserProfilePageProps> = observer(() => {
     };
 
     const onConfirmDelete = async () => {
-        
+        try {
+            const result = await agent.apiUser.deleteUser();
+            userStore.clearUser();
+
+            navigate('/');
+
+            if (result.isSuccess) {
+                toast.success(result.successMessage);
+            } else {
+                toast.error(result.errorMessage);
+            }
+        } catch (err) {
+            console.error(err);
+        }
     };
 
     return (
