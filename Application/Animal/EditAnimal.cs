@@ -14,7 +14,7 @@
     {
         public class EditAnimalCommand : IRequest<Result<Unit>>
         {
-            public AddOrEditAnimalDto AnimalDto { get; set; } = null!;
+            public EditAnimalDto AnimalDto { get; set; } = null!;
 
             public string AnimalId { get; set; } = null!;
 
@@ -33,7 +33,7 @@
 
             public async Task<Result<Unit>> Handle(EditAnimalCommand request, CancellationToken cancellationToken)
             {
-                AddOrEditAnimalDto dto = request.AnimalDto;
+                EditAnimalDto dto = request.AnimalDto;
                 Animal? animal =
                     await repository.GetById<Animal>(Guid.Parse(request.AnimalId));
 
@@ -46,21 +46,38 @@
                     return Result<Unit>.Failure("This pet does not belong to you!");
                 }
 
-                bool isSomethingEdit = animal.Name != dto.Name 
-                    || animal.BreedId != dto.BreedId 
-                    || animal.Gender != dto.Gender;
+                int daysDifferenceName = (DateTime.UtcNow - animal.LastModifiedName).Days;
+                int daysDifferenceBreed = (DateTime.UtcNow - animal.LastModifiedBreed).Days;
+                int daysDifferenceGender = (DateTime.UtcNow - animal.LastModifiedGender).Days;
 
+                bool isNameEdit = animal.Name != dto.Name;
+                bool isBreedEdit = animal.BreedId != dto.BreedId;
+                bool isGenderEdit = animal.Gender != dto.Gender;
 
-                int daysDifference = (DateTime.UtcNow - animal.LastModified).Days;
-
-                if (isSomethingEdit)
+                if (daysDifferenceName < 30 && isNameEdit)
                 {
-                    animal.LastModified = DateTime.UtcNow;
+                    return Result<Unit>.Failure($"Can not update pet name {30 - daysDifferenceName} days.");
+                }
+                if (daysDifferenceBreed < 30 && isBreedEdit)
+                {
+                    return Result<Unit>.Failure($"Can not update pet breed for another {30 - daysDifferenceBreed} days.");
+                }
+                if (daysDifferenceGender < 30 && isGenderEdit)
+                {
+                    return Result<Unit>.Failure($"Can not update pet gender for another {30 - daysDifferenceName} days.");
                 }
 
-                if (daysDifference < 30 && isSomethingEdit)
+                if (isNameEdit)
                 {
-                    return Result<Unit>.Failure($"Can not update pet name, breed and gender for another {30 - daysDifference} days.");
+                    animal.LastModifiedName = DateTime.UtcNow;
+                }
+                if (isBreedEdit)
+                {
+                    animal.LastModifiedBreed = DateTime.UtcNow;
+                }
+                if (isGenderEdit)
+                {
+                    animal.LastModifiedGender = DateTime.UtcNow;
                 }
 
                 animal.BirthDate = dto.BirthDate;

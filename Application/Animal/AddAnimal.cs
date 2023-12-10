@@ -5,30 +5,38 @@
     using Domain;
     using Response;
     using DTOs.Animal;
+    using DTOs.Photo;
+    using Service.Interfaces;
     using Persistence.Repositories;
 
     public class AddAnimal
     {
-        public class AddAnimalCommand : IRequest<Result<string>>
+        public class AddAnimalCommand : IRequest<Result<Unit>>
         {
-            public AddOrEditAnimalDto AnimalDto { get; set; } = null!;
+            public AddAnimalDto AnimalDto { get; set; } = null!;
 
             public string OwnerId { get; set; } = null!;
         }
 
         public class AddAnimalCommandHandler :
-            IRequestHandler<AddAnimalCommand, Result<string>>
+            IRequestHandler<AddAnimalCommand, Result<Unit>>
         {
             private readonly IRepository repository;
 
-            public AddAnimalCommandHandler(IRepository repository)
+            private readonly IPhotoService photoService;
+
+            public AddAnimalCommandHandler(IRepository repository,
+                                           IPhotoService photoService)
             {
                 this.repository = repository;
+                this.photoService = photoService;
+
             }
 
-            public async Task<Result<string>> Handle(AddAnimalCommand request, CancellationToken cancellationToken)
+            public async Task<Result<Unit>> Handle(AddAnimalCommand request, CancellationToken cancellationToken)
             {
-                AddOrEditAnimalDto animalDto = request.AnimalDto;
+                AddAnimalDto animalDto = request.AnimalDto;
+                MainPhotoDto[] photos = request.AnimalDto.Photos;
 
                 Animal animal = new Animal()
                 {
@@ -51,12 +59,14 @@
                 try
                 {
                     await repository.SaveChangesAsync();
-                    return Result<string>.Success(animal.AnimalId.ToString(), $"You have successfully add {animal.Name} to your pet's list");
+                    await photoService.AddAnimalPhotosWithMainAsync(photos,animal);
+
+                    return Result<Unit>.Success(Unit.Value,$"You have successfully add {animal.Name} to your pet's list");
                 }
                 catch (Exception)
                 {
                     return
-                        Result<string>.Failure($"Failed to create pet - {animal.Name}");
+                        Result<Unit>.Failure($"Failed to create pet - {animal.Name}");
                 }
 
             }

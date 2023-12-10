@@ -1,14 +1,13 @@
 namespace API.Controllers
 {
+    using MediatR;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Authorization;
-
+    
+    using Application.Response;
     using Application.DTOs.Match;
     using Application.Service.Interfaces;
-    using Application.Exceptions.Entity;
-    using Application.Exceptions.Animal;
-    using Application.Exceptions.Match;
-    using static Common.ExceptionMessages.Entity;
+    using API.Infrastructure;
 
     [Authorize]
     [Route("api/[controller]")]
@@ -26,95 +25,35 @@ namespace API.Controllers
         [HttpPost]
         public async Task<ActionResult> Match([FromBody] MatchDto matchDto)
         {
-            try
-            {
-                await this.matchService.Match(
-                    matchDto.AnimalOneId,
-                    matchDto.AnimalTwoId
-                );
-            }
-            catch (InvalidGuidFormatException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (AnimalNotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch (AlreadyMatchedException ex)
-            {
-                return Conflict(ex.Message);
-            }
-            catch (SameAnimalException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch
-            {
-                return StatusCode(500, InternalServerError);
-            }
+            Result<Unit> result = await this.matchService.Match(
+                matchDto.AnimalOneId,
+                matchDto.AnimalTwoId,
+                User.GetById());
 
-            return Ok();
+            return Ok(result);
         }
 
         [Route("/unmatch")]
         [HttpPost]
         public async Task<ActionResult> UnMatch([FromBody] UnMatchDto unMatchDto)
         {
-            try
-            {
-                await this.matchService.UnMatch(
-                    unMatchDto.AnimalOneId,
-                    unMatchDto.AnimalTwoId
-                );
-            }
-            catch (InvalidGuidFormatException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (AnimalNotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch (MatchNotFoundException ex)
-            {
-                return Conflict(ex.Message);
-            }
-            catch (SameAnimalException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch
-            {
-                return StatusCode(500, InternalServerError);
-            }
+            Result<Unit> result = await this.matchService.UnMatch(
+                unMatchDto.AnimalOneId,
+                unMatchDto.AnimalTwoId,
+                User.GetById());
 
-            return Ok();
+            return Ok(result);
         }
 
         [Route("/animal-matches")]
         [HttpGet]
         public async Task<ActionResult> AnimalMatches([FromQuery] string animalId)
         {
-            IEnumerable<AnimalMatchDto> matches;
-            try
-            {
-                matches = await this.matchService.GetAnimalMatches(animalId);
-            }
-            catch (InvalidGuidFormatException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (AnimalNotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch
-            {
-                return StatusCode(500, InternalServerError);
-            }
+            Result<IEnumerable<AnimalMatchDto>> result = await this.matchService.GetAnimalMatches(
+                animalId,
+                User.GetById());
 
-            return Ok(matches);
+            return Ok(result);
         }
     }
 }

@@ -46,10 +46,10 @@ export const registerFormValidator = combineValidators({
         isRequired,
         hasLengthGreaterThan(4)
     )('Password'),
-    RePassword: composeValidators(
+    ConfirmPassword: composeValidators(
         isRequired,
         matchesField('Password', 'Password')
-    )('Retype Password')
+    )('Confirm Password')
 });
 
 export const loginFormValidator = combineValidators({

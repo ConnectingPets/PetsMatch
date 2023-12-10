@@ -8,78 +8,77 @@
     using MediatR;
 
     using Domain;
-    using Persistence;
     using Interfaces;
     using Response;
     using Persistence.Repositories;
+    using Application.DTOs.Photo;
 
     public class PhotoService : IPhotoService
     {
         private readonly Cloudinary cloudinary;
         private readonly IRepository repository;
-        private readonly DataContext dataContext;
 
         public PhotoService(Cloudinary cloudinary,
-                            IRepository repository,
-                            DataContext dataContext)
+                            IRepository repository)
         {
             this.cloudinary = cloudinary;
             this.repository = repository;
-            this.dataContext = dataContext;
         }
 
-        public async Task<Result<string>> AddAnimalPhotoAsync(IFormFile file, Animal animal)
+        public async Task<Result<string>> AddAnimalPhotosAsync(IFormFile[] files, Animal animal)
         {
-            using var transaction =
-                await dataContext.Database.BeginTransactionAsync();
             try
             {
-                var imageUploadResult = new ImageUploadResult();
-
-                using (var stream = file.OpenReadStream())
+                foreach (var file in files)
                 {
-                    var uploadParams = new ImageUploadParams
+                    if (animal.Photos.Count == 6)
                     {
-                        File = new FileDescription(file.FileName, stream)
+                        return Result<string>.Failure("You already have 6 photos of this animal. You cannot add more");
+                    }
+
+                    var imageUploadResult = new ImageUploadResult();
+
+                    using (var stream = file.OpenReadStream())
+                    {
+                        var uploadParams = new ImageUploadParams
+                        {
+                            File = new FileDescription(file.FileName, stream)
+                        };
+
+                        try
+                        {
+                            imageUploadResult =
+                                await cloudinary.UploadAsync(uploadParams);
+                        }
+                        catch (Exception)
+                        {
+                            return Result<string>.Failure("Error occurred during images upload");
+                        }
+                    }
+
+                    Photo photo = new Photo()
+                    {
+                        Id = imageUploadResult.PublicId,
+                        IsMain = false,
+                        Url = imageUploadResult.Url.AbsoluteUri,
+                        AnimalId = animal.AnimalId
                     };
 
-                    try
-                    {
-                        imageUploadResult =
-                            await cloudinary.UploadAsync(uploadParams);
-                    }
-                    catch (Exception)
-                    {
-                        return Result<string>.Failure("Error occurred during image upload");
-                    }
+                    await repository.AddAsync(photo);
+                    await repository.SaveChangesAsync();
                 }
 
-                Photo photo = new Photo()
-                {
-                    Id = imageUploadResult.PublicId,
-                    IsMain = false,
-                    Url = imageUploadResult.Url.AbsoluteUri,
-                    AnimalId = animal.AnimalId
-                };
-
-                await repository.AddAsync(photo);
-                await repository.SaveChangesAsync();
-                await transaction.CommitAsync();
-
-                return Result<string>.Success(photo.Id, "Successfully upload image");
+                return Result<string>.Success("Successfully upload images");
             }
             catch
             {
-                await transaction.RollbackAsync();
                 return Result<string>.Failure("Error occurred during uploading photo");
             }
-
         }
+
 
         public async Task<Result<Unit>> AddUserPhotoAsync(IFormFile file, string userId)
         {
-            using var transaction =
-                await dataContext.Database.BeginTransactionAsync();
             try
             {
                 var imageUploadResult = new ImageUploadResult();
@@ -115,21 +114,17 @@
 
                 await repository.AddAsync(photo);
                 await repository.SaveChangesAsync();
-                await transaction.CommitAsync();
 
-                return Result<Unit>.Success(Unit.Value,"Successfully upload image");
+                return Result<Unit>.Success(Unit.Value, "Successfully upload image");
             }
             catch (Exception)
             {
-                await transaction.RollbackAsync();
                 return Result<Unit>.Failure("Error occurred during uploading photo");
             }
         }
 
         public async Task<Result<Unit>> DeleteAnimalPhotoAsync(Photo photo)
         {
-            using var transaction =
-                await dataContext.Database.BeginTransactionAsync();
             try
             {
                 var deleteParams = new DeletionParams(photo.Id);
@@ -148,26 +143,21 @@
                 try
                 {
                     await repository.SaveChangesAsync();
-                    await transaction.CommitAsync();
                     return Result<Unit>.Success(Unit.Value, "Successfully delete photo");
                 }
                 catch
                 {
-                    await transaction.RollbackAsync();
                     return Result<Unit>.Failure("Error occurred during saving changes");
                 }
             }
             catch (Exception)
             {
-                await transaction.RollbackAsync();
                 return Result<Unit>.Failure("Error occurred during deleting photo");
             }
         }
 
         public async Task<Result<Unit>> DeleteUserPhotoAsync(Photo photo, string userId)
         {
-            using var transaction =
-                await dataContext.Database.BeginTransactionAsync();
             try
             {
                 var deleteParams = new DeletionParams(photo.Id);
@@ -181,7 +171,7 @@
                     return Result<Unit>.Failure("Failed to delete photo");
                 }
 
-                User? user = await 
+                User? user = await
                     repository.GetById<User>(Guid.Parse(userId));
                 user!.PhotoId = null;
 
@@ -190,18 +180,15 @@
                 try
                 {
                     await repository.SaveChangesAsync();
-                    await transaction.CommitAsync();
                     return Result<Unit>.Success(Unit.Value, "Successfully delete photo");
                 }
                 catch
                 {
-                    await transaction.RollbackAsync();
                     return Result<Unit>.Failure("Error occurred during saving changes");
                 }
             }
             catch (Exception)
             {
-                await transaction.RollbackAsync();
                 return Result<Unit>.Failure("Error occurred during deleting photo");
             }
         }
@@ -227,6 +214,71 @@
             catch (Exception)
             {
                 return Result<Unit>.Failure("Error occurred during saving changes");
+            }
+        }
+        public async Task<Result<string>> AddAnimalPhotosWithMainAsync(MainPhotoDto[] photos, Animal animal)
+        {
+            bool hasMain = photos.Any(p => p.IsMain);
+
+            try
+            {
+                for (int i = 0; i < photos.Length; i++)
+                {
+                    MainPhotoDto photo = photos[i];
+                    IFormFile file = photo.File;
+
+                    if (animal.Photos.Count == 6)
+                    {
+                        return Result<string>.Failure("You already have 6 photos of this animal. You cannot add more");
+                    }
+
+                    var imageUploadResult = new ImageUploadResult();
+
+                    using (var stream = file.OpenReadStream())
+                    {
+                        var uploadParams = new ImageUploadParams
+                        {
+                            File = new FileDescription(file.FileName, stream)
+                        };
+
+                        try
+                        {
+                            imageUploadResult =
+                                await cloudinary.UploadAsync(uploadParams);
+                        }
+                        catch (Exception)
+                        {
+                            return Result<string>.Failure("Error occurred during images upload");
+                        }
+                    }
+
+                    Photo photoToAdd = new Photo()
+                    {
+                        Id = imageUploadResult.PublicId,
+                        IsMain = false,
+                        Url = imageUploadResult.Url.AbsoluteUri,
+                        AnimalId = animal.AnimalId
+                    };
+
+                    if (photo.IsMain)
+                    {
+                        photoToAdd.IsMain = true;
+                    }
+
+                    if (!hasMain && i == 0)
+                    {
+                        photoToAdd.IsMain = true;
+                    }
+
+                    await repository.AddAsync(photoToAdd);
+                    await repository.SaveChangesAsync();
+                }
+
+                return Result<string>.Success("Successfully upload images");
+            }
+            catch
+            {
+                return Result<string>.Failure("Error occurred during uploading photo");
             }
         }
     }

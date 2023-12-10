@@ -25,10 +25,10 @@ export const Register: React.FC<RegisterProps> = observer(({
 
     const onSubmit = async (values: IUser) => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { RePassword, ...userData } = values;
+        // const { ConfirmPassword, ...userData } = values;
 
         try {
-            const { name: Name, token } = await agent.apiUser.register(userData);
+            const { name: Name, token } = await agent.apiUser.register(values);
             const Email = values.Email;
             
             userStore.setUser({ Name, Email }, token);
@@ -79,11 +79,11 @@ export const Register: React.FC<RegisterProps> = observer(({
                             )}
                         </Field>
 
-                        <Field name="RePassword">
+                        <Field name="ConfirmPassword">
                             {({ input, meta }) => (
                                 <div>
-                                    <CLabel inputName={'RePassword'} title={'Retype Password'} />
-                                    <input className='register__form__input' type="password" {...input} name='RePassword' id='RePassword' placeholder="* * * * * * *" />
+                                    <CLabel inputName={'ConfirmPassword'} title={'Confirm Password'} />
+                                    <input className='register__form__input' type="password" {...input} name='ConfirmPassword' id='ConfirmPassword' placeholder="* * * * * * *" />
                                     {meta.touched && meta.error && <div className='register__form__error__message'>{meta.error}</div>}
                                 </div>
                             )}
