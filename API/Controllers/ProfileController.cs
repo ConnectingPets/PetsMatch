@@ -31,7 +31,7 @@
         }
 
         [Route("edit")]
-        [HttpPost]
+        [HttpPatch]
         public async Task<ActionResult> Edit([FromBody] EditUserDto editUserDto)
         {
             Result<Unit> result = await this.profileService.EditUser(
@@ -42,7 +42,7 @@
         }
 
         [Route("delete")]
-        [HttpPost]
+        [HttpDelete]
         public async Task<ActionResult> Delete()
         {
             Result<Unit> result = await this.profileService.DeleteUser(User.GetById());

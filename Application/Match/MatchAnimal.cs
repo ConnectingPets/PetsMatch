@@ -49,7 +49,7 @@
                     return Result<Unit>.Failure(AnimalNotFound);
                 }
 
-                if (await this.repository.AnyAsync<User>(u => u.Id.ToString() == request.UserId))
+                if (await this.repository.AnyAsync<User>(u => u.Id.ToString() == request.UserId) == false)
                 {
                     return Result<Unit>.Failure(UserNotFound);
                 }

@@ -52,7 +52,7 @@
                     return Result<bool>.Failure(AnimalNotFound);
                 }
 
-                if (await this.repository.AnyAsync<User>(u => u.Id.ToString() == request.UserId.ToLower()))
+                if (await this.repository.AnyAsync<User>(u => u.Id.ToString() == request.UserId.ToLower()) == false)
                 {
                     return Result<bool>.Failure(UserNotFound);
                 }
@@ -62,7 +62,7 @@
                     return Result<bool>.Failure(SameAnimal);
                 }
 
-                if (swiper.OwnerId.ToString() == request.UserId.ToLower())
+                if (swiper.OwnerId.ToString() != request.UserId.ToLower())
                 {
                     return Result<bool>.Failure(NotOwner);
                 }

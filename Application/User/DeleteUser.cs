@@ -69,7 +69,7 @@
                 {
                     return Result<Unit>.Failure(String.Format(FailedDeleteUser, user.Name));
                 }
-            }
+             }
 
             private async Task<Result<Unit>> DeleteAllData(User user)
             {

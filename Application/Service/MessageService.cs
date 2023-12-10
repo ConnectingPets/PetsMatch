@@ -25,7 +25,7 @@
             => await this.mediator.Send(new ChatHistoryQuery
             {
                 MatchId = matchId,
-                UserId = userId
+                UserId = userId 
             });
 
         public async Task<Result<Unit>> SaveMessage(string matchId, string animalId, string message, string userId)
