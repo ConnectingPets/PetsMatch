@@ -23,7 +23,7 @@ export const UserProfile: React.FC<UserProfileProps> = () => {
         <section className='dashboard__user__profile'>
             <article className='dashboard__user__profile__image__wrapper'>
                 {userStore.user?.Photo
-                    ? <img src={userStore.user?.Photo} alt="user profile image" />
+                    ? <img src={URL.createObjectURL(userStore.user?.Photo)} alt="user profile image" />
                     : <img src="/images/user-profile-pic.jpg" alt="default user profile picture" />
                 }
             </article>

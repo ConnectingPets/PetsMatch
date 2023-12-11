@@ -18,11 +18,5 @@ export const returnCorrecTypesForEditUser = (values: IUser) => {
     userData.Gender = gender;
   }
 
-  const formData = new FormData();
-
-  Object.entries(userData).forEach(([key, value]) => {
-    formData.append(key, value);
-  });
-
-  return formData;
+  return userData;
 }

@@ -34,9 +34,16 @@ const EditUserProfilePage: React.FC<EditUserProfilePageProps> = observer(() => {
     const onEditUserProfileSubmit = async (values: IUser) => {
         const userData = returnCorrecTypesForEditUser(values);
 
+        const formData = new FormData();
+
+        Object.entries(userData).forEach(([key, value]) => {
+            formData.append(key, value);
+        });
+
         try {
-            const result = await agent.apiUser.editUser(userData);
-            userStore.setUser(values, userStore.authToken!);
+            const result = await agent.apiUser.editUser(formData);
+
+            userStore.setUser(userData, userStore.authToken!);
 
             navigate('/dashboard');
 
