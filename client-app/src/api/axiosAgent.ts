@@ -26,7 +26,7 @@ const apiUser = {
     register: (userData: IUser) => requests.post('/api/user/register', userData, headers.appJSON),
     login: (userData: IUser) => requests.post('/api/user/login', userData, headers.appJSON),
     logout: (body: object) => requests.post('/api/user/logout', body, headers.appJSON),
-    editUser: (body: IUser) => requests.patch('/api/profile/edit', body, headers.multipart),
+    editUser: (body: FormData) => requests.patch('/api/profile/edit', body, headers.multipart),
     deleteUser: () => requests.del('/api/profile/delete')
 };
 

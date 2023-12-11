@@ -6,6 +6,7 @@ import { FaTrashAlt } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 
+
 import themeStore from '../../stores/themeStore';
 import { IUser } from '../../interfaces/Interfaces';
 import { editUserProfileFormValidator } from '../../validators/userProfileFormValidators';
@@ -32,7 +33,6 @@ const EditUserProfilePage: React.FC<EditUserProfilePageProps> = observer(() => {
 
     const onEditUserProfileSubmit = async (values: IUser) => {
         const userData = returnCorrecTypesForEditUser(values);
-        console.log(userData);
 
         try {
             const result = await agent.apiUser.editUser(userData);
