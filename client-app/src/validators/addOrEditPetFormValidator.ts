@@ -62,7 +62,7 @@ export const addOrEditPetFormValidator = combineValidators({
         ageRange
     )('Age'),
     IsEducated: isRequired('This field'),
-    Photo: composeValidators(
+    Photos: composeValidators(
         isRequired,
         photoRequired
     )('Photo'),

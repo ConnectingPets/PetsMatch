@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FieldInputProps } from 'react-final-form';
 import { CgAsterisk } from 'react-icons/cg';
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
+import { DragDropContext, Draggable, DropResult, Droppable } from 'react-beautiful-dnd';
 
 import { CLabel } from '../common/CLabel/CLabel';
 
@@ -38,7 +38,7 @@ const PetImages: React.FC<PetImagesProps> = ({ input }) => {
         input.onChange(updateFiles);
     };
 
-    const handleOnDragEnd = (result: any) => {
+    const handleOnDragEnd = (result: DropResult) => {
         if (!result.destination) {
             return;
         }
@@ -55,7 +55,7 @@ const PetImages: React.FC<PetImagesProps> = ({ input }) => {
             {images.length < 6 && (
                 <>
                     <div className="required">
-                        <CLabel inputName='Photo' title='Photo' />
+                        <CLabel inputName='Photos' title='Photo' />
                         <CgAsterisk className="asterisk" />
                     </div>
 

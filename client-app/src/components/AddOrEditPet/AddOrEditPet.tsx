@@ -283,7 +283,7 @@ const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAd
                                 )}
                             </Field>
 
-                            <Field name='Photo'>
+                            <Field name='Photos'>
                                 {({ input, meta }) => (
                                     <>
                                         <PetImages input={input} />

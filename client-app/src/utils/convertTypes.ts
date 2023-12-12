@@ -2,7 +2,7 @@ import { IAnimal } from '../interfaces/Interfaces';
 import { GenderEnum, HealthStatusEnum, genderEnum, healthStatusEnum } from './constants';
 
 export const returnCorrectTypesForAddOrEditPetForm = (values: IAnimal) => {
-    const { Age, BreedId, Gender, HealthStatus, IsEducated, IsHavingValidDocuments, Photo, ...otherValues } = values;
+    const { Age, BreedId, Gender, HealthStatus, IsEducated, IsHavingValidDocuments, Photos, ...otherValues } = values;
 
         const ageValue = Number(Age);
         const breedValue = Number(BreedId);
@@ -10,8 +10,7 @@ export const returnCorrectTypesForAddOrEditPetForm = (values: IAnimal) => {
         const healthStatusValue = healthStatusEnum[HealthStatus as unknown as keyof HealthStatusEnum];
         const isEducatedValue = IsEducated == 'Yes' ? true : false;
         const isHavingValidDocumentsValue = IsHavingValidDocuments == 'Yes' ? true : false;
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const photoValue = Photo;
+        const photoValue = Photos.map(file => ({ File: file, IsMain: false }));
 
         const petData: IAnimal = {
             Age: ageValue,
@@ -22,7 +21,8 @@ export const returnCorrectTypesForAddOrEditPetForm = (values: IAnimal) => {
             HealthStatus: healthStatusValue,
             IsEducated: isEducatedValue,
             IsHavingValidDocuments: isHavingValidDocumentsValue,
-            ...otherValues,
+            Photos: photoValue,
+            ...otherValues
         };
 
         if (otherValues.Weight) {

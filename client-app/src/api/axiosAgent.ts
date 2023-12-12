@@ -33,7 +33,7 @@ const apiAnimal = {
     getAllCategories: () => requests.get('/api/animal/GetAllCategories'),
     getAllBreeds: (categoryId: number) => requests.get(`/api/animal/GetBreeds/${categoryId}`),
     getAnimalById: (animalId: string) => requests.get(`/api/animal/editanimal/${animalId}`),
-    addAnimal: (animalData: IAnimal) => requests.post('/api/animal/add', animalData, headers.multipart),
+    addAnimal: (animalData: FormData) => requests.post('/api/animal/add', animalData, headers.multipart),
     editAnimalById: (animalId: string, animalData: IAnimal) => requests.patch(`/api/animal/${animalId}`, animalData, headers.multipart),
     deleteAnimal: (animalId: string) => requests.del(`/api/animal/${animalId}`)
 };
