@@ -13,40 +13,39 @@
     using Persistence.Repositories;
     using Application.DTOs.Marketplace;
 
-    public class AllAnimalsForSale
+    public class MyAnimalForSale
     {
-        public class AllAnimalsForSaleQuery : IRequest<Result<IEnumerable<AllAnimalForSaleDto>>>
+        public class MyAnimalForSaleQuery : IRequest<Result<IEnumerable<AllAnimalForSaleDto>>>
         {
             public string UserId { get; set; } = null!;
         }
 
-        public class AllAnimalsForSaleQueryHandler : IRequestHandler<AllAnimalsForSaleQuery, Result<IEnumerable<AllAnimalForSaleDto>>>
+        public class MyAnimalForSaleQueryHandler : IRequestHandler<MyAnimalForSaleQuery, Result<IEnumerable<AllAnimalForSaleDto>>>
         {
             private readonly IRepository repository;
 
-            public AllAnimalsForSaleQueryHandler(IRepository repository)
+            public MyAnimalForSaleQueryHandler(IRepository repository)
             {
                 this.repository = repository;
             }
 
-            public async Task<Result<IEnumerable<AllAnimalForSaleDto>>> Handle(AllAnimalsForSaleQuery request, CancellationToken cancellationToken)
+            public async Task<Result<IEnumerable<AllAnimalForSaleDto>>> Handle(MyAnimalForSaleQuery request, CancellationToken cancellationToken)
             {
                 string userId = request.UserId;
 
-                var allAnimals = await repository.
-                    AllReadonly<Animal>(a => a.OwnerId.ToString() != userId 
-                    && a.AnimalStatus == AnimalStatus.ForSale).
+                var allAnimals = await repository
+                    .AllReadonly<Animal>(a => a.OwnerId.ToString() == userId && a.AnimalStatus == AnimalStatus.ForSale).
                     Select(a => new AllAnimalForSaleDto()
                     {
                         Id = a.AnimalId.ToString(),
+                        MainPhoto = a.Photos.First(a => a.IsMain).Url,
                         Name = a.Name,
-                        MainPhoto = a.Photos.First(p => p.IsMain).Url,
                         Price = a.Price
                     }).ToArrayAsync();
 
                 if (!allAnimals.Any())
                 {
-                    return Result<IEnumerable<AllAnimalForSaleDto>>.Failure("We still don't have animals for sale");
+                    return Result<IEnumerable<AllAnimalForSaleDto>>.Failure("You still don't have animal for sale");
                 }
 
                 return Result<IEnumerable<AllAnimalForSaleDto>>.Success(allAnimals);
