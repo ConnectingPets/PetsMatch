@@ -31,8 +31,7 @@ export const returnCorrectTypesForAddOrEditPetForm = (values: IAnimal) => {
         }
 
         if (otherValues.BirthDate) {
-            const birthDateValue = new Date(otherValues.BirthDate);
-            petData['BirthDate'] = birthDateValue;
+            petData['BirthDate'] = otherValues.BirthDate;       
         }
 
         return petData;

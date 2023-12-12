@@ -144,6 +144,7 @@ const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAd
                                                 <CLabel inputName='BreedId' title='Breed' />
                                                 <CgAsterisk className="asterisk" />
                                                 <select {...input} name="BreedId.breedId" id="Breed">
+                                                    <option>  </option>
                                                     {!isCategoryDisabled && <option>  </option>}
                                                     {isCategoryDisabled && breeds.map(b => <option value={b.breedId} key={b.breedId}>{b.name}</option>)}
                                                 </select>
