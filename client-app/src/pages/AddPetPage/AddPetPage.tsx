@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -8,11 +8,13 @@ import { returnCorrectTypesForAddOrEditPetForm } from '../../utils/convertTypes'
 import agent from '../../api/axiosAgent';
 
 import AddOrEditPet from '../../components/AddOrEditPet/AddOrEditPet';
+import { CLoading } from '../../components/common/CLoading/CLoading';
 
 interface AddPetPageProps { }
 
 const AddPetPage: React.FC<AddPetPageProps> = () => {
     const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const addOrEditPet = 'add';
 
     const onAddPetSubmit = async (values: IAnimal) => {
@@ -32,6 +34,7 @@ const AddPetPage: React.FC<AddPetPageProps> = () => {
     });
 
         try {
+            setIsLoading(true);
             const res = await agent.apiAnimal.addAnimal(formData);
             
             navigate('/dashboard');
@@ -42,7 +45,10 @@ const AddPetPage: React.FC<AddPetPageProps> = () => {
     };
 
     return (
-        <AddOrEditPet addOrEditPet={addOrEditPet} onAddPetSubmit={onAddPetSubmit} />
+        <>
+            <AddOrEditPet addOrEditPet={addOrEditPet} onAddPetSubmit={onAddPetSubmit} />
+            {isLoading && <CLoading />}
+        </>
     );
 };
 

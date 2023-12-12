@@ -10,7 +10,7 @@ export const returnCorrectTypesForAddOrEditPetForm = (values: IAnimal) => {
         const healthStatusValue = healthStatusEnum[HealthStatus as unknown as keyof HealthStatusEnum];
         const isEducatedValue = IsEducated == 'Yes' ? true : false;
         const isHavingValidDocumentsValue = IsHavingValidDocuments == 'Yes' ? true : false;
-        const photoValue = Photos.map(file => ({ File: file, IsMain: false }));
+        const photoValue = Photos.map((file, index) => ({ File: file, IsMain: index == 0 ? true : false }));
 
         const petData: IAnimal = {
             Age: ageValue,
