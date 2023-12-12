@@ -38,7 +38,7 @@ const EditUserProfilePage: React.FC<EditUserProfilePageProps> = observer(() => {
             const result = await agent.apiUser.editUser(userData);
 
             if (result.isSuccess) {
-                userStore.setUser({PhotoUrl: userStore.user?.PhotoUrl, ...values}, userStore.authToken!);
+                userStore.setUser({...values, PhotoUrl: userStore.user?.PhotoUrl}, userStore.authToken!);
 
                 navigate('/dashboard');
 
