@@ -27,12 +27,32 @@ export const Login: React.FC<LoginProps> = ({
             const result = await agent.apiUser.login(values);
 
             if (result.isSuccess) {
-                const { name: Name, photo: Photo, token} = result.data;
+                const { 
+                    name: Name,
+                    photoUrl: PhotoUrl, 
+                    age: Age,
+                    jobTitle: JobTitle,
+                    city: City,
+                    address: Address,
+                    education: Education,
+                    gender: Gender,
+                    token
+                } = result.data;
                 const Email = values.Email;
             
-                userStore.setUser({ Name, Email, Photo }, token);
+                userStore.setUser({
+                    Name,
+                    PhotoUrl,
+                    Age,
+                    Email,
+                    JobTitle,
+                    City,
+                    Address,
+                    Education,
+                    Gender
+                }, token);
 
-                navigate('/dashboard');
+                navigate('/dashboard'); 
             } else {
                 toast.error(result.errorMessage);
             }

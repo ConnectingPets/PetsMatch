@@ -34,17 +34,11 @@ const EditUserProfilePage: React.FC<EditUserProfilePageProps> = observer(() => {
     const onEditUserProfileSubmit = async (values: IUser) => {
         const userData = returnCorrecTypesForEditUser(values);
 
-        const formData = new FormData();
-
-        Object.entries(userData).forEach(([key, value]) => {
-            formData.append(key, value);
-        });
-
         try {
-            const result = await agent.apiUser.editUser(formData);
+            const result = await agent.apiUser.editUser(userData);
 
             if (result.isSuccess) {
-                userStore.setUser(userData, userStore.authToken!);
+                userStore.setUser({PhotoUrl: userStore.user?.PhotoUrl, ...values}, userStore.authToken!);
 
                 navigate('/dashboard');
 
@@ -199,7 +193,7 @@ const EditUserProfilePage: React.FC<EditUserProfilePageProps> = observer(() => {
                             <Field name='Photo'>
                                 {({ input, meta }) => (
                                     <>
-                                        <UserPhoto input={input} />
+                                        <UserPhoto input={input} initialValue={userStore.user?.PhotoUrl} />
                                         {meta.touched && meta.error && <span>{meta.error}</span>}
                                     </>
                                 )}

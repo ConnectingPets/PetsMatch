@@ -32,7 +32,7 @@
 
         [Route("edit")]
         [HttpPatch]
-        public async Task<ActionResult> Edit([FromForm] EditUserDto editUserDto)
+        public async Task<ActionResult> Edit([FromBody] EditUserDto editUserDto)
         {
             Result<Unit> result = await this.profileService.EditUser(
                 User.GetById(),

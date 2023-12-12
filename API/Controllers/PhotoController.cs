@@ -23,7 +23,7 @@
         }
 
         [HttpPost("AddUserPhoto")]
-        public async Task<IActionResult> AddUserPhoto(IFormFile file)
+        public async Task<IActionResult> AddUserPhoto([FromForm] IFormFile file)
         {
             AddUserPhotoCommand command = new AddUserPhotoCommand()
             {

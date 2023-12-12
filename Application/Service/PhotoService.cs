@@ -12,6 +12,7 @@
     using Response;
     using Persistence.Repositories;
     using Application.DTOs.Photo;
+    using System.Net;
 
     public class PhotoService : IPhotoService
     {

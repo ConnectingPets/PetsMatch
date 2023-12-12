@@ -1,7 +1,6 @@
 ﻿namespace Application.DTOs.User
 {
     using Domain.Enum;
-    using Microsoft.AspNetCore.Http;
 
     public class EditUserDto
     {
@@ -22,7 +21,5 @@
         public string? City { get; set; }
 
         public string? Education { get; set; }
-
-        public IFormFile? Photo { get; set; } 
     }
 }

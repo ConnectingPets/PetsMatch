@@ -6,12 +6,12 @@ export interface IUser {
     ConfirmPassword?: string,
     Description?: string,
     Age?: number,
-    Education?: string,
-    Photo?: File,
+    Education?: string
     JobTitle?: string,
     Gender?: number,
     Address?: string,
-    City?: string
+    City?: string,
+    PhotoUrl?: string
 }
 
 export interface IAnimal {
