@@ -78,9 +78,10 @@ const PetImages: React.FC<PetImagesProps> = ({ input }) => {
                                 {images.map((imageUrl, index) => (
                                     <Draggable key={index} draggableId={`image-${index}`} index={index} >
                                         {(provided) => (
-                                            <div {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef} className="image-preview">
+                                            <div {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef} className={index == 0 ? 'image-preview main' : 'image-preview'}>
                                                 <img src={imageUrl} alt="preview image" />
                                                 <button type="button" onClick={() => handleRemoveImage(index, input)}>X</button>
+                                                {index == 0 && <span className="main-message">Main photo</span>}
                                             </div>
                                         )}
                                     </Draggable>
