@@ -11,6 +11,7 @@
     using static Application.Marketplace.EditAnimalMarketplace;
     using static Application.Marketplace.DeleteAnimalMarketplace;
     using static Application.Marketplace.AllAnimalsForSale;
+    using static Application.Marketplace.AllAnimalsForAdoption;
 
     [Authorize]
     [ApiController]
@@ -87,8 +88,21 @@
         {
             AllAnimalsForSaleQuery query = new AllAnimalsForSaleQuery()
             {
-                 UserId = this.User.GetById()
+                UserId = this.User.GetById()
             };
+
+            var result = await mediator.Send(query);
+            return new JsonResult(result);
+        }
+
+        [HttpGet("AllAnimalsForAdoption")]
+        public async Task<IActionResult> GetAllAnimalsForAdoption()
+        {
+            AllAnimalsForAdoptionQuery query =
+                new AllAnimalsForAdoptionQuery()
+                {
+                    UserId = this.User.GetById()
+                };
 
             var result = await mediator.Send(query);
             return new JsonResult(result);
