@@ -13,7 +13,6 @@
     using static Common.ExceptionMessages.User;
     using static Common.FailMessages.User;
     using static Common.SuccessMessages.User;
-    using Microsoft.EntityFrameworkCore;
 
     public class EditUser
     {
