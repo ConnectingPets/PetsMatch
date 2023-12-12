@@ -10,6 +10,7 @@
     using static Application.Marketplace.ShowAnimalMarketplaceToEdit;
     using static Application.Marketplace.EditAnimalMarketplace;
     using static Application.Marketplace.DeleteAnimalMarketplace;
+    using static Application.Marketplace.AllAnimalsForSale;
 
     [Authorize]
     [ApiController]
@@ -78,6 +79,18 @@
                 };
 
             var result = await mediator.Send(command);
+            return new JsonResult(result);
+        }
+
+        [HttpGet("AllAnimalsForSale")]
+        public async Task<IActionResult> GetAllAnimalsForSale()
+        {
+            AllAnimalsForSaleQuery query = new AllAnimalsForSaleQuery()
+            {
+                 UserId = this.User.GetById()
+            };
+
+            var result = await mediator.Send(query);
             return new JsonResult(result);
         }
     }
