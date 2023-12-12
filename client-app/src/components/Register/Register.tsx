@@ -29,12 +29,17 @@ export const Register: React.FC<RegisterProps> = observer(({
 
         try {
             const result = await agent.apiUser.register(values);
-            const { name: Name, token } = result.data;
-            const Email = values.Email;
-            
-            userStore.setUser({ Name, Email }, token);
 
-            navigate('/dashboard');
+            if (result.isSuccess) {
+                const { name: Name, token } = result.data;
+                const Email = values.Email;
+            
+                userStore.setUser({ Name, Email }, token);
+
+                navigate('/dashboard');
+            } else {
+                toast.error(result.errorMessage);
+            }
         } catch (err) {
             console.log(err);
 

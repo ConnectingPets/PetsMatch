@@ -25,12 +25,17 @@ export const Login: React.FC<LoginProps> = ({
     const onSubmit = async (values: IUser) => {
         try {
             const result = await agent.apiUser.login(values);
-            const { name: Name, photo: Photo, token} = result.data;
-            const Email = values.Email;
-            
-            userStore.setUser({ Name, Email, Photo }, token);
 
-            navigate('/dashboard');
+            if (result.isSuccess) {
+                const { name: Name, photo: Photo, token} = result.data;
+                const Email = values.Email;
+            
+                userStore.setUser({ Name, Email, Photo }, token);
+
+                navigate('/dashboard');
+            } else {
+                toast.error(result.errorMessage);
+            }
         } catch (err) {
             console.log(err);
 

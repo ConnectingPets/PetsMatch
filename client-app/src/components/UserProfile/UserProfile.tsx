@@ -6,6 +6,7 @@ import userStore from '../../stores/userStore';
 import agent from '../../api/axiosAgent';
 
 import './UserProfile.scss';
+import { toast } from 'react-toastify';
 
 interface UserProfileProps { }
 
@@ -13,10 +14,18 @@ export const UserProfile: React.FC<UserProfileProps> = () => {
     const navigate = useNavigate();
 
     const onLogoutClick = async () => {
-        await agent.apiUser.logout({});
+        try {
+            const result = await agent.apiUser.logout({});
 
-        userStore.clearUser();
-        navigate('/');
+            if (result.isSuccess) {
+                userStore.clearUser();
+                navigate('/');
+            } else {
+                toast.error(result.errorMessage);
+            }
+        } catch(err) {
+            console.error(err);
+        }
     };
 
     return (

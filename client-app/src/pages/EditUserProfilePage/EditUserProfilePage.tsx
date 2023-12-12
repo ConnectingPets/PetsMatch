@@ -43,11 +43,11 @@ const EditUserProfilePage: React.FC<EditUserProfilePageProps> = observer(() => {
         try {
             const result = await agent.apiUser.editUser(formData);
 
-            userStore.setUser(userData, userStore.authToken!);
-
-            navigate('/dashboard');
-
             if (result.isSuccess) {
+                userStore.setUser(userData, userStore.authToken!);
+
+                navigate('/dashboard');
+
                 toast.success(result.successMessage);
             } else {
                 toast.error(result.errorMessage);
@@ -64,11 +64,12 @@ const EditUserProfilePage: React.FC<EditUserProfilePageProps> = observer(() => {
     const onConfirmDelete = async () => {
         try {
             const result = await agent.apiUser.deleteUser();
-            userStore.clearUser();
-
-            navigate('/');
 
             if (result.isSuccess) {
+                userStore.clearUser();
+
+                navigate('/');
+
                 toast.success(result.successMessage);
             } else {
                 toast.error(result.errorMessage);
