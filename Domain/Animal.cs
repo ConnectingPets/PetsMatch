@@ -20,7 +20,6 @@ namespace Domain
             this.SwipesTo = new HashSet<Swipe>();
             this.AnimalMatches = new HashSet<AnimalMatch>();
             this.Messages = new HashSet<Message>();
-            this.Photos = new HashSet<Photo>();
         }
 
         [Comment("animal id")]
@@ -42,20 +41,17 @@ namespace Domain
         [Comment("animal birth date")]
         public DateTime? BirthDate { get; set; }
 
-        [Comment("animal last modified name")]
-        public DateTime LastModifiedName { get; set; }
-
-        [Comment("animal last modified breed")]
-        public DateTime LastModifiedBreed { get; set; }
-
-        [Comment("animal last modified gender")]
-        public DateTime LastModifiedGender { get; set; }
+        [Comment("animal last modified")]
+        public DateTime LastModified { get; set; }
 
         [Comment("animal created on")]
         public DateTime CreatedOn { get; set; }
 
         [Comment("stores if the animal is educated")]
         public required bool IsEducated { get; set; }
+
+        [Comment("animal photo")]
+        public required byte[] Photo { get; set; }
 
         [Comment("animal health status")]
         [DisplayName("Health Status")]
@@ -96,7 +92,5 @@ namespace Domain
         public ICollection<AnimalMatch> AnimalMatches { get; set; } = null!;
 
         public ICollection<Message> Messages { get; set; } = null!;
-
-        public ICollection<Photo> Photos { get; set; } = null!;
     }
 }

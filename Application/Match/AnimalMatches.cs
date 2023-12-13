@@ -3,27 +3,22 @@
     using System.Threading;
     using System.Threading.Tasks;
 
-    using MediatR;
     using Microsoft.EntityFrameworkCore;
+    using MediatR;
 
     using Domain;
+    using Application.DTOs;
     using Persistence.Repositories;
-    using Application.DTOs.Match;
-    using Application.Response;
-
-    using static Common.ExceptionMessages.Animal;
-    using static Common.ExceptionMessages.User;
+    using Application.Exceptions;
 
     public class AnimalMatches
     {
-        public class AnimalMatchesQuery : IRequest<Result<IEnumerable<AnimalMatchDto>>>
+        public class AnimalMatchesQuery : IRequest<IEnumerable<AnimalMatchDto>>
         {
-            public string AnimalId { get; set; } = null!;
-
-            public string UserId { get; set; } = null!;
+            public required string AnimalId { get; set; }
         }
 
-        public class AnimalMatchesHandler : IRequestHandler<AnimalMatchesQuery, Result<IEnumerable<AnimalMatchDto>>>
+        public class AnimalMatchesHandler : IRequestHandler<AnimalMatchesQuery, IEnumerable<AnimalMatchDto>>
         {
             private readonly IRepository repository;
 
@@ -32,50 +27,38 @@
                 this.repository = repository;
             }
 
-            public async Task<Result<IEnumerable<AnimalMatchDto>>> Handle(AnimalMatchesQuery request, CancellationToken cancellationToken)
+            public async Task<IEnumerable<AnimalMatchDto>> Handle(AnimalMatchesQuery request, CancellationToken cancellationToken)
             {
+                if (!Guid.TryParse(request.AnimalId, out Guid animalId))
+                {
+                    throw new InvalidGuidFormatException();
+                }
+
                 Animal? animal = await this.repository
-                    .All<Animal>(animal => animal.AnimalId.ToString() == request.AnimalId)
+                    .All<Animal>(animal => animal.AnimalId == animalId)
                     .Include(animal => animal.AnimalMatches)
                     .ThenInclude(am => am.Match)
                     .ThenInclude(m => m.AnimalMatches)
                     .ThenInclude(am => am.Animal)
-                    .ThenInclude(a => a.Photos)
                     .FirstOrDefaultAsync();
 
                 if (animal == null)
                 {
-                    return Result<IEnumerable<AnimalMatchDto>>.Failure(AnimalNotFound);
+                    throw new AnimalNotFoundException();
                 }
 
-                if (await this.repository.AnyAsync<User>(u => u.Id.ToString() == request.UserId.ToLower()) == false)
-                {
-                    return Result<IEnumerable<AnimalMatchDto>>.Failure(UserNotFound);
-                }
+                IEnumerable<AnimalMatch> matches = animal.AnimalMatches
+                    .Select(am => am.Match.AnimalMatches
+                        .FirstOrDefault(am => am.AnimalId != animalId))!;
 
-                if (animal.OwnerId.ToString() != request.UserId.ToLower())
-                {
-                    return Result<IEnumerable<AnimalMatchDto>>.Failure(NotOwner);
-                }
-
-                IEnumerable<AnimalMatchDto> animalMatches = new List<AnimalMatchDto>();
-                if (animal.AnimalMatches.Count > 0)
-                {
-                    IEnumerable<AnimalMatch> matches = animal.AnimalMatches
-                        .Select(am => am.Match.AnimalMatches
-                            .FirstOrDefault(am => am.AnimalId != Guid.Parse(request.AnimalId)))!;
-
-                    animalMatches = matches
-                        .Select(am => new AnimalMatchDto
-                        {
-                            AnimalId = am.AnimalId.ToString(),
-                            Name = am.Animal.Name,
-                            Photo = am.Animal.Photos.First(p => p.IsMain).Url
-                        })
-                        .ToList();
-                }
-
-                return Result<IEnumerable<AnimalMatchDto>>.Success(animalMatches);
+                return matches
+                    .Select(am => new AnimalMatchDto
+                    {
+                        AnimalId = am.AnimalId.ToString(),
+                        Name = am.Animal.Name,
+                        Photo = Convert.ToBase64String(am.Animal.Photo)
+                    })
+                    .ToList();
             }
         }
     }

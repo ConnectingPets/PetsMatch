@@ -24,9 +24,7 @@ const requests = {
 const apiUser = {
     register: (userData: IUser) => requests.post('/api/user/register', userData, headers.appJSON),
     login: (userData: IUser) => requests.post('/api/user/login', userData, headers.appJSON),
-    logout: (body: object) => requests.post('/api/user/logout', body, headers.appJSON),
-    editUser: (body: IUser) => requests.post('/api/profile/edit', body, headers.appJSON),
-    deleteUser: () => requests.post('/api/profile/delete', {}, headers.appJSON)
+    logout: (body: object) => requests.post('/api/user/logout', body, headers.appJSON)
 };
 
 const apiAnimal = {

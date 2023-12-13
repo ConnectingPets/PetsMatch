@@ -1,15 +1,13 @@
 ﻿namespace Application.Service.Interfaces
 {
-    using Application.DTOs.Match;
-    using Application.Response;
-    using MediatR;
+    using Application.DTOs;
 
     public interface IMatchService 
     {
-        Task<Result<IEnumerable<AnimalMatchDto>>> GetAnimalMatches(string animalId, string userId);
+        Task<IEnumerable<AnimalMatchDto>> GetAnimalMatches(string animalId);
 
-        Task<Result<Unit>> UnMatch(string animalOneId, string animalTwoId, string userId);
+        Task UnMatch(string animalOneId, string animalTwoId);
 
-        Task<Result<Unit>> Match(string animalOneId, string animalTwoId, string userId);
+        Task Match(string animalOneId, string animalTwoId);
     }
 }

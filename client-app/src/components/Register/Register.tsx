@@ -1,16 +1,7 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Form, Field } from 'react-final-form';
-import { observer } from 'mobx-react';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-
-import { IUser } from '../../interfaces/Interfaces';
-import { registerFormValidator } from '../../validators/userProfileFormValidators';
-import agent from '../../api/axiosAgent';
-import userStore from '../../stores/userStore';
-
 import { CLabel } from '../common/CLabel/CLabel';
+// import { CInput } from '../common/CInput/CInput';
 import { CSubmitButton } from '../common/CSubmitButton/CSubmitButton';
 import './Register.scss';
 
@@ -18,81 +9,107 @@ interface RegisterProps {
     showLogin: () => void;
 }
 
-export const Register: React.FC<RegisterProps> = observer(({
+interface Errors {
+    fullName: string | undefined,
+    email: string | undefined,
+    password: string | undefined,
+    repassword: string | undefined,
+}
+
+export const Register: React.FC<RegisterProps> = ({
     showLogin
 }) => {
-    const navigate = useNavigate();
 
-    const onSubmit = async (values: IUser) => {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        // const { ConfirmPassword, ...userData } = values;
+    const onSubmit = () => {
+        // TODO
+    }
 
-        try {
-            const { name: Name, token } = await agent.apiUser.register(values);
-            const Email = values.Email;
-            
-            userStore.setUser({ Name, Email }, token);
+    const validate = (e: any) => {
+        const errors: Errors = {
+            fullName: undefined,
+            email: undefined,
+            password: undefined,
+            repassword: undefined,
+        };
 
-            navigate('/dashboard');
-        } catch (err) {
-            console.log(err);
-
-            toast.error('Register failed. Please check your credentials.');
+        if (e.fullName && e.fullName.length < 3) {
+            errors.fullName = 'to short'
         }
-    };
+        if (e.email && e.email.length < 3) {
+            errors.email = 'to short'
+        }
+        if (e.password && e.password.length < 3) {
+            errors.password = 'to short'
+        }
+        if (e.repassword && e.repassword !== e.password) {
+            errors.repassword = 'not valid'
+        }
+
+        return errors;
+    }
 
     return (
         <section className='register__form__section'>
             <Form
                 onSubmit={onSubmit}
-                validate={registerFormValidator}
+                validate={validate}
                 render={({ handleSubmit }) => (
                     <form className='register__form' onSubmit={handleSubmit}>
 
-                        <Field name="Name">
+                        <Field name="fullName">
                             {({ input, meta }) => (
                                 <div>
-                                    <CLabel inputName={'Name'} title={'Name'} />
-                                    <input className='register__form__input' type="text" {...input} name='Name' id='Name' placeholder="John Sillver" />
+                                    <CLabel inputName={'fullName'} title={'Full Name'} />
+                                    <input className='register__form__input' type="text" {...input} name='fullName' id='fullName' placeholder="John Sillver" />
                                     {meta.touched && meta.error && <div className='register__form__error__message'>{meta.error}</div>}
                                 </div>
                             )}
                         </Field>
-
-                        <Field name="Email">
+                        {/* <div>
+                          <CLabel inputName={'fullName'} title={'Full Name'} />
+                           <CInput type='text' id='fullName' name='fullName' placeholder='John Sillver' />
+                         </div> */}
+                        <Field name="email">
                             {({ input, meta }) => (
                                 <div>
-                                    <CLabel inputName={'Email'} title={'Email'} />
-                                    <input className='register__form__input' type="text" {...input} name='Email' id='Email' placeholder="john-sillver@gmail.com" />
+                                    <CLabel inputName={'email'} title={'Email'} />
+                                    <input className='register__form__input' type="email" {...input} name='email' id='email' placeholder="john-sillver@gmail.com" />
                                     {meta.touched && meta.error && <div className='register__form__error__message'>{meta.error}</div>}
                                 </div>
                             )}
                         </Field>
-
-                        <Field name="Password">
+                        {/* <div>
+                            <CLabel inputName={'email'} title={'Email'} />
+                            <CInput type='email' id='email' name='email' placeholder='john-sillver@gmail.com' />
+                        </div> */}
+                        <Field name="password">
                             {({ input, meta }) => (
                                 <div>
-                                    <CLabel inputName={'Password'} title={'Password'} />
-                                    <input className='register__form__input' type="password" {...input} name='Password' id='Password' placeholder="* * * * * * *" />
+                                    <CLabel inputName={'password'} title={'Password'} />
+                                    <input className='register__form__input' type="password" {...input} name='password' id='password' placeholder="* * * * * * *" />
                                     {meta.touched && meta.error && <div className='register__form__error__message'>{meta.error}</div>}
                                 </div>
                             )}
                         </Field>
-
-                        <Field name="ConfirmPassword">
+                        
+                        <Field name="repassword">
                             {({ input, meta }) => (
                                 <div>
-                                    <CLabel inputName={'ConfirmPassword'} title={'Confirm Password'} />
-                                    <input className='register__form__input' type="password" {...input} name='ConfirmPassword' id='ConfirmPassword' placeholder="* * * * * * *" />
+                                    <CLabel inputName={'repassword'} title={'Retype Password'} />
+                                    <input className='register__form__input' type="password" {...input} name='repassword' id='repassword' placeholder="* * * * * * *" />
                                     {meta.touched && meta.error && <div className='register__form__error__message'>{meta.error}</div>}
                                 </div>
                             )}
                         </Field>
+                        {/* <div>
+                            <CLabel inputName={'repassword'} title={'Retype Password'} />
+                            <CInput type='password' id='repassword' name='repassword' placeholder='* * * * * * *' />
+                        </div> */}
 
                         <CSubmitButton textContent='Register' />
                         <p className='account__message' onClick={showLogin}>If you have an account click here!</p>
                     </form>
                 )} />
         </section>
-    );
-});
+    )
+}

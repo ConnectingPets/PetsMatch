@@ -5,6 +5,7 @@
     using System.Security.Cryptography;
     using System.IdentityModel.Tokens.Jwt;
     
+    using Microsoft.Extensions.Configuration;
     using Microsoft.IdentityModel.Tokens;
     
     using Domain;
@@ -12,6 +13,13 @@
 
     public class TokenService : ITokenService
     {
+        private readonly IConfiguration configuration;
+
+        public TokenService(IConfiguration configuration)
+        {
+            this.configuration = configuration;
+        }
+
         public string CreateToken(User user)
         {
             IEnumerable<Claim> claims = new List<Claim>
@@ -30,7 +38,7 @@
             SecurityTokenDescriptor descriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddDays(7),
+                Expires = DateTime.UtcNow.AddHours(1),
                 SigningCredentials = credentials
             };
 

@@ -5,10 +5,10 @@
 
     using MediatR;
 
+    using DTOs;
     using Domain;
-    using Persistence.Repositories;
-    using Application.DTOs.Animal;
     using Response;
+    using Persistence.Repositories;
 
     public class EditAnimal
     {
@@ -46,38 +46,21 @@
                     return Result<Unit>.Failure("This pet does not belong to you!");
                 }
 
-                int daysDifferenceName = (DateTime.UtcNow - animal.LastModifiedName).Days;
-                int daysDifferenceBreed = (DateTime.UtcNow - animal.LastModifiedBreed).Days;
-                int daysDifferenceGender = (DateTime.UtcNow - animal.LastModifiedGender).Days;
+                bool isSomethingEdit = animal.Name != dto.Name 
+                    || animal.BreedId != dto.BreedId 
+                    || animal.Gender != dto.Gender;
 
-                bool isNameEdit = animal.Name != dto.Name;
-                bool isBreedEdit = animal.BreedId != dto.BreedId;
-                bool isGenderEdit = animal.Gender != dto.Gender;
 
-                if (daysDifferenceName < 30 && isNameEdit)
+                int daysDifference = (DateTime.UtcNow - animal.LastModified).Days;
+
+                if (isSomethingEdit)
                 {
-                    return Result<Unit>.Failure($"Can not update pet name {30 - daysDifferenceName} days.");
-                }
-                if (daysDifferenceBreed < 30 && isBreedEdit)
-                {
-                    return Result<Unit>.Failure($"Can not update pet breed for another {30 - daysDifferenceBreed} days.");
-                }
-                if (daysDifferenceGender < 30 && isGenderEdit)
-                {
-                    return Result<Unit>.Failure($"Can not update pet gender for another {30 - daysDifferenceName} days.");
+                    animal.LastModified = DateTime.UtcNow;
                 }
 
-                if (isNameEdit)
+                if (daysDifference < 30 && isSomethingEdit)
                 {
-                    animal.LastModifiedName = DateTime.UtcNow;
-                }
-                if (isBreedEdit)
-                {
-                    animal.LastModifiedBreed = DateTime.UtcNow;
-                }
-                if (isGenderEdit)
-                {
-                    animal.LastModifiedGender = DateTime.UtcNow;
+                    return Result<Unit>.Failure($"Can not update pet name, breed and gender for another {30 - daysDifference} days.");
                 }
 
                 animal.BirthDate = dto.BirthDate;
@@ -85,6 +68,7 @@
                 animal.Description = dto.Description;
                 animal.HealthStatus = dto.HealthStatus;
                 animal.SocialMedia = dto.SocialMedia;
+                animal.Photo = dto.Photo;
                 animal.Age = dto.Age;
                 animal.BreedId = dto.BreedId;
                 animal.IsEducated = dto.IsEducated;

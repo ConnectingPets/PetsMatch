@@ -2,11 +2,9 @@
 {
     using MediatR;
 
+    using DTOs;
     using Domain;
     using Response;
-    using DTOs.Animal;
-    using DTOs.Photo;
-    using Service.Interfaces;
     using Persistence.Repositories;
 
     public class AddAnimal
@@ -23,20 +21,14 @@
         {
             private readonly IRepository repository;
 
-            private readonly IPhotoService photoService;
-
-            public AddAnimalCommandHandler(IRepository repository,
-                                           IPhotoService photoService)
+            public AddAnimalCommandHandler(IRepository repository)
             {
                 this.repository = repository;
-                this.photoService = photoService;
-
             }
 
             public async Task<Result<Unit>> Handle(AddAnimalCommand request, CancellationToken cancellationToken)
             {
                 AddAnimalDto animalDto = request.AnimalDto;
-                MainPhotoDto[] photos = request.AnimalDto.Photos;
 
                 Animal animal = new Animal()
                 {
@@ -49,6 +41,7 @@
                     Weight = animalDto.Weight,
                     SocialMedia = animalDto.SocialMedia,
                     IsEducated = animalDto.IsEducated,
+                    Photo = animalDto.Photo,
                     IsHavingValidDocuments = animalDto.IsHavingValidDocuments,
                     OwnerId = Guid.Parse(request.OwnerId),
                     BreedId = animalDto.BreedId
@@ -59,9 +52,7 @@
                 try
                 {
                     await repository.SaveChangesAsync();
-                    await photoService.AddAnimalPhotosWithMainAsync(photos,animal);
-
-                    return Result<Unit>.Success(Unit.Value,$"You have successfully add {animal.Name} to your pet's list");
+                    return Result<Unit>.Success(Unit.Value, $"You have successfully add {animal.Name} to your pet's list");
                 }
                 catch (Exception)
                 {

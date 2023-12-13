@@ -6,10 +6,9 @@
     using MediatR;
     using Microsoft.EntityFrameworkCore;
 
+    using DTOs;
     using Domain;
     using Response;
-    using DTOs.Photo;
-    using DTOs.Animal;
     using Persistence.Repositories;
 
     public class ShowAnimalToEdit
@@ -34,10 +33,7 @@
             public async Task<Result<ShowAnimalToEditDto>> Handle(ShowAnimalToEditQuery request, CancellationToken cancellationToken)
             {
                 Animal? animal =
-                    await repository.All<Animal>().
-                    Include(a => a.Photos).
-                    Include(a => a.Breed).
-                    FirstOrDefaultAsync(a => a.AnimalId.ToString() == request.AnimalId);
+                    await repository.GetById<Animal>(Guid.Parse(request.AnimalId));
 
                 if (animal == null)
                 {
@@ -50,29 +46,34 @@
 
                 ShowAnimalToEditDto animalDto = new ShowAnimalToEditDto()
                 {
+                    Breeds = await repository.AllReadonly<Breed>().
+                    Select(b => new BreedDto()
+                    {
+                        BreedId = b.BreedId,
+                        Name = b.Name,
+                        AnimalCategoryId = b.CategoryId
+                    }).ToArrayAsync(),
+                    AnimalCategories = await repository.AllReadonly<AnimalCategory>().
+                    Select(ac => new AnimalCategoryDto()
+                    {
+                        AnimalCategoryId = ac.AnimalCategoryId,
+                        Name = ac.Name
+                    }).ToArrayAsync(),
                     Age = animal.Age,
                     BirthDate = animal.BirthDate.ToString(),
                     Description = animal.Description,
                     IsEducated = animal.IsEducated,
                     IsHavingValidDocuments = animal.IsHavingValidDocuments,
                     Name = animal.Name,
+                    Photo = animal.Photo,
                     SocialMedia = animal.SocialMedia,
                     Weight = animal.Weight,
-                    Gender = animal.Gender,
-                    HealthStatus = animal.HealthStatus,
-                    LastModifiedBreed = animal.LastModifiedBreed,
-                    LastModifiedGender = animal.LastModifiedGender,
-                    LastModifiedName = animal.LastModifiedName,
-                    BreedId = animal.BreedId,
-                    BreedName = animal.Breed.Name,
-                    CategoryId = animal.Breed.CategoryId,
-                    Photos = animal.Photos.Select(p => new PhotoDto()
-                    {
-                        Id = p.Id,
-                        IsMain = p.IsMain,
-                        Url = p.Url,
-                    }).ToArray(),
                 };
+
+                if (!((DateTime.UtcNow - animal.LastModified).Days < 30))
+                {
+                    animalDto.CanEditAll = true;
+                }
 
                 return Result<ShowAnimalToEditDto>.Success(animalDto);
             }

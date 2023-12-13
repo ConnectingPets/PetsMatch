@@ -11,7 +11,6 @@
         {
             this.MatchId = Guid.NewGuid();
             this.AnimalMatches = new HashSet<AnimalMatch>();
-            this.Messages = new HashSet<Message>();
         }
 
         [Comment("match id")]
@@ -22,7 +21,5 @@
         public required DateTime MatchOn { get; set; }
 
         public ICollection<AnimalMatch> AnimalMatches { get; set; } = null!;
-
-        public ICollection<Message> Messages { get; set; } = null!;
     }
 }

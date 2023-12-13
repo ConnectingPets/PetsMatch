@@ -4,30 +4,22 @@
     using System.Threading.Tasks;
 
     using MediatR;
-    using Microsoft.EntityFrameworkCore;
 
     using Domain;
     using Persistence.Repositories;
-    using Application.Response;
-
-    using static Common.ExceptionMessages.Animal;
-    using static Common.ExceptionMessages.Match;
-    using static Common.SuccessMessages.Match;
-    using static Common.FailMessages.Match;
-    using static Common.ExceptionMessages.User;
+    using Application.Exceptions;
+    using Microsoft.EntityFrameworkCore;
 
     public class UnMatchAnimal
     {
-        public class UnMatchAnimalCommand : IRequest<Result<Unit>>
+        public class UnMatchAnimalCommand : IRequest<Unit>
         {
             public required string AnimalOneId { get; set; }
 
             public required string AnimalTwoId { get; set; }
-
-            public required string UserId { get; set; }
         }
 
-        public class UnMatchAnimalHandler : IRequestHandler<UnMatchAnimalCommand, Result<Unit>>
+        public class UnMatchAnimalHandler : IRequestHandler<UnMatchAnimalCommand, Unit>
         {
             private readonly IRepository repository;
 
@@ -36,68 +28,56 @@
                 this.repository = repository;
             }
 
-            public async Task<Result<Unit>> Handle(UnMatchAnimalCommand request, CancellationToken cancellationToken)
+            public async Task<Unit> Handle(UnMatchAnimalCommand request, CancellationToken cancellationToken)
             {
-                Animal? animalOne = await this.repository.FirstOrDefaultAsync<Animal>(animal => animal.AnimalId.ToString() == request.AnimalOneId.ToLower());
-                if (animalOne == null)
+                if (!Guid.TryParse(request.AnimalOneId, out Guid animalOneId))
                 {
-                    return Result<Unit>.Failure(AnimalNotFound);
+                    throw new InvalidGuidFormatException();
                 }
 
-                Animal? animalTwo = await this.repository.FirstOrDefaultAsync<Animal>(animal => animal.AnimalId.ToString() == request.AnimalTwoId.ToLower());
-                if (animalTwo == null)
+                if (!Guid.TryParse(request.AnimalTwoId, out Guid animalTwoId))
                 {
-                    return Result<Unit>.Failure(AnimalNotFound);
+                    throw new InvalidGuidFormatException();
                 }
 
-                if (await this.repository.AnyAsync<User>(u => u.Id.ToString() == request.UserId.ToLower()) == false)
+                if (await this.repository.AnyAsync<Animal>(animal => animal.AnimalId == animalOneId) == false)
                 {
-                    return Result<Unit>.Failure(UserNotFound);
+                    throw new AnimalNotFoundException();
+                }
+
+                if (await this.repository.AnyAsync<Animal>(animal => animal.AnimalId == animalTwoId) == false)
+                {
+                    throw new AnimalNotFoundException();
                 }
 
                 if (request.AnimalOneId.ToString() == request.AnimalTwoId.ToString())
                 {
-                    return Result<Unit>.Failure(SameAnimal);
-                }
-
-                if (animalOne.OwnerId.ToString() != request.UserId.ToLower() &&
-                    animalTwo.OwnerId.ToString() != request.UserId.ToLower())
-                {
-                    return Result<Unit>.Failure(NotOwner);
+                    throw new SameAnimalException();
                 }
 
                 Match? existingMatch = await GetExistingMatch(
-                    request.AnimalOneId,
-                    request.AnimalTwoId
+                    animalOneId,
+                    animalTwoId
                 );
 
                 if (existingMatch == null)
                 {
-                    return Result<Unit>.Failure(MatchNotFound);
+                    throw new MatchNotFoundException();
                 }
 
                 this.repository.DeleteRange(existingMatch.AnimalMatches.ToArray());
-                this.repository.DeleteRange(existingMatch.Messages.ToArray());
                 this.repository.Delete(existingMatch);
+                await this.repository.SaveChangesAsync();
 
-                try
-                {
-                    await this.repository.SaveChangesAsync();
-                    return Result<Unit>.Success(Unit.Value, SuccessUnMatch);
-                }
-                catch (Exception)
-                {
-                    return Result<Unit>.Failure(FailedUnMatch);
-                }
+                return Unit.Value;
             }
 
-            private async Task<Match?> GetExistingMatch(string animalOneId, string animalTwoId)
-                => await this.repository.All<AnimalMatch>(am => am.AnimalId.ToString() == animalOneId.ToLower() &&
+            private async Task<Match?> GetExistingMatch(Guid animalOneId, Guid animalTwoId)
+                => await this.repository.All<AnimalMatch>(am => am.AnimalId == animalOneId &&
                                             am.Match.AnimalMatches
-                                                .Any(m => m.AnimalId.ToString() == animalTwoId.ToLower()))
+                                                .Any(m => m.AnimalId == animalTwoId))
                                         .Include(am => am.Match)
                                         .ThenInclude(m => m.AnimalMatches)
-                                        .Include(m => m.Match.Messages)
                                         .Select(am => am.Match)
                                         .FirstOrDefaultAsync();
         }

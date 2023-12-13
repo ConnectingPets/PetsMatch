@@ -1,9 +1,7 @@
 export interface IUser {
-    Id?: string,
-    Name?: string,
+    Id: string,
+    Name: string,
     Email: string,
-    Password?: string,
-    ConfirmPassword?: string,
     Description?: string,
     Age?: number,
     Education?: string,

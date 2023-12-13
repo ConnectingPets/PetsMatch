@@ -2,13 +2,17 @@
 {
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
-    
+
     using Domain;
 
     public class MessageEntityConfiguration : IEntityTypeConfiguration<Message>
     {
         public void Configure(EntityTypeBuilder<Message> builder)
         {
+            builder.ToTable("Messages");
+
+            builder.HasKey(m => new { m.AnimalId, m.ConversationId });
+
             builder
                 .HasOne(m => m.Animal)
                 .WithMany(a => a.Messages)
@@ -16,9 +20,9 @@
                 .OnDelete(DeleteBehavior.NoAction);
 
             builder
-                .HasOne(me => me.Match)
-                .WithMany(m => m.Messages)
-                .HasForeignKey(me => me.MatchId)
+                .HasOne(m => m.Conversation)
+                .WithMany(c => c.Messages)
+                .HasForeignKey(m => m.ConversationId)
                 .OnDelete(DeleteBehavior.NoAction);
         }
     }

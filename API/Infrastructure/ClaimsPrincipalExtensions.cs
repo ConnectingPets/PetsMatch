@@ -6,7 +6,7 @@
     {
         public static string GetById(this ClaimsPrincipal user)
         {
-            return user.FindFirstValue(ClaimTypes.NameIdentifier)!;
+            return user.FindFirstValue(ClaimTypes.NameIdentifier);
         }
     }
 }

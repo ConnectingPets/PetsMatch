@@ -10,7 +10,7 @@
 
         public string? SuccessMessage { get; set; }
 
-        public static Result<T> Success(T data, string? successMessage = null)
+        public static Result<T> Success(T data, string successMessage = null)
         {
             return new Result<T>
             {

@@ -7,9 +7,8 @@
     using Microsoft.EntityFrameworkCore;
 
     using Domain;
-    using Persistence.Repositories;
     using Response;
-    using Application.Service.Interfaces;
+    using Persistence.Repositories;
 
     public class DeleteAnimal
     {
@@ -24,27 +23,17 @@
             IRequestHandler<DeleteAnimalCommand, Result<Unit>>
         {
             private readonly IRepository repository;
-            private readonly IPhotoService photoService;
 
-            public DeleteAnimalCommandHandler(IRepository repository,
-                                              IPhotoService photoService)
+            public DeleteAnimalCommandHandler(IRepository repository)
             {
                 this.repository = repository;
-                this.photoService = photoService;
             }
 
             public async Task<Result<Unit>> Handle(DeleteAnimalCommand request, CancellationToken cancellationToken)
             {
                 string animalId = request.AnimalId;
                 Animal? animal =
-                    await repository.FirstOrDefaultAsync<Animal>(a => a.AnimalId.ToString() == animalId);
-
-                Photo[] animalPhotos = await repository.All<Photo>(p => p.AnimalId.ToString() == animalId).ToArrayAsync();
-
-                foreach (Photo photo in animalPhotos)
-                {
-                    await photoService.DeleteAnimalPhotoAsync(photo);
-                }
+                    await repository.GetById<Animal>(Guid.Parse(animalId));
 
                 try
                 {
@@ -60,34 +49,35 @@
                     return Result<Unit>.Failure("This pet does not belong to you!");
                 }
 
+
                 repository.
                     DeleteRange<Swipe>(s => s.SwiperAnimalId.ToString() == animalId
-                    || s.SwipeeAnimalId.ToString() == animalId);
+                    || s.SwipeeAnimal.ToString() == animalId);
 
-                AnimalMatch[] animalMatch = await repository.
-                    All<AnimalMatch>(am => am.AnimalId.ToString() == animalId).ToArrayAsync();
-
-                foreach (AnimalMatch match in animalMatch)
-                {
-                    AnimalMatch[] animalMatches = await repository.All<AnimalMatch>(am => am.MatchId == match.MatchId).ToArrayAsync();
-
-                    Guid[] matchesIds = animalMatches.
-                        Select(am => am.MatchId)
-                        .ToArray();
-
-                    repository.DeleteRange(animalMatches);
-
-                    foreach (var animalMatchId in matchesIds)
-                    {
-                        await repository.DeleteAsync<Match>(animalMatchId);
-                    }
-                }
-
+                AnimalMatch[] animalMatches = await repository.
+                    All<AnimalMatch>(am => am.AnimalId.ToString() == animalId)
+                    .ToArrayAsync();
+                Guid[] matchesIds = animalMatches.
+                    Select(am => am.MatchId)
+                    .ToArray();
                 Message[] allMessages = await repository.
                     All<Message>(m => m.AnimalId.ToString() == animalId).
                     ToArrayAsync();
+                Guid[] allAnimalConversationId = allMessages.
+                    Select(m => m.ConversationId).
+                    ToArray();
 
                 repository.DeleteRange(allMessages);
+                repository.DeleteRange(animalMatches);
+
+                foreach (var conversationId in allAnimalConversationId)
+                {
+                    await repository.DeleteAsync<Conversation>(conversationId);
+                }
+                foreach (var animalMatchId in matchesIds)
+                {
+                    await repository.DeleteAsync<Match>(animalMatchId);
+                }
 
                 try
                 {

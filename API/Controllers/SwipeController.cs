@@ -1,14 +1,12 @@
 ﻿namespace API.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Authorization;
-
-    using API.Infrastructure;
-    using Application.DTOs.Swipe;
+    
+    using Application.DTOs;
     using Application.Service.Interfaces;
-    using Application.Response;
+    using Application.Exceptions;
+    using static Common.ExceptionMessages.Entity;
 
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class SwipeController : ControllerBase
@@ -24,22 +22,32 @@
         [HttpPost]
         public async Task<ActionResult> Swipe([FromBody] SwipeDto swipe)
         {
-            Result<bool> result = await this.swipeService.Swipe(
-                swipe.SwiperAnimalId,
-                swipe.SwipeeAnimalId,
-                swipe.SwipedRight,
-                User.GetById());
+            bool isMatch = false;
+            try
+            {
+                isMatch = await this.swipeService.Swipe(
+                    swipe.SwiperAnimalId,
+                    swipe.SwipeeAnimalId,
+                    swipe.SwipedRight);
+            }
+            catch (InvalidGuidFormatException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (AnimalNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (SameAnimalException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch
+            {
+                return StatusCode(500, InternalServerError);
+            }
 
-            return Ok(result);
-        }
-
-        [Route("animals")]
-        [HttpGet]
-        public async Task<ActionResult> AnimalsToSwipe()
-        {
-            Result<IEnumerable<AnimalToSwipeDto>> result = await this.swipeService.GetAnimalsToSwipe(User.GetById());
-
-            return Ok(result);
+            return Ok(isMatch);
         }
     }
 }

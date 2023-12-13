@@ -7,7 +7,6 @@ import { CLogo } from '../../components/common/CLogo/CLogo';
 import { CChangeThemeButton } from '../../components/common/CChangeThemeButton/CChangeThemeButton';
 import themeStore from '../../stores/themeStore';
 import './DashboardPage.scss';
-import userStore from '../../stores/userStore';
 
 const pets = [
     {
@@ -33,7 +32,7 @@ const pets = [
 ]
 
 
-interface DashboardPageProps { }
+interface DashboardPageProps { };
 
 export const DashboardPage: React.FC<DashboardPageProps> = observer(() => {
     return (
@@ -41,7 +40,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = observer(() => {
 
             <article className='dashboard__greet'>
                 <CLogo/>
-                <h1 className={themeStore.isLightTheme ? 'greet__title' :'greet__title dashboard__greet__dark'}>welcome, {userStore.user?.Name} !</h1>
+                <h1 className={themeStore.isLightTheme ? 'greet__title' :'greet__title dashboard__greet__dark'}>welcome, jim carrey !</h1>
                 <CChangeThemeButton />
             </article>
 

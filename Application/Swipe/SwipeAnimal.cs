@@ -7,28 +7,20 @@
     using Domain;
 
     using Persistence.Repositories;
-    using Microsoft.EntityFrameworkCore;
-    using Application.Response;
-
-    using static Common.ExceptionMessages.Animal;
-    using static Common.ExceptionMessages.Swipe;
-    using static Common.ExceptionMessages.User;
-    using static Common.FailMessages.Swipe;
+    using Application.Exceptions;
 
     public class SwipeAnimal
     {
-        public class SwipeAnimalCommand : IRequest<Result<bool>>
+        public class SwipeAnimalCommand : IRequest<bool>
         {
             public required string SwiperAnimalId { get; set; }
 
             public required string SwipeeAnimalId { get; set; }
 
             public required bool SwipedRight { get; set; }
-
-            public required string UserId { get; set; }
         }
 
-        public class SwipeAnimalHandler : IRequestHandler<SwipeAnimalCommand, Result<bool>>
+        public class SwipeAnimalHandler : IRequestHandler<SwipeAnimalCommand, bool>
         {
             private readonly IRepository repository;
 
@@ -37,67 +29,52 @@
                 this.repository = repository;
             }
 
-            public async Task<Result<bool>> Handle(SwipeAnimalCommand request, CancellationToken cancellationToken)
+            public async Task<bool> Handle(SwipeAnimalCommand request, CancellationToken cancellationToken)
             {
-                Animal? swiper = await this.repository.FirstOrDefaultAsync<Animal>(a => a.AnimalId.ToString() == request.SwiperAnimalId.ToLower());
-
-                if (swiper == null)
+                if (!Guid.TryParse(request.SwiperAnimalId, out Guid swiperAnimalId))
                 {
-                    return Result<bool>.Failure(AnimalNotFound);
+                    throw new InvalidGuidFormatException();
                 }
 
-                Animal? swipee = await this.repository.FirstOrDefaultAsync<Animal>(a => a.AnimalId.ToString() == request.SwipeeAnimalId.ToLower());
-                if (swipee == null)
+                if (!Guid.TryParse(request.SwipeeAnimalId, out Guid swipeeAnimalId))
                 {
-                    return Result<bool>.Failure(AnimalNotFound);
+                    throw new InvalidGuidFormatException();
                 }
 
-                if (await this.repository.AnyAsync<User>(u => u.Id.ToString() == request.UserId.ToLower()) == false)
+                if (await this.repository.AnyAsync<Animal>(animal => animal.AnimalId == swiperAnimalId) == false)
                 {
-                    return Result<bool>.Failure(UserNotFound);
+                    throw new AnimalNotFoundException();
                 }
 
-                if (request.SwiperAnimalId == request.SwipeeAnimalId)
+                if (await this.repository.AnyAsync<Animal>(animal => animal.AnimalId == swipeeAnimalId) == false)
                 {
-                    return Result<bool>.Failure(SameAnimal);
+                    throw new AnimalNotFoundException();
                 }
 
-                if (swiper.OwnerId.ToString() != request.UserId.ToLower())
+                if (request.SwiperAnimalId.ToString() == request.SwipeeAnimalId.ToString())
                 {
-                    return Result<bool>.Failure(NotOwner);
+                    throw new SameAnimalException();
                 }
 
                 Swipe swipe = new Swipe
                 {
-                    SwiperAnimalId = Guid.Parse(request.SwiperAnimalId),
-                    SwipeeAnimalId = Guid.Parse(request.SwipeeAnimalId),
+                    SwiperAnimalId = swiperAnimalId,
+                    SwipeeAnimalId = swipeeAnimalId,
                     SwipedRight = request.SwipedRight,
                     SwipedOn = DateTime.Now
                 };
 
                 await this.repository.AddAsync(swipe);
+                await this.repository.SaveChangesAsync();
 
-                try
-                {
-                    await this.repository.SaveChangesAsync();
-                }
-                catch (Exception)
-                {
-                    return Result<bool>.Failure(FailedSwipe);
-                }
-
-                bool isMatch = await IsMatch(request.SwiperAnimalId, request.SwipeeAnimalId, request.SwipedRight);
-
-                return Result<bool>.Success(isMatch);
+                return await IsMatch(swiperAnimalId, swipeeAnimalId, request.SwipedRight);
             }
 
-            private async Task<bool> IsMatch(string swiperAnimalId, string swipeeAnimalId, bool swipedRight)
+            private async Task<bool> IsMatch(Guid swiperAnimalId, Guid swipeeAnimalId, bool swipedRight)
             {
-                Animal? animal = await this.repository.All<Animal>(a => a.AnimalId.ToString() == swiperAnimalId.ToLower())
-                    .Include(a => a.SwipesFrom)
-                    .FirstOrDefaultAsync();
+                Animal? animal = await this.repository.GetById<Animal>(swiperAnimalId);
 
-                return animal!.SwipesFrom.Any(s => s.SwiperAnimalId.ToString() == swipeeAnimalId.ToLower() && s.SwipedRight) && swipedRight;
+                return animal!.SwipesFrom.Any(s => s.SwiperAnimalId == swipeeAnimalId && s.SwipedRight) && swipedRight;
             }
         }
     }

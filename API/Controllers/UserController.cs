@@ -1,59 +1,103 @@
-﻿namespace API.Controllers
+﻿using Application;
+using Application.DTOs;
+using Application.Service.Interfaces;
+using Domain;
+using Domain.ViewModels;
+using MediatR;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+
+namespace API.Controllers
 {
-    using MediatR;
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Authorization;
-
-    using API.Infrastructure;
-    using Application.DTOs.User;
-    using Application.Service.Interfaces;
-    using Application.Response;
-
-    [AllowAnonymous]
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : Controller
     {
-        private readonly IUserService userService;
+        private readonly SignInManager<User> signInManager;
+        private readonly UserManager<User> userManager;
+        private readonly ITokenService tokenService;
+        private readonly IMediator mediator;
 
         public UserController(
-            IUserService userService)
+            SignInManager<User> signInManager,
+            UserManager<User> userManager,
+            IMediator mediator,
+            ITokenService tokenService)
         {
-            this.userService = userService;
+            this.signInManager = signInManager;
+            this.userManager = userManager;
+            this.mediator = mediator;
+            this.tokenService = tokenService;
         }
 
-        [Route("register")]
-        [HttpPost]
-        public async Task<IActionResult> Register([FromBody] RegisterUserDto registerDto) 
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody]RegisterUserDto model) 
         {
-            Result<UserDto> result = await this.userService.RegisterAsync(
-                registerDto.Email,
-                registerDto.Password,
-                registerDto.Name);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-            return Ok(result);
+            RegisterRequest request = new RegisterRequest(model);
+
+            User user = await mediator.Send(request, CancellationToken.None);
+
+            if (user == null)
+            {
+                return BadRequest();
+            }
+
+            await signInManager.SignInAsync(user, false);
+
+            UserDto userObj = CreateUserObject(user);
+
+            return Ok(userObj);
         }
 
-        [Route("login")]
-        [HttpPost]
-        public async Task<IActionResult> Login([FromBody] LoginUserDto loginDto)
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody]LoginUserDto model)
         {
-            Result<UserDto> result = await this.userService.LoginAsync(
-                loginDto.Email,
-                loginDto.Password,
-                loginDto.RememberMe);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(model);
+            }
 
-            return Ok(result);
+            User? user = await this.userManager
+                   .FindByEmailAsync(model.Email);
+
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            var result = await signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, false);
+
+            if (!result.Succeeded)
+            {
+                return Unauthorized(new { Message = "Invalid username or password" });
+            }
+
+            UserDto userObj = CreateUserObject(user);
+
+            return Ok(userObj);
         }
 
-        [Authorize]
-        [Route("logout")]
-        [HttpPost]
+        [HttpPost("logout")]
         public async Task<IActionResult> Logout()
         {
-            Result<Unit> result = await this.userService.LogoutAsync(User!.GetById());
+            await signInManager.SignOutAsync();
 
-            return Ok(result);
+            return Ok(new { Message = "Logout successful" });
         }
+
+        private UserDto CreateUserObject(User user)
+            => new UserDto
+            {
+                Photo = user.Photo != null 
+                    ? Convert.ToBase64String(user.Photo)
+                    : null,
+                Name = user.Name,
+                Token = this.tokenService.CreateToken(user)
+            };
     }
 }

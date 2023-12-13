@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
 import { FieldInputProps } from 'react-final-form';
 
+import { IUser } from '../../interfaces/Interfaces';
+
 import { CLabel } from '../common/CLabel/CLabel';
 
 import '../../global-styles/forms-images.scss';
 
 interface UserPhotoProps {
+    errors: IUser | null
     input: FieldInputProps<File, HTMLElement>
 }
 
-const UserPhoto: React.FC<UserPhotoProps> = ({ input }) => {
+const UserPhoto: React.FC<UserPhotoProps> = ({ errors, input }) => {
     const [photo, setPhoto] = useState<string | null>(null);
 
     const handleFile = (
@@ -42,7 +45,9 @@ const UserPhoto: React.FC<UserPhotoProps> = ({ input }) => {
                     </div>
                 </>
             )}
-            
+
+            {errors && <span>{errors.Photo}</span>}
+
             {photo && (
                 <div id="images">
                     <div className="image-preview">
