@@ -114,8 +114,11 @@ const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAd
                                             <CLabel inputName='Name' title='Name' />
                                             <CgAsterisk className="asterisk" />
                                         </div>
-                                        <input type="text" {...input} name='Name' id='Name' placeholder='Rico' />
+                                        <input type="text" {...input} className={addOrEditPet == 'edit' && !petData?.isModifiedName ? 'disabled' : ''} name='Name' id='Name' placeholder='Rico' />
                                         {meta.touched && meta.error && <span>{meta.error}</span>}
+                                        {addOrEditPet == 'edit' && !petData?.isModifiedName && (
+                                            <p className="days-message">Name can only be edited once every 30 days.</p>
+                                        )}
                                     </>
                                 )}
                             </Field>
@@ -143,7 +146,7 @@ const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAd
                                             <div className="required">
                                                 <CLabel inputName='BreedId' title='Breed' />
                                                 <CgAsterisk className="asterisk" />
-                                                <select {...input} name="BreedId.breedId" id="Breed">
+                                                <select {...input} className={addOrEditPet == 'edit' && !petData?.isModifiedBreed ? 'disabled' : ''} name="BreedId.breedId" id="Breed">
                                                     <option>  </option>
                                                     {!isCategoryDisabled && <option>  </option>}
                                                     {isCategoryDisabled && breeds.map(b => <option value={b.breedId} key={b.breedId}>{b.name}</option>)}
@@ -151,6 +154,9 @@ const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAd
                                                 <button type="button" onClick={onBackToCategory}><TbArrowBack /> Reset</button>
                                             </div>
                                             {meta.touched && meta.error && <span>{meta.error}</span>}
+                                            {addOrEditPet == 'edit' && !petData?.isModifiedBreed && (
+                                                <p className="days-message">Breed can only be edited once every 30 days.</p>
+                                            )}
                                         </div>
                                     )}
                                 </Field>
@@ -186,13 +192,16 @@ const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAd
                                             <div className="required">
                                                 <CLabel inputName='Gender' title='Gender' />
                                                 <CgAsterisk className="asterisk" />
-                                                <select {...input} name="Gender" id="Gender">
+                                                <select {...input} className={addOrEditPet == 'edit' && !petData?.isModifiedGender ? 'disabled' : ''} name="Gender" id="Gender">
                                                     <option>  </option>
                                                     <option>Male</option>
                                                     <option>Female</option>
                                                 </select>
                                             </div>
                                             {meta.touched && meta.error && <span>{meta.error}</span>}
+                                            {addOrEditPet == 'edit' && !petData?.isModifiedGender && (
+                                                <p className="days-message">Gender can only be edited once every 30 days.</p>
+                                            )}
                                         </div>
                                     )}
                                 </Field>

@@ -28,7 +28,10 @@ export interface IAnimal {
     Gender: number,
     SocialMedia?: string,
     Weight?: number,
-    IsHavingValidDocuments: string | boolean
+    IsHavingValidDocuments: string | boolean,
+    isModifiedBreed?: boolean,
+    isModifiedGender?: boolean,
+    isModifiedName?: boolean
 }
 
 export interface Categories {

@@ -179,11 +179,10 @@
                         width: 100%;
                         margin-top: 0.2rem;
                     }
-                }
 
-                &>.disabled {
-                    opacity: 0.3;
-                    pointer-events: none;
+                    &>p {
+                        margin-bottom: unset;
+                    }
                 }
 
                 &>.last-wrapper {
@@ -247,4 +246,13 @@
 
 .asterisk {
     color: red;
+}
+
+.disabled {
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+.days-message {
+    font-size: 0.8rem;
 }

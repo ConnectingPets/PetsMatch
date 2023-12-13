@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { IAnimal } from '../../interfaces/Interfaces';
 import { returnCorrectTypesForAddOrEditPetForm } from '../../utils/convertTypes';
 import { GenderEnum, HealthStatusEnum, genderEnum, healthStatusEnum } from '../../utils/constants';
+import { isMoreThan30DaysAgo } from '../../utils/utils';
 import agent from '../../api/axiosAgent';
 
 import AddOrEditPet from '../../components/AddOrEditPet/AddOrEditPet';
@@ -15,12 +16,18 @@ interface EditPetPageProps { }
 interface PetValues {
     age: number,
     birthDate: string,
+    breedId: number,
+    categoryId: number,
     description: string,
     gender: number,
     healthStatus: number,
     isEducated: boolean,
     isHavingValidDocuments: boolean,
+    lastModifiedBreed: string,
+    lastModifiedGender: string,
+    lastModifiedName: string,
     name: string,
+    photos: object[],
     socialMedia: string,
     weight: number
 }
@@ -38,15 +45,24 @@ const returnCorrectTypes = (data: PetValues) => {
     const isEducatedValue = data.isEducated == true ? 'Yes' : 'No';
     const isHavingValidDocumentsValue = data.isHavingValidDocuments == true ? 'Yes' : 'No';
 
+    const isModifiedBreed = isMoreThan30DaysAgo(data.lastModifiedBreed);
+    const isModifiedGender = isMoreThan30DaysAgo(data.lastModifiedGender);
+    const isModifiedName = isMoreThan30DaysAgo(data.lastModifiedName);
+
     const petData = {
         Age: data.age,
         BirthDate: birthDateValue,
+        BreedId: data.breedId,
         Description: data.description,
         Gender: genderValue,
         HealthStatus: healthStatusValue,
         IsEducated: isEducatedValue,
         IsHavingValidDocuments: isHavingValidDocumentsValue,
+        isModifiedBreed,
+        isModifiedGender,
+        isModifiedName,
         Name: data.name,
+        Photos: data.photos,
         SocialMedia: data.socialMedia,
         Weight: data.weight
     };
