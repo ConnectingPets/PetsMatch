@@ -5,8 +5,10 @@
 
     using MediatR;
 
-    using Application.DTOs;
+    using Application.Response;
+    using Application.DTOs.Match;
     using Application.Service.Interfaces;
+
     using static Application.Match.AnimalMatches;
     using static Application.Match.UnMatchAnimal;
     using static Application.Matches.MatchAnimal;
@@ -20,24 +22,27 @@
             this.mediator = mediator;
         }
 
-        public async Task<IEnumerable<AnimalMatchDto>> GetAnimalMatches(string animalId)
+        public async Task<Result<IEnumerable<AnimalMatchDto>>> GetAnimalMatches(string animalId, string userId)
             => await this.mediator.Send(new AnimalMatchesQuery
             {
-                AnimalId = animalId
+                AnimalId = animalId,
+                UserId = userId
             });
 
-        public async Task Match(string animalOneId, string animalTwoId)
+        public async Task<Result<Unit>> Match(string animalOneId, string animalTwoId, string userId)
             => await this.mediator.Send(new MatchAnimalCommand
             {
                 AnimalOneId = animalOneId,
-                AnimalTwoId = animalTwoId
+                AnimalTwoId = animalTwoId,
+                UserId = userId
             });
 
-        public async Task UnMatch(string animalOneId, string animalTwoId)
+        public async Task<Result<Unit>> UnMatch(string animalOneId, string animalTwoId, string userId)
             => await this.mediator.Send(new UnMatchAnimalCommand
             {
                 AnimalOneId = animalOneId,
-                AnimalTwoId = animalTwoId
+                AnimalTwoId = animalTwoId,
+                UserId = userId
             });
     }
 }

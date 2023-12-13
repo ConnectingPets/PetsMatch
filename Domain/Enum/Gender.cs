@@ -4,7 +4,6 @@
     {
         Male = 1,
         Female = 2,
-        Other = 3,
-        Default = 4
+        Other = 3
     }
 }

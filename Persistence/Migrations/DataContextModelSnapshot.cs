@@ -17,7 +17,7 @@ namespace Persistence.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.13")
+                .HasAnnotation("ProductVersion", "8.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -44,11 +44,12 @@ namespace Persistence.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETDATE()");
+                        .HasDefaultValueSql("GETDATE()")
+                        .HasComment("animal created on");
 
                     b.Property<string>("Description")
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)")
                         .HasComment("animal description");
 
                     b.Property<int>("Gender")
@@ -67,8 +68,17 @@ namespace Persistence.Migrations
                         .HasColumnType("bit")
                         .HasComment("it stores if the animal has valid documents");
 
-                    b.Property<DateTime>("LastModified")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTime>("LastModifiedBreed")
+                        .HasColumnType("datetime2")
+                        .HasComment("animal last modified breed");
+
+                    b.Property<DateTime>("LastModifiedGender")
+                        .HasColumnType("datetime2")
+                        .HasComment("animal last modified gender");
+
+                    b.Property<DateTime>("LastModifiedName")
+                        .HasColumnType("datetime2")
+                        .HasComment("animal last modified name");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -79,11 +89,6 @@ namespace Persistence.Migrations
                     b.Property<Guid>("OwnerId")
                         .HasColumnType("uniqueidentifier")
                         .HasComment("animal owner id");
-
-                    b.Property<byte[]>("Photo")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)")
-                        .HasComment("animal photo");
 
                     b.Property<string>("SocialMedia")
                         .HasColumnType("nvarchar(max)")
@@ -177,25 +182,6 @@ namespace Persistence.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Domain.Conversation", b =>
-                {
-                    b.Property<Guid>("ConversationId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasComment("conversation id");
-
-                    b.Property<DateTime>("StartedOn")
-                        .HasColumnType("datetime2")
-                        .HasComment("timestamp when the conversation started");
-
-                    b.HasKey("ConversationId");
-
-                    b.ToTable("Conversations", t =>
-                        {
-                            t.HasComment("conversation table");
-                        });
-                });
-
             modelBuilder.Entity("Domain.Match", b =>
                 {
                     b.Property<Guid>("MatchId")
@@ -217,13 +203,14 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Message", b =>
                 {
+                    b.Property<Guid>("MessageId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasComment("message id");
+
                     b.Property<Guid>("AnimalId")
                         .HasColumnType("uniqueidentifier")
                         .HasComment("message animal id");
-
-                    b.Property<Guid>("ConversationId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasComment("message conversation id");
 
                     b.Property<string>("Content")
                         .IsRequired()
@@ -231,15 +218,21 @@ namespace Persistence.Migrations
                         .HasColumnType("nvarchar(350)")
                         .HasComment("message content");
 
+                    b.Property<Guid>("MatchId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasComment("message match id");
+
                     b.Property<DateTime>("SentOn")
                         .HasColumnType("datetime2")
                         .HasComment("timestamp when the message is sent");
 
-                    b.HasKey("AnimalId", "ConversationId");
+                    b.HasKey("MessageId");
 
-                    b.HasIndex("ConversationId");
+                    b.HasIndex("AnimalId");
 
-                    b.ToTable("Messages", null, t =>
+                    b.HasIndex("MatchId");
+
+                    b.ToTable("Messages", t =>
                         {
                             t.HasComment("message table");
                         });
@@ -265,6 +258,35 @@ namespace Persistence.Migrations
                     b.ToTable("Passions", t =>
                         {
                             t.HasComment("passion table");
+                        });
+                });
+
+            modelBuilder.Entity("Domain.Photo", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)")
+                        .HasComment("photo id");
+
+                    b.Property<Guid?>("AnimalId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasComment("photo animal id");
+
+                    b.Property<bool>("IsMain")
+                        .HasColumnType("bit")
+                        .HasComment("stores if the photo is main");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasComment("photo url");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AnimalId");
+
+                    b.ToTable("Photos", t =>
+                        {
+                            t.HasComment("photo table");
                         });
                 });
 
@@ -324,8 +346,8 @@ namespace Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)")
                         .HasComment("user description");
 
                     b.Property<string>("Education")
@@ -378,9 +400,9 @@ namespace Persistence.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<byte[]>("Photo")
-                        .HasColumnType("varbinary(max)")
-                        .HasComment("user photo");
+                    b.Property<string>("PhotoId")
+                        .HasColumnType("nvarchar(450)")
+                        .HasComment("user photo id");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
@@ -401,6 +423,8 @@ namespace Persistence.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.HasIndex("PhotoId");
 
                     b.ToTable("AspNetUsers", null, t =>
                         {
@@ -616,15 +640,24 @@ namespace Persistence.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("Domain.Conversation", "Conversation")
+                    b.HasOne("Domain.Match", "Match")
                         .WithMany("Messages")
-                        .HasForeignKey("ConversationId")
+                        .HasForeignKey("MatchId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Animal");
 
-                    b.Navigation("Conversation");
+                    b.Navigation("Match");
+                });
+
+            modelBuilder.Entity("Domain.Photo", b =>
+                {
+                    b.HasOne("Domain.Animal", "Animal")
+                        .WithMany("Photos")
+                        .HasForeignKey("AnimalId");
+
+                    b.Navigation("Animal");
                 });
 
             modelBuilder.Entity("Domain.Swipe", b =>
@@ -644,6 +677,15 @@ namespace Persistence.Migrations
                     b.Navigation("SwipeeAnimal");
 
                     b.Navigation("SwiperAnimal");
+                });
+
+            modelBuilder.Entity("Domain.User", b =>
+                {
+                    b.HasOne("Domain.Photo", "Photo")
+                        .WithMany()
+                        .HasForeignKey("PhotoId");
+
+                    b.Navigation("Photo");
                 });
 
             modelBuilder.Entity("Domain.UserPassion", b =>
@@ -722,6 +764,8 @@ namespace Persistence.Migrations
 
                     b.Navigation("Messages");
 
+                    b.Navigation("Photos");
+
                     b.Navigation("SwipesFrom");
 
                     b.Navigation("SwipesTo");
@@ -737,14 +781,11 @@ namespace Persistence.Migrations
                     b.Navigation("Animals");
                 });
 
-            modelBuilder.Entity("Domain.Conversation", b =>
-                {
-                    b.Navigation("Messages");
-                });
-
             modelBuilder.Entity("Domain.Match", b =>
                 {
                     b.Navigation("AnimalMatches");
+
+                    b.Navigation("Messages");
                 });
 
             modelBuilder.Entity("Domain.Passion", b =>
