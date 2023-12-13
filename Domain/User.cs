@@ -2,6 +2,7 @@ namespace Domain
 {
     using Domain.Enum;
     using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
 
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
@@ -35,8 +36,12 @@ namespace Domain
         [StringLength(EducationMaxLength, ErrorMessage = InvalidEducationLength)]
         public string? Education { get; set; }
 
+        [Comment("user photo id")]
+        public string? PhotoId { get; set; }
+
         [Comment("user photo")]
-        public byte[]? Photo { get; set; }
+        [ForeignKey(nameof(PhotoId))]
+        public Photo? Photo { get; set; }
 
         [Comment("user job title")]
         [StringLength(JobTitleMaxLength, ErrorMessage = InvalidJobTitleLength)]

@@ -1,6 +1,7 @@
 ﻿namespace API.Infrastructure
 {
     using Microsoft.EntityFrameworkCore;
+
     using Persistence;
 
     /// <summary>
@@ -13,8 +14,8 @@
         {
             string connectionString = configuration.GetConnectionString("DefaultConnection") ??
                 throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-
-            services.AddDbContext<DataContext>(options => options.UseSqlServer(connectionString));
+            string fullConnectionString = connectionString + "TrustServerCertificate=true";
+            services.AddDbContext<DataContext>(options => options.UseSqlServer(fullConnectionString));
 
             return services;
         }

@@ -1,11 +1,16 @@
 ﻿namespace Application.Service
 {
     using System.Threading.Tasks;
+    using System.Collections.Generic;
 
     using MediatR;
 
+    using Application.DTOs.Swipe;
     using Application.Service.Interfaces;
+    using Application.Response;
+
     using static Application.Swipe.SwipeAnimal;
+    using static Application.Swipe.AnimalsToSwipe;
 
     public class SwipeService : ISwipeService
     {
@@ -16,12 +21,19 @@
             this.mediator = mediator;
         }
 
-        public async Task<bool> Swipe(string swiperAnimalId, string swipeeAnimalId, bool swipedRight)
+        public async Task<Result<IEnumerable<AnimalToSwipeDto>>> GetAnimalsToSwipe(string userId)
+            => await this.mediator.Send(new AnimalsToSwipeQuery
+            {
+                UserId = userId
+            });
+
+        public async Task<Result<bool>> Swipe(string swiperAnimalId, string swipeeAnimalId, bool swipedRight, string userId)
             => await this.mediator.Send(new SwipeAnimalCommand
             {
                 SwiperAnimalId = swiperAnimalId,
                 SwipeeAnimalId = swipeeAnimalId,
-                SwipedRight = swipedRight
+                SwipedRight = swipedRight,
+                UserId = userId
             });
     }
 }

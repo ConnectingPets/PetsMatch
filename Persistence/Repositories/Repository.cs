@@ -90,7 +90,7 @@
 
         public void DeleteRange<T>(Expression<Func<T, bool>> expression) where T : class
         {
-            T[] entities =  this.All<T>().ToArray();
+            T[] entities =  this.All(expression).ToArray();
 
             this.DeleteRange(entities);
         }
