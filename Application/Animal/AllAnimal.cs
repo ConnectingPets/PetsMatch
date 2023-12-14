@@ -7,10 +7,11 @@
     using Microsoft.EntityFrameworkCore;
 
     using Domain;
-    using Persistence;
-    using Persistence.Repositories;
-    using Application.DTOs.Animal;
     using Response;
+    using Persistence;
+    using Application.DTOs.Animal;
+    using Persistence.Repositories;
+    using static Common.ExceptionMessages.Animal;
 
     public class AllAnimal
     {
@@ -40,7 +41,7 @@
 
                 if (!(user!.Animals.Any()))
                 {
-                    return Result<IEnumerable<AllAnimalDto>>.Failure("You don't have pets yet");
+                    return Result<IEnumerable<AllAnimalDto>>.Failure(NoPets);
                 }
 
                 var userAnimals = await repository.

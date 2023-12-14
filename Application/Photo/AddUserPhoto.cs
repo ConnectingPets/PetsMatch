@@ -1,15 +1,16 @@
 ﻿namespace Application.Photo
 {
-    using System.Threading.Tasks;
     using System.Threading;
+    using System.Threading.Tasks;
 
-    using Microsoft.AspNetCore.Http;
     using MediatR;
+    using Microsoft.AspNetCore.Http;
 
     using Domain;
     using Response;
     using Service.Interfaces;
     using Persistence.Repositories;
+    using static Common.ExceptionMessages.Photo;
 
     public class AddUserPhoto
     {
@@ -40,18 +41,18 @@
 
                 if (user!.PhotoId != null)
                 {
-                    return Result<Unit>.Failure("You already have photo!");
+                    return Result<Unit>.Failure(AlreadyHavePhoto);
                 }
 
                 if (file == null || file.Length == 0)
                 {
-                    return Result<Unit>.Failure("File is not selected or empty");
+                    return Result<Unit>.Failure(EmptyPhoto);
                 }
 
                 if (!file.ContentType.StartsWith("image"))
                 {
                     return
-                        Result<Unit>.Failure("This file is not an image");
+                        Result<Unit>.Failure(NotImage);
                 }
 
                 var result = 

@@ -8,9 +8,10 @@
 
     using Domain;
     using Response;
-    using Domain.Enum;
     using DTOs.Animal;
+    using Domain.Enum;
     using Persistence.Repositories;
+    using static Common.ExceptionMessages.Marketplace;
 
     public class AllAnimalsForAdoption
     {
@@ -43,7 +44,7 @@
 
                 if (!allAnimals.Any())
                 {
-                    return Result<IEnumerable<AllAnimalDto>>.Failure("We still don't have animal for adoption");
+                    return Result<IEnumerable<AllAnimalDto>>.Failure(NoAnimalsForAdoption);
                 }
 
                 return Result<IEnumerable<AllAnimalDto>>.Success(allAnimals);

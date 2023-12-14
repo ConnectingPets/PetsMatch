@@ -5,10 +5,12 @@
     using Domain;
     using Response;
     using DTOs.Photo;
-    using Domain.Enum;
     using DTOs.Animal;
+    using Domain.Enum;
     using Service.Interfaces;
     using Persistence.Repositories;
+    using static Common.SuccessfulMessages.Animal;
+    using static Common.ExceptionMessages.Animal;
 
     public class AddAnimal
     {
@@ -63,12 +65,12 @@
                     await repository.SaveChangesAsync();
                     await photoService.AddAnimalPhotosWithMainAsync(photos,animal);
 
-                    return Result<Unit>.Success(Unit.Value,$"You have successfully add {animal.Name} to your pet's list");
+                    return Result<Unit>.Success(Unit.Value,string.Format(SuccessfullyAddedAnimal,animal.Name));
                 }
                 catch (Exception)
                 {
                     return
-                        Result<Unit>.Failure($"Failed to create pet - {animal.Name}");
+                        Result<Unit>.Failure(string.Format(FailedToCreate,animal.Name));
                 }
             }
         }

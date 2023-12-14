@@ -12,6 +12,8 @@
     using Service.Interfaces;
     using Persistence.Repositories;
     using Application.DTOs.Marketplace;
+    using static Common.ExceptionMessages.Animal;
+    using static Common.SuccessfulMessages.Animal;
 
     public class AddAnimalMarketplace
     {
@@ -87,12 +89,11 @@
                     await repository.SaveChangesAsync();
                     await photoService.AddAnimalPhotosWithMainAsync(photos, animal);
 
-                    return Result<Unit>.Success(Unit.Value, $"You have successfully add {animal.Name} to your pet's list");
+                    return Result<Unit>.Success(Unit.Value, string.Format(SuccessfullyAddedAnimal, animal.Name));
                 }
                 catch (Exception)
                 {
-                    return
-                        Result<Unit>.Failure($"Failed to create pet - {animal.Name}");
+                    return Result<Unit>.Failure(FailedToCreate);
                 }
             }
         }

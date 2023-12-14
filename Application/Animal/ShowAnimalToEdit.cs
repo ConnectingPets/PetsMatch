@@ -11,6 +11,7 @@
     using DTOs.Photo;
     using DTOs.Animal;
     using Persistence.Repositories;
+    using static Common.ExceptionMessages.Animal;
 
     public class ShowAnimalToEdit
     {
@@ -41,11 +42,11 @@
 
                 if (animal == null)
                 {
-                    return Result<ShowAnimalToEditDto>.Failure("This pet does not exist! Please select existing one");
+                    return Result<ShowAnimalToEditDto>.Failure(AnimalNotFound);
                 }
                 if (animal.OwnerId.ToString() != request.UserId.ToLower())
                 {
-                    return Result<ShowAnimalToEditDto>.Failure("This pet does not belong to you!");
+                    return Result<ShowAnimalToEditDto>.Failure(NotRightUser);
                 }
 
                 ShowAnimalToEditDto animalDto = new ShowAnimalToEditDto()

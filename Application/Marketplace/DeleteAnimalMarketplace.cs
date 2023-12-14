@@ -10,6 +10,8 @@
     using Response;
     using Service.Interfaces;
     using Persistence.Repositories;
+    using static Common.ExceptionMessages.Animal;
+    using static Common.SuccessfulMessages.Animal;
 
     public class DeleteAnimalMarketplace
     {
@@ -53,11 +55,11 @@
                 }
                 catch (Exception)
                 {
-                    return Result<Unit>.Failure("This pet does not exist! Please select existing one.");
+                    return Result<Unit>.Failure(AnimalNotFound);
                 }
                 if (animal!.OwnerId.ToString() != request.UserId.ToLower())
                 {
-                    return Result<Unit>.Failure("This pet does not belong to you!");
+                    return Result<Unit>.Failure(NotRightUser);
                 }
 
                 Message[] allMessages = await repository.
@@ -69,12 +71,12 @@
                 try
                 {
                     await repository.SaveChangesAsync();
-                    return Result<Unit>.Success(Unit.Value, $"You have successfully delete {animal!.Name} from your pet's list");
+                    return Result<Unit>.Success(Unit.Value, string.Format(SuccessfullyDeleteAnimal, animal.Name));
                 }
                 catch (Exception)
                 {
                     return
-                        Result<Unit>.Failure($"Failed to delete pet - {animal.Name}");
+                        Result<Unit>.Failure(string.Format(FailedToDelete, animal.Name));
                 }
 
             }

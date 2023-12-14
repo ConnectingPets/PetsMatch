@@ -8,6 +8,14 @@
             public const string InvalidDescriptionLength = "The animal description has max length of 150";
             public const string AnimalNotFound = "The animal is not found";
             public const string SameAnimal = "Animal IDs must be different.";
+            public const string FailedToCreate = "Failed to create pet - {0}";
+            public const string NoPets = "You don't have pets yet";
+            public const string NotRightUser = "This pet does not belong to you!";
+            public const string FailedToDelete = "Failed to delete pet - {0}";
+            public const string FailedToEdit = "Failed to edit pet - {0}";
+            public const string CannotUpdateName = "Can not update pet name for another {0} days.";
+            public const string CannotUpdateBreed = "Can not update pet breed for another {0} days.";
+            public const string CannotUpdateGender = "Can not update pet gender for another {0} days.";
         }
 
         public static class Match
@@ -19,6 +27,7 @@
         public static class AnimalCategory
         {
             public const string InvalidNameLength = "The animal category should be with length between 3 and 30";
+            public const string CategoryNotExist = "This category does not exist. Please select existing one";
         }
 
         public static class Breed
@@ -65,6 +74,30 @@
             public const string InvalidGuidFormat = "The id is not a valid GUID format";
             public const string InternalServerError = "Internal Server Error";
             public const string InvalidEnum = "The value is invalid {0}";
+        }
+
+        public static class Marketplace
+        {
+            public const string NoAnimalsForAdoption = "We still don't have animal for adoption";
+            public const string NoAnimalsForSale = "We still don't have animals for sale";
+            public const string DoNotHaveAnimalForSale = "You still don't have animal for sale";
+            public const string DoNotHaveAnimalForAdoption = "You still don't have animal for adoption";
+        }
+
+        public static class Photo
+        {
+            public const string EmptyPhoto = "File is not selected or empty";
+            public const string AlreadyHavePhoto = "You already have photo!";
+            public const string NotImage = "This file is not an image";
+            public const string PhotoNotExist = "This photo does not exist! Please select existing one";
+            public const string MainPhotoError = "This is your main photo! You can not delete it";
+            public const string DonNotHavePhoto = "You don't have photo yet!";
+            public const string ErrorUploadPhoto = "Error occurred during uploading photo";
+            public const string FullCapacityImage = "You already have 6 photos of this animal. You cannot add more";
+            public const string FailedToDeletePhoto = "Failed to delete photo";
+            public const string ErrorDeletingPhoto = "Error occurred during deleting photo";
+            public const string ErrorSetMain = "Error occurred during set main";
+
         }
     }
 }

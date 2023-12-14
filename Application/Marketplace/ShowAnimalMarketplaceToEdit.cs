@@ -8,6 +8,7 @@
     using DTOs.Photo;
     using Persistence.Repositories;
     using Application.DTOs.Marketplace;
+    using static Common.ExceptionMessages.Animal;
 
     public class ShowAnimalMarketplaceToEdit
     {
@@ -40,11 +41,11 @@
 
                 if (animal == null)
                 {
-                    return Result<ShowAnimalMarketplaceToEditDto>.Failure("This pet does not exist! Please select existing one");
+                    return Result<ShowAnimalMarketplaceToEditDto>.Failure(AnimalNotFound);
                 }
                 if (animal.OwnerId.ToString() != request.UserId.ToLower())
                 {
-                    return Result<ShowAnimalMarketplaceToEditDto>.Failure("This pet does not belong to you!");
+                    return Result<ShowAnimalMarketplaceToEditDto>.Failure(NotRightUser);
                 }
 
                 ShowAnimalMarketplaceToEditDto animalDto =
