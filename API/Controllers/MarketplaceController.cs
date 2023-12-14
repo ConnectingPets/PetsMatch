@@ -14,6 +14,7 @@
     using static Application.Marketplace.AllAnimalsForAdoption;
     using static Application.Marketplace.MyAnimalsForAdoption;
     using static Application.Marketplace.MyAnimalForSale;
+    using static Application.Marketplace.GetAnimal;
 
     [Authorize]
     [ApiController]
@@ -135,5 +136,18 @@
             var result = await mediator.Send(query);
             return new JsonResult(result);
         }
+
+        [HttpGet("GetAnimal/{id}")]
+        public async Task<IActionResult> GetAnimalById(string id)
+        {
+            GetAnimalQuery query = new GetAnimalQuery()
+            {
+                AnimalId = id,
+            };
+
+            var result = await mediator.Send(query);
+            return new JsonResult(result);
+        }
+
     }
 }
