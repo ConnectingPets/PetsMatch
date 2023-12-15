@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-preview-ubuntu-22.04
+    environment:
+      ACCEPT_EULA: Y
+      SA_PASSWORD: Pass#123
+      MSSQL_PID: Evaluation
+    ports:
+      - "5268:1433"
+
+  webapi:
+    image: mcr.microsoft.com/dotnet/aspnet:latest
+    build:
+      context: ./PetsMatch
+    ports:
+      - "5216:5216"
+    depends_on:
+      - sqlserver
