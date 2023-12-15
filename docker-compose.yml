@@ -9,12 +9,3 @@ services:
       MSSQL_PID: Evaluation
     ports:
       - "5268:1433"
-
-  webapi:
-    image: mcr.microsoft.com/dotnet/aspnet:latest
-    build:
-      context: ./PetsMatch
-    ports:
-      - "5216:5216"
-    depends_on:
-      - sqlserver
