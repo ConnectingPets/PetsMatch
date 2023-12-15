@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Persistence", "Persistence\Persistence.csproj", "{32441DF8-FC0C-4A9E-851C-03699C5AC273}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{2C0FE19A-1F3F-482D-B867-9B395BADEAAF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "Common\Common.csproj", "{2C0FE19A-1F3F-482D-B867-9B395BADEAAF}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{458A879D-DE36-4741-AE1D-56FBD5216886}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{2C0FE19A-1F3F-482D-B867-9B395BADEAAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2C0FE19A-1F3F-482D-B867-9B395BADEAAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2C0FE19A-1F3F-482D-B867-9B395BADEAAF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{458A879D-DE36-4741-AE1D-56FBD5216886}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{458A879D-DE36-4741-AE1D-56FBD5216886}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{458A879D-DE36-4741-AE1D-56FBD5216886}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{458A879D-DE36-4741-AE1D-56FBD5216886}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

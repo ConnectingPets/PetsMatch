@@ -1,0 +1,25 @@
+version: '3.4'
+
+services:
+  api-db:
+    container_name: pets-match-db
+    image: mcr.microsoft.com/mssql/server:2022-preview-ubuntu-22.04
+    ports:
+      - 5216:1433
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=123456
+  api:
+    container_name: pets-match
+    image: ${DOCKER_REGISTRY-}api
+    build:
+      context: .
+      dockerfile: API/Dockerfile
+    ports:
+      - 80:80
+    depends_on:
+      - api-db
+    environment: 
+      - DB_HOST=api-db
+      - DB_NAME=PetsMatch
+      - DB_SA_PASSWORD=123456
