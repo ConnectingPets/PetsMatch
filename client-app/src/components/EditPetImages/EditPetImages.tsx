@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FieldInputProps } from 'react-final-form';
 import { DragDropContext, Draggable, DropResult, Droppable } from 'react-beautiful-dnd';
+import { CgAsterisk } from 'react-icons/cg';
 
 import { CLabel } from '../common/CLabel/CLabel';
 
@@ -9,11 +10,11 @@ import '../../global-styles/forms-images.scss';
 interface EditPetImagesProps {
     input: FieldInputProps<File[], HTMLElement>;
     initialImages: Array<{
-    [x: string]: unknown;
-    id: string; 
-    isMain: boolean; 
-    url: string 
-}>;
+        [x: string]: unknown;
+        id: string;
+        isMain: boolean;
+        url: string
+    }>;
 }
 
 const EditPetImages: React.FC<EditPetImagesProps> = ({ input, initialImages }) => {
@@ -53,7 +54,7 @@ const EditPetImages: React.FC<EditPetImagesProps> = ({ input, initialImages }) =
     const handleRemoveImage = (id: string) => {
         const updatedImages = images.filter((img) => img.id !== id);
         setImages(updatedImages);
-        
+
         const updatedFiles = updatedImages.map((img) => img.file);
         input.onChange(updatedFiles);
     };
@@ -74,13 +75,23 @@ const EditPetImages: React.FC<EditPetImagesProps> = ({ input, initialImages }) =
 
     return (
         <>
-            <div className="required">
-                <CLabel inputName='Photos' title='Photo' />
-            </div>
-            <div id="fileInput">
-                <input type="file" accept="image/*" multiple onChange={(e) => handleFile(e, input, images.length)} name='Photo' id='Photo' />
-                <p className="fakeFileInput" >Upload Photo</p>
-            </div>
+            {images.length < 6 && (
+                <>
+                    <div className="required">
+                        <CLabel inputName='Photos' title='Photo' />
+                        <CgAsterisk className="asterisk" />
+                    </div>
+                    <div id="fileInput">
+                        <input type="file" accept="image/*" multiple onChange={(e) => handleFile(e, input, images.length)} name='Photo' id='Photo' />
+                        <p className="fakeFileInput" >Upload Photo</p>
+                    </div>
+                </>
+            )}
+
+            {images.length > 5 && (
+                <p className="limit-message">Only up to 6 images can be uploaded.</p>
+            )}
+
             {images.length > 0 && (
                 <DragDropContext onDragEnd={handleOnDragEnd}>
                     <Droppable droppableId="images">
