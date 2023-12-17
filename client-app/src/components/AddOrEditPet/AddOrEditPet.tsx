@@ -17,6 +17,7 @@ import FormsHeader from '../FormsHeader/FormsHeader';
 import { CLabel } from '../../components/common/CLabel/CLabel';
 import { CSubmitButton } from '../../components/common/CSubmitButton/CSubmitButton';
 import PetImages from '../PetImages/PetImages';
+import EditPetImages from '../EditPetImages/EditPetImages';
 import DeleteModal from '../DeleteModal/DeleteModal';
 import Footer from '../../components/Footer/Footer';
 
@@ -296,7 +297,8 @@ const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAd
                             <Field name='Photos'>
                                 {({ input, meta }) => (
                                     <>
-                                        <PetImages input={input} />
+                                        {addOrEditPet == 'add' && <PetImages input={input} />}
+                                        {addOrEditPet == 'edit' && <EditPetImages input={input} initialImages={petData?.Photos || []} />}
                                         {meta.touched && meta.error && <span>{meta.error}</span>}
                                     </>
                                 )}
