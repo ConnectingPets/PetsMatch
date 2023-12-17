@@ -40,6 +40,14 @@ const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAd
     const [isDeleteClick, setIsDeleteClick] = useState<boolean>(false);
 
     useEffect(() => {
+        if (addOrEditPet == 'edit' && petData?.AnimalCategory) {
+            const category: string = petData?.AnimalCategory;
+            setSelectedCategory(category);
+            loadBreeds(category);
+        }
+    }, [addOrEditPet, petData?.AnimalCategory]);
+
+    useEffect(() => {
         agent.apiAnimal.getAllCategories()
             .then(res => {
                 setCategories(res.data);
