@@ -11,7 +11,7 @@
     using Service.Interfaces;
     using Persistence.Repositories;
     using static Common.ExceptionMessages.Animal;
-    using static Common.SuccessfulMessages.Animal;
+    using static Common.SuccessMessages.Animal;
 
     public class DeleteAnimal
     {

@@ -7,12 +7,15 @@
     using Microsoft.AspNetCore.Identity;
     
     using Domain;
-    using Application.Exceptions.User;
-    using static Common.ExceptionMessages.User;
+    using Application.Response;
+    using Application.DTOs.User;
+    using Application.Service.Interfaces;
+
+    using static Common.FailMessages.User;
 
     public class RegisterUser
     {
-        public class RegisterUserCommand : IRequest<User>
+        public class RegisterUserCommand : IRequest<Result<UserDto>>
         {
             public string Email { get; set; } = null!;
 
@@ -21,20 +24,23 @@
             public string Name { get; set; } = null!;
         }
 
-        public class RegisterUserHandler : IRequestHandler<RegisterUserCommand, User>
+        public class RegisterUserHandler : IRequestHandler<RegisterUserCommand, Result<UserDto>>
         {
             private readonly UserManager<User> userManager;
             private readonly SignInManager<User> signInManager;
+            private readonly ITokenService tokenService;
 
             public RegisterUserHandler(
                 UserManager<User> userManager,
-                SignInManager<User> signInManager)
+                SignInManager<User> signInManager,
+                ITokenService tokenService)
             {
                 this.userManager = userManager;
                 this.signInManager = signInManager;
+                this.tokenService = tokenService;
             }
 
-            public async Task<User> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
+            public async Task<Result<UserDto>> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
             {
                 User user = new User()
                 {
@@ -43,17 +49,30 @@
                     UserName = request.Email,
                 };
 
-                IdentityResult result =
-                    await userManager.CreateAsync(user, request.Password);
-
-                if (!result.Succeeded)
+                try
                 {
-                    throw new UserResultNotSucceededException(InvalidRegister);
+                    IdentityResult result =
+                        await userManager.CreateAsync(user, request.Password);
+
+                    if (!result.Succeeded)
+                    {
+                        return Result<UserDto>.Failure(FailedRegister);
+                    } 
+
+                    await signInManager.SignInAsync(user, false);
+
+                    UserDto userDto = new UserDto
+                    {
+                        Name = user.Name,
+                        Token = this.tokenService.CreateToken(user)
+                    };
+
+                    return Result<UserDto>.Success(userDto);
                 }
-
-                await signInManager.SignInAsync(user, false);
-
-                return user;
+                catch (Exception)
+                {
+                    return Result<UserDto>.Failure(FailedRegister);
+                }
             }
         }
     }

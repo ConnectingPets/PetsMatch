@@ -5,6 +5,7 @@ import { IAnimal } from '../interfaces/Interfaces';
 
 const axiosInstance = axios.create({
     baseURL: 'http://localhost:5216',
+    withCredentials: true
 });
 
 const headers = {
@@ -24,7 +25,9 @@ const requests = {
 const apiUser = {
     register: (userData: IUser) => requests.post('/api/user/register', userData, headers.appJSON),
     login: (userData: IUser) => requests.post('/api/user/login', userData, headers.appJSON),
-    logout: (body: object) => requests.post('/api/user/logout', body, headers.appJSON)
+    logout: (body: object) => requests.post('/api/user/logout', body, headers.appJSON),
+    editUser: (body: IUser) => requests.patch('/api/profile/edit', body, headers.appJSON),
+    deleteUser: () => requests.del('/api/profile/delete')
 };
 
 const apiAnimal = {
@@ -43,10 +46,16 @@ const apiMatches = {
     unmatch: (animalOneId: string, animalTwoId: string) => requests.post('/unmatch', { animalOneId, animalTwoId }, headers.appJSON)
 };
 
+const apiPhotos = {
+    addUserPhoto: (body: FormData) => requests.post('/api/photo/addUserPhoto', body, headers.multipart),
+    deleteUserPhoto: () => requests.del('/api/photo/deleteUserPhoto')
+};
+
 const agent = {
     apiUser,
     apiAnimal,
-    apiMatches
+    apiMatches,
+    apiPhotos
 };
 
 export default agent;

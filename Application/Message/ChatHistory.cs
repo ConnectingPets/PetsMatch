@@ -9,16 +9,21 @@
     using Domain;
     using Persistence.Repositories;
     using Application.DTOs.Message;
-    using Application.Exceptions.Match;
+    using Application.Response;
+
+    using static Common.ExceptionMessages.Match;
+    using static Common.ExceptionMessages.Animal;
 
     public class ChatHistory
     {
-        public class ChatHistoryQuery : IRequest<IEnumerable<ChatMessageDto>>
+        public class ChatHistoryQuery : IRequest<Result<IEnumerable<ChatMessageDto>>>
         {
             public string MatchId { get; set; } = null!;
+
+            public string UserId { get; set; } = null!;
         }
 
-        public class ChatHistoryHandler : IRequestHandler<ChatHistoryQuery, IEnumerable<ChatMessageDto>>
+        public class ChatHistoryHandler : IRequestHandler<ChatHistoryQuery, Result<IEnumerable<ChatMessageDto>>>
         {
             private readonly IRepository repository;
 
@@ -27,15 +32,27 @@
                 this.repository = repository;
             }
 
-            public async Task<IEnumerable<ChatMessageDto>> Handle(ChatHistoryQuery request, CancellationToken cancellationToken)
+            public async Task<Result<IEnumerable<ChatMessageDto>>> Handle(ChatHistoryQuery request, CancellationToken cancellationToken)
             {
-                if (!Guid.TryParse(request.MatchId, out Guid guidMatchId))
+                Match? match = await this.repository.All<Match>(m => m.MatchId.ToString() == request.MatchId.ToLower())
+                    .Include(m => m.AnimalMatches)
+                    .ThenInclude(am => am.Animal)
+                    .FirstOrDefaultAsync();
+
+                if (match == null)
                 {
-                    throw new MatchNotFoundException();
+                    return Result<IEnumerable<ChatMessageDto>>.Failure(MatchNotFound);
                 }
 
-                return await this.repository
-                    .AllReadonly<Message>(m => m.MatchId == guidMatchId)
+                bool isOwner = match.AnimalMatches.Any(am => am.Animal.OwnerId.ToString() == request.UserId.ToLower());
+
+                if (!isOwner)
+                {
+                    return Result<IEnumerable<ChatMessageDto>>.Failure(NotOwner);
+                }
+
+                IEnumerable<ChatMessageDto> chatHistory = await this.repository
+                    .AllReadonly<Message>(m => m.MatchId.ToString() == request.MatchId)
                     .OrderBy(m => m.SentOn)
                     .Select(m => new ChatMessageDto
                     {
@@ -44,6 +61,8 @@
                         SentOn = m.SentOn
                     })
                     .ToListAsync();
+
+                return Result<IEnumerable<ChatMessageDto>>.Success(chatHistory);
             }
         }
     }

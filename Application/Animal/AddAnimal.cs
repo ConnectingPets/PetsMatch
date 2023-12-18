@@ -9,7 +9,7 @@
     using Domain.Enum;
     using Service.Interfaces;
     using Persistence.Repositories;
-    using static Common.SuccessfulMessages.Animal;
+    using static Common.SuccessMessages.Animal;
     using static Common.ExceptionMessages.Animal;
 
     public class AddAnimal

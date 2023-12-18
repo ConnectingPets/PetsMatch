@@ -13,7 +13,7 @@
     using Application.DTOs.Photo;
     using Persistence.Repositories;
     using static Common.ExceptionMessages.Photo;
-    using static Common.SuccessfulMessages.Photo;
+    using static Common.SuccessMessages.Photo;
 
     public class PhotoService : IPhotoService
     {
@@ -33,7 +33,7 @@
             {
                 foreach (var file in files)
                 {
-                    if (animal.Photos.Count() == 6)
+                    if (animal.Photos.Count == 6)
                     {
                         return Result<string>.Failure(FullCapacityImage);
                     }
@@ -70,10 +70,12 @@
                     await repository.SaveChangesAsync();
                 }
 
+
                 return Result<string>.Success(SuccessfullyUploadPhoto);
             }
             catch
             {
+
                 return Result<string>.Failure(ErrorUploadPhoto);
             }
         }
@@ -99,7 +101,7 @@
                     }
                     catch (Exception)
                     {
-                        return Result<Unit>.Failure(ErrorUploadPhoto);
+                        return Result<Unit>.Failure("Error occurred during image upload");                        return Result<Unit>.Failure(ErrorUploadPhoto);
                     }
                 }
 
@@ -137,6 +139,7 @@
                 }
                 catch (Exception)
                 {
+
                     return Result<Unit>.Failure(FailedToDeletePhoto);
                 }
 
@@ -145,15 +148,18 @@
                 try
                 {
                     await repository.SaveChangesAsync();
+
                     return Result<Unit>.Success(Unit.Value, SuccessfullyDeletedPhoto);
                 }
                 catch
                 {
+  
                     return Result<Unit>.Failure(ErrorDeletingPhoto);
                 }
             }
             catch (Exception)
             {
+
                 return Result<Unit>.Failure(ErrorDeletingPhoto);
             }
         }
@@ -170,6 +176,7 @@
                 }
                 catch (Exception)
                 {
+
                     return Result<Unit>.Failure(FailedToDeletePhoto);
                 }
 
@@ -182,15 +189,18 @@
                 try
                 {
                     await repository.SaveChangesAsync();
+
                     return Result<Unit>.Success(Unit.Value, SuccessfullyDeletedPhoto);
                 }
                 catch
                 {
+
                     return Result<Unit>.Failure(FailedToDeletePhoto);
                 }
             }
             catch (Exception)
             {
+
                 return Result<Unit>.Failure(ErrorDeletingPhoto);
             }
         }
@@ -211,10 +221,12 @@
             try
             {
                 await repository.SaveChangesAsync();
+
                 return Result<Unit>.Success(Unit.Value, SuccessfullySetMainPhoto);
             }
             catch (Exception)
             {
+
                 return Result<Unit>.Failure(ErrorSetMain);
             }
         }
@@ -229,8 +241,10 @@
                     MainPhotoDto photo = photos[i];
                     IFormFile file = photo.File;
 
-                    if (animal.Photos.Count() == 6)
+
+                    if (animal.Photos.Count == 6)
                     {
+
                         return Result<string>.Failure(FullCapacityImage);
                     }
 
@@ -250,6 +264,7 @@
                         }
                         catch (Exception)
                         {
+
                             return Result<string>.Failure(ErrorUploadPhoto);
                         }
                     }
@@ -276,10 +291,12 @@
                     await repository.SaveChangesAsync();
                 }
 
+
                 return Result<string>.Success(SuccessfullyUploadPhoto);
             }
             catch
             {
+
                 return Result<string>.Failure(ErrorUploadPhoto);
             }
         }

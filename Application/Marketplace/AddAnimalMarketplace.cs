@@ -13,7 +13,7 @@
     using Persistence.Repositories;
     using Application.DTOs.Marketplace;
     using static Common.ExceptionMessages.Animal;
-    using static Common.SuccessfulMessages.Animal;
+    using static Common.SuccessMessages.Animal;
 
     public class AddAnimalMarketplace
     {

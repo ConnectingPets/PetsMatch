@@ -11,7 +11,7 @@
     using Persistence.Repositories;
     using static Common.ExceptionMessages.Entity;
     using static Common.ExceptionMessages.Animal;
-    using static Common.SuccessfulMessages.Animal;
+    using static Common.SuccessMessages.Animal;
 
     public class EditAnimal
     {

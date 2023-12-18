@@ -2,13 +2,12 @@
 {
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Authorization;
+    using MediatR;
 
     using Application.DTOs.Message;
     using Application.Service.Interfaces;
-    using Application.Exceptions.Entity;
-    using Application.Exceptions.Animal;
-    using Application.Exceptions.Match;
-    using static Common.ExceptionMessages.Entity;
+    using Application.Response;
+    using API.Infrastructure;
 
     [Authorize]
     [Route("api/[controller]")]
@@ -26,52 +25,24 @@
         [HttpPost]
         public async Task<ActionResult> SendMessage([FromBody] SaveMessageDto saveMessageDto)
         {
-            try
-            {
-                await this.messageService.SaveMessage(
-                    saveMessageDto.MatchId,
-                    saveMessageDto.AnimalId,
-                    saveMessageDto.Content);
-            }
-            catch (InvalidGuidFormatException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (MatchNotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch (AnimalNotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch
-            {
-                return StatusCode(500, InternalServerError);
-            }
+            Result<Unit> result = await this.messageService.SaveMessage(
+                saveMessageDto.MatchId,
+                saveMessageDto.AnimalId,
+                saveMessageDto.Content,
+                User.GetById());
 
-            return Ok();
+            return Ok(result);
         }
 
         [Route("/chatHistory")]
         [HttpGet]
         public async Task<ActionResult> ChatHistory([FromQuery] string matchId)
         {
-            IEnumerable<ChatMessageDto> messages;
-            try
-            {
-                messages = await this.messageService.GetChatHistory(matchId);
-            }
-            catch (MatchNotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch
-            {
-                return StatusCode(500, InternalServerError);
-            }
+            Result<IEnumerable<ChatMessageDto>> result = await this.messageService.GetChatHistory(
+                matchId,
+                User.GetById());
 
-            return Ok(messages);
+            return Ok(result);
         }
     }
 }
