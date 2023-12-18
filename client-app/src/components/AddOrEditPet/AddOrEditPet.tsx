@@ -306,7 +306,7 @@ const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAd
                                 {({ input, meta }) => (
                                     <>
                                         {addOrEditPet == 'add' && <AddPetImages input={input} />}
-                                        {addOrEditPet == 'edit' && <EditPetImages input={input} initialImages={petData?.Photos || []} />}
+                                        {addOrEditPet == 'edit' && <EditPetImages input={input} initialImages={petData?.Photos || []} petId={petId} />}
                                         {meta.touched && meta.error && <span>{meta.error}</span>}
                                     </>
                                 )}
