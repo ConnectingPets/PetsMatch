@@ -15,7 +15,7 @@ export interface IUser {
 }
 
 export interface IAnimal {
-    AnimalId: string,
+    AnimalId?: string,
     Name: string,
     AnimalCategory?: Categories,
     BreedId: Breeds,

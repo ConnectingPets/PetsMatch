@@ -36,12 +36,6 @@ const returnCorrectTypes = (data: PetValues) => {
     const genderValue = Object.keys(genderEnum).filter(x => genderEnum[x as keyof GenderEnum] == data.gender)[0];
     const healthStatusValue = Object.keys(healthStatusEnum).filter(x => healthStatusEnum[x as keyof HealthStatusEnum] == data.healthStatus)[0];
 
-    const inputDate = new Date(data.birthDate);
-    const year = inputDate.getFullYear();
-    const month = String(inputDate.getMonth() + 1).padStart(2, '0');
-    const day = String(inputDate.getDate()).padStart(2, '0');
-    const birthDateValue = `${year}-${month}-${day}`;
-
     const isEducatedValue = data.isEducated == true ? 'Yes' : 'No';
     const isHavingValidDocumentsValue = data.isHavingValidDocuments == true ? 'Yes' : 'No';
 
@@ -51,9 +45,9 @@ const returnCorrectTypes = (data: PetValues) => {
 
     const petData = {
         Age: data.age,
-        BirthDate: birthDateValue,
         BreedId: data.breedId,
-        Description: data.description,
+        AnimalCategory: String(data.categoryId),
+        Description: data.description ? data.description : '',
         Gender: genderValue,
         HealthStatus: healthStatusValue,
         IsEducated: isEducatedValue,
@@ -64,8 +58,21 @@ const returnCorrectTypes = (data: PetValues) => {
         Name: data.name,
         Photos: data.photos,
         SocialMedia: data.socialMedia,
-        Weight: data.weight
     };
+
+    if (data.birthDate) {
+        const inputDate = new Date(data.birthDate);
+        const year = inputDate.getFullYear();
+        const month = String(inputDate.getMonth() + 1).padStart(2, '0');
+        const day = String(inputDate.getDate()).padStart(2, '0');
+        const birthDateValue = `${year}-${month}-${day}`;
+
+        petData['BirthDate'] = birthDateValue;
+    }
+
+    if (data.weight) {
+        petData['Weight'] = data.weight;
+    }
 
     return petData;
 };
@@ -81,6 +88,7 @@ const EditPetPage: React.FC<EditPetPageProps> = () => {
             agent.apiAnimal.getAnimalById(petId)
                 .then(res => {
                     const petValues = returnCorrectTypes(res.data);
+
                     setPetData(petValues);
                 });
         }
