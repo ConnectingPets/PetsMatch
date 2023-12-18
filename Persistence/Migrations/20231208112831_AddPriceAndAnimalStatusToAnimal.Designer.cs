@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
 
@@ -11,9 +12,11 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20231208112831_AddPriceAndAnimalStatusToAnimal")]
+    partial class AddPriceAndAnimalStatusToAnimal
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -139,23 +142,6 @@ namespace Persistence.Migrations
                         {
                             t.HasComment("animal category table");
                         });
-
-                    b.HasData(
-                        new
-                        {
-                            AnimalCategoryId = 1,
-                            Name = "Dog"
-                        },
-                        new
-                        {
-                            AnimalCategoryId = 2,
-                            Name = "Cat"
-                        },
-                        new
-                        {
-                            AnimalCategoryId = 3,
-                            Name = "Rabbit"
-                        });
                 });
 
             modelBuilder.Entity("Domain.AnimalMatch", b =>
@@ -204,38 +190,6 @@ namespace Persistence.Migrations
                     b.ToTable("Breeds", t =>
                         {
                             t.HasComment("breed table");
-                        });
-
-                    b.HasData(
-                        new
-                        {
-                            BreedId = 1,
-                            CategoryId = 2,
-                            Name = "Persian Cat"
-                        },
-                        new
-                        {
-                            BreedId = 2,
-                            CategoryId = 2,
-                            Name = "Bengal Cat"
-                        },
-                        new
-                        {
-                            BreedId = 3,
-                            CategoryId = 3,
-                            Name = "American Rabbit"
-                        },
-                        new
-                        {
-                            BreedId = 4,
-                            CategoryId = 1,
-                            Name = "Pitbull"
-                        },
-                        new
-                        {
-                            BreedId = 5,
-                            CategoryId = 1,
-                            Name = "BullDog"
                         });
                 });
 

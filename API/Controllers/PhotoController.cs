@@ -13,7 +13,9 @@
     using static Application.Photo.DeleteUserPhoto;
 
     [Authorize]
-    public class PhotoController : BaseApiController
+    [ApiController]
+    [Route("api/[controller]")]
+    public class PhotoController : ControllerBase
     {
         private readonly IMediator mediator;
 

@@ -6,9 +6,10 @@
     using MediatR;
 
     using Domain;
-    using Persistence.Repositories;
-    using Service.Interfaces;
     using Response;
+    using Service.Interfaces;
+    using Persistence.Repositories;
+    using static Common.ExceptionMessages.Photo;
 
     public class DeleteAnimalPhoto
     {
@@ -37,12 +38,12 @@
 
                 if (photo == null)
                 {
-                    return Result<Unit>.Failure("This photo does not exist! Please select existing one");
+                    return Result<Unit>.Failure(PhotoNotExist);
                 }
 
                 if (photo.IsMain)
                 {
-                    return Result<Unit>.Failure("This is your main photo! You can not delete it");
+                    return Result<Unit>.Failure(MainPhotoError);
                 }
 
                 return await photoService.DeleteAnimalPhotoAsync(photo);

@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <Folder Include="AnimalCategory\" />
-    <Folder Include="Animal\" />
     <Folder Include="Breed\" />
     <Folder Include="Passion\" />
   </ItemGroup>

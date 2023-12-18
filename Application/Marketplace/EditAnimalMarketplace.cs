@@ -1,4 +1,4 @@
-﻿namespace Application.Animal
+﻿namespace Application.Marketplace
 {
     using System.Threading;
     using System.Threading.Tasks;
@@ -7,43 +7,40 @@
 
     using Domain;
     using Response;
-    using Application.DTOs.Animal;
     using Persistence.Repositories;
+    using Application.DTOs.Marketplace;
     using static Common.ExceptionMessages.Entity;
     using static Common.ExceptionMessages.Animal;
     using static Common.SuccessMessages.Animal;
 
-    public class EditAnimal
+    public class EditAnimalMarketplace
     {
-        public class EditAnimalCommand : IRequest<Result<Unit>>
+        public class EditAnimalMarketplaceCommand : IRequest<Result<Unit>>
         {
-            public EditAnimalDto AnimalDto { get; set; } = null!;
-
-            public string AnimalId { get; set; } = null!;
+            public EditAnimalMarketplaceDto AnimalDto { get; set; } = null!;
 
             public string UserId { get; set; } = null!;
+            public string AnimalId { get; set; } = null!;
         }
 
-        public class EditAnimalCommandHandler :
-            IRequestHandler<EditAnimalCommand, Result<Unit>>
+        public class EditAnimalMarketplaceCommandHandler : IRequestHandler<EditAnimalMarketplaceCommand, Result<Unit>>
         {
             private readonly IRepository repository;
 
-            public EditAnimalCommandHandler(IRepository repository)
+            public EditAnimalMarketplaceCommandHandler(IRepository repository)
             {
                 this.repository = repository;
             }
 
-            public async Task<Result<Unit>> Handle(EditAnimalCommand request, CancellationToken cancellationToken)
+            public async Task<Result<Unit>> Handle(EditAnimalMarketplaceCommand request, CancellationToken cancellationToken)
             {
                 string animalId = request.AnimalId;
-                EditAnimalDto dto = request.AnimalDto;
+                EditAnimalMarketplaceDto dto = request.AnimalDto;
 
                 if (!Guid.TryParse(animalId, out Guid result))
                 {
                     return Result<Unit>.Failure(InvalidGuidFormat);
                 }
-
                 Animal? animal =
                     await repository.GetById<Animal>(Guid.Parse(animalId));
 
@@ -101,6 +98,8 @@
                 animal.IsHavingValidDocuments = dto.IsHavingValidDocuments;
                 animal.Name = dto.Name;
                 animal.Weight = dto.Weight;
+                animal.Price = dto.Price;
+                animal.AnimalStatus = dto.AnimalStatus;
 
                 try
                 {
@@ -112,6 +111,8 @@
                     return Result<Unit>.Failure(string.Format(FailedToEdit, animal.Name));
                 }
             }
+
         }
     }
 }
+

@@ -2,17 +2,18 @@
 {
     using System.Threading.Tasks;
 
+    using MediatR;
     using CloudinaryDotNet;
     using CloudinaryDotNet.Actions;
     using Microsoft.AspNetCore.Http;
-    using MediatR;
 
     using Domain;
-    using Interfaces;
     using Response;
-    using Persistence.Repositories;
+    using Interfaces;
     using Application.DTOs.Photo;
-    using System.Net;
+    using Persistence.Repositories;
+    using static Common.ExceptionMessages.Photo;
+    using static Common.SuccessMessages.Photo;
 
     public class PhotoService : IPhotoService
     {
@@ -34,7 +35,7 @@
                 {
                     if (animal.Photos.Count == 6)
                     {
-                        return Result<string>.Failure("You already have 6 photos of this animal. You cannot add more");
+                        return Result<string>.Failure(FullCapacityImage);
                     }
 
                     var imageUploadResult = new ImageUploadResult();
@@ -53,7 +54,7 @@
                         }
                         catch (Exception)
                         {
-                            return Result<string>.Failure("Error occurred during images upload");
+                            return Result<string>.Failure(ErrorUploadPhoto);
                         }
                     }
 
@@ -69,11 +70,13 @@
                     await repository.SaveChangesAsync();
                 }
 
-                return Result<string>.Success("Successfully upload images");
+
+                return Result<string>.Success(SuccessfullyUploadPhoto);
             }
             catch
             {
-                return Result<string>.Failure("Error occurred during uploading photo");
+
+                return Result<string>.Failure(ErrorUploadPhoto);
             }
         }
 
@@ -98,7 +101,7 @@
                     }
                     catch (Exception)
                     {
-                        return Result<Unit>.Failure("Error occurred during image upload");
+                        return Result<Unit>.Failure("Error occurred during image upload");                        return Result<Unit>.Failure(ErrorUploadPhoto);
                     }
                 }
 
@@ -116,11 +119,11 @@
                 await repository.AddAsync(photo);
                 await repository.SaveChangesAsync();
 
-                return Result<Unit>.Success(Unit.Value, "Successfully upload image");
+                return Result<Unit>.Success(Unit.Value, SuccessfullyUploadPhoto);
             }
             catch (Exception)
             {
-                return Result<Unit>.Failure("Error occurred during uploading photo");
+                return Result<Unit>.Failure(ErrorUploadPhoto);
             }
         }
 
@@ -136,7 +139,8 @@
                 }
                 catch (Exception)
                 {
-                    return Result<Unit>.Failure("Failed to delete photo");
+
+                    return Result<Unit>.Failure(FailedToDeletePhoto);
                 }
 
                 repository.Delete(photo);
@@ -144,16 +148,19 @@
                 try
                 {
                     await repository.SaveChangesAsync();
-                    return Result<Unit>.Success(Unit.Value, "Successfully delete photo");
+
+                    return Result<Unit>.Success(Unit.Value, SuccessfullyDeletedPhoto);
                 }
                 catch
                 {
-                    return Result<Unit>.Failure("Error occurred during saving changes");
+  
+                    return Result<Unit>.Failure(ErrorDeletingPhoto);
                 }
             }
             catch (Exception)
             {
-                return Result<Unit>.Failure("Error occurred during deleting photo");
+
+                return Result<Unit>.Failure(ErrorDeletingPhoto);
             }
         }
 
@@ -169,7 +176,8 @@
                 }
                 catch (Exception)
                 {
-                    return Result<Unit>.Failure("Failed to delete photo");
+
+                    return Result<Unit>.Failure(FailedToDeletePhoto);
                 }
 
                 User? user = await
@@ -181,16 +189,19 @@
                 try
                 {
                     await repository.SaveChangesAsync();
-                    return Result<Unit>.Success(Unit.Value, "Successfully delete photo");
+
+                    return Result<Unit>.Success(Unit.Value, SuccessfullyDeletedPhoto);
                 }
                 catch
                 {
-                    return Result<Unit>.Failure("Error occurred during saving changes");
+
+                    return Result<Unit>.Failure(FailedToDeletePhoto);
                 }
             }
             catch (Exception)
             {
-                return Result<Unit>.Failure("Error occurred during deleting photo");
+
+                return Result<Unit>.Failure(ErrorDeletingPhoto);
             }
         }
 
@@ -210,11 +221,13 @@
             try
             {
                 await repository.SaveChangesAsync();
-                return Result<Unit>.Success(Unit.Value, "You successfully set main photo");
+
+                return Result<Unit>.Success(Unit.Value, SuccessfullySetMainPhoto);
             }
             catch (Exception)
             {
-                return Result<Unit>.Failure("Error occurred during saving changes");
+
+                return Result<Unit>.Failure(ErrorSetMain);
             }
         }
         public async Task<Result<string>> AddAnimalPhotosWithMainAsync(MainPhotoDto[] photos, Animal animal)
@@ -228,9 +241,11 @@
                     MainPhotoDto photo = photos[i];
                     IFormFile file = photo.File;
 
+
                     if (animal.Photos.Count == 6)
                     {
-                        return Result<string>.Failure("You already have 6 photos of this animal. You cannot add more");
+
+                        return Result<string>.Failure(FullCapacityImage);
                     }
 
                     var imageUploadResult = new ImageUploadResult();
@@ -249,7 +264,8 @@
                         }
                         catch (Exception)
                         {
-                            return Result<string>.Failure("Error occurred during images upload");
+
+                            return Result<string>.Failure(ErrorUploadPhoto);
                         }
                     }
 
@@ -275,11 +291,13 @@
                     await repository.SaveChangesAsync();
                 }
 
-                return Result<string>.Success("Successfully upload images");
+
+                return Result<string>.Success(SuccessfullyUploadPhoto);
             }
             catch
             {
-                return Result<string>.Failure("Error occurred during uploading photo");
+
+                return Result<string>.Failure(ErrorUploadPhoto);
             }
         }
     }
