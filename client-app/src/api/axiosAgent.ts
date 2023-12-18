@@ -37,7 +37,7 @@ const apiAnimal = {
     editAnimalById: (animalId: string, animalData: IAnimal) => requests.patch(`/api/animal/${animalId}`, animalData, headers.multipart),
     deleteAnimal: (animalId: string) => requests.del(`/api/animal/${animalId}`),
     uploadAnimalPhoto: (animalId: string, image: FormData) => requests.post(`/api/photo/AddAnimalPhoto/${animalId}`, image, headers.multipart),
-    // setAnimalMainPhoto: (photoId: string, data: object) => requests.post(`/api/photo/SetAnimalMain/${photoId}`, data, headers.multipart),
+    setAnimalMainPhoto: (photoId: string, data: object) => requests.post(`/api/photo/SetAnimalMain/${photoId}`, data, headers.multipart),
     deleteAnimalPhoto: (photoId: string) => requests.del(`/api/photo/DeleteAnimalPhoto/${photoId}`)
 };
 

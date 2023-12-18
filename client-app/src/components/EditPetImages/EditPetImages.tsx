@@ -112,6 +112,27 @@ const EditPetImages: React.FC<EditPetImagesProps> = ({ input, initialImages, pet
         input.onChange(updatedFiles);
     };
 
+    const setMainPhoto = async (id: string) => {
+        try {
+            const res = await agent.apiAnimal.setAnimalMainPhoto(id, {});
+
+            if (res.isSuccess) {
+                const updatedImages = images.map((img) => ({
+                    ...img,
+                    isMain: img.id == id
+                }));
+    
+                setImages(updatedImages);
+                
+                toast.success(res.successMessage);
+            } else {
+                toast.error(res.errorMessage);
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
     return (
         <>
             {images.length < 6 && (
@@ -150,6 +171,9 @@ const EditPetImages: React.FC<EditPetImagesProps> = ({ input, initialImages, pet
                                                     X
                                                 </button>
                                                 {image.isMain && <span className="main-message">Main photo</span>}
+                                                {!image.isMain && (
+                                                    <button onClick={() => setMainPhoto(image.id)} className="set-main-btn" type="button">Set as Main</button>
+                                                )}
                                             </div>
                                         )}
                                     </Draggable>

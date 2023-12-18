@@ -78,7 +78,7 @@
             border-radius: 1.5rem;
         }
 
-        &>button {
+        &>button:not(.set-main-btn) {
             position: absolute;
             top: -0.25rem;
             right: -0.25rem;
@@ -104,6 +104,24 @@
             background-color: rgba(205, 115, 227, 0.6);
             padding: 0.25rem;
             border-radius: 1.5rem;
+        }
+
+        &>.set-main-btn {
+            position: absolute;
+            top: -0.25rem;
+            left: 0.5rem;
+            background-color: gs.$light-background-color;
+            color: purple;
+            border-radius: 1.5rem;
+            border: 1px solid purple;
+            padding: 0.1rem 0.4rem;
+            cursor: pointer;
+            transition: background-color 0.5s ease-in-out;
+
+            &:hover {
+                background-color: rgba(205, 115, 227, 0.6);
+                color: gs.$white-text;
+            }
         }
     }
 
