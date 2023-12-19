@@ -13,6 +13,7 @@ interface PetImagesProps {
 
 const PetImages: React.FC<PetImagesProps> = ({ input }) => {
     const [images, setImages] = useState<string[]>([]);
+    const [mainPhotoIndex, setMainPhotoIndex] = useState<number>(0);
 
     const handleFile = (
         e: React.ChangeEvent<HTMLInputElement>,
@@ -36,6 +37,10 @@ const PetImages: React.FC<PetImagesProps> = ({ input }) => {
         const updateFiles = [...input.value];
         updateFiles.splice(index, 1);
         input.onChange(updateFiles);
+
+        if (index == mainPhotoIndex) {
+            setMainPhotoIndex(0);
+        }
     };
 
     const handleOnDragEnd = (result: DropResult) => {
@@ -48,6 +53,17 @@ const PetImages: React.FC<PetImagesProps> = ({ input }) => {
         updated.splice(result.destination.index, 0, reorderedItem);
 
         setImages(updated);
+    };
+
+    const setMainPhoto = (index: number) => {
+        const updatedImages = [...images];
+        const mainPhoto = updatedImages.splice(index, 1);
+        updatedImages.unshift(mainPhoto[0]);
+        setImages(updatedImages);
+
+        const updatedFiles = [...input.value];
+        const mainPhotoFile = updatedFiles.splice(index, 1);
+        input.onChange([...mainPhotoFile, ...updatedFiles]);
     };
 
     return (
@@ -81,7 +97,10 @@ const PetImages: React.FC<PetImagesProps> = ({ input }) => {
                                             <div {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef} className={index == 0 ? 'image-preview main' : 'image-preview'}>
                                                 <img src={imageUrl} alt="preview image" />
                                                 <button type="button" onClick={() => handleRemoveImage(index, input)}>X</button>
-                                                {index == 0 && <span className="main-message">Main photo</span>}
+                                                {index == mainPhotoIndex && <span className="main-message">Main photo</span>}
+                                                {index != mainPhotoIndex && (
+                                                    <button onClick={() => setMainPhoto(index)} className="set-main-btn" type="button">Set as Main</button>
+                                                )}
                                             </div>
                                         )}
                                     </Draggable>
