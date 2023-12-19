@@ -25,11 +25,11 @@ const AddPetPage: React.FC<AddPetPageProps> = () => {
         Object.entries(petData).forEach(([key, value]) => {
             if (key === 'Photos' && Array.isArray(value)) {
                 value.forEach((photo, index) => {
-                    formData.append(`Photos[${index}].File`, photo.File);
-                    formData.append(`Photos[${index}].IsMain`, photo.IsMain);
+                    formData.append(`Photos[${index}].File`, (photo.File as Blob));
+                    formData.append(`Photos[${index}].IsMain`, String(photo.IsMain));
                 });
             } else {
-                formData.append(key, value);
+                formData.append(key, (value as string));
             }
         });
 
