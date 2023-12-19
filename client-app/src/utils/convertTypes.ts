@@ -1,3 +1,4 @@
+import { IUser } from '../interfaces/Interfaces';
 import { IAnimal } from '../interfaces/Interfaces';
 import { GenderEnum, HealthStatusEnum, genderEnum, healthStatusEnum } from './constants';
 
@@ -36,4 +37,24 @@ export const returnCorrectTypesForAddOrEditPetForm = (values: IAnimal) => {
         }
 
         return petData;
+};
+
+export const returnCorrecTypesForEditUser = (values: IUser) => {
+  const {Age, Gender, ...otherValues} = values;
+
+  const userData: IUser = {
+    ...otherValues
+  };
+
+  if (Age) {
+    const age = Number(Age);
+    userData.Age = age;
+  }
+
+  if (Gender) {
+    const gender = genderEnum[Gender as unknown as keyof GenderEnum];
+    userData.Gender = gender;
+  }
+
+  return userData;
 };

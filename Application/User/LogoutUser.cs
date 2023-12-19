@@ -7,17 +7,19 @@
     using Microsoft.AspNetCore.Identity;
     
     using Domain;
-    using Application.Exceptions.User;
+    using Application.Response;
+
     using static Common.ExceptionMessages.User;
+    using static Common.FailMessages.User;
 
     public class LogoutUser
     {
-        public class LogoutUserCommand : IRequest<Unit>
+        public class LogoutUserCommand : IRequest<Result<Unit>>
         {
             public string UserId { get; set; } = null!;
         }
 
-        public class LogoutHandler : IRequestHandler<LogoutUserCommand, Unit>
+        public class LogoutHandler : IRequestHandler<LogoutUserCommand, Result<Unit>>
         {
             private readonly SignInManager<User> signInManager;
             private readonly UserManager<User> userManager;
@@ -30,18 +32,24 @@
                 this.userManager = userManager;
             }
 
-            public async Task<Unit> Handle(LogoutUserCommand request, CancellationToken cancellationToken)
+            public async Task<Result<Unit>> Handle(LogoutUserCommand request, CancellationToken cancellationToken)
             {
                 User? user = await this.userManager.FindByIdAsync(request.UserId);
 
                 if (user == null)
                 {
-                    throw new UserNotFoundException(NotAuthenticated);
+                    return Result<Unit>.Failure(NotAuthenticated);
                 }
 
-                await this.signInManager.SignOutAsync();
-
-                return Unit.Value;
+                try
+                {
+                    await this.signInManager.SignOutAsync();
+                    return Result<Unit>.Success(Unit.Value);
+                }
+                catch (Exception)
+                {
+                    return Result<Unit>.Failure(FailedLogout);
+                }
             }
         }
     }

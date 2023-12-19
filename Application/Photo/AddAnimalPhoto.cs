@@ -5,9 +5,11 @@
     using Microsoft.EntityFrameworkCore;
 
     using Domain;
-    using Persistence.Repositories;
-    using Service.Interfaces;
     using Response;
+    using Service.Interfaces;
+    using Persistence.Repositories;
+    using static Common.ExceptionMessages.Photo;
+    using static Common.ExceptionMessages.Animal;
 
     public class AddAnimalPhoto
     {
@@ -38,7 +40,7 @@
                 if (files == null || files.Length == 0)
                 {
                     return
-                        Result<string>.Failure("File is not selected or empty");
+                        Result<string>.Failure(EmptyPhoto);
                 }
 
                 Animal? animal = await repository.
@@ -48,7 +50,7 @@
 
                 if (animal == null)
                 {
-                    return Result<string>.Failure("This animal does not exist! please select existing one");
+                    return Result<string>.Failure(AnimalNotFound);
                 }
 
                 var result = await photoService.AddAnimalPhotosAsync(files, animal);

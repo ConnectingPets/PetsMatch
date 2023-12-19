@@ -14,7 +14,8 @@
         {
             string connectionString = configuration.GetConnectionString("DefaultConnection") ??
                 throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-            string fullConnectionString = connectionString + "TrustServerCertificate=true";
+
+            string fullConnectionString = connectionString + "TrustServerCertificate=true;";
             services.AddDbContext<DataContext>(options => options.UseSqlServer(fullConnectionString));
 
             return services;

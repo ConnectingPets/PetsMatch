@@ -7,9 +7,11 @@
     using Microsoft.EntityFrameworkCore;
 
     using Domain;
-    using Persistence.Repositories;
     using Response;
-    using Application.Service.Interfaces;
+    using Service.Interfaces;
+    using Persistence.Repositories;
+    using static Common.ExceptionMessages.Animal;
+    using static Common.SuccessMessages.Animal;
 
     public class DeleteAnimal
     {
@@ -53,11 +55,11 @@
                 }
                 catch (Exception)
                 {
-                    return Result<Unit>.Failure("This pet does not exist! Please select existing one.");
+                    return Result<Unit>.Failure(AnimalNotFound);
                 }
                 if (animal!.OwnerId.ToString() != request.UserId.ToLower())
                 {
-                    return Result<Unit>.Failure("This pet does not belong to you!");
+                    return Result<Unit>.Failure(NotRightUser);
                 }
 
                 repository.
@@ -92,14 +94,13 @@
                 try
                 {
                     await repository.SaveChangesAsync();
-                    return Result<Unit>.Success(Unit.Value, $"You have successfully delete {animal!.Name} to your pet's list");
+                    return Result<Unit>.Success(Unit.Value,String.Format(SuccessfullyDeleteAnimal,animal.Name));
                 }
                 catch (Exception)
                 {
                     return
-                        Result<Unit>.Failure($"Failed to delete pet - {animal.Name}");
+                        Result<Unit>.Failure(string.Format(FailedToDelete, animal.Name));
                 }
-
             }
         }
     }

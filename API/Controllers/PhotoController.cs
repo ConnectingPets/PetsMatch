@@ -13,7 +13,9 @@
     using static Application.Photo.DeleteUserPhoto;
 
     [Authorize]
-    public class PhotoController : BaseApiController
+    [ApiController]
+    [Route("api/[controller]")]
+    public class PhotoController : ControllerBase
     {
         private readonly IMediator mediator;
 
@@ -23,7 +25,7 @@
         }
 
         [HttpPost("AddUserPhoto")]
-        public async Task<IActionResult> AddUserPhoto(IFormFile file)
+        public async Task<IActionResult> AddUserPhoto([FromForm] IFormFile file)
         {
             AddUserPhotoCommand command = new AddUserPhotoCommand()
             {

@@ -1,17 +1,17 @@
 export interface IUser {
     Id?: string,
-    Name?: string,
+    Name: string,
     Email: string,
     Password?: string,
     ConfirmPassword?: string,
     Description?: string,
     Age?: number,
-    Education?: string,
-    Photo?: string,
+    Education?: string
     JobTitle?: string,
-    Gender?: string,
+    Gender?: number,
     Address?: string,
-    City?: string
+    City?: string,
+    PhotoUrl?: string
 }
 
 export interface IAnimal {

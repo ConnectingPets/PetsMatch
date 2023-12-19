@@ -15,7 +15,9 @@
     using static Application.AnimalCategory.AllAnimalCategories;
 
     [Authorize]
-    public class AnimalController : BaseApiController
+    [ApiController]
+    [Route("api/[controller]")]
+    public class AnimalController : ControllerBase
     {
         private readonly IMediator mediator;
 
@@ -66,7 +68,7 @@
         }
 
         [HttpPatch("{id}")]
-        public async Task<IActionResult> UpdateAnimal([FromBody] EditAnimalDto animalDto, string id)
+        public async Task<IActionResult> UpdateAnimal([FromBody] EditAnimalDto animalDto, [FromRoute]string id)
         {
             EditAnimalCommand command = new EditAnimalCommand()
             {

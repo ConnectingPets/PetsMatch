@@ -1,14 +1,15 @@
 ﻿namespace Application.Photo
 {
-    using System.Threading.Tasks;
     using System.Threading;
+    using System.Threading.Tasks;
 
     using MediatR;
 
     using Domain;
-    using Persistence.Repositories;
-    using Service.Interfaces;
     using Response;
+    using Service.Interfaces;
+    using Persistence.Repositories;
+    using static Common.ExceptionMessages.Photo;
 
     public class SetAnimaMainPhoto
     {
@@ -38,7 +39,7 @@
 
                 if (photo == null)
                 {
-                    return Result<Unit>.Failure("This photo does not exist! Please select existing one");
+                    return Result<Unit>.Failure(PhotoNotExist);
                 }
                 return await photoService.
                     SetAnimalMainPhotoAsync(photo);

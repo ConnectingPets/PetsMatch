@@ -3,10 +3,15 @@ import { observer } from 'mobx-react';
 import { Form, Field } from 'react-final-form';
 import { CgAsterisk } from 'react-icons/cg';
 import { FaTrashAlt } from 'react-icons/fa';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
+
 
 import themeStore from '../../stores/themeStore';
 import { IUser } from '../../interfaces/Interfaces';
 import { editUserProfileFormValidator } from '../../validators/userProfileFormValidators';
+import userStore from '../../stores/userStore';
+import agent from '../../api/axiosAgent';
 
 import FormsHeader from '../../components/FormsHeader/FormsHeader';
 import { CLabel } from '../../components/common/CLabel/CLabel';
@@ -14,29 +19,58 @@ import UserPhoto from '../../components/UserPhoto/UserPhoto';
 import { CSubmitButton } from '../../components/common/CSubmitButton/CSubmitButton';
 import DeleteModal from '../../components/DeleteModal/DeleteModal';
 import Footer from '../../components/Footer/Footer';
-import userStore from '../../stores/userStore';
+import { returnCorrecTypesForEditUser } from '../../utils/convertTypes';
 
 interface EditUserProfilePageProps { }
 
 const EditUserProfilePage: React.FC<EditUserProfilePageProps> = observer(() => {
+    const navigate = useNavigate();
+
     const [isDeleteClick, setIsDeleteClick] = useState<boolean>(false);
 
     const title = 'Edit My Profile';
     const subjectForDelete = 'this profile';
 
-    //  TO DO show user photo
+    const onEditUserProfileSubmit = async (values: IUser) => {
+        const userData = returnCorrecTypesForEditUser(values);
 
-    const onEditUserProfileSubmit = (values: IUser) => {
-        // TO DO .....
-    };
+        try {
+            const result = await agent.apiUser.editUser(userData);
+
+            if (result.isSuccess) {
+                userStore.setUser({...values, PhotoUrl: userStore.user?.PhotoUrl}, userStore.authToken!);
+
+                navigate('/dashboard');
+
+                toast.success(result.successMessage);
+            } else {
+                toast.error(result.errorMessage);
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    }
 
     const onDeleteOrCancelClick = () => {
         setIsDeleteClick(state => !state);
     };
 
-    const onConfirmDelete = () => {
+    const onConfirmDelete = async () => {
+        try {
+            const result = await agent.apiUser.deleteUser();
 
-        // TO DO .....
+            if (result.isSuccess) {
+                userStore.clearUser();
+
+                navigate('/');
+
+                toast.success(result.successMessage);
+            } else {
+                toast.error(result.errorMessage);
+            }
+        } catch (err) {
+            console.error(err);
+        }
     };
 
     return (
@@ -159,7 +193,7 @@ const EditUserProfilePage: React.FC<EditUserProfilePageProps> = observer(() => {
                             <Field name='Photo'>
                                 {({ input, meta }) => (
                                     <>
-                                        <UserPhoto input={input} />
+                                        <UserPhoto input={input} initialValue={userStore.user?.PhotoUrl} />
                                         {meta.touched && meta.error && <span>{meta.error}</span>}
                                     </>
                                 )}

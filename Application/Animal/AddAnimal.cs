@@ -4,10 +4,13 @@
 
     using Domain;
     using Response;
-    using DTOs.Animal;
     using DTOs.Photo;
+    using DTOs.Animal;
+    using Domain.Enum;
     using Service.Interfaces;
     using Persistence.Repositories;
+    using static Common.SuccessMessages.Animal;
+    using static Common.ExceptionMessages.Animal;
 
     public class AddAnimal
     {
@@ -51,7 +54,8 @@
                     IsEducated = animalDto.IsEducated,
                     IsHavingValidDocuments = animalDto.IsHavingValidDocuments,
                     OwnerId = Guid.Parse(request.OwnerId),
-                    BreedId = animalDto.BreedId
+                    BreedId = animalDto.BreedId,
+                    AnimalStatus = AnimalStatus.ForSwiping
                 };
 
                 await repository.AddAsync(animal);
@@ -61,14 +65,13 @@
                     await repository.SaveChangesAsync();
                     await photoService.AddAnimalPhotosWithMainAsync(photos,animal);
 
-                    return Result<Unit>.Success(Unit.Value,$"You have successfully add {animal.Name} to your pet's list");
+                    return Result<Unit>.Success(Unit.Value,string.Format(SuccessfullyAddedAnimal,animal.Name));
                 }
                 catch (Exception)
                 {
                     return
-                        Result<Unit>.Failure($"Failed to create pet - {animal.Name}");
+                        Result<Unit>.Failure(string.Format(FailedToCreate,animal.Name));
                 }
-
             }
         }
     }
