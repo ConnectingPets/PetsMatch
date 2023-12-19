@@ -34,14 +34,14 @@ interface AddOrEditPetProps {
 const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAddPetSubmit, petData, onEditPetSubmit, petId }) => {
     const navigate = useNavigate();
     const [categories, setCategories] = useState<Categories[]>([]);
-    const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+    const [selectedCategory, setSelectedCategory] = useState<string | null | unknown>(null);
     const [isCategoryDisabled, setIsCategoryDisabled] = useState<boolean>(false);
     const [breeds, setBreeds] = useState<Breeds[]>([]);
     const [isDeleteClick, setIsDeleteClick] = useState<boolean>(false);
 
     useEffect(() => {
         if (addOrEditPet == 'edit' && petData?.AnimalCategory) {
-            const category: string = petData?.AnimalCategory;
+            const category: unknown = petData?.AnimalCategory;
             setSelectedCategory(category);
             loadBreeds(category);
         }
@@ -66,7 +66,7 @@ const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAd
         }
     }, [selectedCategory]);
 
-    const loadBreeds = (categoryId: string) => {
+    const loadBreeds = (categoryId: string | unknown) => {
         setSelectedCategory(String(categoryId));
         setIsCategoryDisabled(true);
     };

@@ -12,7 +12,8 @@ export const returnCorrectTypesForAddOrEditPetForm = (values: IAnimal) => {
         const isHavingValidDocumentsValue = IsHavingValidDocuments == 'Yes' ? true : false;
         const photoValue = Photos.map((file, index) => ({ File: file, IsMain: index == 0 ? true : false }));
 
-        const petData: IAnimal = {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const petData: any = {
             Age: ageValue,
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore

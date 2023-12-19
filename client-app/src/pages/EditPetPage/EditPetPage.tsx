@@ -43,7 +43,8 @@ const returnCorrectTypes = (data: PetValues) => {
     const isModifiedGender = isMoreThan30DaysAgo(data.lastModifiedGender);
     const isModifiedName = isMoreThan30DaysAgo(data.lastModifiedName);
 
-    const petData = {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const petData: any = {
         Age: data.age,
         BreedId: data.breedId,
         AnimalCategory: String(data.categoryId),

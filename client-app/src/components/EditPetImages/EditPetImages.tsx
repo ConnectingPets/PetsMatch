@@ -35,8 +35,8 @@ const EditPetImages: React.FC<EditPetImagesProps> = ({ input, initialImages, pet
             return image.url;
         }
     };
-
-    const updatedImg = async (image: { file: string | Blob; isMain: { toString: () => string | Blob; }; id: string; }) => {
+                                    // file optional ??
+    const updatedImg = async (image: { file?: string | Blob; isMain: boolean; id: string; }) => {
         try {
             if (image.file && petId) {
                 const formData = new FormData();
