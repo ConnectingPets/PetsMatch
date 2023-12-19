@@ -94,9 +94,7 @@
             }
 
             private bool IsMatch(Animal swiper, string swipeeAnimalId, bool swipedRight)
-            {
-                return swiper.SwipesFrom.Any(s => s.SwiperAnimalId.ToString() == swipeeAnimalId.ToLower() && s.SwipedRight) && swipedRight;
-            }
+                => swiper.SwipesFrom.Any(s => s.SwiperAnimalId.ToString() == swipeeAnimalId.ToLower() && s.SwipedRight) && swipedRight;
         }
     }
 }
