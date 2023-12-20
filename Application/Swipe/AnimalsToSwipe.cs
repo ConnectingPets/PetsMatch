@@ -12,12 +12,15 @@
     using Application.Response;
 
     using static Common.ExceptionMessages.User;
+    using static Common.ExceptionMessages.Animal;
 
     public class AnimalsToSwipe
     {
         public class AnimalsToSwipeQuery : IRequest<Result<IEnumerable<AnimalToSwipeDto>>>
         {
             public string UserId { get; set; } = null!;
+
+            public string AnimalId { get; set; } = null!;
         }
 
         public class AnimalsToSwipeHandler : IRequestHandler<AnimalsToSwipeQuery, Result<IEnumerable<AnimalToSwipeDto>>>
@@ -31,15 +34,32 @@
 
             public async Task<Result<IEnumerable<AnimalToSwipeDto>>> Handle(AnimalsToSwipeQuery request, CancellationToken cancellationToken)
             {
+                Animal? animal = await this.repository.FirstOrDefaultAsync<Animal>(a => a.AnimalId.ToString() == request.AnimalId.ToLower());
+
+                if (animal == null)
+                {
+                    return Result<IEnumerable<AnimalToSwipeDto>>.Failure(AnimalNotFound);
+                }
+
                 if (await this.repository.AnyAsync<User>(u => u.Id.ToString() == request.UserId.ToLower()) == false)
                 {
                     return Result<IEnumerable<AnimalToSwipeDto>>.Failure(UserNotFound);
                 }
 
-                IEnumerable<AnimalToSwipeDto> animalsToSwipeDto = await this.repository
-                    .All<Animal>(a => a.OwnerId.ToString() != request.UserId)
+                if (animal.OwnerId.ToString() != request.UserId.ToLower())
+                {
+                    return Result<IEnumerable<AnimalToSwipeDto>>.Failure(NotOwner);
+                }
+
+                IEnumerable<Animal> animals = await this.repository
+                    .All<Animal>(a => a.OwnerId.ToString() != request.UserId.ToLower())
+                    .Include(a => a.SwipesFrom)
                     .Include(a => a.Breed)
                     .Include(a => a.Photos)
+                    .ToArrayAsync();
+
+                IEnumerable<AnimalToSwipeDto> animalsToSwipeDto = animals 
+                    .Where(a => !a.SwipesFrom.Any(s => s.SwiperAnimalId.ToString() == animal.AnimalId.ToString()))
                     .Select(a => new AnimalToSwipeDto
                     {
                         Name = a.Name,
@@ -55,7 +75,7 @@
                         Breed = a.Breed.Name,
                         Photo = a.Photos.First(p => p.IsMain).Url
                     })
-                    .ToArrayAsync();
+                    .ToArray();
 
                 return Result<IEnumerable<AnimalToSwipeDto>>.Success(animalsToSwipeDto);
             }
