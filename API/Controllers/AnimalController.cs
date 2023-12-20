@@ -14,8 +14,9 @@
     using static Application.Animal.DeleteAnimal;
     using static Application.Animal.ShowAnimalToEdit;
     using static Application.AnimalCategory.AllAnimalCategories;
+    using static Common.GeneralApplicationConstants;
 
-    [Authorize]
+    [Authorize(Roles = MatchingRoleName)]
     [ApiController]
     [Route("api/[controller]")]
     public class AnimalController : ControllerBase

@@ -17,7 +17,7 @@
 
             Task.Run(async () =>
             {
-                string[] roleNames = { MarketplaceRoleName, MarketplaceRoleName};
+                string[] roleNames = { MarketplaceRoleName, MatchingRoleName};
 
                 foreach (var roleName in roleNames)
                 {

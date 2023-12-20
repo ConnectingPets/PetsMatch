@@ -16,8 +16,9 @@
     using static Application.Marketplace.AllAnimalsForAdoption;
     using static Application.Marketplace.DeleteAnimalMarketplace;
     using static Application.Marketplace.ShowAnimalMarketplaceToEdit;
+    using static Common.GeneralApplicationConstants;
 
-    [Authorize]
+    [Authorize(Roles = MarketplaceRoleName)]
     [ApiController]
     [Route("api/[controller]")]
     public class MarketplaceController : ControllerBase
