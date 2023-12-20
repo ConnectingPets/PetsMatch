@@ -1,9 +1,9 @@
 ﻿namespace Application.Service
 {
     using System.Threading.Tasks;
-    
+
     using MediatR;
-    
+
     using Application.Response;
     using Application.Service.Interfaces;
     using Application.DTOs.User;
@@ -35,12 +35,13 @@
                 UserId = userId
             });
 
-        public async Task<Result<UserDto>> RegisterAsync(string email, string password, string name)
+        public async Task<Result<UserDto>> RegisterAsync(string email, string password, string name, string[] roles)
             => await this.mediator.Send(new RegisterUserCommand
             {
                 Email = email,
                 Password = password,
-                Name = name
+                Name = name,
+                Roles = roles
             });
     }
 }
