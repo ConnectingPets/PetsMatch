@@ -1,0 +1,25 @@
+.card-wrapper {
+    width: 100%;
+    max-width: 1000px;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &__swipe {
+        position: absolute;
+
+        &__card {
+            position: relative;
+            background-color: white;
+            width: 80vw;
+            max-width: 260px;
+            height: 300px;
+            box-shadow: 0px 0px 60px 0px rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            background-size: cover;
+            background-position: center;
+        }
+    }
+}
