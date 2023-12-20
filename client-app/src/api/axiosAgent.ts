@@ -55,11 +55,17 @@ const apiPhotos = {
     deleteUserPhoto: () => requests.del('/api/photo/deleteUserPhoto')
 };
 
+const apiMessages = {
+    getChatHistory: (matchId: string) => requests.get(`/chatHistory?matchId=${matchId}`),
+    sendMessage: (body: object) => requests.post('/sendMessage', body, headers.appJSON)
+}
+
 const agent = {
     apiUser,
     apiAnimal,
     apiMatches,
-    apiPhotos
+    apiPhotos,
+    apiMessages
 };
 
 export default agent;
