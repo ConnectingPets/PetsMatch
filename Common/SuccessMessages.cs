@@ -12,6 +12,8 @@
         {
             public const string SuccessDeleteUser = "The user {0} is deleted successfully";
             public const string SuccessEditUser = "The user {0} is edited successfully";
+            public const string SuccessDeleteRole = 
+                "The profile {0} is deleted successfully";
         }
 
         public static class Animal

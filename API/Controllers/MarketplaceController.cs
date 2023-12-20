@@ -6,15 +6,16 @@
 
     using Infrastructure;
     using Application.DTOs.Marketplace;
-    using static Application.Marketplace.AddAnimalMarketplace;
-    using static Application.Marketplace.ShowAnimalMarketplaceToEdit;
-    using static Application.Marketplace.EditAnimalMarketplace;
-    using static Application.Marketplace.DeleteAnimalMarketplace;
-    using static Application.Marketplace.AllAnimalsForSale;
-    using static Application.Marketplace.AllAnimalsForAdoption;
-    using static Application.Marketplace.MyAnimalsForAdoption;
-    using static Application.Marketplace.MyAnimalForSale;
+
     using static Application.Marketplace.GetAnimal;
+    using static Application.Marketplace.MyAnimalForSale;
+    using static Application.Marketplace.AllAnimalsForSale;
+    using static Application.Marketplace.MyAnimalsForAdoption;
+    using static Application.Marketplace.AddAnimalMarketplace;
+    using static Application.Marketplace.EditAnimalMarketplace;
+    using static Application.Marketplace.AllAnimalsForAdoption;
+    using static Application.Marketplace.DeleteAnimalMarketplace;
+    using static Application.Marketplace.ShowAnimalMarketplaceToEdit;
 
     [Authorize]
     [ApiController]

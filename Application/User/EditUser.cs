@@ -2,9 +2,10 @@
 {
     using System.Threading;
     using System.Threading.Tasks;
-    
+
     using MediatR;
-    
+    using Microsoft.AspNetCore.Identity;
+
     using Domain;
     using Persistence.Repositories;
     using Application.DTOs.User;
@@ -26,14 +27,18 @@
         public class EditUserHandler : IRequestHandler<EditUserCommand, Result<Unit>>
         {
             private readonly IRepository repository;
+            private readonly UserManager<User> userManager;
 
-            public EditUserHandler(IRepository repository)
+            public EditUserHandler(IRepository repository,
+                                   UserManager<User> userManager)
             {
                 this.repository = repository;
+                this.userManager = userManager;
             }
 
             public async Task<Result<Unit>> Handle(EditUserCommand request, CancellationToken cancellationToken)
             {
+                string[] roles = request.User.Roles;
                 User? user = await this.repository.FirstOrDefaultAsync<User>(u => u.Id.ToString() == request.UserId.ToLower());
 
                 if (user == null)
@@ -53,6 +58,14 @@
 
                 try
                 {
+                    foreach (var role in roles)
+                    {
+                        if (!await userManager.IsInRoleAsync(user, role))
+                        {
+                            await userManager.AddToRoleAsync(user, role);
+                        }
+                    }
+
                     await this.repository.SaveChangesAsync();
                     return Result<Unit>.Success(Unit.Value, String.Format(SuccessEditUser, user.Name));
                 }

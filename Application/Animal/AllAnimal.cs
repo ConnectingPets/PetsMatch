@@ -11,6 +11,7 @@
     using Persistence;
     using Application.DTOs.Animal;
     using Persistence.Repositories;
+
     using static Common.ExceptionMessages.Animal;
 
     public class AllAnimal

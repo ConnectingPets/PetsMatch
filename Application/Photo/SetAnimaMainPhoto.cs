@@ -9,6 +9,7 @@
     using Response;
     using Service.Interfaces;
     using Persistence.Repositories;
+
     using static Common.ExceptionMessages.Photo;
 
     public class SetAnimaMainPhoto

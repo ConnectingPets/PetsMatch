@@ -9,9 +9,10 @@
     using Response;
     using Application.DTOs.Animal;
     using Persistence.Repositories;
+
+    using static Common.SuccessMessages.Animal;
     using static Common.ExceptionMessages.Entity;
     using static Common.ExceptionMessages.Animal;
-    using static Common.SuccessMessages.Animal;
 
     public class EditAnimal
     {

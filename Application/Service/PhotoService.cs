@@ -12,8 +12,9 @@
     using Interfaces;
     using Application.DTOs.Photo;
     using Persistence.Repositories;
-    using static Common.ExceptionMessages.Photo;
+
     using static Common.SuccessMessages.Photo;
+    using static Common.ExceptionMessages.Photo;
 
     public class PhotoService : IPhotoService
     {
@@ -101,7 +102,8 @@
                     }
                     catch (Exception)
                     {
-                        return Result<Unit>.Failure("Error occurred during image upload");                        return Result<Unit>.Failure(ErrorUploadPhoto);
+                        return Result<Unit>.
+                            Failure("Error occurred during image upload");                       
                     }
                 }
 

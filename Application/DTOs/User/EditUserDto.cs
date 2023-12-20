@@ -21,5 +21,7 @@
         public string? City { get; set; }
 
         public string? Education { get; set; }
+
+        public string[] Roles { get; set; } = null!;
     }
 }
