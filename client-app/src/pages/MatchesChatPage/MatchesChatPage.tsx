@@ -19,8 +19,7 @@ interface IMatch {
   photo: string;
 }
 
-interface IShowChat {
-    isShownChat: boolean,
+interface ISendee {
     sendeeName: string,
     sendeePhoto: string
 }
@@ -29,7 +28,8 @@ export const MatchesChatPage: React.FC<MatchesChatPageProps> = observer(() => {
   const [matchesOrMessages, setMatchesOrMessages] = useState(true);
   const [shownMatches, setShownMatches] = useState(true);
   const [matches, setMatches] = useState<IMatch[]>([]);
-  const [shownChat, setShownChat] = useState<IShowChat>();
+  const [shownChat, setShownChat] = useState(false);
+  const [sendee, setSendee] = useState<ISendee>();
   const { id } = useParams();
 
   useEffect(() => {
@@ -58,19 +58,15 @@ export const MatchesChatPage: React.FC<MatchesChatPageProps> = observer(() => {
   };
 
   const showChat = (sendeeName: string, sendeePhoto: string) => {
-    setShownChat({
-        isShownChat: true,
+    setShownChat(true);
+    setSendee({
         sendeeName,
         sendeePhoto
-    });
+    })
   };
 
   const hideChat = () => {
-    setShownChat({
-        isShownChat: false,
-        sendeeName: '',
-        sendeePhoto: ''
-    });
+    setShownChat(false);
   };
 
   return (
@@ -156,10 +152,9 @@ export const MatchesChatPage: React.FC<MatchesChatPageProps> = observer(() => {
             : " matches__page__chat  matches__page__chat__large"
         }
       >
-        {shownChat?.isShownChat && (
+        {shownChat && (
           <PetChat
-            sendeeName={shownChat.sendeeName}
-            sendeePhoto={shownChat.sendeePhoto}
+            sendee={sendee!}
             onHideChat={hideChat}
           />
         )}

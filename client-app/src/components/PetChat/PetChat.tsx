@@ -2,14 +2,15 @@ import { observer } from "mobx-react";
 import "./PetChat.scss";
 
 interface PetChatProps {
-  sendeeName: string
-  sendeePhoto: string
+  sendee: {
+    sendeeName: string,
+    sendeePhoto: string
+  }
   onHideChat: () => void
 }
 
 export const PetChat: React.FC<PetChatProps> = observer(({
-  sendeeName,
-  sendeePhoto,
+  sendee,
   onHideChat
 }) => {
   return (
@@ -17,8 +18,8 @@ export const PetChat: React.FC<PetChatProps> = observer(({
       <div className="chat-container">
         <div className="chat-header">
           <div className="user-info">
-            <img src={sendeePhoto} alt="User Photo" className="user-photo" />
-            <span className="username">{sendeeName}</span>
+            <img src={sendee.sendeePhoto} alt="User Photo" className="user-photo" />
+            <span className="username">{sendee.sendeeName}</span>
           </div>
           <button onClick={onHideChat} className="exit-button">X</button>
         </div>
