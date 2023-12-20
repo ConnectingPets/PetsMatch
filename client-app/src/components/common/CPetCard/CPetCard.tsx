@@ -18,7 +18,7 @@ export const CPetCard: React.FC<CPetCardProps> = (pet) => {
                 <h3>{pet.name}</h3>
                 <div className='pet__card__buttons__wrapper'>
                     <CCardEditButton id={pet.id} />
-                    <CCardMatchesButton/>
+                    <CCardMatchesButton id={pet.id} />
                 </div>
             </div>
         </article>
