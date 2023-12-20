@@ -44,6 +44,7 @@ const apiAnimal = {
 };
 
 const apiMatches = {
+    getAllPossibleSwipesForAnimal: () => requests.get('/api/swipe/animals'),
     animalMatches: (animalId: string) => requests.get(`/animal-matches?animalId=${animalId}`),
     swipe: (swiperAnimalId: string, swipeeAnimalId: string, swipedRight: boolean) => requests.post('/swipe', { swiperAnimalId, swipeeAnimalId, swipedRight }, headers.appJSON),
     match: (animalOneId: string, animalTwoId: string) => requests.post('/match', { animalOneId, animalTwoId }, headers.appJSON),
