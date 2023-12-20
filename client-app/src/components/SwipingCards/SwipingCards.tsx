@@ -1,50 +1,74 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState, useCallback } from 'react';
 import TinderCard from 'react-tinder-card';
 
+import { IPossibleSwipes, ITinderCard } from '../../interfaces/Interfaces';
 import agent from '../../api/axiosAgent';
 
 import './SwipingCards.scss';
 
-interface SwipingCardsProps { }
-
-interface IPossibleSwipes {
-    map(arg0: (pet: { name: string; photo: string; }) => import('react/jsx-runtime').JSX.Element): React.ReactNode;
-    age: number,
-    birthDate?: Date,
-    breed: string,
-    description?: string,
-    gender: string,
-    healthStatus: string,
-    isEducated: false,
-    isHavingValidDocuments: true,
-    name: string,
-    photo: string,
-    socialMedia?: string,
-    weight?: number
+interface SwipingCardsProps {
+    possibleSwipes?: IPossibleSwipes[];
+    onPetChange?: (pet: IPossibleSwipes | undefined) => void;
 }
 
 const SwipingCards: React.FC<SwipingCardsProps> = () => {
-    const [possibleSwipes, setPossibleSwipes] = useState<IPossibleSwipes>();
+    const [possibleSwipes, setPossibleSwipes] = useState<IPossibleSwipes[]>([]);
+    const swipesLength = (possibleSwipes && possibleSwipes.length) || 0;
+    const [currentIndex, setCurrentIndex] = useState(swipesLength - 1);
+    const currentIndexRef = useRef<number>(currentIndex);
 
     useEffect(() => {
         agent.apiMatches.getAllPossibleSwipesForAnimal()
             .then(res => {
-                console.log(res.data);
                 setPossibleSwipes(res.data);
             });
     }, []);
 
-    const outOfFrame = (name: string) => {
-        console.log(name + ' left');
+    const childRef = useMemo(
+        () => Array(swipesLength).fill(0).map(() => React.createRef<ITinderCard | null>()), [swipesLength]
+    );
+
+    const updateCurrentIndex = (index: number) => {
+        setCurrentIndex(index);
+        currentIndexRef.current = index;
     };
+
+    const canGoBack = currentIndex < swipesLength - 1;
+    const canSwipe = currentIndex >= 0;
+
+    const swiped = useCallback((index: number) => {
+        updateCurrentIndex(index - 1);
+    }, []);
+
+    const outOfFrame = useCallback((index: number) => {
+        currentIndexRef.current >= index && childRef[index].current?.restoreCard();
+    }, [childRef]);
+
+    const swipe = useCallback(async (dir: string) => {
+        if (canSwipe && currentIndex < swipesLength) {
+            await childRef[currentIndex].current?.swipe(dir);
+        }
+    }, [canSwipe, childRef, currentIndex, swipesLength]);
+
+    const goBack = useCallback(async () => {
+        if (!canGoBack) {
+            return;
+        }
+
+        const newIndex = currentIndex + 1;
+        updateCurrentIndex(newIndex);
+        await childRef[newIndex].current?.restoreCard();
+    }, [canGoBack, currentIndex, childRef]);
 
     return (
         <div className="card-wrapper">
-            {possibleSwipes && possibleSwipes.map((pet: { name: string, photo: string }) => (
+            {possibleSwipes && possibleSwipes.map((pet: { name: string, photo: string }, index) => (
                 <TinderCard
                     key={pet.photo}
+                    ref={childRef[index] as never}
+                    onSwipe={() => swiped(index)}
                     preventSwipe={['up', 'down']}
-                    onCardLeftScreen={() => outOfFrame(pet.name)}
+                    onCardLeftScreen={() => outOfFrame(index)}
                     className="card-wrapper__swipe"
                 >
                     <div style={{ backgroundImage: `url(${pet.photo})` }} className="card-wrapper__swipe__card">
@@ -52,6 +76,12 @@ const SwipingCards: React.FC<SwipingCardsProps> = () => {
                     </div>
                 </TinderCard>
             ))}
+
+            <div className="card-wrapper__buttons">
+                <button onClick={() => swipe('left')} style={{ backgroundColor: !canSwipe ? '#c3c4d3' : '' }} disabled={!canGoBack} >X</button>
+                <button onClick={() => goBack()} style={{ backgroundColor: !canGoBack ? '#c3c4d3' : '' }} disabled={!canGoBack} >Undo</button>
+                <button onClick={() => swipe('right')} style={{ backgroundColor: !canSwipe ? '#c3c4d3' : '' }} disabled={!canGoBack} >Like</button>
+            </div>
         </div>
     );
 };

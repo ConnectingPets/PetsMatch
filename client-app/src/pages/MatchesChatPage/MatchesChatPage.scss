@@ -25,7 +25,11 @@
 
             -ms-overflow-style: none;
             scrollbar-width: none;
-            overflow: auto;
+
+            &:first-of-type,
+            &:last-of-type {
+                overflow: auto;
+            }
         }
 
 

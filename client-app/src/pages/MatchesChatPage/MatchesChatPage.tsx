@@ -24,13 +24,15 @@ export const MatchesChatPage: React.FC<MatchesChatPageProps> = observer(() => {
     const [shownMatches, setShownMatches] = useState(true);
     const [matches, setMatches] = useState<IMatch[]>([]);
     const { id } = useParams();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [showChat, setShowChat] = useState(false);
 
     useEffect(() => {
         if (id) {
             agent.apiMatches.animalMatches(id!)
-            .then(res => {
-                setMatches(res.data);
-            });
+                .then(res => {
+                    setMatches(res.data);
+                });
         }
     }, [id]);
 
@@ -78,12 +80,9 @@ export const MatchesChatPage: React.FC<MatchesChatPageProps> = observer(() => {
             </section>
 
             <section className={chatProfileStore.isItShown || shownMatches ? ' matches__page__chat' : ' matches__page__chat  matches__page__chat__large'}>
-                {shownMatches && (
-                    <SwipingCards />
-                )}
-
-                {!shownMatches && (
-                    <p style={{ padding: '0 5rem', lineHeight: '3rem' }}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit amet cumque rerum alias quasi? Tenetur, cum hic? Illo accusamus, amet enim, rerum at nostrum iste architecto cum velit nihil nulla!<br/>CHAT</p>
+                {!showChat && <SwipingCards />}
+                {showChat && (
+                    <p style={{ padding: '0 5rem', lineHeight: '3rem' }}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit amet cumque rerum alias quasi? Tenetur, cum hic? Illo accusamus, amet enim, rerum at nostrum iste architecto cum velit nihil nulla!<br />CHAT</p>
                 )}
             </section>
 

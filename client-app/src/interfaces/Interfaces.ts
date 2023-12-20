@@ -1,3 +1,5 @@
+import React from 'react';
+
 export interface IUser {
     Id?: string,
     Name: string,
@@ -46,4 +48,37 @@ export interface Categories {
 export interface Breeds {
     name: string,
     breedId: number
+}
+
+export interface IPossibleSwipes {
+    map(arg0: (pet: { name: string; photo: string; }, arg1: number) => import('react/jsx-runtime').JSX.Element): React.ReactNode;
+    age: number,
+    birthDate?: Date,
+    breed: string,
+    description?: string,
+    gender: string,
+    healthStatus: string,
+    isEducated: false,
+    isHavingValidDocuments: true,
+    name: string,
+    photo: string,
+    socialMedia?: string,
+    weight?: number
+}
+
+export interface ITinderCard {
+    swipe: (dir: string) => Promise<void>;
+    restoreCard: () => void;
+    age: number,
+    birthDate?: Date,
+    breed: string,
+    description?: string,
+    gender: string,
+    healthStatus: string,
+    isEducated: false,
+    isHavingValidDocuments: true,
+    name: string,
+    photo: string,
+    socialMedia?: string,
+    weight?: number
 }
