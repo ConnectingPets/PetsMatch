@@ -9,27 +9,35 @@ import { CShowHideButton } from "../../components/common/CShowHideButton/CShowHi
 import "./MatchesChatPage.scss";
 import agent from "../../api/axiosAgent";
 import { useParams } from "react-router-dom";
+import { PetChat } from "../../components/PetChat/PetChat";
 
 interface MatchesChatPageProps {}
 
 interface IMatch {
-  id: string;
+  animalId: string;
   name: string;
   photo: string;
+}
+
+interface IShowChat {
+    isShownChat: boolean,
+    sendeeName: string,
+    sendeePhoto: string
 }
 
 export const MatchesChatPage: React.FC<MatchesChatPageProps> = observer(() => {
   const [matchesOrMessages, setMatchesOrMessages] = useState(true);
   const [shownMatches, setShownMatches] = useState(true);
   const [matches, setMatches] = useState<IMatch[]>([]);
-  const [shownChat, setShownChat] = useState(false);
+  const [shownChat, setShownChat] = useState<IShowChat>();
   const { id } = useParams();
 
   useEffect(() => {
     if (id) {
-      agent.apiMatches.animalMatches(id!).then((res) => {
-        setMatches(res.data);
-      });
+      agent.apiMatches.animalMatches(id!)
+        .then((res) => {
+            setMatches(res.data);
+        });
     }
   }, [id]);
 
@@ -49,8 +57,20 @@ export const MatchesChatPage: React.FC<MatchesChatPageProps> = observer(() => {
     setShownMatches(!shownMatches);
   };
 
-  const showChat = () => {
-    setShownChat(true);
+  const showChat = (sendeeName: string, sendeePhoto: string) => {
+    setShownChat({
+        isShownChat: true,
+        sendeeName,
+        sendeePhoto
+    });
+  };
+
+  const hideChat = () => {
+    setShownChat({
+        isShownChat: false,
+        sendeeName: '',
+        sendeePhoto: ''
+    });
   };
 
   return (
@@ -118,10 +138,10 @@ export const MatchesChatPage: React.FC<MatchesChatPageProps> = observer(() => {
             <>
               {matches.map((match) => (
                 <CMatchCard
-                  onShowChat={showChat}
+                  onShowChat={() => showChat(match.name, match.photo)}
                   name={match.name}
                   photo={match.photo}
-                  key={match.id}
+                  key={match.animalId}
                 />
               ))}
             </>
@@ -136,7 +156,13 @@ export const MatchesChatPage: React.FC<MatchesChatPageProps> = observer(() => {
             : " matches__page__chat  matches__page__chat__large"
         }
       >
-        {shownChat && <p>Chat</p>}
+        {shownChat?.isShownChat && (
+          <PetChat
+            sendeeName={shownChat.sendeeName}
+            sendeePhoto={shownChat.sendeePhoto}
+            onHideChat={hideChat}
+          />
+        )}
       </section>
 
       <section

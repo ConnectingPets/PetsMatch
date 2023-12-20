@@ -1,10 +1,10 @@
-import React, { MouseEventHandler } from 'react';
+import React from 'react';
 import themeStore from '../../../stores/themeStore.ts';
 import { observer } from 'mobx-react';
 import './CMatchCard.scss';
 
 interface CMatchCardProps {
-    onShowChat: MouseEventHandler<HTMLElement>
+    onShowChat: () => void
     name: string,
     photo: string
 }
