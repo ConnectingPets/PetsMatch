@@ -4,7 +4,7 @@ import themeStore from '../../../stores/themeStore';
 import { FaSun, FaMoon } from 'react-icons/fa';
 import './CChangeThemeButton.scss';
 
-interface CChangeThemeButtonProps { };
+interface CChangeThemeButtonProps { }
 
 export const CChangeThemeButton: React.FC<CChangeThemeButtonProps> = observer(() => {
     return (
