@@ -18,6 +18,7 @@ interface IMatch {
   animalId: string;
   name: string;
   photo: string;
+  matchId: string;
 }
 
 export const MatchesChatPage: React.FC<MatchesChatPageProps> = observer(() => {
@@ -33,6 +34,10 @@ export const MatchesChatPage: React.FC<MatchesChatPageProps> = observer(() => {
       });
     }
   }, [id]);
+
+  useEffect(() => {
+    chatStore.hideChat();
+  }, [id])
 
   const matchesOption = () => {
     setMatchesOrMessages(true);
@@ -115,7 +120,7 @@ export const MatchesChatPage: React.FC<MatchesChatPageProps> = observer(() => {
             <>
               {matches.map((match) => (
                 <CMatchCard
-                  onShowChat={() => chatStore.showChat(match.name, match.photo)}
+                  onShowChat={() => chatStore.showChat(match.name, match.photo, match.matchId)}
                   name={match.name}
                   photo={match.photo}
                   key={match.animalId}

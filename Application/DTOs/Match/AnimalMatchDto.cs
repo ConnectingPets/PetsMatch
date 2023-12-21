@@ -2,6 +2,8 @@
 {
     public class AnimalMatchDto
     {
+        public required string MatchId { get; set; }
+
         public required string AnimalId { get; set; }
 
         public required string Name { get; set; }

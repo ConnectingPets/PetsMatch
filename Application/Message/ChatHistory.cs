@@ -52,13 +52,13 @@
                 }
 
                 IEnumerable<ChatMessageDto> chatHistory = await this.repository
-                    .AllReadonly<Message>(m => m.MatchId.ToString() == request.MatchId)
+                    .AllReadonly<Message>(m => m.MatchId.ToString() == request.MatchId.ToLower())
                     .OrderBy(m => m.SentOn)
                     .Select(m => new ChatMessageDto
                     {
                         AnimalId = m.AnimalId.ToString(),
                         Content = m.Content,
-                        SentOn = m.SentOn
+                        SentOn = m.SentOn.ToString()
                     })
                     .ToListAsync();
 
