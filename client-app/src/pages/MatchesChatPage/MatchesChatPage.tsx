@@ -134,6 +134,7 @@ export const MatchesChatPage: React.FC<MatchesChatPageProps> = observer(() => {
         }
       >
         {chatStore.isShown && <PetChat />}
+        {!chatStore.isShown && <p>Swipes</p>}
       </section>
 
       <section

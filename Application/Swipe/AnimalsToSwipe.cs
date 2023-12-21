@@ -62,6 +62,7 @@
                     .Where(a => !a.SwipesFrom.Any(s => s.SwiperAnimalId.ToString() == animal.AnimalId.ToString()))
                     .Select(a => new AnimalToSwipeDto
                     {
+                        AnimalId = a.AnimalId.ToString(),
                         Name = a.Name,
                         Description = a.Description,
                         Age = a.Age,
