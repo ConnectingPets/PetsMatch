@@ -7,15 +7,15 @@ import agent from '../../api/axiosAgent';
 import './SwipingCards.scss';
 
 interface SwipingCardsProps {
-    possibleSwipes?: IPossibleSwipes[];
     onPetChange?: (pet: IPossibleSwipes | undefined) => void;
 }
 
-const SwipingCards: React.FC<SwipingCardsProps> = () => {
+const SwipingCards: React.FC<SwipingCardsProps> = ({ onPetChange }) => {
     const [possibleSwipes, setPossibleSwipes] = useState<IPossibleSwipes[]>([]);
     const swipesLength = (possibleSwipes && possibleSwipes.length) || 0;
     const [currentIndex, setCurrentIndex] = useState(swipesLength - 1);
     const currentIndexRef = useRef<number>(currentIndex);
+    const [, setCurrentPet] = useState<IPossibleSwipes | undefined>(possibleSwipes?.[currentIndex]);
 
     useEffect(() => {
         agent.apiMatches.getAllPossibleSwipesForAnimal()
@@ -38,7 +38,11 @@ const SwipingCards: React.FC<SwipingCardsProps> = () => {
 
     const swiped = useCallback((index: number) => {
         updateCurrentIndex(index - 1);
-    }, []);
+
+        const newPet = possibleSwipes?.[index - 1];
+        setCurrentPet(newPet);
+        onPetChange && onPetChange(newPet);
+    }, [onPetChange, possibleSwipes]);
 
     const outOfFrame = useCallback((index: number) => {
         currentIndexRef.current >= index && childRef[index].current?.restoreCard();

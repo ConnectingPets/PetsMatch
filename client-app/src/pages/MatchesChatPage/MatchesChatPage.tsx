@@ -10,6 +10,8 @@ import './MatchesChatPage.scss';
 import agent from '../../api/axiosAgent';
 import { useParams } from 'react-router-dom';
 import SwipingCards from '../../components/SwipingCards/SwipingCards';
+import { IPossibleSwipes } from '../../interfaces/Interfaces';
+import PetProfile from '../../components/PetProfile/PetProfile';
 
 interface MatchesChatPageProps { }
 
@@ -26,6 +28,7 @@ export const MatchesChatPage: React.FC<MatchesChatPageProps> = observer(() => {
     const { id } = useParams();
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [showChat, setShowChat] = useState(false);
+    const [currentPet, setCurrentPet] = useState<IPossibleSwipes | undefined>(undefined);
 
     useEffect(() => {
         if (id) {
@@ -35,6 +38,10 @@ export const MatchesChatPage: React.FC<MatchesChatPageProps> = observer(() => {
                 });
         }
     }, [id]);
+
+    const onPetChange = (pet: IPossibleSwipes | undefined) => {
+        setCurrentPet(pet);
+    };
 
     const matchesOption = () => {
         setMatchesOrMessages(true);
@@ -80,14 +87,14 @@ export const MatchesChatPage: React.FC<MatchesChatPageProps> = observer(() => {
             </section>
 
             <section className={chatProfileStore.isItShown || shownMatches ? ' matches__page__chat' : ' matches__page__chat  matches__page__chat__large'}>
-                {!showChat && <SwipingCards />}
+                {!showChat && <SwipingCards onPetChange={onPetChange} />}
                 {showChat && (
                     <p style={{ padding: '0 5rem', lineHeight: '3rem' }}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit amet cumque rerum alias quasi? Tenetur, cum hic? Illo accusamus, amet enim, rerum at nostrum iste architecto cum velit nihil nulla!<br />CHAT</p>
                 )}
             </section>
 
             <section className={chatProfileStore.isItShown ? ' matches__page__profile' : 'matches__page__profile  matches__page__profile__hidden'}>
-                <p style={{ padding: '8rem' }}>PROFILE</p>
+                {currentPet && <PetProfile pet={currentPet} />}
             </section>
 
             <section className={!chatProfileStore.isItShown ? 'matches__page__see__profile' : 'matches__page__see__profile__hidden'}>
