@@ -1,0 +1,31 @@
+.exit-button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+.exit-icon {
+  display: inline-flex;
+}
+
+.circle {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 3px solid #fd5068;
+  align-items: center;
+  justify-content: center;
+}
+
+.x {
+  color: #fd5068;
+  font-weight: 900;
+  font-size: 14px;
+  line-height: 17px;
+}

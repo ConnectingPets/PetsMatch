@@ -10,6 +10,7 @@ import "./MatchesChatPage.scss";
 import agent from "../../api/axiosAgent";
 import { useParams } from "react-router-dom";
 import { PetChat } from "../../components/PetChat/PetChat";
+import chatStore from "../../stores/chatStore";
 
 interface MatchesChatPageProps {}
 
@@ -19,25 +20,17 @@ interface IMatch {
   photo: string;
 }
 
-interface ISendee {
-    sendeeName: string,
-    sendeePhoto: string
-}
-
 export const MatchesChatPage: React.FC<MatchesChatPageProps> = observer(() => {
   const [matchesOrMessages, setMatchesOrMessages] = useState(true);
   const [shownMatches, setShownMatches] = useState(true);
   const [matches, setMatches] = useState<IMatch[]>([]);
-  const [shownChat, setShownChat] = useState(false);
-  const [sendee, setSendee] = useState<ISendee>();
   const { id } = useParams();
 
   useEffect(() => {
     if (id) {
-      agent.apiMatches.animalMatches(id!)
-        .then((res) => {
-            setMatches(res.data);
-        });
+      agent.apiMatches.animalMatches(id!).then((res) => {
+        setMatches(res.data);
+      });
     }
   }, [id]);
 
@@ -55,18 +48,6 @@ export const MatchesChatPage: React.FC<MatchesChatPageProps> = observer(() => {
 
   const showMatchesHandler = () => {
     setShownMatches(!shownMatches);
-  };
-
-  const showChat = (sendeeName: string, sendeePhoto: string) => {
-    setShownChat(true);
-    setSendee({
-        sendeeName,
-        sendeePhoto
-    })
-  };
-
-  const hideChat = () => {
-    setShownChat(false);
   };
 
   return (
@@ -134,7 +115,7 @@ export const MatchesChatPage: React.FC<MatchesChatPageProps> = observer(() => {
             <>
               {matches.map((match) => (
                 <CMatchCard
-                  onShowChat={() => showChat(match.name, match.photo)}
+                  onShowChat={() => chatStore.showChat(match.name, match.photo)}
                   name={match.name}
                   photo={match.photo}
                   key={match.animalId}
@@ -152,12 +133,7 @@ export const MatchesChatPage: React.FC<MatchesChatPageProps> = observer(() => {
             : " matches__page__chat  matches__page__chat__large"
         }
       >
-        {shownChat && (
-          <PetChat
-            sendee={sendee!}
-            onHideChat={hideChat}
-          />
-        )}
+        {chatStore.isShown && <PetChat />}
       </section>
 
       <section

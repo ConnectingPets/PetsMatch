@@ -1,0 +1,41 @@
+.chat-messages {
+  overflow-y: auto;
+  padding: 10px;
+  height: 448px;
+
+  scrollbar-width: thin;
+  scrollbar-color: #ccc #f4f4f4;
+
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.message {
+  margin-bottom: 10px;
+
+  &.sender {
+    text-align: right;
+    .message-text {
+      background-color: #34B7F1;
+      color: #fff;
+    }
+  }
+
+  .message-text {
+    background-color: #e1e1e1;
+    padding: 8px;
+    border-radius: 8px;
+    display: inline-block;
+
+    &.sender {
+      background-color: blue;
+      color: #fff;
+    }
+  }
+
+  .timestamp {
+    font-size: 12px; /* Set the desired font size */
+    color: #888; /* Set the desired color for the timestamp */
+    margin-top: 4px; /* Adjust the spacing if needed */
+  }
+}
