@@ -1,4 +1,5 @@
-import React, { useEffect, useMemo, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+// import { useParams } from 'react-router-dom';
 import TinderCard from 'react-tinder-card';
 
 import { IPossibleSwipes, ITinderCard } from '../../interfaces/Interfaces';
@@ -12,17 +13,20 @@ interface SwipingCardsProps {
 
 const SwipingCards: React.FC<SwipingCardsProps> = ({ onPetChange }) => {
     const [possibleSwipes, setPossibleSwipes] = useState<IPossibleSwipes[]>([]);
-    const swipesLength = (possibleSwipes && possibleSwipes.length) || 0;
-    const [currentIndex, setCurrentIndex] = useState(swipesLength - 1);
+    const [currentIndex, setCurrentIndex] = useState(0);
     const currentIndexRef = useRef<number>(currentIndex);
     const [, setCurrentPet] = useState<IPossibleSwipes | undefined>(possibleSwipes?.[currentIndex]);
+    // const { id: petId } = useParams();
 
     useEffect(() => {
         agent.apiMatches.getAllPossibleSwipesForAnimal()
             .then(res => {
                 setPossibleSwipes(res.data);
+                setCurrentIndex(res.data.length);
             });
     }, []);
+
+    const swipesLength = (possibleSwipes && possibleSwipes.length);
 
     const childRef = useMemo(
         () => Array(swipesLength).fill(0).map(() => React.createRef<ITinderCard | null>()), [swipesLength]
@@ -36,33 +40,43 @@ const SwipingCards: React.FC<SwipingCardsProps> = ({ onPetChange }) => {
     const canGoBack = currentIndex < swipesLength - 1;
     const canSwipe = currentIndex >= 0;
 
-    const swiped = useCallback((index: number) => {
+    const swiped = (index: number, dir: string) => {
         updateCurrentIndex(index - 1);
 
         const newPet = possibleSwipes?.[index - 1];
         setCurrentPet(newPet);
         onPetChange && onPetChange(newPet);
-    }, [onPetChange, possibleSwipes]);
 
-    const outOfFrame = useCallback((index: number) => {
-        currentIndexRef.current >= index && childRef[index].current?.restoreCard();
-    }, [childRef]);
-
-    const swipe = useCallback(async (dir: string) => {
-        if (canSwipe && currentIndex < swipesLength) {
-            await childRef[currentIndex].current?.swipe(dir);
+        if (dir == 'right') {
+            // agent.apiMatches.swipe(petId, currentPet.id, true)
         }
-    }, [canSwipe, childRef, currentIndex, swipesLength]);
 
-    const goBack = useCallback(async () => {
+    };
+
+    const outOfFrame = (index: number) => {
+        currentIndexRef.current >= index && childRef[index].current?.restoreCard();
+    };
+
+    const swipe = (dir: string) => {
+        if (canSwipe && currentIndex < swipesLength) {
+            childRef[currentIndex].current?.swipe(dir);
+        } else {
+            swiped(currentIndex, dir);
+        }
+    };
+
+    const goBack = () => {
         if (!canGoBack) {
             return;
         }
 
         const newIndex = currentIndex + 1;
         updateCurrentIndex(newIndex);
-        await childRef[newIndex].current?.restoreCard();
-    }, [canGoBack, currentIndex, childRef]);
+        childRef[newIndex].current?.restoreCard();
+        
+        const newPet = possibleSwipes[currentIndex + 1];
+        onPetChange && onPetChange(newPet);
+    };
 
     return (
         <div className="card-wrapper">
@@ -70,7 +84,7 @@ const SwipingCards: React.FC<SwipingCardsProps> = ({ onPetChange }) => {
                 <TinderCard
                     key={pet.photo}
                     ref={childRef[index] as never}
-                    onSwipe={() => swiped(index)}
+                    onSwipe={(dir) => swiped(index, dir)}
                     preventSwipe={['up', 'down']}
                     onCardLeftScreen={() => outOfFrame(index)}
                     className="card-wrapper__swipe"
@@ -81,11 +95,13 @@ const SwipingCards: React.FC<SwipingCardsProps> = ({ onPetChange }) => {
                 </TinderCard>
             ))}
 
-            <div className="card-wrapper__buttons">
-                <button onClick={() => swipe('left')} style={{ backgroundColor: !canSwipe ? '#c3c4d3' : '' }} disabled={!canGoBack} >X</button>
-                <button onClick={() => goBack()} style={{ backgroundColor: !canGoBack ? '#c3c4d3' : '' }} disabled={!canGoBack} >Undo</button>
-                <button onClick={() => swipe('right')} style={{ backgroundColor: !canSwipe ? '#c3c4d3' : '' }} disabled={!canGoBack} >Like</button>
-            </div>
+            {possibleSwipes && (
+                <div className="card-wrapper__buttons">
+                    <button onClick={() => swipe('left')} style={{ backgroundColor: !canSwipe ? '#c3c4d3' : '' }} disabled={!canSwipe} >X</button>
+                    <button onClick={() => goBack()} style={{ backgroundColor: !canGoBack ? '#c3c4d3' : '' }} disabled={!canGoBack} >Undo</button>
+                    <button onClick={() => swipe('right')} style={{ backgroundColor: !canSwipe ? '#c3c4d3' : '' }} disabled={!canSwipe} >Like</button>
+                </div>
+            )}
         </div>
     );
 };

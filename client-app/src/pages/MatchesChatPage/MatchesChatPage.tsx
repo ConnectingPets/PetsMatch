@@ -27,7 +27,7 @@ export const MatchesChatPage: React.FC<MatchesChatPageProps> = observer(() => {
     const [matches, setMatches] = useState<IMatch[]>([]);
     const { id } = useParams();
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [showChat, setShowChat] = useState(false);
+    const [shownChat, setShownChat] = useState(false);
     const [currentPet, setCurrentPet] = useState<IPossibleSwipes | undefined>(undefined);
 
     useEffect(() => {
@@ -87,8 +87,8 @@ export const MatchesChatPage: React.FC<MatchesChatPageProps> = observer(() => {
             </section>
 
             <section className={chatProfileStore.isItShown || shownMatches ? ' matches__page__chat' : ' matches__page__chat  matches__page__chat__large'}>
-                {!showChat && <SwipingCards onPetChange={onPetChange} />}
-                {showChat && (
+                {!shownChat && <SwipingCards onPetChange={onPetChange} />}
+                {shownChat && (
                     <p style={{ padding: '0 5rem', lineHeight: '3rem' }}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit amet cumque rerum alias quasi? Tenetur, cum hic? Illo accusamus, amet enim, rerum at nostrum iste architecto cum velit nihil nulla!<br />CHAT</p>
                 )}
             </section>
