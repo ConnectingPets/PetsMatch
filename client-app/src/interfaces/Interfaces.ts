@@ -47,3 +47,9 @@ export interface Breeds {
     name: string,
     breedId: number
 }
+
+export interface IMessage {
+    content: string;
+    animalId: string;
+    sentOn: string;
+}

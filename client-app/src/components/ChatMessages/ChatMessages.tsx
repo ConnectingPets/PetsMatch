@@ -1,29 +1,16 @@
 import { observer } from "mobx-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import "./ChatMessages.scss";
 import { useParams } from "react-router-dom";
-import agent from "../../api/axiosAgent";
-import chatStore from "../../stores/chatStore";
+import { IMessage } from "../../interfaces/Interfaces";
 
-interface ChatMessagesProps {}
-
-interface IMessage {
-  content: string;
-  animalId: string;
-  sentOn: string;
+interface ChatMessagesProps {
+  messages: IMessage[]
 }
 
-export const ChatMessages: React.FC<ChatMessagesProps> = observer(() => {
+export const ChatMessages: React.FC<ChatMessagesProps> = observer(({messages}) => {
   const chatMessagesRef = useRef<HTMLDivElement>(null);
-  const [messages, setMessages] = useState<IMessage[]>([]);
   const { id } = useParams();
-
-  useEffect(() => {
-    agent.apiMessages.getChatHistory(chatStore.matchId!).then((res) => {
-      console.log(res.data);
-      setMessages(res.data.reverse());
-    });
-  }, [id]);
 
   useEffect(() => {
     scrollToBottom();
