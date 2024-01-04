@@ -23,6 +23,7 @@
             public const string AlreadyMatched = "There is already a match between these animals";
             public const string MatchNotFound = "The animals are not matched";
             public const string SameAnimal = "The animal is matching on itself";
+            public const string NotMatched = "The animals don't like each other";
         }
 
         public static class Swipe

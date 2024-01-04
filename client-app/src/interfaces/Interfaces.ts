@@ -82,3 +82,9 @@ export interface ITinderCard {
     socialMedia?: string,
     weight?: number
 }
+
+export interface IMessage {
+    content: string;
+    animalId: string;
+    sentOn: string;
+}

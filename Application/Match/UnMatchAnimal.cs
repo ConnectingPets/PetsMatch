@@ -76,6 +76,8 @@
                     return Result<Unit>.Failure(MatchNotFound);
                 }
 
+                this.repository.DeleteRange<Swipe>(s => (s.SwiperAnimalId == animalOne.AnimalId && s.SwipeeAnimalId == animalTwo.AnimalId) ||
+                                                         s.SwiperAnimalId == animalTwo.AnimalId && s.SwipeeAnimalId == animalOne.AnimalId);
                 this.repository.DeleteRange(existingMatch.AnimalMatches.ToArray());
                 this.repository.DeleteRange(existingMatch.Messages.ToArray());
                 this.repository.Delete(existingMatch);
@@ -96,7 +98,7 @@
                                             am.Match.AnimalMatches
                                                 .Any(m => m.AnimalId.ToString() == animalTwoId.ToLower()))
                                         .Include(am => am.Match)
-                                        .ThenInclude(m => m.AnimalMatches)
+                                            .ThenInclude(m => m.AnimalMatches)
                                         .Include(m => m.Match.Messages)
                                         .Select(am => am.Match)
                                         .FirstOrDefaultAsync();

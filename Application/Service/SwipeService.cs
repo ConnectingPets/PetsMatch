@@ -21,10 +21,11 @@
             this.mediator = mediator;
         }
 
-        public async Task<Result<IEnumerable<AnimalToSwipeDto>>> GetAnimalsToSwipe(string userId)
+        public async Task<Result<IEnumerable<AnimalToSwipeDto>>> GetAnimalsToSwipe(string animalId, string userId)
             => await this.mediator.Send(new AnimalsToSwipeQuery
             {
-                UserId = userId
+                UserId = userId,
+                AnimalId = animalId
             });
 
         public async Task<Result<bool>> Swipe(string swiperAnimalId, string swipeeAnimalId, bool swipedRight, string userId)

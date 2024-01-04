@@ -4,11 +4,11 @@ import { AiOutlineFire } from 'react-icons/ai';
 import themeStore from '../../../stores/themeStore';
 import './CCardMatchesButton.scss';
 
-interface CCardMatchesButtonProps {
+interface CCardMatchesButtonProps { 
     id: string
 }
 
-export const CCardMatchesButton: React.FC<CCardMatchesButtonProps> = ({ 
+export const CCardMatchesButton: React.FC<CCardMatchesButtonProps> = ({
     id
 }) => {
     return (

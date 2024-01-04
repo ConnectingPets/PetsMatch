@@ -9,6 +9,8 @@ import { CShowHideButton } from '../../components/common/CShowHideButton/CShowHi
 import './MatchesChatPage.scss';
 import agent from '../../api/axiosAgent';
 import { useParams } from 'react-router-dom';
+import { PetChat } from '../../components/PetChat/PetChat';
+import chatStore from '../../stores/chatStore';
 import SwipingCards from '../../components/SwipingCards/SwipingCards';
 import { IPossibleSwipes } from '../../interfaces/Interfaces';
 import PetProfile from '../../components/PetProfile/PetProfile';
@@ -16,9 +18,10 @@ import PetProfile from '../../components/PetProfile/PetProfile';
 interface MatchesChatPageProps { }
 
 interface IMatch {
-    id: string,
-    name: string,
-    photo: string
+    animalId: string;
+    name: string;
+    photo: string;
+    matchId: string;
 }
 
 export const MatchesChatPage: React.FC<MatchesChatPageProps> = observer(() => {
@@ -26,8 +29,6 @@ export const MatchesChatPage: React.FC<MatchesChatPageProps> = observer(() => {
     const [shownMatches, setShownMatches] = useState(true);
     const [matches, setMatches] = useState<IMatch[]>([]);
     const { id } = useParams();
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [shownChat, setShownChat] = useState(false);
     const [currentPet, setCurrentPet] = useState<IPossibleSwipes | undefined>(undefined);
 
     useEffect(() => {
@@ -37,6 +38,10 @@ export const MatchesChatPage: React.FC<MatchesChatPageProps> = observer(() => {
                     setMatches(res.data);
                 });
         }
+    }, [id]);
+
+    useEffect(() => {
+        chatStore.hideChat();
     }, [id]);
 
     const onPetChange = (pet: IPossibleSwipes | undefined) => {
@@ -80,17 +85,16 @@ export const MatchesChatPage: React.FC<MatchesChatPageProps> = observer(() => {
                 <article className='matches__page__matches__render' >
                     {
                         matchesOrMessages
-                            ? <>{matches.map(match => <CMatchCard name={match.name} photo={match.photo} key={match.id} />)}</>
+                            ? <>{matches.map(match => <CMatchCard name={match.name} photo={match.photo} matchId={match.matchId}
+                                key={match.animalId} />)}</>
                             : null
                     }
                 </article>
             </section>
 
             <section className={chatProfileStore.isItShown || shownMatches ? ' matches__page__chat' : ' matches__page__chat  matches__page__chat__large'}>
-                {!shownChat && <SwipingCards onPetChange={onPetChange} />}
-                {shownChat && (
-                    <p style={{ padding: '0 5rem', lineHeight: '3rem' }}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit amet cumque rerum alias quasi? Tenetur, cum hic? Illo accusamus, amet enim, rerum at nostrum iste architecto cum velit nihil nulla!<br />CHAT</p>
-                )}
+                {chatStore.isShown && <PetChat />}
+                {!chatStore.isShown && <SwipingCards onPetChange={onPetChange} />}
             </section>
 
             <section className={chatProfileStore.isItShown ? ' matches__page__profile' : 'matches__page__profile  matches__page__profile__hidden'}>
