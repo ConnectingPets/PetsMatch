@@ -35,12 +35,8 @@
             public async Task<Result<IEnumerable<AnimalMatchDto>>> Handle(AnimalMatchesQuery request, CancellationToken cancellationToken)
             {
                 Animal? animal = await this.repository
-                    .All<Animal>(animal => animal.AnimalId.ToString() == request.AnimalId)
+                    .All<Animal>(animal => animal.AnimalId.ToString() == request.AnimalId.ToLower())
                     .Include(animal => animal.AnimalMatches)
-                    .ThenInclude(am => am.Match)
-                    .ThenInclude(m => m.AnimalMatches)
-                    .ThenInclude(am => am.Animal)
-                    .ThenInclude(a => a.Photos)
                     .FirstOrDefaultAsync();
 
                 if (animal == null)
@@ -58,12 +54,19 @@
                     return Result<IEnumerable<AnimalMatchDto>>.Failure(NotOwner);
                 }
 
+                IEnumerable<string> matchesIds = animal.AnimalMatches
+                    .Select(am => am.MatchId.ToString());
+
                 IEnumerable<AnimalMatchDto> animalMatches = new List<AnimalMatchDto>();
-                if (animal.AnimalMatches.Count > 0)
+                if (matchesIds.Any())
                 {
-                    IEnumerable<AnimalMatch> matches = animal.AnimalMatches
-                        .Select(am => am.Match.AnimalMatches
-                            .FirstOrDefault(am => am.AnimalId != Guid.Parse(request.AnimalId)))!;
+                    IEnumerable<AnimalMatch> matches = await this.repository
+                        .All<AnimalMatch>(am => matchesIds.Contains(am.MatchId.ToString()) &&
+                            am.AnimalId.ToString() != request.AnimalId.ToLower())
+                        .Include(am => am.Animal)
+                        .ThenInclude(a => a.Photos)
+                        .Include(am => am.Match.Messages)
+                        .ToListAsync();
 
                     animalMatches = matches
                         .Select(am => new AnimalMatchDto
@@ -71,7 +74,8 @@
                             AnimalId = am.AnimalId.ToString(),
                             Name = am.Animal.Name,
                             Photo = am.Animal.Photos.First(p => p.IsMain).Url,
-                            MatchId = am.MatchId.ToString()
+                            MatchId = am.MatchId.ToString(),
+                            IsChatStarted = am.Match.Messages.Any(m => m.AnimalId.ToString() == request.AnimalId.ToLower())
                         })
                         .ToList();
                 }

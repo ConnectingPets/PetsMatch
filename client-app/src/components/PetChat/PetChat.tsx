@@ -12,7 +12,9 @@ import { useEffect, useRef, useState } from "react";
 import * as signalR from "@microsoft/signalr";
 import { IMessage } from "../../interfaces/Interfaces";
 
-interface PetChatProps {}
+interface PetChatProps {
+  updateMatches: () => void
+}
 
 interface ISendMessage {
   Content: string;
@@ -20,7 +22,7 @@ interface ISendMessage {
   MatchId: string;
 }
 
-export const PetChat: React.FC<PetChatProps> = observer(() => {
+export const PetChat: React.FC<PetChatProps> = observer(({updateMatches}) => {
   const { id: animalId } = useParams();
   const [messages, setMessages] = useState<IMessage[]>([]);
 
@@ -81,6 +83,8 @@ export const PetChat: React.FC<PetChatProps> = observer(() => {
           );
         }
       }
+
+      updateMatches();
 
       form.reset();
     } catch (err) {
