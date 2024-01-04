@@ -4,7 +4,7 @@ import {BsPlusCircleFill} from 'react-icons/bs'
 import themeStore from '../../../stores/themeStore';
 import './CAddPetCard.scss';
 
-interface CAddPetCardProps { };
+interface CAddPetCardProps { }
 
 export const CAddPetCard: React.FC<CAddPetCardProps> = () => {
     return (

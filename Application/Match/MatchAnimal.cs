@@ -72,6 +72,13 @@
                     return Result<Unit>.Failure(AlreadyMatched);
                 }
 
+                bool isMatch = await IsMatch(request.AnimalOneId, request.AnimalTwoId);
+
+                if (!isMatch)
+                {
+                    return Result<Unit>.Failure(NotMatched);
+                }
+
                 try
                 {
                     await CreateMatch(request.AnimalOneId, request.AnimalTwoId);
@@ -108,6 +115,12 @@
                 => await this.repository.AnyAsync<AnimalMatch>(am => am.AnimalId.ToString() == animalOneId.ToLower() &&
                                                                am.Match.AnimalMatches
                                                                    .Any(m => m.AnimalId.ToString() == animalTwoId.ToLower()));
+
+            private async Task<bool> IsMatch(string animalOneId, string animalTwoId)
+                => await this.repository.CountAsync<Swipe>(s => (s.SwiperAnimalId.ToString() == animalOneId.ToLower() &&
+                                                                    s.SwipeeAnimalId.ToString() == animalTwoId.ToLower() && s.SwipedRight) ||
+                                                                 s.SwiperAnimalId.ToString() == animalTwoId.ToLower() &&
+                                                                    s.SwipeeAnimalId.ToString() == animalOneId.ToLower() && s.SwipedRight) == 2;
         }
     }
 }

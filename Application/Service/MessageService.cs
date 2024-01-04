@@ -28,7 +28,7 @@
                 UserId = userId 
             });
 
-        public async Task<Result<Unit>> SaveMessage(string matchId, string animalId, string message, string userId)
+        public async Task<Result<DateTime>> SaveMessage(string matchId, string animalId, string message, string userId)
             => await this.mediator.Send(new SaveMessageCommand
             {
                 MatchId = matchId,

@@ -21,7 +21,7 @@ const AllRoutes: React.FC = () => {
             <Route path='matches/:id' element={<MatchesChatPage />} />
             <Route path='add-pet' element={<AddPetPage />} />
             <Route path='pet/:petId/edit' element={<EditPetPage />} />
-            <Route path='user/:userId/edit-profile' element={<EditUserProfilePage />} />
+            <Route path='user/edit-profile' element={<EditUserProfilePage />} />
             <Route path='*' element={<Page404 />} />
         </Routes>
     );
