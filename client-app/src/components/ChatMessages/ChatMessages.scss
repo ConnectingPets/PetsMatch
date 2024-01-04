@@ -15,7 +15,7 @@
 
   &.sender {
     justify-content: flex-end;
-    align-items: flex-end; /* Align text to the right for sender messages */
+    align-items: flex-end;
     .message-text {
       background-color: #34B7F1;
       color: #fff;
@@ -25,7 +25,7 @@
 
   &.recipient {
     justify-content: flex-end;
-    align-items: flex-start; /* Align text to the left for recipient messages */
+    align-items: flex-start;
     .message-text {
       background-color: #efefef;
       border-radius: 8px;

@@ -27,8 +27,9 @@ export const PetChat: React.FC<PetChatProps> = observer(() => {
   const connection = useRef<signalR.HubConnection | null>(null);
 
   useEffect(() => {
-    agent.apiMessages.getChatHistory(chatStore.matchId!).then((res) => {
-      setMessages(res.data.reverse());
+    agent.apiMessages.getChatHistory(chatStore.matchId!)
+      .then((res) => {
+        setMessages(res.data.reverse());
     });
   }, [animalId]);
 

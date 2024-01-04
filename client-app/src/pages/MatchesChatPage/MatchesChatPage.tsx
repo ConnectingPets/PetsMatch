@@ -29,9 +29,10 @@ export const MatchesChatPage: React.FC<MatchesChatPageProps> = observer(() => {
 
   useEffect(() => {
     if (id) {
-      agent.apiMatches.animalMatches(id!).then((res) => {
-        setMatches(res.data);
-      });
+      agent.apiMatches.animalMatches(id!)
+        .then((res) => {
+          setMatches(res.data);
+        });
     }
   }, [id]);
 
@@ -120,9 +121,9 @@ export const MatchesChatPage: React.FC<MatchesChatPageProps> = observer(() => {
             <>
               {matches.map((match) => (
                 <CMatchCard
-                  onShowChat={() => chatStore.showChat(match.name, match.photo, match.matchId)}
                   name={match.name}
                   photo={match.photo}
+                  matchId={match.matchId}
                   key={match.animalId}
                 />
               ))}

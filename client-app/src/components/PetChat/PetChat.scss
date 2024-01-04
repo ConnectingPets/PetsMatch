@@ -1,3 +1,5 @@
+@use '../../global-styles/' as gs;
+
 $primary-color: #fd5068;
 $background-color: #fff;
 $shadow-color: rgba(0, 0, 0, 0.1);
@@ -6,12 +8,20 @@ $shadow-color: rgba(0, 0, 0, 0.1);
   width: 100%;
   background-color: $background-color;
   box-shadow: 0 0 10px $shadow-color;
-  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+
+  .dark {
+    @include gs.dark-theme(gs.$dark-background-color-second);
+    transition: 0.5s;
+  }
 
   .message-input {
     padding: 10px;
     border-top: 1px solid #ccc;
     display: flex;
+    margin-top: auto;
 
     input {
       flex: 1;
@@ -24,7 +34,7 @@ $shadow-color: rgba(0, 0, 0, 0.1);
     }
 
     button {
-      background: linear-gradient(220deg, #FD2973 0%, #FF5A39 77%);
+      background: linear-gradient(220deg, #fd2973 0%, #ff5a39 77%);
       color: #fff;
       border: none;
       padding: 8px 15px;
@@ -33,3 +43,4 @@ $shadow-color: rgba(0, 0, 0, 0.1);
     }
   }
 }
+
