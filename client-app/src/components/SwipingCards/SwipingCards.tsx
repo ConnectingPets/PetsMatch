@@ -1,7 +1,11 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 // import { useParams } from 'react-router-dom';
 import TinderCard from 'react-tinder-card';
+import { PiHandHeartDuotone } from 'react-icons/pi';
+import { FaRegPaperPlane } from 'react-icons/fa';
 
+import themeStore from '../../stores/themeStore';
+import chatProfileStore from '../../stores/chatProfileStore';
 import { IPossibleSwipes, ITinderCard } from '../../interfaces/Interfaces';
 import agent from '../../api/axiosAgent';
 
@@ -12,6 +16,7 @@ interface SwipingCardsProps {
 }
 
 const SwipingCards: React.FC<SwipingCardsProps> = ({ onPetChange }) => {
+    const [welcomeMessage, setWelcomeMessage] = useState<boolean>(true);
     const [possibleSwipes, setPossibleSwipes] = useState<IPossibleSwipes[]>([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const currentIndexRef = useRef<number>(currentIndex);
@@ -78,8 +83,20 @@ const SwipingCards: React.FC<SwipingCardsProps> = ({ onPetChange }) => {
         onPetChange && onPetChange(newPet);
     };
 
+    const onWelcomeMessageClick = () => {
+        setWelcomeMessage(false);
+        swipe('left');
+    };
+
     return (
         <div className="card-wrapper">
+            {welcomeMessage && (
+                <div className="card-wrapper__welcomeMessage">
+                    <p className={themeStore.isLightTheme ? '' : 'p-dark'}>Ready to swipe <PiHandHeartDuotone /></p>
+                    <button onClick={onWelcomeMessageClick} className={themeStore.isLightTheme ? '' : 'btn-dark'}>Go <FaRegPaperPlane /></button>
+                </div>
+            )}
+
             {possibleSwipes && possibleSwipes.map((pet: { name: string, photo: string }, index) => (
                 <TinderCard
                     key={pet.photo}
@@ -87,19 +104,32 @@ const SwipingCards: React.FC<SwipingCardsProps> = ({ onPetChange }) => {
                     onSwipe={(dir) => swiped(index, dir)}
                     preventSwipe={['up', 'down']}
                     onCardLeftScreen={() => outOfFrame(index)}
-                    className="card-wrapper__swipe"
+                    className={`card-wrapper__swipe ${chatProfileStore.isItShown ? 'card-wrapper__swipe__hidden' : null}`}
                 >
                     <div style={{ backgroundImage: `url(${pet.photo})` }} className="card-wrapper__swipe__card">
-                        <h3>{pet.name}</h3>
+                        <h3 className={themeStore.isLightTheme ? '' : 'h3-dark'}>{pet.name}</h3>
                     </div>
                 </TinderCard>
             ))}
 
             {possibleSwipes && (
-                <div className="card-wrapper__buttons">
-                    <button onClick={() => swipe('left')} style={{ backgroundColor: !canSwipe ? '#c3c4d3' : '' }} disabled={!canSwipe} >X</button>
-                    <button onClick={() => goBack()} style={{ backgroundColor: !canGoBack ? '#c3c4d3' : '' }} disabled={!canGoBack} >Undo</button>
-                    <button onClick={() => swipe('right')} style={{ backgroundColor: !canSwipe ? '#c3c4d3' : '' }} disabled={!canSwipe} >Like</button>
+                <div className={`card-wrapper__buttons ${chatProfileStore.isItShown ? 'card-wrapper__buttons__hidden' : null}`}>
+                    <button 
+                        onClick={() => swipe('left')} 
+                        style={{ backgroundColor: !canSwipe ? '#c3c4d3' : '' }} 
+                        disabled={!canSwipe}
+                    >X</button>
+                    <button 
+                        onClick={() => goBack()} 
+                        style={{ backgroundColor: !canGoBack ? '#c3c4d3' : '' }} 
+                        disabled={!canGoBack}
+                    >Undo</button>
+                    <button 
+                        onClick={() => swipe('right')} 
+                        style={{ backgroundColor: !canSwipe ? '#c3c4d3' : '' }} 
+                        disabled={!canSwipe}
+                        id={themeStore.isLightTheme ? '' : 'like-btn-dark'}
+                    >Like</button>
                 </div>
             )}
         </div>

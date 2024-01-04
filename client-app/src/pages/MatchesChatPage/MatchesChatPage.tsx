@@ -70,7 +70,7 @@ export const MatchesChatPage: React.FC<MatchesChatPageProps> = observer(() => {
             <div className='matches__page__profile__button'>
                 <CShowHideButton param='Profile' clickHandler={showProfileHandler} state={chatProfileStore.isItShown} />
             </div>
-            <section className={shownMatches ? 'matches__page__matches' : 'matches__page__matches matches__page__matches__hidden'}>
+            <section className={`${shownMatches ? 'matches__page__matches' : 'matches__page__matches matches__page__matches__hidden'} ${themeStore.isLightTheme ? null : 'matches__page__matches__dark'}`}>
                 <CMatchesHeader />
                 <article className={themeStore.isLightTheme ? 'matches__page__matches__links' : 'matches__page__matches__links matches__page__matches__links__dark'}>
                     <h4 className={matchesOrMessages ? 'matches__messages__option' : ''} onClick={matchesOption}>matches <span>{matches.length}</span></h4>

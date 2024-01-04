@@ -8,6 +8,8 @@
         @include gs.display-flex(row, none, none);
         transition: 0.5s;
         overflow: hidden;
+        background: rgb(255,239,236);
+        background: linear-gradient(126deg, rgba(255,239,236,1) 17%, rgba(226,130,164,1) 98%);   
 
         &__dark {
             @include gs.dark-theme(gs.$dark-background-color-second);
@@ -78,6 +80,14 @@
             transition: 0.5s;
             z-index: 2;
             animation: showMatches 0.5s forwards;
+            background: rgb(255,90,57);
+            background: linear-gradient(126deg, rgba(255,90,57,0.783333401720063) 30%, rgba(253,41,115,0.5508404045211834) 100%);
+
+            &__dark {
+                background: gs.$dark-background-color-second;
+                // background: rgb(3,218,198);
+                // background: linear-gradient(127deg, rgba(3,218,198,1) 3%, rgba(187,134,252,1) 94%); 
+            }
 
             @include gs.breakpoint(display-start, display-end) {
                 width: 33%;
@@ -153,9 +163,14 @@
             transition: 0.5s;
             margin: 0 25%;
 
-            @include gs.breakpoint(display-start, display-end) {
+            @media (max-width: 75rem) {
                 width: 33%;
-                margin: 0 33%;
+                margin-left: 33%;
+                margin-right: 0;
+            }
+
+            @media (max-width: 56.25rem) {
+                width: 66%;
             }
 
             @include gs.breakpoint(tablet-start, tablet-end) {
@@ -193,8 +208,12 @@
             transition: 0.5s;
             animation: showProfile 0.5s forwards;
 
-            @include gs.breakpoint(display-start, display-end) {
+            @media (max-width: 75rem) {
                 width: 33%;
+            }
+
+            @media (max-width: 56.25rem) {
+                width: 66%;
             }
 
             @include gs.breakpoint(tablet-start, tablet-end) {
@@ -217,8 +236,12 @@
             @include gs.display-flex(column, center, center);
             border: none !important;
 
-            @include gs.breakpoint(display-start, display-end) {
+            @media (max-width: 75rem) {
                 width: 33%;
+            }
+
+            @media (max-width: 56.25rem) {
+                display: none;
             }
 
             @include gs.breakpoint(tablet-start, tablet-end) {
