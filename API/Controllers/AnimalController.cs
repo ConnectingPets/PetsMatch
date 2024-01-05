@@ -16,7 +16,7 @@
     using static Application.AnimalCategory.AllAnimalCategories;
     using static Common.GeneralApplicationConstants;
 
-    [Authorize(Roles = MatchingRoleName)]
+    //[Authorize(Roles = MatchingRoleName)]
     [ApiController]
     [Route("api/[controller]")]
     public class AnimalController : ControllerBase
