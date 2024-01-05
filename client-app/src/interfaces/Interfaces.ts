@@ -52,6 +52,7 @@ export interface Breeds {
 
 export interface IPossibleSwipes {
     map(arg0: (pet: { name: string; photo: string; }, arg1: number) => import('react/jsx-runtime').JSX.Element): React.ReactNode;
+    animalId: string,
     age: number,
     birthDate?: Date,
     breed: string,

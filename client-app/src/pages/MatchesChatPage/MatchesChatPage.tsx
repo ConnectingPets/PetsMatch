@@ -64,6 +64,12 @@ export const MatchesChatPage: React.FC<MatchesChatPageProps> = observer(() => {
         setShownMatches(!shownMatches);
     };
 
+    const onNewMatch = async () => {
+        const res = await agent.apiMatches.animalMatches(id!);
+
+        setMatches(res.data);
+    };
+
     return (
         <section className={themeStore.isLightTheme ? 'matches__page' : 'matches__page  matches__page__dark'}>
             <div className='matches__page__theme__button'>
@@ -94,7 +100,7 @@ export const MatchesChatPage: React.FC<MatchesChatPageProps> = observer(() => {
 
             <section className={chatProfileStore.isItShown || shownMatches ? ' matches__page__chat' : ' matches__page__chat  matches__page__chat__large'}>
                 {chatStore.isShown && <PetChat />}
-                {!chatStore.isShown && <SwipingCards onPetChange={onPetChange} />}
+                {!chatStore.isShown && <SwipingCards onPetChange={onPetChange} onNewMatch={onNewMatch} />}
             </section>
 
             <section className={chatProfileStore.isItShown ? ' matches__page__profile' : 'matches__page__profile  matches__page__profile__hidden'}>

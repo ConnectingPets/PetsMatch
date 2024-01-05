@@ -1,8 +1,10 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-// import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import TinderCard from 'react-tinder-card';
 import { PiHandHeartDuotone } from 'react-icons/pi';
 import { FaRegPaperPlane } from 'react-icons/fa';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import themeStore from '../../stores/themeStore';
 import chatProfileStore from '../../stores/chatProfileStore';
@@ -13,23 +15,24 @@ import './SwipingCards.scss';
 
 interface SwipingCardsProps {
     onPetChange?: (pet: IPossibleSwipes | undefined) => void;
+    onNewMatch: () => void;
 }
 
-const SwipingCards: React.FC<SwipingCardsProps> = ({ onPetChange }) => {
+const SwipingCards: React.FC<SwipingCardsProps> = ({ onPetChange, onNewMatch }) => {
     const [welcomeMessage, setWelcomeMessage] = useState<boolean>(true);
     const [possibleSwipes, setPossibleSwipes] = useState<IPossibleSwipes[]>([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const currentIndexRef = useRef<number>(currentIndex);
-    const [, setCurrentPet] = useState<IPossibleSwipes | undefined>(possibleSwipes?.[currentIndex]);
-    // const { id: petId } = useParams();
+    const [currentPet, setCurrentPet] = useState<IPossibleSwipes | undefined>(possibleSwipes?.[currentIndex]);
+    const { id: petId } = useParams();
 
     useEffect(() => {
-        agent.apiMatches.getAllPossibleSwipesForAnimal()
+        agent.apiMatches.getAllPossibleSwipesForAnimal(petId!)
             .then(res => {
                 setPossibleSwipes(res.data);
                 setCurrentIndex(res.data.length);
             });
-    }, []);
+    }, [petId]);
 
     const swipesLength = (possibleSwipes && possibleSwipes.length);
 
@@ -45,17 +48,27 @@ const SwipingCards: React.FC<SwipingCardsProps> = ({ onPetChange }) => {
     const canGoBack = currentIndex < swipesLength - 1;
     const canSwipe = currentIndex >= 0;
 
-    const swiped = (index: number, dir: string) => {
+    const swiped = async (index: number, dir: string) => {
         updateCurrentIndex(index - 1);
 
         const newPet = possibleSwipes?.[index - 1];
         setCurrentPet(newPet);
         onPetChange && onPetChange(newPet);
 
-        if (dir == 'right') {
-            // agent.apiMatches.swipe(petId, currentPet.id, true)
-        }
+        if (dir == 'left' && currentPet?.animalId) {
+            await agent.apiMatches.swipe(petId!, currentPet.animalId, false);
+        } else if (dir == 'right' && currentPet?.animalId) {
+            const res = await agent.apiMatches.swipe(petId!, currentPet.animalId, true);
 
+            if (res.data) {
+                const res = await agent.apiMatches.match(petId!, currentPet.animalId);
+                toast.success(res.successMessage);
+
+                if (res.isSuccess) {
+                    onNewMatch();
+                }
+            }
+        }
     };
 
     const outOfFrame = (index: number) => {
