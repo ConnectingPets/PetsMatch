@@ -16,7 +16,7 @@
 
     public class SaveMessage
     {
-        public class SaveMessageCommand : IRequest<Result<Unit>>
+        public class SaveMessageCommand : IRequest<Result<DateTime>>
         {
             public string AnimalId { get; set; } = null!;
 
@@ -27,7 +27,7 @@
             public string UserId { get; set; } = null!;
         }
 
-        public class SaveMessageHandler : IRequestHandler<SaveMessageCommand, Result<Unit>>
+        public class SaveMessageHandler : IRequestHandler<SaveMessageCommand, Result<DateTime>>
         {
             private readonly IRepository repository;
 
@@ -36,27 +36,27 @@
                 this.repository = repository;
             }
 
-            public async Task<Result<Unit>> Handle(SaveMessageCommand request, CancellationToken cancellationToken)
+            public async Task<Result<DateTime>> Handle(SaveMessageCommand request, CancellationToken cancellationToken)
             {
                 Animal? animal = await this.repository.FirstOrDefaultAsync<Animal>(animal => animal.AnimalId.ToString() == request.AnimalId.ToLower());
                 if (animal == null)
                 {
-                    return Result<Unit>.Failure(AnimalNotFound);
+                    return Result<DateTime>.Failure(AnimalNotFound);
                 }
 
                 if (await this.repository.AnyAsync<Match>(animal => animal.MatchId.ToString() == request.MatchId.ToLower()) == false)
                 {
-                    return Result<Unit>.Failure(MatchNotFound);
+                    return Result<DateTime>.Failure(MatchNotFound);
                 }
 
                 if (await this.repository.AnyAsync<User>(u => u.Id.ToString() == request.UserId.ToLower()) == false)
                 {
-                    return Result<Unit>.Failure(UserNotFound);
+                    return Result<DateTime>.Failure(UserNotFound);
                 }
 
                 if (animal.OwnerId.ToString() != request.UserId.ToLower())
                 {
-                    return Result<Unit>.Failure(NotOwner);
+                    return Result<DateTime>.Failure(NotOwner);
                 }
 
                 Message message = new Message
@@ -72,12 +72,11 @@
                 try
                 {
                     await this.repository.SaveChangesAsync();
-                    // What data to return
-                    return Result<Unit>.Success(Unit.Value);
+                    return Result<DateTime>.Success(message.SentOn);
                 }
                 catch (Exception)
                 {
-                    return Result<Unit>.Failure(FailedSendMessage);
+                    return Result<DateTime>.Failure(FailedSendMessage);
                 }
             }
         }

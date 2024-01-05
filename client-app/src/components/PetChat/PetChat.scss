@@ -1,0 +1,46 @@
+@use '../../global-styles/' as gs;
+
+$primary-color: #fd5068;
+$background-color: #fff;
+$shadow-color: rgba(0, 0, 0, 0.1);
+
+.chat-container {
+  width: 100%;
+  background-color: $background-color;
+  box-shadow: 0 0 10px $shadow-color;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+
+  .dark {
+    @include gs.dark-theme(gs.$dark-background-color-second);
+    transition: 0.5s;
+  }
+
+  .message-input {
+    padding: 10px;
+    border-top: 1px solid #ccc;
+    display: flex;
+    margin-top: auto;
+
+    input {
+      flex: 1;
+      padding: 8px;
+      border: none;
+      border-radius: 5px;
+      margin-right: 10px;
+      outline: none;
+      background-color: #efefef;
+    }
+
+    button {
+      background: linear-gradient(220deg, #fd2973 0%, #ff5a39 77%);
+      color: #fff;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  }
+}
+

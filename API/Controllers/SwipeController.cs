@@ -37,9 +37,11 @@
 
         [Route("animals")]
         [HttpGet]
-        public async Task<ActionResult> AnimalsToSwipe()
+        public async Task<ActionResult> AnimalsToSwipe([FromQuery] string animalId)
         {
-            Result<IEnumerable<AnimalToSwipeDto>> result = await this.swipeService.GetAnimalsToSwipe(User.GetById());
+            Result<IEnumerable<AnimalToSwipeDto>> result = await this.swipeService.GetAnimalsToSwipe(
+                animalId,
+                User.GetById());
 
             return Ok(result);
         }

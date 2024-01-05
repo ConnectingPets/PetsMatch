@@ -25,7 +25,7 @@
         [HttpPost]
         public async Task<ActionResult> SendMessage([FromBody] SaveMessageDto saveMessageDto)
         {
-            Result<Unit> result = await this.messageService.SaveMessage(
+            Result<DateTime> result = await this.messageService.SaveMessage(
                 saveMessageDto.MatchId,
                 saveMessageDto.AnimalId,
                 saveMessageDto.Content,

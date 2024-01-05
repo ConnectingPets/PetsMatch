@@ -9,7 +9,7 @@ interface CInputProps extends InputHTMLAttributes<HTMLInputElement> {
     value?:string | number,
     onChange?:ChangeEventHandler<HTMLInputElement>,
     onBlur?:ChangeEventHandler<HTMLInputElement>,
-};
+}
 
 export const CInput: React.FC<CInputProps> = ({
     type,

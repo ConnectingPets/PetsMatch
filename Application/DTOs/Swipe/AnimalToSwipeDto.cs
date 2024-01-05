@@ -2,6 +2,8 @@
 {
     public class AnimalToSwipeDto
     {
+        public string AnimalId { get; set; } = null!;
+
         public string Name { get; set; } = null!;
 
         public string? Description { get; set; }

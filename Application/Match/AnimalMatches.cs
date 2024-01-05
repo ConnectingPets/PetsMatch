@@ -70,7 +70,8 @@
                         {
                             AnimalId = am.AnimalId.ToString(),
                             Name = am.Animal.Name,
-                            Photo = am.Animal.Photos.First(p => p.IsMain).Url
+                            Photo = am.Animal.Photos.First(p => p.IsMain).Url,
+                            MatchId = am.MatchId.ToString()
                         })
                         .ToList();
                 }
