@@ -8,7 +8,6 @@
 
     using Domain;
     using Response;
-    using Persistence;
     using Application.DTOs.Animal;
     using Persistence.Repositories;
 
@@ -25,12 +24,10 @@
             IRequestHandler<AllAnimalQuery, Result<IEnumerable<AllAnimalDto>>>
         {
             private readonly IRepository repository;
-            private readonly DataContext dataContext;
 
-            public AllAnimalQueryHandler(IRepository repository, DataContext dataContext)
+            public AllAnimalQueryHandler(IRepository repository)
             {
                 this.repository = repository;
-                this.dataContext = dataContext;
             }
 
             public async Task<Result<IEnumerable<AllAnimalDto>>> Handle(AllAnimalQuery request, CancellationToken cancellationToken)
@@ -45,14 +42,13 @@
                     return Result<IEnumerable<AllAnimalDto>>.Failure(NoPets);
                 }
 
-                var userAnimals = await repository.
-                    AllReadonly<Animal>(a => a.OwnerId.ToString() == userId).
+                var userAnimals = user.Animals.
                     Select(a => new AllAnimalDto()
                     {
                         Id = a.AnimalId.ToString(),
                         Name = a.Name,
                         MainPhoto = a.Photos.First(p => p.IsMain).Url
-                    }).ToListAsync();
+                    }).ToList();
 
                 return Result<IEnumerable<AllAnimalDto>>.Success(userAnimals);
             }
