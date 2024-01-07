@@ -5,6 +5,7 @@ import { observer } from 'mobx-react';
 import themeStore from '../../../stores/themeStore';
 import './CMatchesHeader.scss';
 import agent from '../../../api/axiosAgent';
+import { MdOutlineDashboardCustomize } from 'react-icons/md';
 
 interface CMatchesHeaderProps { }
 
@@ -15,13 +16,13 @@ interface IMatchesHeaderAnimal {
 
 export const CMatchesHeader: React.FC<CMatchesHeaderProps> = observer(() => {
     const [pet, setPet] = useState<IMatchesHeaderAnimal>();
-    const {id} = useParams();
+    const { id } = useParams();
 
     useEffect(() => {
         if (id) {
             agent.apiAnimal.getAnimalById(id!)
                 .then(res => {
-                    const {name, photos} = res.data;
+                    const { name, photos } = res.data;
 
                     setPet({
                         name,
@@ -41,9 +42,14 @@ export const CMatchesHeader: React.FC<CMatchesHeaderProps> = observer(() => {
                 </div>
                 <h5>{pet?.name}</h5>
             </article>
-            <Link to={'/about-faq'}>
-                <FaShieldDog />
-            </Link>
+            <div>
+                <Link to={'/dashboard'}>
+                    <MdOutlineDashboardCustomize />
+                </Link>
+                <Link to={'/about-faq'}>
+                    <FaShieldDog />
+                </Link>
+            </div>
         </section>
     );
 });
