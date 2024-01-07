@@ -16,8 +16,12 @@
 
         &>p {
             font-size: 2.5rem;
+
+            @media (max-width: 62.5rem) {
+                font-size: 2rem;
+            }
         }
-        
+
         &>.p-dark {
             color: black;
             text-shadow: 0px 0px 4px white;
@@ -70,6 +74,16 @@
                 height: 25rem;
             }
 
+            @media (max-height: 38rem) and (orientation: landscape) {
+                max-width: 14.5rem;
+                height: 16rem;
+            }
+
+            @media (max-height: 25rem) and (orientation: landscape) {
+                max-width: 10rem;
+                height: 13rem;
+            }
+
             &>h3 {
                 background-color: rgba(255, 255, 255, 0.705);
                 display: inline-block;
@@ -94,6 +108,14 @@
     &__buttons {
         position: absolute;
         bottom: 7rem;
+
+        @media (max-height: 46.875rem) and (orientation: landscape) {
+            bottom: 3.5rem;
+        }
+
+        @media (max-height: 37.5rem) and (orientation: landscape) {
+            bottom: 1.5rem;
+        }
 
         &>button {
             font-size: 1.75rem;
