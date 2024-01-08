@@ -20,6 +20,23 @@
 
     .username {
       font-weight: bold;
+      margin-right: 1rem;
+    }
+
+    &>button {
+      padding: 0.35rem;
+      background-color: #FD2973;
+      border: 2px solid gray;
+      border-radius: 0.5rem;
+
+      &:hover {
+        color: white;
+        box-shadow: 0 0 0.75rem black;
+      }
+    }
+
+    &>.btn-dark:hover {
+      box-shadow: 0 0 0.75rem white;
     }
   }
 }

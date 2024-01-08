@@ -1,3 +1,4 @@
+import React from "react";
 import { observer } from "mobx-react";
 import "./PetChat.scss";
 import { ChatMessages } from "../ChatMessages/ChatMessages";
@@ -12,7 +13,9 @@ import { useEffect, useRef, useState } from "react";
 import * as signalR from "@microsoft/signalr";
 import { IMessage } from "../../interfaces/Interfaces";
 
-interface PetChatProps {}
+interface PetChatProps {
+  onUnmatch: () => void
+}
 
 interface ISendMessage {
   Content: string;
@@ -20,7 +23,7 @@ interface ISendMessage {
   MatchId: string;
 }
 
-export const PetChat: React.FC<PetChatProps> = observer(() => {
+export const PetChat: React.FC<PetChatProps> = observer(({ onUnmatch }) => {
   const { id: animalId } = useParams();
   const [messages, setMessages] = useState<IMessage[]>([]);
 
@@ -90,7 +93,7 @@ export const PetChat: React.FC<PetChatProps> = observer(() => {
 
   return (
     <div className="chat-container">
-      <ChatHeader />
+      <ChatHeader onUnmatch={onUnmatch} />
       <ChatMessages messages={messages} />
       <Form
         onSubmit={(values, form) => onSend(values, form)}

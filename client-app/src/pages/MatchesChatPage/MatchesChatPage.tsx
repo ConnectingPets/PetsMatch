@@ -64,7 +64,7 @@ export const MatchesChatPage: React.FC<MatchesChatPageProps> = observer(() => {
         setShownMatches(!shownMatches);
     };
 
-    const onNewMatch = async () => {
+    const onNewMatchOrUnmatch = async () => {
         const res = await agent.apiMatches.animalMatches(id!);
 
         setMatches(res.data);
@@ -99,8 +99,8 @@ export const MatchesChatPage: React.FC<MatchesChatPageProps> = observer(() => {
             </section>
 
             <section className={chatProfileStore.isItShown || shownMatches ? ' matches__page__chat' : ' matches__page__chat  matches__page__chat__large'}>
-                {chatStore.isShown && <PetChat />}
-                {!chatStore.isShown && <SwipingCards onPetChange={onPetChange} onNewMatch={onNewMatch} />}
+                {chatStore.isShown && <PetChat onUnmatch={onNewMatchOrUnmatch} />}
+                {!chatStore.isShown && <SwipingCards onPetChange={onPetChange} onNewMatch={onNewMatchOrUnmatch} />}
             </section>
 
             <section className={chatProfileStore.isItShown ? ' matches__page__profile' : 'matches__page__profile  matches__page__profile__hidden'}>
