@@ -4,7 +4,6 @@
     using System.Threading.Tasks;
 
     using MediatR;
-    using Microsoft.EntityFrameworkCore;
 
     using Domain;
     using Response;
@@ -42,7 +41,7 @@
                 Animal? animal =
                     await repository.FirstOrDefaultAsync<Animal>(a => a.AnimalId.ToString() == animalId);
 
-                Photo[] animalPhotos = await repository.All<Photo>(p => p.AnimalId.ToString() == animalId).ToArrayAsync();
+                Photo[] animalPhotos =  repository.All<Photo>(p => p.AnimalId.ToString() == animalId).ToArray();
 
                 foreach (Photo photo in animalPhotos)
                 {
@@ -67,12 +66,12 @@
                     DeleteRange<Swipe>(s => s.SwiperAnimalId.ToString() == animalId
                     || s.SwipeeAnimalId.ToString() == animalId);
 
-                AnimalMatch[] animalMatch = await repository.
-                    All<AnimalMatch>(am => am.AnimalId.ToString() == animalId).ToArrayAsync();
+                AnimalMatch[] animalMatch =  repository.
+                    All<AnimalMatch>(am => am.AnimalId.ToString() == animalId).ToArray();
 
                 foreach (AnimalMatch match in animalMatch)
                 {
-                    AnimalMatch[] animalMatches = await repository.All<AnimalMatch>(am => am.MatchId == match.MatchId).ToArrayAsync();
+                    AnimalMatch[] animalMatches =  repository.All<AnimalMatch>(am => am.MatchId == match.MatchId).ToArray();
 
                     Guid[] matchesIds = animalMatches.
                         Select(am => am.MatchId)
@@ -86,9 +85,9 @@
                     }
                 }
 
-                Message[] allMessages = await repository.
+                Message[] allMessages =  repository.
                     All<Message>(m => m.AnimalId.ToString() == animalId).
-                    ToArrayAsync();
+                    ToArray();
 
                 repository.DeleteRange(allMessages);
 

@@ -33,9 +33,9 @@
             public async Task<Result<IEnumerable<AllAnimalDto>>> Handle(AllAnimalQuery request, CancellationToken cancellationToken)
             {
                 string userId = request.OwnerId;
-                User? user = await repository.
+                User? user = repository.
                     All<User>(u => u.Id.ToString() == userId).
-                    Include(u => u.Animals).FirstOrDefaultAsync();
+                    Include(u => u.Animals).FirstOrDefault();
 
                 if (!(user!.Animals.Any()))
                 {

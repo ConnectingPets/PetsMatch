@@ -7,24 +7,19 @@
 
     using Domain;
     using Domain.Enum;
-    using Persistence;
     using Persistence.Repositories;
 
     using static Application.Animal.AllAnimal;
-    using System.Xml.Linq;
-    using MockQueryable.Moq;
 
     [TestFixture]
     public class AllAnimalTests
     {
         private Mock<IRepository> repositoryMock;
-        private Mock<DataContext> dataContextMock;
 
         [SetUp]
         public void Setup()
         {
             repositoryMock = new Mock<IRepository>();
-            dataContextMock = new Mock<DataContext>();
 
         }
         [Test]
@@ -121,8 +116,6 @@
                  };
 
             repositoryMock.Setup(r => r.All(It.IsAny<Expression<Func<User, bool>>>())).Returns(MockDbSet(userWithoutPets));
-
-            dataContextMock.Setup(x => x.Users).Returns(MockDbSet(userWithoutPets));
 
             var result = await handler.Handle(query, CancellationToken.None);
 
