@@ -11,7 +11,6 @@
     using Application.Service.Interfaces;
 
     using static Application.Animal.DeleteAnimal;
-    using Application.Animal;
 
     [TestFixture]
     public class DeleteAnimalTests
