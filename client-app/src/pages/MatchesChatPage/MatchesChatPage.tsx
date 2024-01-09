@@ -27,6 +27,7 @@ export const MatchesChatPage: React.FC<MatchesChatPageProps> = observer(() => {
   const [shownMatches, setShownMatches] = useState(true);
   const [matches, setMatches] = useState<IMatch[]>([]);
   const [messagesCards, setMessagesCards] = useState<IMatch[]>([]);
+  const [matchId, setMatchId] = useState<string>();
   const { id } = useParams();
 
   useEffect(() => {
@@ -65,9 +66,7 @@ export const MatchesChatPage: React.FC<MatchesChatPageProps> = observer(() => {
     setMatches((prev) => {
       const updatedMatches = [...prev];
 
-      const matchToUpdate = updatedMatches.find(
-        (m) => m.matchId === chatStore.matchId
-      );
+      const matchToUpdate = updatedMatches.find((m) => m.matchId === matchId);
 
       if (matchToUpdate) {
         matchToUpdate.isChatStarted = true;
@@ -84,12 +83,16 @@ export const MatchesChatPage: React.FC<MatchesChatPageProps> = observer(() => {
           <CMatchCard
             name={match.name}
             photo={match.photo}
-            matchId={match.matchId}
             key={match.animalId}
+            onSetMatchId={() => handleSetMatchId(match.matchId)}
           />
         ))}
       </>
     );
+  };
+
+  const handleSetMatchId = (newMatchId: string) => {
+    setMatchId(newMatchId);
   };
 
   return (
@@ -166,7 +169,9 @@ export const MatchesChatPage: React.FC<MatchesChatPageProps> = observer(() => {
             : " matches__page__chat  matches__page__chat__large"
         }
       >
-        {chatStore.isShown && <PetChat updateMatches={updateMatches} />}
+        {chatStore.isShown && (
+          <PetChat updateMatches={updateMatches} matchId={matchId!} />
+        )}
         {!chatStore.isShown && <p>Swipes</p>}
       </section>
 
