@@ -64,7 +64,8 @@ export interface IPossibleSwipes {
     name: string,
     photo: string,
     socialMedia?: string,
-    weight?: number
+    weight?: number,
+    unmatchId?: string
 }
 
 export interface ITinderCard {

@@ -1,13 +1,13 @@
 .profile-wrapper {
     width: 100%;
     height: 100%;
-    background: rgb(255,90,57);
-    background: linear-gradient(306deg, rgba(255,90,57,0.7777311608237045) 3%, rgba(253,41,115,0.5480392840730042) 94%);
+    background: rgb(255, 90, 57);
+    background: linear-gradient(306deg, rgba(255, 90, 57, 0.7777311608237045) 3%, rgba(253, 41, 115, 0.5480392840730042) 94%);
     overflow: scroll;
-    
+
     &__dark {
-        background: rgb(3,218,198);
-        background: linear-gradient(306deg, rgba(3,218,198,1) 3%, rgba(187,134,252,1) 94%); 
+        background: rgb(3, 218, 198);
+        background: linear-gradient(306deg, rgba(3, 218, 198, 1) 3%, rgba(187, 134, 252, 1) 94%);
     }
 
     &__img {
@@ -34,6 +34,22 @@
         &__name {
             font-size: 1.5rem;
             font-weight: bold;
+        }
+    }
+
+    &>button {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        padding: 0.5rem 0;
+        border: 2px solid black;
+        font-weight: bold;
+        font-size: 1rem;
+        letter-spacing: 0.15rem;
+        cursor: pointer;
+
+        &:hover {
+            color: #FD2973;
         }
     }
 }

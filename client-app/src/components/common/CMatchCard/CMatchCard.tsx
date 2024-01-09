@@ -27,6 +27,7 @@ export const CMatchCard: React.FC<CMatchCardProps> = observer(({
 
         try {
             const res = await agent.apiMatches.getPetProfile(petId);
+            res.data.unmatchId = petId;
 
             onPetChange(res.data);
         } catch (err) {
