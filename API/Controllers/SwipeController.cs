@@ -8,7 +8,9 @@
     using Application.Service.Interfaces;
     using Application.Response;
 
-    [Authorize]
+    using static Common.GeneralApplicationConstants;
+
+    //[Authorize(Roles = MatchingRoleName)]
     [Route("api/[controller]")]
     [ApiController]
     public class SwipeController : ControllerBase

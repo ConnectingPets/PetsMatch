@@ -32,4 +32,6 @@ app.MapControllers();
 
 app.MapHub<ChatHub>("/chat");
 
+app.SeedRoles();
+
 await app.RunAsync();

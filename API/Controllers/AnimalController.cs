@@ -1,20 +1,23 @@
 ﻿namespace API.Controllers
 {
     using MediatR;
-    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Authorization;
 
     using Infrastructure;
     using Application.DTOs.Animal;
+
+    using static Application.Breed.AllBreeds;
     using static Application.Animal.AddAnimal;
     using static Application.Animal.AllAnimal;
-    using static Application.Animal.DeleteAnimal;
     using static Application.Animal.EditAnimal;
+    using static Application.Animal.DeleteAnimal;
     using static Application.Animal.ShowAnimalToEdit;
-    using static Application.Breed.AllBreeds;
     using static Application.AnimalCategory.AllAnimalCategories;
+    using static Common.GeneralApplicationConstants;
+    using static Application.Animal.AnimalProfile;
 
-    [Authorize]
+    //[Authorize(Roles = MatchingRoleName)]
     [ApiController]
     [Route("api/[controller]")]
     public class AnimalController : ControllerBase
@@ -111,6 +114,19 @@
 
             var allCategories = await mediator.Send(query);
             return new JsonResult(allCategories);
+        }
+
+        [HttpGet("profile/{animalId}")]
+        public async Task<IActionResult> AnimalProfile(string animalId)
+        {
+            AnimalProfileQuery animalProfileQuery = new AnimalProfileQuery
+            {
+                AnimalId = animalId
+            };
+
+            var animalProfile = await mediator.Send(animalProfileQuery);
+
+            return new JsonResult(animalProfile);
         }
     }
 }

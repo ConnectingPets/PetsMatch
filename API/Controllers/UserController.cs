@@ -29,7 +29,8 @@
             Result<UserDto> result = await this.userService.RegisterAsync(
                 registerDto.Email,
                 registerDto.Password,
-                registerDto.Name);
+                registerDto.Name,
+                registerDto.Roles);
 
             return Ok(result);
         }

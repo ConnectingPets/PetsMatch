@@ -22,6 +22,8 @@
             public string Password { get; set; } = null!;
 
             public string Name { get; set; } = null!;
+
+            public string[] Roles { get; set; } = null!;
         }
 
         public class RegisterUserHandler : IRequestHandler<RegisterUserCommand, Result<UserDto>>
@@ -42,6 +44,8 @@
 
             public async Task<Result<UserDto>> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
             {
+                string[] roles = request.Roles;
+
                 User user = new User()
                 {
                     Email = request.Email,
@@ -66,6 +70,11 @@
                         Name = user.Name,
                         Token = this.tokenService.CreateToken(user)
                     };
+
+                    foreach (var role in roles)
+                    {
+                        await userManager.AddToRoleAsync(user, role);
+                    }
 
                     return Result<UserDto>.Success(userDto);
                 }

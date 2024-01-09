@@ -3,7 +3,7 @@
     using MediatR;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Authorization;
-    
+
     using API.Infrastructure;
     using Application.DTOs.User;
     using Application.Service.Interfaces;
@@ -46,6 +46,16 @@
         public async Task<ActionResult> Delete()
         {
             Result<Unit> result = await this.profileService.DeleteUser(User.GetById());
+
+            return Ok(result);
+        }
+
+        [Route("deleteRole")]
+        [HttpDelete]
+        public async Task<ActionResult> DeleteRole([FromQuery] string roleName)
+        {
+            Result<Unit> result =
+                await this.profileService.DeleteRole(User.GetById(), roleName);
 
             return Ok(result);
         }

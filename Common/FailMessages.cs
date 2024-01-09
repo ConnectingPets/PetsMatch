@@ -11,6 +11,8 @@
             public const string FailedLogout = "Failed to logout";
             public const string FailedAddUserPhoto = "Failed to add {0}'s photo";
             public const string FailedDeleteUserPhoto = "Failed to delete {0}'s photo";
+            public const string FailedDeleteRole = 
+                "Failed to delete {0} profile";
         }
 
         public static class Match

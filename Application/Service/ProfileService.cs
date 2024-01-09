@@ -1,9 +1,9 @@
 ﻿namespace Application.Service
 {
     using System.Threading.Tasks;
-    
+
     using MediatR;
-    
+
     using Application.DTOs.User;
     using Application.Service.Interfaces;
     using Application.Response;
@@ -11,6 +11,7 @@
     using static Application.User.DeleteUser;
     using static Application.User.EditUser;
     using static Application.User.UserProfile;
+    using static Application.User.DeleteRole;
 
     public class ProfileService : IProfileService
     {
@@ -38,6 +39,13 @@
             => await this.mediator.Send(new UserProfileQuery
             {
                 UserId = userId,
+            });
+
+        public async Task<Result<Unit>> DeleteRole(string userId, string roleName)
+            => await this.mediator.Send(new DeleteRoleCommand
+            {
+                RoleName = roleName,
+                UserId = userId
             });
     }
 }
