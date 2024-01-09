@@ -45,7 +45,7 @@ const SwipingCards: React.FC<SwipingCardsProps> = ({ onPetChange, onNewMatch }) 
         currentIndexRef.current = index;
     };
 
-    const canGoBack = currentIndex < swipesLength - 1;
+    // const canGoBack = currentIndex < swipesLength - 1;
     const canSwipe = currentIndex >= 0;
 
     const swiped = async (index: number, dir: string) => {
@@ -63,7 +63,7 @@ const SwipingCards: React.FC<SwipingCardsProps> = ({ onPetChange, onNewMatch }) 
             if (res.data) {
                 const res = await agent.apiMatches.match(petId!, currentPet.animalId);
                 toast.success(res.successMessage);
-
+                
                 if (res.isSuccess) {
                     onNewMatch();
                 }
@@ -83,18 +83,19 @@ const SwipingCards: React.FC<SwipingCardsProps> = ({ onPetChange, onNewMatch }) 
         }
     };
 
-    const goBack = () => {
-        if (!canGoBack) {
-            return;
-        }
+    // const goBack = () => {
+    //     if (!canGoBack) {
+    //         return;
+    //     }
 
-        const newIndex = currentIndex + 1;
-        updateCurrentIndex(newIndex);
-        childRef[newIndex].current?.restoreCard();
+    //     const newIndex = currentIndex + 1;
+    //     updateCurrentIndex(newIndex);
+    //     childRef[newIndex].current?.restoreCard();
         
-        const newPet = possibleSwipes[currentIndex + 1];
-        onPetChange && onPetChange(newPet);
-    };
+    //     const newPet = possibleSwipes[currentIndex + 1];
+    //     setCurrentPet(newPet);
+    //     onPetChange && onPetChange(newPet);
+    // };
 
     const onWelcomeMessageClick = () => {
         setWelcomeMessage(false);
@@ -132,11 +133,11 @@ const SwipingCards: React.FC<SwipingCardsProps> = ({ onPetChange, onNewMatch }) 
                         style={{ backgroundColor: !canSwipe ? '#c3c4d3' : '' }} 
                         disabled={!canSwipe}
                     >X</button>
-                    <button 
+                    {/* <button 
                         onClick={() => goBack()} 
                         style={{ backgroundColor: !canGoBack ? '#c3c4d3' : '' }} 
                         disabled={!canGoBack}
-                    >Undo</button>
+                    >Undo</button> */}
                     <button 
                         onClick={() => swipe('right')} 
                         style={{ backgroundColor: !canSwipe ? '#c3c4d3' : '' }} 
