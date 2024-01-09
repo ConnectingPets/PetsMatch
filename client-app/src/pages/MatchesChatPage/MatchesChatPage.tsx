@@ -91,7 +91,7 @@ export const MatchesChatPage: React.FC<MatchesChatPageProps> = observer(() => {
                 <article className='matches__page__matches__render' >
                     {
                         matchesOrMessages
-                            ? <>{matches.map(match => <CMatchCard name={match.name} photo={match.photo} matchId={match.matchId}
+                            ? <>{matches.map(match => <CMatchCard name={match.name} photo={match.photo} matchId={match.matchId} petId={match.animalId} onPetChange={onPetChange}
                                 key={match.animalId} />)}</>
                             : null
                     }

@@ -48,6 +48,7 @@ const apiMatches = {
     animalMatches: (animalId: string) => requests.get(`/animal-matches?animalId=${animalId}`),
     swipe: (swiperAnimalId: string, swipeeAnimalId: string, swipedRight: boolean) => requests.post('/swipe', { swiperAnimalId, swipeeAnimalId, swipedRight }, headers.appJSON),
     match: (animalOneId: string, animalTwoId: string) => requests.post('/match', { animalOneId, animalTwoId }, headers.appJSON),
+    getPetProfile: (animalId: string) => requests.get(`api/animal/profile/${animalId}`),
     unmatch: (animalOneId: string, animalTwoId: string) => requests.post('/unmatch', { animalOneId, animalTwoId }, headers.appJSON)
 };
 
