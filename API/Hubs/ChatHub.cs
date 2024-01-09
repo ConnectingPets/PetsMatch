@@ -4,10 +4,10 @@
 
     public class ChatHub : Hub
     {
-        public async Task SendMessage(string matchId, string animalId, string message)
+        public async Task SendMessage(string matchId, string animalId, string message, DateTime date)
         {
             await base.Groups.AddToGroupAsync(Context.ConnectionId, matchId);
-            await base.Clients.Group(matchId).SendAsync(animalId, message);
+            await base.Clients.Group(matchId).SendAsync("ReceiveMessage", animalId, message, date);
         }
     }
 }

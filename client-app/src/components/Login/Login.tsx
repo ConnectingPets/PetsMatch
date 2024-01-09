@@ -24,12 +24,38 @@ export const Login: React.FC<LoginProps> = ({
 
     const onSubmit = async (values: IUser) => {
         try {
-            const { name: Name, token } = await agent.apiUser.login(values);
-            const Email = values.Email;
-            
-            userStore.setUser({ Name, Email }, token);
+            const result = await agent.apiUser.login(values);
 
-            navigate('/dashboard');
+            if (result.isSuccess) {
+                const { 
+                    name: Name,
+                    photoUrl: PhotoUrl, 
+                    age: Age,
+                    jobTitle: JobTitle,
+                    city: City,
+                    address: Address,
+                    education: Education,
+                    gender: Gender,
+                    token
+                } = result.data;
+                const Email = values.Email;
+            
+                userStore.setUser({
+                    Name,
+                    PhotoUrl,
+                    Age,
+                    Email,
+                    JobTitle,
+                    City,
+                    Address,
+                    Education,
+                    Gender
+                }, token);
+
+                navigate('/dashboard'); 
+            } else {
+                toast.error(result.errorMessage);
+            }
         } catch (err) {
             console.log(err);
 

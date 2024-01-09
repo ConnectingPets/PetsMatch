@@ -67,8 +67,14 @@
                     UserDto userDto = new UserDto
                     {
                         Name = user.Name,
-                        Photo = user.Photo?.Url,
-                        Token = this.tokenService.CreateToken(user)
+                        PhotoUrl = user.Photo?.Url,
+                        Token = this.tokenService.CreateToken(user),
+                        City = user.City,
+                        Address = user.Address,
+                        JobTitle = user.JobTitle,
+                        Gender = user.Gender.ToString(),
+                        Education = user.Education,
+                        Age = user.Age
                     };
 
                     return Result<UserDto>.Success(userDto);

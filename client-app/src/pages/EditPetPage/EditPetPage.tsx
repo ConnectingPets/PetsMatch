@@ -1,55 +1,123 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import { IAnimal } from '../../interfaces/Interfaces';
-import { addOrEditPetFormValidator } from '../../validators/addOrEditPetFormValidator';
+import { returnCorrectTypesForAddOrEditPetForm } from '../../utils/convertTypes';
+import { GenderEnum, HealthStatusEnum, genderEnum, healthStatusEnum } from '../../utils/constants';
+import { isMoreThan30DaysAgo } from '../../utils/utils';
+import agent from '../../api/axiosAgent';
 
 import AddOrEditPet from '../../components/AddOrEditPet/AddOrEditPet';
 
 interface EditPetPageProps { }
 
-const EditPetPage: React.FC<EditPetPageProps> = () => {
-    const [errors, setErrors] = useState<IAnimal | null>(null);
+interface PetValues {
+    age: number,
+    birthDate: string,
+    breedId: number,
+    categoryId: number,
+    description: string,
+    gender: number,
+    healthStatus: number,
+    isEducated: boolean,
+    isHavingValidDocuments: boolean,
+    lastModifiedBreed: string,
+    lastModifiedGender: string,
+    lastModifiedName: string,
+    name: string,
+    photos: object[],
+    socialMedia: string,
+    weight: number
+}
 
+const returnCorrectTypes = (data: PetValues) => {
+    const genderValue = Object.keys(genderEnum).filter(x => genderEnum[x as keyof GenderEnum] == data.gender)[0];
+    const healthStatusValue = Object.keys(healthStatusEnum).filter(x => healthStatusEnum[x as keyof HealthStatusEnum] == data.healthStatus)[0];
+
+    const isEducatedValue = data.isEducated == true ? 'Yes' : 'No';
+    const isHavingValidDocumentsValue = data.isHavingValidDocuments == true ? 'Yes' : 'No';
+
+    const isModifiedBreed = isMoreThan30DaysAgo(data.lastModifiedBreed);
+    const isModifiedGender = isMoreThan30DaysAgo(data.lastModifiedGender);
+    const isModifiedName = isMoreThan30DaysAgo(data.lastModifiedName);
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const petData: any = {
+        Age: data.age,
+        BreedId: data.breedId,
+        AnimalCategory: String(data.categoryId),
+        Description: data.description ? data.description : '',
+        Gender: genderValue,
+        HealthStatus: healthStatusValue,
+        IsEducated: isEducatedValue,
+        IsHavingValidDocuments: isHavingValidDocumentsValue,
+        isModifiedBreed,
+        isModifiedGender,
+        isModifiedName,
+        Name: data.name,
+        Photos: data.photos,
+        SocialMedia: data.socialMedia,
+    };
+
+    if (data.birthDate) {
+        const inputDate = new Date(data.birthDate);
+        const year = inputDate.getFullYear();
+        const month = String(inputDate.getMonth() + 1).padStart(2, '0');
+        const day = String(inputDate.getDate()).padStart(2, '0');
+        const birthDateValue = `${year}-${month}-${day}`;
+
+        petData['BirthDate'] = birthDateValue;
+    }
+
+    if (data.weight) {
+        petData['Weight'] = data.weight;
+    }
+
+    return petData;
+};
+
+const EditPetPage: React.FC<EditPetPageProps> = () => {
+    const { petId } = useParams();
+    const navigate = useNavigate();
+    const [petData, setPetData] = useState<IAnimal | null>(null);
     const addOrEditPet = 'edit';
 
-    const data = {
-        AnimalId: '123',
-        Name: 'Rumen',
-        AnimalCategory: 'dog',
-        Breed: 'setter',
-        Description: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sit, quis culpa molestiae modi et repellendus eum facere dolorem soluta quibusdam temporibus, vitae totam eligendi nesciunt atque! Ea commodi quae expedita!',
-        Age: '2',
-        BirthDate: '2023-11-16',
-        IsEducated: 'Yes',
-        Photo: '???',
-        // Photo: {
-        //     lastModified: 1699371298685,
-        //     name: 'dog-404.png',
-        //     size: 77796,
-        //     type: 'image/png',
-        //     webkitRelativePath: ''
-        // },
-        HealthStatus: 'Vaccinated',
-        Gender: 'Male',
-        SocialMedia: 'http://localhost:3000/add-pet',
-        Weight: '20',
-        IsHavingValidDocuments: 'Yes'
-};
+    useEffect(() => {
+        if (petId) {
+            agent.apiAnimal.getAnimalById(petId)
+                .then(res => {
+                    const petValues = returnCorrectTypes(res.data);
 
-const onEditPetSubmit = (values: IAnimal) => {
-    setErrors(null);
-    const err = addOrEditPetFormValidator(values);
+                    setPetData(petValues);
+                });
+        }
+    }, [petId]);
 
-    if (Object.keys(err).length !== 0) {
-        setErrors(err);
-    } else {
-        console.log(values);
-    }
-};
+    const onEditPetSubmit = async (values: IAnimal) => {
+        const newValues = returnCorrectTypesForAddOrEditPetForm(values);
 
-return (
-    <AddOrEditPet addOrEditPet={addOrEditPet} data={data} onEditPetSubmit={onEditPetSubmit} errors={errors} />
-);
+        try {
+            if (petId) {
+                const res = await agent.apiAnimal.editAnimalById(petId, newValues);
+
+                navigate('/dashboard');
+
+                if (res.isSuccess) {
+                    toast.success(res.successMessage);
+                } else {
+                    toast.error(res.errorMessage);
+                }
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    return (
+        <AddOrEditPet addOrEditPet={addOrEditPet} petData={petData} onEditPetSubmit={onEditPetSubmit} petId={petId} />
+    );
 };
 
 export default EditPetPage;

@@ -7,9 +7,10 @@
     using Microsoft.EntityFrameworkCore;
 
     using Domain;
-    using Persistence.Repositories;
-    using Application.DTOs.Breed;
     using Response;
+    using Application.DTOs.Breed;
+    using Persistence.Repositories;
+    using static Common.ExceptionMessages.AnimalCategory;
 
     public class AllBreeds
     {
@@ -36,7 +37,7 @@
 
                 if (category == null)
                 {
-                    return Result<IEnumerable<BreedDto>>.Failure("This category does not exist. Please select existing one");
+                    return Result<IEnumerable<BreedDto>>.Failure(CategoryNotExist);
                 }
 
                 BreedDto[] breeds = await repository.

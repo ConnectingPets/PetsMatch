@@ -11,5 +11,7 @@
         Task<Result<Unit>> EditUser(string userId, EditUserDto editUserDto);
 
         Task<Result<Unit>> DeleteUser(string userId);
+
+        Task<Result<Unit>> DeleteRole(string userId, string roleName);
     }
 }

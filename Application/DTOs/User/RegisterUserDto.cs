@@ -21,5 +21,8 @@
         [Required]
         [EmailAddress(ErrorMessage = InvalidEmail)]
         public string Email { get; set; } = null!;
+
+        [Required]
+        public string[] Roles { get; set; } = null!;
     }
 }

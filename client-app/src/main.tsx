@@ -1,4 +1,4 @@
-import React from 'react';
+// import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'mobx-react';
 import { ToastContainer } from 'react-toastify';
@@ -13,10 +13,10 @@ const stores = {
 };
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <Provider {...stores}>
       <App />
       <ToastContainer />
     </Provider>
-  </React.StrictMode>,
+  // </React.StrictMode>,
 );

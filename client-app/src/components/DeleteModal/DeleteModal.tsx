@@ -5,7 +5,7 @@ import themeStore from '../../stores/themeStore';
 import './DeleteModal.scss';
 
 interface DeleteModalProps {
-    subjectForDelete: string,
+    subjectForDelete?: string,
     onDeleteOrCancelClick: () => void,
     onConfirmDelete: () => void
 }

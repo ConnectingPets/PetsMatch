@@ -129,6 +129,19 @@
                             border: 1px solid lightgrey;
                             cursor: pointer;
                         }
+
+                        &>button {
+                            margin-left: 1rem;
+                            border-radius: 1rem;
+                            border: 1px solid #808080;
+                            padding: 0.1rem 0.4rem;
+                            cursor: pointer;
+                            margin-top: 0.5rem;
+                            
+                            &:hover {
+                                color: gs.$light-blue;
+                            }
+                        }
                     }
 
                     &>.required>label {
@@ -165,6 +178,10 @@
                         display: inline-block;
                         width: 100%;
                         margin-top: 0.2rem;
+                    }
+
+                    &>p {
+                        margin-bottom: unset;
                     }
                 }
 
@@ -229,4 +246,13 @@
 
 .asterisk {
     color: red;
+}
+
+.disabled {
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+.days-message {
+    font-size: 0.8rem;
 }

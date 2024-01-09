@@ -5,6 +5,7 @@ import themeStore from '../../../stores/themeStore';
 import './CPetCard.scss';
 
 interface CPetCardProps {
+    id: string,
     name: string,
     photo: string
 }
@@ -16,10 +17,10 @@ export const CPetCard: React.FC<CPetCardProps> = (pet) => {
             <div className='pet__card__content'>
                 <h3>{pet.name}</h3>
                 <div className='pet__card__buttons__wrapper'>
-                    <CCardEditButton/>
-                    <CCardMatchesButton/>
+                    <CCardEditButton id={pet.id} />
+                    <CCardMatchesButton id={pet.id}/>
                 </div>
             </div>
         </article>
-    )
-}
+    );
+};

@@ -4,15 +4,19 @@ import { FieldInputProps } from 'react-final-form';
 import { CLabel } from '../common/CLabel/CLabel';
 
 import '../../global-styles/forms-images.scss';
+import agent from '../../api/axiosAgent';
+import userStore from '../../stores/userStore';
+import { toast } from 'react-toastify';
 
 interface UserPhotoProps {
     input: FieldInputProps<File, HTMLElement>
+    initialValue: string | undefined
 }
 
-const UserPhoto: React.FC<UserPhotoProps> = ({ input }) => {
-    const [photo, setPhoto] = useState<string | null>(null);
+const UserPhoto: React.FC<UserPhotoProps> = ({ input, initialValue }) => {
+    const [photo, setPhoto] = useState<string | null>(initialValue || null);
 
-    const handleFile = (
+    const handleFile = async (
         e: React.ChangeEvent<HTMLInputElement>,
         input: FieldInputProps<File, HTMLElement>
     ) => {
@@ -23,12 +27,44 @@ const UserPhoto: React.FC<UserPhotoProps> = ({ input }) => {
 
             setPhoto(imageUrl);
             input.onChange(file);
+
+            const formData = new FormData();
+
+            formData.append('file', file);
+
+            try {
+                const result = await agent.apiPhotos.addUserPhoto(formData);
+
+                if (result.isSuccess) {
+                    userStore.setUser({...userStore.user!, PhotoUrl: URL.createObjectURL(file)}, userStore.authToken!);
+
+                    toast.success(result.successMessage);
+                } else {
+                    toast.error(result.errorMessage);
+                }
+            } catch(err) {
+                console.error(err);
+            }
         }
     };
 
-    const handleRemovePhoto = (input: FieldInputProps<File, HTMLElement>) => {
+    const handleRemovePhoto = async (input: FieldInputProps<File, HTMLElement>) => {
         setPhoto(null);
         input.onChange(null);
+
+        try {
+            const result = await agent.apiPhotos.deleteUserPhoto();
+
+            if (result.isSuccess) {
+                userStore.setUser({...userStore.user!, PhotoUrl: undefined}, userStore.authToken!);
+
+                toast.success(result.successMessage);
+            } else {
+                toast.error(result.errorMessage);
+            }
+        } catch(err) {
+            console.error(err);
+        }
     };
 
     return (

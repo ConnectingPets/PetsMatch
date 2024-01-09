@@ -9,7 +9,7 @@
     {
         Task<Result<UserDto>> LoginAsync(string email, string password, bool rememberMe);
 
-        Task<Result<UserDto>> RegisterAsync(string email, string password, string name);
+        Task<Result<UserDto>> RegisterAsync(string email, string password, string name, string[] roles);
 
         Task<Result<Unit>> LogoutAsync(string email);
     }

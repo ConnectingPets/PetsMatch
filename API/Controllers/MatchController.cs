@@ -9,7 +9,9 @@ namespace API.Controllers
     using Application.Service.Interfaces;
     using API.Infrastructure;
 
-    [Authorize]
+    using static Common.GeneralApplicationConstants;
+
+    //[Authorize(Roles = MatchingRoleName)]
     [Route("api/[controller]")]
     [ApiController]
     public class MatchController : ControllerBase 

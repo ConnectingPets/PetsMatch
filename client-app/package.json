@@ -11,11 +11,13 @@
     "start": "npm run dev"
   },
   "dependencies": {
+    "@microsoft/signalr": "^8.0.0",
     "axios": "^1.6.0",
     "final-form": "^4.20.10",
     "mobx": "^6.10.2",
     "mobx-react": "^9.0.1",
     "react": "^18.2.0",
+    "react-beautiful-dnd": "^13.1.1",
     "react-dom": "^18.2.0",
     "react-final-form": "^6.5.9",
     "react-icons": "^4.11.0",
@@ -26,6 +28,8 @@
   },
   "devDependencies": {
     "@types/react": "^18.2.15",
+    "@types/react-beautiful-dnd": "^13.1.7",
+    "@types/react-custom-scrollbars": "^4.0.13",
     "@types/react-dom": "^18.2.7",
     "@types/revalidate": "^1.1.6",
     "@typescript-eslint/eslint-plugin": "^6.0.0",

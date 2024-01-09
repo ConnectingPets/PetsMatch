@@ -1,16 +1,23 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import { Form, Field } from 'react-final-form';
 import { CgAsterisk } from 'react-icons/cg';
+import { TbArrowBack } from 'react-icons/tb';
 import { FaTrashAlt } from 'react-icons/fa';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import themeStore from '../../stores/themeStore';
-import { IAnimal } from '../../interfaces/Interfaces';
+import { Breeds, Categories, IAnimal } from '../../interfaces/Interfaces';
+import { addOrEditPetFormValidator } from '../../validators/addOrEditPetFormValidator';
+import agent from '../../api/axiosAgent';
 
 import FormsHeader from '../FormsHeader/FormsHeader';
 import { CLabel } from '../../components/common/CLabel/CLabel';
 import { CSubmitButton } from '../../components/common/CSubmitButton/CSubmitButton';
-import PetImages from '../PetImages/PetImages';
+import AddPetImages from '../AddPetImages/AddPetImages';
+import EditPetImages from '../EditPetImages/EditPetImages';
 import DeleteModal from '../DeleteModal/DeleteModal';
 import Footer from '../../components/Footer/Footer';
 
@@ -19,25 +26,75 @@ import '../../global-styles/forms.scss';
 interface AddOrEditPetProps {
     addOrEditPet: string,
     onAddPetSubmit?: (values: IAnimal) => void,
-    data?: IAnimal,
+    petData?: IAnimal | null,
     onEditPetSubmit?: (values: IAnimal) => void,
-    errors: IAnimal | null
+    petId?: string
 }
 
-const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAddPetSubmit, data, onEditPetSubmit, errors }) => {
+const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAddPetSubmit, petData, onEditPetSubmit, petId }) => {
+    const navigate = useNavigate();
+    const [categories, setCategories] = useState<Categories[]>([]);
+    const [selectedCategory, setSelectedCategory] = useState<string | null | unknown>(null);
+    const [isCategoryDisabled, setIsCategoryDisabled] = useState<boolean>(false);
+    const [breeds, setBreeds] = useState<Breeds[]>([]);
     const [isDeleteClick, setIsDeleteClick] = useState<boolean>(false);
 
-    // TO DO show images on edit-view
+    useEffect(() => {
+        if (addOrEditPet == 'edit' && petData?.AnimalCategory) {
+            const category: unknown = petData?.AnimalCategory;
+            setSelectedCategory(category);
+            loadBreeds(category);
+        }
+    }, [addOrEditPet, petData?.AnimalCategory]);
 
-    const subjectForDelete = 'Tutsy';
+    useEffect(() => {
+        agent.apiAnimal.getAllCategories()
+            .then(res => {
+                setCategories(res.data);
+            });
+    }, []);
+
+    useEffect(() => {
+        if (selectedCategory) {
+            agent.apiAnimal.getAllBreeds(Number(selectedCategory))
+                .then(res => {
+                    setBreeds(res.data);
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        }
+    }, [selectedCategory]);
+
+    const loadBreeds = (categoryId: string | unknown) => {
+        setSelectedCategory(String(categoryId));
+        setIsCategoryDisabled(true);
+    };
+
+    const onBackToCategory = () => {
+        setIsCategoryDisabled(false);
+    };
 
     const onDeleteOrCancelClick = () => {
         setIsDeleteClick(state => !state);
     };
 
-    const onConfirmDelete = () => {
+    const onConfirmDelete = async () => {
+        try {
+            if (petId) {
+                const res = await agent.apiAnimal.deleteAnimal(petId);
 
-       // TO DO .....
+                navigate('/dashboard');
+
+                if (res.isSuccess) {
+                    toast.success(res.successMessage);
+                } else {
+                    toast.error(res.errorMessage);
+                }
+            }
+        } catch (err) {
+            console.error(err);
+        }
     };
 
     return (
@@ -48,7 +105,8 @@ const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAd
                 <p>Fields with "<CgAsterisk className="asterisk" />" are required!</p>
 
                 <Form
-                    initialValues={data}
+                    initialValues={petData}
+                    validate={addOrEditPetFormValidator}
                     onSubmit={(values: IAnimal) => {
                         if (addOrEditPet === 'add' && onAddPetSubmit) {
                             onAddPetSubmit(values);
@@ -59,81 +117,100 @@ const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAd
                     render={({ handleSubmit }) => (
                         <form className={themeStore.isLightTheme ? '' : 'dark'} onSubmit={handleSubmit}>
                             <Field name='Name'>
-                                {({ input }) => (
+                                {({ input, meta }) => (
                                     <>
                                         <div className="required">
                                             <CLabel inputName='Name' title='Name' />
                                             <CgAsterisk className="asterisk" />
                                         </div>
-                                        <input type="text" {...input} name='Name' id='Name' placeholder='Rico' />
-                                        {errors && <span>{errors.Name}</span>}
+                                        <input type="text" {...input} className={addOrEditPet == 'edit' && !petData?.isModifiedName ? 'disabled' : ''} name='Name' id='Name' placeholder='Rico' />
+                                        {meta.touched && meta.error && <span>{meta.error}</span>}
+                                        {addOrEditPet == 'edit' && !petData?.isModifiedName && (
+                                            <p className="days-message">Name can only be edited once every 30 days.</p>
+                                        )}
                                     </>
                                 )}
                             </Field>
 
-                            <Field name='AnimalCategory'>
-                                {({ input }) => (
-                                    <>
-                                        <div className="required">
-                                            <CLabel inputName='AnimalCategory' title='Category' />
-                                            <CgAsterisk className="asterisk" />
+                            <div className="pairs">
+                                <Field name='AnimalCategory'>
+                                    {({ input, meta }) => (
+                                        <div className={isCategoryDisabled ? 'wrapper disabled' : 'wrapper'}>
+                                            <div className="required">
+                                                <CLabel inputName='AnimalCategory' title='Category' />
+                                                <CgAsterisk className="asterisk" />
+                                                <select {...input} onChange={(e) => loadBreeds(e.target.value)} name="AnimalCategory" id="AnimalCategory">
+                                                    <option>  </option>
+                                                    {categories && categories.map(c => <option value={c.animalCategoryId} key={c.animalCategoryId}>{c.name}</option>)}
+                                                </select>
+                                            </div>
+                                            {meta.touched && meta.error && !isCategoryDisabled && <span>{meta.error}</span>}
                                         </div>
-                                        <input type="text" {...input} name='AnimalCategory' id='AnimalCategory' placeholder='dog' />
-                                        {errors && <span>{errors.AnimalCategory}</span>}
-                                    </>
-                                )}
-                            </Field>
+                                    )}
+                                </Field>
 
-                            <Field name='Breed'>
-                                {({ input }) => (
-                                    <>
-                                        <div className="required">
-                                            <CLabel inputName='Breed' title='Breed' />
-                                            <CgAsterisk className="asterisk" />
+                                <Field name='BreedId'>
+                                    {({ input, meta }) => (
+                                        <div className={!isCategoryDisabled ? 'wrapper disabled' : 'wrapper'}>
+                                            <div className="required">
+                                                <CLabel inputName='BreedId' title='Breed' />
+                                                <CgAsterisk className="asterisk" />
+                                                <select {...input} className={addOrEditPet == 'edit' && !petData?.isModifiedBreed ? 'disabled' : ''} name="BreedId.breedId" id="Breed">
+                                                    <option>  </option>
+                                                    {!isCategoryDisabled && <option>  </option>}
+                                                    {isCategoryDisabled && breeds.map(b => <option value={b.breedId} key={b.breedId}>{b.name}</option>)}
+                                                </select>
+                                                <button type="button" onClick={onBackToCategory}><TbArrowBack /> Reset</button>
+                                            </div>
+                                            {meta.touched && meta.error && <span>{meta.error}</span>}
+                                            {addOrEditPet == 'edit' && !petData?.isModifiedBreed && (
+                                                <p className="days-message">Breed can only be edited once every 30 days.</p>
+                                            )}
                                         </div>
-                                        <input type="text" {...input} name='Breed' id='Breed' placeholder='Golden Retriever' />
-                                        {errors && <span>{errors.Breed}</span>}
-                                    </>
-                                )}
-                            </Field>
+                                    )}
+                                </Field>
+                            </div>
 
                             <Field name='Description'>
-                                {({ input }) => (
+                                {({ input, meta }) => (
                                     <>
                                         <CLabel inputName='Description' title='Description' />
                                         <textarea {...input} name="Description" id="Description" placeholder='  .....' />
-                                        {errors && <span>{errors.Description}</span>}
+                                        {meta.touched && meta.error && <span>{meta.error}</span>}
                                     </>
                                 )}
                             </Field>
 
                             <div className="pairs">
                                 <Field name='Age'>
-                                    {({ input }) => (
+                                    {({ input, meta }) => (
                                         <div className="wrapper">
                                             <div className="required">
                                                 <CLabel inputName='Age' title='Age' />
                                                 <CgAsterisk className="asterisk" />
                                                 <input type="text" {...input} name='Age' id='Age' placeholder='5' />
                                             </div>
-                                            {errors && <span>{errors.Age}</span>}
+                                            {meta.touched && meta.error && <span>{meta.error}</span>}
                                         </div>
                                     )}
                                 </Field>
 
                                 <Field name='Gender'>
-                                    {({ input }) => (
+                                    {({ input, meta }) => (
                                         <div className="wrapper">
                                             <div className="required">
                                                 <CLabel inputName='Gender' title='Gender' />
                                                 <CgAsterisk className="asterisk" />
-                                                <select {...input} name="Gender" id="Gender">
+                                                <select {...input} className={addOrEditPet == 'edit' && !petData?.isModifiedGender ? 'disabled' : ''} name="Gender" id="Gender">
                                                     <option>  </option>
                                                     <option>Male</option>
                                                     <option>Female</option>
                                                 </select>
                                             </div>
-                                            {errors && <span>{errors.Gender}</span>}
+                                            {meta.touched && meta.error && <span>{meta.error}</span>}
+                                            {addOrEditPet == 'edit' && !petData?.isModifiedGender && (
+                                                <p className="days-message">Gender can only be edited once every 30 days.</p>
+                                            )}
                                         </div>
                                     )}
                                 </Field>
@@ -141,7 +218,7 @@ const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAd
 
                             <div className="pairs">
                                 <Field name='IsEducated'>
-                                    {({ input }) => (
+                                    {({ input, meta }) => (
                                         <div className="wrapper">
                                             <div className="required">
                                                 <CLabel inputName='IsEducated' title='Educated' />
@@ -152,19 +229,19 @@ const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAd
                                                     <option>Yes</option>
                                                 </select>
                                             </div>
-                                            {errors && <span>{errors.IsEducated}</span>}
+                                            {meta.touched && meta.error && <span>{meta.error}</span>}
                                         </div>
                                     )}
                                 </Field>
 
                                 <Field name='Weight'>
-                                    {({ input }) => (
+                                    {({ input, meta }) => (
                                         <div className="wrapper">
                                             <div className="content">
                                                 <CLabel inputName='Weight' title='Weight in kg' />
                                                 <input type="text" {...input} name='Weight' id='Weight' placeholder='15' />
                                             </div>
-                                            {errors && <span>{errors.Weight}</span>}
+                                            {meta.touched && meta.error && <span>{meta.error}</span>}
                                         </div>
                                     )}
                                 </Field>
@@ -172,24 +249,24 @@ const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAd
 
                             <div className="pairs">
                                 <Field name='HealthStatus'>
-                                    {({ input }) => (
+                                    {({ input, meta }) => (
                                         <div className="wrapper">
                                             <div className="required">
                                                 <CLabel inputName='HealthStatus' title='Health Status' />
                                                 <CgAsterisk className="asterisk" />
                                                 <select {...input} name="HealthStatus" id="HealthStatus">
                                                     <option>  </option>
-                                                    <option>Not vaccinated</option>
                                                     <option>Vaccinated</option>
+                                                    <option>Dewormed</option>
                                                 </select>
                                             </div>
-                                            {errors && <span>{errors.HealthStatus}</span>}
+                                            {meta.touched && meta.error && <span>{meta.error}</span>}
                                         </div>
                                     )}
                                 </Field>
 
                                 <Field name='IsHavingValidDocuments'>
-                                    {({ input }) => (
+                                    {({ input, meta }) => (
                                         <div className="wrapper last-wrapper">
                                             <div className="required">
                                                 <CLabel inputName='IsHavingValidDocuments' title='Valid Documents' />
@@ -200,7 +277,7 @@ const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAd
                                                     <option>Yes</option>
                                                 </select>
                                             </div>
-                                            {errors && <span>{errors.IsHavingValidDocuments}</span>}
+                                            {meta.touched && meta.error && <span>{meta.error}</span>}
                                         </div>
                                     )}
                                 </Field>
@@ -216,18 +293,22 @@ const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAd
                             </Field>
 
                             <Field name='SocialMedia'>
-                                {({ input }) => (
+                                {({ input, meta }) => (
                                     <>
                                         <CLabel inputName='SocialMedia' title='Social Media' />
                                         <input type="url" {...input} name='SocialMedia' id='SocialMedia' placeholder='https://.......' />
-                                        {errors && <span>{errors.SocialMedia}</span>}
+                                        {meta.touched && meta.error && <span>{meta.error}</span>}
                                     </>
                                 )}
                             </Field>
 
-                            <Field name='Photo'>
-                                {({ input }) => (
-                                    <PetImages errors={errors} input={input} />
+                            <Field name='Photos'>
+                                {({ input, meta }) => (
+                                    <>
+                                        {addOrEditPet == 'add' && <AddPetImages input={input} />}
+                                        {addOrEditPet == 'edit' && <EditPetImages input={input} initialImages={petData?.Photos || []} petId={petId} />}
+                                        {meta.touched && meta.error && <span>{meta.error}</span>}
+                                    </>
                                 )}
                             </Field>
 
@@ -241,7 +322,7 @@ const AddOrEditPet: React.FC<AddOrEditPetProps> = observer(({ addOrEditPet, onAd
             </section>
 
             {isDeleteClick && (
-                <DeleteModal subjectForDelete={subjectForDelete} onDeleteOrCancelClick={onDeleteOrCancelClick} onConfirmDelete={onConfirmDelete} />
+                <DeleteModal subjectForDelete={petData?.Name} onDeleteOrCancelClick={onDeleteOrCancelClick} onConfirmDelete={onConfirmDelete} />
             )}
 
             <Footer />

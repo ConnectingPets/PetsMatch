@@ -7,10 +7,12 @@
     using Microsoft.EntityFrameworkCore;
 
     using Domain;
-    using Persistence;
-    using Persistence.Repositories;
-    using Application.DTOs.Animal;
     using Response;
+    using Persistence;
+    using Application.DTOs.Animal;
+    using Persistence.Repositories;
+
+    using static Common.ExceptionMessages.Animal;
 
     public class AllAnimal
     {
@@ -34,13 +36,13 @@
             public async Task<Result<IEnumerable<AllAnimalDto>>> Handle(AllAnimalQuery request, CancellationToken cancellationToken)
             {
                 string userId = request.OwnerId;
-                User? user = await dataContext.Users.
-                    Include(u => u.Animals).
-                    FirstAsync(u => u.Id.ToString() == userId);
+                User? user = await repository.
+                    All<User>(u => u.Id.ToString() == userId).
+                    Include(u => u.Animals).FirstOrDefaultAsync();
 
                 if (!(user!.Animals.Any()))
                 {
-                    return Result<IEnumerable<AllAnimalDto>>.Failure("You don't have pets yet");
+                    return Result<IEnumerable<AllAnimalDto>>.Failure(NoPets);
                 }
 
                 var userAnimals = await repository.

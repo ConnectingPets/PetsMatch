@@ -1,32 +1,55 @@
 export interface IUser {
     Id?: string,
-    Name?: string,
+    Name: string,
     Email: string,
     Password?: string,
     ConfirmPassword?: string,
     Description?: string,
     Age?: number,
-    Education?: string,
-    Photo?: string,
+    Education?: string
     JobTitle?: string,
-    Gender?: string,
+    Gender?: number,
     Address?: string,
-    City?: string
+    City?: string,
+    PhotoUrl?: string
 }
 
 export interface IAnimal {
-    AnimalId: string | undefined,
-    Name: string | undefined,
-    AnimalCategory: string | undefined,
-    Breed: string | undefined,
-    Description?: string | undefined,
-    Age: string | undefined,
-    BirthDate?: string | undefined,
-    IsEducated: string | undefined,
-    Photo: string | undefined,
-    HealthStatus: string | undefined,
-    Gender: string | undefined,
-    SocialMedia?: string | undefined,
-    Weight?: string | undefined,
-    IsHavingValidDocuments: string | undefined
+    AnimalId?: string,
+    Name: string,
+    AnimalCategory?: Categories,
+    BreedId: Breeds,
+    Description?: string,
+    Age: number,
+    BirthDate?: Date,
+    IsEducated: string | boolean,
+    Photos: Array<{
+        id: string,
+        isMain: boolean,
+        url: string
+    }>,
+    HealthStatus: number,
+    Gender: number,
+    SocialMedia?: string,
+    Weight?: number,
+    IsHavingValidDocuments: string | boolean,
+    isModifiedBreed?: boolean,
+    isModifiedGender?: boolean,
+    isModifiedName?: boolean
+}
+
+export interface Categories {
+    name: string,
+    animalCategoryId: number
+}
+
+export interface Breeds {
+    name: string,
+    breedId: number
+}
+
+export interface IMessage {
+    content: string;
+    animalId: string;
+    sentOn: string;
 }

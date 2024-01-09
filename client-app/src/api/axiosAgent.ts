@@ -5,6 +5,7 @@ import { IAnimal } from '../interfaces/Interfaces';
 
 const axiosInstance = axios.create({
     baseURL: 'http://localhost:5216',
+    withCredentials: true
 });
 
 const headers = {
@@ -25,17 +26,21 @@ const apiUser = {
     register: (userData: IUser) => requests.post('/api/user/register', userData, headers.appJSON),
     login: (userData: IUser) => requests.post('/api/user/login', userData, headers.appJSON),
     logout: (body: object) => requests.post('/api/user/logout', body, headers.appJSON),
-    editUser: (body: IUser) => requests.post('/api/profile/edit', body, headers.appJSON),
-    deleteUser: () => requests.post('/api/profile/delete', {}, headers.appJSON)
+    editUser: (body: IUser) => requests.patch('/api/profile/edit', body, headers.appJSON),
+    deleteUser: () => requests.del('/api/profile/delete')
 };
 
 const apiAnimal = {
     getAllAnimals: () => requests.get('/api/animal/allanimals'),
+    getAllCategories: () => requests.get('/api/animal/GetAllCategories'),
+    getAllBreeds: (categoryId: number) => requests.get(`/api/animal/GetBreeds/${categoryId}`),
     getAnimalById: (animalId: string) => requests.get(`/api/animal/editanimal/${animalId}`),
-    // getAnimalCategoryAndBreed: () => requests.get('/api/animal/addanimal'),
-    addAnimal: (animalData: IAnimal) => requests.post('/api/animal/add', animalData, headers.multipart),
+    addAnimal: (animalData: FormData) => requests.post('/api/animal/add', animalData, headers.multipart),
     editAnimalById: (animalId: string, animalData: IAnimal) => requests.patch(`/api/animal/${animalId}`, animalData, headers.multipart),
-    deleteAnimal: (animalId: string) => requests.del(`/api/animal/${animalId}`)
+    deleteAnimal: (animalId: string) => requests.del(`/api/animal/${animalId}`),
+    uploadAnimalPhoto: (animalId: string, image: FormData) => requests.post(`/api/photo/AddAnimalPhoto/${animalId}`, image, headers.multipart),
+    setAnimalMainPhoto: (photoId: string, data: object) => requests.post(`/api/photo/SetAnimalMain/${photoId}`, data, headers.multipart),
+    deleteAnimalPhoto: (photoId: string) => requests.del(`/api/photo/DeleteAnimalPhoto/${photoId}`)
 };
 
 const apiMatches = {
@@ -45,10 +50,22 @@ const apiMatches = {
     unmatch: (animalOneId: string, animalTwoId: string) => requests.post('/unmatch', { animalOneId, animalTwoId }, headers.appJSON)
 };
 
+const apiPhotos = {
+    addUserPhoto: (body: FormData) => requests.post('/api/photo/addUserPhoto', body, headers.multipart),
+    deleteUserPhoto: () => requests.del('/api/photo/deleteUserPhoto')
+};
+
+const apiMessages = {
+    getChatHistory: (matchId: string) => requests.get(`/chatHistory?matchId=${matchId}`),
+    sendMessage: (body: object) => requests.post('/sendMessage', body, headers.appJSON)
+}
+
 const agent = {
     apiUser,
     apiAnimal,
-    apiMatches
+    apiMatches,
+    apiPhotos,
+    apiMessages
 };
 
 export default agent;

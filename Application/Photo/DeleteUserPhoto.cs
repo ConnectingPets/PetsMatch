@@ -6,9 +6,11 @@
     using MediatR;
 
     using Domain;
-    using Persistence.Repositories;
-    using Service.Interfaces;
     using Response;
+    using Service.Interfaces;
+    using Persistence.Repositories;
+
+    using static Common.ExceptionMessages.Photo;
 
     public class DeleteUserPhoto
     {
@@ -41,12 +43,12 @@
 
                 if (photoId == null)
                 {
-                    return Result<Unit>.Failure("You don't have photo yet!");
+                    return Result<Unit>.Failure(DonNotHavePhoto);
                 }
 
                 if (photo == null)
                 {
-                    return Result<Unit>.Failure("This photo does not exist! Please select existing one");
+                    return Result<Unit>.Failure(PhotoNotExist);
                 }
 
                 return 

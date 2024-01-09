@@ -18,6 +18,8 @@
 
         public string? JobTitle { get; set; } = null!;
 
-        public string? Photo {  get; set; } = null!;
+        public string? Photo { get; set; } = null!;
+
+        public IEnumerable<string> Roles { get; set; } = null!;
     }
 }

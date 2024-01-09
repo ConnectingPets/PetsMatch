@@ -2,10 +2,11 @@
 {
     using System.Threading;
     using System.Threading.Tasks;
-    
+
     using MediatR;
     using Microsoft.EntityFrameworkCore;
-    
+    using Microsoft.AspNetCore.Identity;
+
     using Domain;
     using Persistence.Repositories;
     using Application.DTOs.User;
@@ -23,10 +24,13 @@
         public class UserProfileCommand : IRequestHandler<UserProfileQuery, Result<UserProfileDto>>
         {
             private readonly IRepository repository;
+            private readonly UserManager<User> userManager;
 
-            public UserProfileCommand(IRepository repository)
+            public UserProfileCommand(IRepository repository,
+                                      UserManager<User> userManager)
             {
                 this.repository = repository;
+                this.userManager = userManager;
             }
 
             public async Task<Result<UserProfileDto>> Handle(UserProfileQuery request, CancellationToken cancellationToken)
@@ -55,7 +59,8 @@
                     City = user.City,
                     Education = user.Education,
                     JobTitle = user.JobTitle,
-                    Photo = user.Photo?.Url
+                    Photo = user.Photo?.Url,
+                    Roles = await userManager.GetRolesAsync(user)
                 };
 
                 return Result<UserProfileDto>.Success(userProfileDto);

@@ -33,6 +33,10 @@ namespace Persistence.Migrations
                         .HasColumnType("int")
                         .HasComment("animal age");
 
+                    b.Property<int>("AnimalStatus")
+                        .HasColumnType("int")
+                        .HasComment("animal status");
+
                     b.Property<DateTime?>("BirthDate")
                         .HasColumnType("datetime2")
                         .HasComment("animal birth date");
@@ -90,6 +94,10 @@ namespace Persistence.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasComment("animal owner id");
 
+                    b.Property<decimal?>("Price")
+                        .HasColumnType("decimal(18,2)")
+                        .HasComment("animal price");
+
                     b.Property<string>("SocialMedia")
                         .HasColumnType("nvarchar(max)")
                         .HasComment("animal social media");
@@ -130,6 +138,23 @@ namespace Persistence.Migrations
                     b.ToTable("AnimalCategories", t =>
                         {
                             t.HasComment("animal category table");
+                        });
+
+                    b.HasData(
+                        new
+                        {
+                            AnimalCategoryId = 1,
+                            Name = "Dog"
+                        },
+                        new
+                        {
+                            AnimalCategoryId = 2,
+                            Name = "Cat"
+                        },
+                        new
+                        {
+                            AnimalCategoryId = 3,
+                            Name = "Rabbit"
                         });
                 });
 
@@ -179,6 +204,38 @@ namespace Persistence.Migrations
                     b.ToTable("Breeds", t =>
                         {
                             t.HasComment("breed table");
+                        });
+
+                    b.HasData(
+                        new
+                        {
+                            BreedId = 1,
+                            CategoryId = 2,
+                            Name = "Persian Cat"
+                        },
+                        new
+                        {
+                            BreedId = 2,
+                            CategoryId = 2,
+                            Name = "Bengal Cat"
+                        },
+                        new
+                        {
+                            BreedId = 3,
+                            CategoryId = 3,
+                            Name = "American Rabbit"
+                        },
+                        new
+                        {
+                            BreedId = 4,
+                            CategoryId = 1,
+                            Name = "Pitbull"
+                        },
+                        new
+                        {
+                            BreedId = 5,
+                            CategoryId = 1,
+                            Name = "BullDog"
                         });
                 });
 

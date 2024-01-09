@@ -39,7 +39,9 @@
 
             public async Task<Result<bool>> Handle(SwipeAnimalCommand request, CancellationToken cancellationToken)
             {
-                Animal? swiper = await this.repository.FirstOrDefaultAsync<Animal>(a => a.AnimalId.ToString() == request.SwiperAnimalId.ToLower());
+                Animal? swiper = await this.repository.All<Animal>(a => a.AnimalId.ToString() == request.SwiperAnimalId.ToLower())
+                    .Include(a => a.SwipesFrom)
+                    .FirstOrDefaultAsync();
 
                 if (swiper == null)
                 {
@@ -86,19 +88,13 @@
                     return Result<bool>.Failure(FailedSwipe);
                 }
 
-                bool isMatch = await IsMatch(request.SwiperAnimalId, request.SwipeeAnimalId, request.SwipedRight);
+                bool isMatch = this.IsMatch(swiper, request.SwipeeAnimalId, request.SwipedRight);
 
                 return Result<bool>.Success(isMatch);
             }
 
-            private async Task<bool> IsMatch(string swiperAnimalId, string swipeeAnimalId, bool swipedRight)
-            {
-                Animal? animal = await this.repository.All<Animal>(a => a.AnimalId.ToString() == swiperAnimalId.ToLower())
-                    .Include(a => a.SwipesFrom)
-                    .FirstOrDefaultAsync();
-
-                return animal!.SwipesFrom.Any(s => s.SwiperAnimalId.ToString() == swipeeAnimalId.ToLower() && s.SwipedRight) && swipedRight;
-            }
+            private bool IsMatch(Animal swiper, string swipeeAnimalId, bool swipedRight)
+                => swiper.SwipesFrom.Any(s => s.SwiperAnimalId.ToString() == swipeeAnimalId.ToLower() && s.SwipedRight) && swipedRight;
         }
     }
 }

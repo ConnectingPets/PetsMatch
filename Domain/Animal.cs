@@ -89,6 +89,12 @@ namespace Domain
         [ForeignKey(nameof(OwnerId))]
         public User Owner { get; set; } = null!;
 
+        [Comment("animal status")]
+        public required AnimalStatus AnimalStatus { get; set; }
+
+        [Comment("animal price")]
+        public decimal? Price { get; set; }
+
         public ICollection<Swipe> SwipesTo { get; set; } = null!;
 
         public ICollection<Swipe> SwipesFrom { get; set; } = null!;  

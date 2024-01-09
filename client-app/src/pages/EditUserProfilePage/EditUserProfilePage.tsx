@@ -6,6 +6,7 @@ import { FaTrashAlt } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 
+
 import themeStore from '../../stores/themeStore';
 import { IUser } from '../../interfaces/Interfaces';
 import { editUserProfileFormValidator } from '../../validators/userProfileFormValidators';
@@ -18,6 +19,7 @@ import UserPhoto from '../../components/UserPhoto/UserPhoto';
 import { CSubmitButton } from '../../components/common/CSubmitButton/CSubmitButton';
 import DeleteModal from '../../components/DeleteModal/DeleteModal';
 import Footer from '../../components/Footer/Footer';
+import { returnCorrecTypesForEditUser } from '../../utils/convertTypes';
 
 interface EditUserProfilePageProps { }
 
@@ -30,7 +32,23 @@ const EditUserProfilePage: React.FC<EditUserProfilePageProps> = observer(() => {
     const subjectForDelete = 'this profile';
 
     const onEditUserProfileSubmit = async (values: IUser) => {
+        const userData = returnCorrecTypesForEditUser(values);
 
+        try {
+            const result = await agent.apiUser.editUser(userData);
+
+            if (result.isSuccess) {
+                userStore.setUser({...values, PhotoUrl: userStore.user?.PhotoUrl}, userStore.authToken!);
+
+                navigate('/dashboard');
+
+                toast.success(result.successMessage);
+            } else {
+                toast.error(result.errorMessage);
+            }
+        } catch (err) {
+            console.error(err);
+        }
     }
 
     const onDeleteOrCancelClick = () => {
@@ -38,7 +56,21 @@ const EditUserProfilePage: React.FC<EditUserProfilePageProps> = observer(() => {
     };
 
     const onConfirmDelete = async () => {
-        
+        try {
+            const result = await agent.apiUser.deleteUser();
+
+            if (result.isSuccess) {
+                userStore.clearUser();
+
+                navigate('/');
+
+                toast.success(result.successMessage);
+            } else {
+                toast.error(result.errorMessage);
+            }
+        } catch (err) {
+            console.error(err);
+        }
     };
 
     return (
@@ -161,7 +193,7 @@ const EditUserProfilePage: React.FC<EditUserProfilePageProps> = observer(() => {
                             <Field name='Photo'>
                                 {({ input, meta }) => (
                                     <>
-                                        <UserPhoto input={input} />
+                                        <UserPhoto input={input} initialValue={userStore.user?.PhotoUrl} />
                                         {meta.touched && meta.error && <span>{meta.error}</span>}
                                     </>
                                 )}

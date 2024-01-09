@@ -6,9 +6,13 @@
     using MediatR;
 
     using Domain;
-    using Persistence.Repositories;
-    using Application.DTOs.Animal;
     using Response;
+    using Application.DTOs.Animal;
+    using Persistence.Repositories;
+
+    using static Common.SuccessMessages.Animal;
+    using static Common.ExceptionMessages.Entity;
+    using static Common.ExceptionMessages.Animal;
 
     public class EditAnimal
     {
@@ -33,17 +37,24 @@
 
             public async Task<Result<Unit>> Handle(EditAnimalCommand request, CancellationToken cancellationToken)
             {
+                string animalId = request.AnimalId;
                 EditAnimalDto dto = request.AnimalDto;
+
+                if (!Guid.TryParse(animalId, out Guid result))
+                {
+                    return Result<Unit>.Failure(InvalidGuidFormat);
+                }
+
                 Animal? animal =
-                    await repository.GetById<Animal>(Guid.Parse(request.AnimalId));
+                    await repository.GetById<Animal>(Guid.Parse(animalId));
 
                 if (animal == null)
                 {
-                    return Result<Unit>.Failure("This pet does not exist! Please select existing one");
+                    return Result<Unit>.Failure(AnimalNotFound);
                 }
                 if (animal.OwnerId.ToString() != request.UserId.ToLower())
                 {
-                    return Result<Unit>.Failure("This pet does not belong to you!");
+                    return Result<Unit>.Failure(NotRightUser);
                 }
 
                 int daysDifferenceName = (DateTime.UtcNow - animal.LastModifiedName).Days;
@@ -56,15 +67,15 @@
 
                 if (daysDifferenceName < 30 && isNameEdit)
                 {
-                    return Result<Unit>.Failure($"Can not update pet name {30 - daysDifferenceName} days.");
+                    return Result<Unit>.Failure(string.Format(CannotUpdateName, 30 - daysDifferenceName));
                 }
                 if (daysDifferenceBreed < 30 && isBreedEdit)
                 {
-                    return Result<Unit>.Failure($"Can not update pet breed for another {30 - daysDifferenceBreed} days.");
+                    return Result<Unit>.Failure(string.Format(CannotUpdateBreed, 30 - daysDifferenceBreed));
                 }
                 if (daysDifferenceGender < 30 && isGenderEdit)
                 {
-                    return Result<Unit>.Failure($"Can not update pet gender for another {30 - daysDifferenceName} days.");
+                    return Result<Unit>.Failure(string.Format(CannotUpdateGender, 30 - daysDifferenceGender));
                 }
 
                 if (isNameEdit)
@@ -95,11 +106,11 @@
                 try
                 {
                     await repository.SaveChangesAsync();
-                    return Result<Unit>.Success(Unit.Value, $"Successfully updated {animal.Name}");
+                    return Result<Unit>.Success(Unit.Value, string.Format(SuccessfullyEditAnimal, animal.Name));
                 }
                 catch (Exception)
                 {
-                    return Result<Unit>.Failure($"Failed to update pet - {animal.Name}");
+                    return Result<Unit>.Failure(string.Format(FailedToEdit, animal.Name));
                 }
             }
         }

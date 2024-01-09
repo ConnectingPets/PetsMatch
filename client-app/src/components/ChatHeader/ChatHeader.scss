@@ -1,0 +1,25 @@
+.chat-header {
+  padding: 10px;
+  color: black;
+  text-align: center;
+  font-size: 20px;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 0.5px solid black;
+
+  .user-info {
+    display: flex;
+    align-items: center;
+
+    .user-photo {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+
+    .username {
+      font-weight: bold;
+    }
+  }
+}
