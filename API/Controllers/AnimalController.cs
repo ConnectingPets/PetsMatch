@@ -15,6 +15,7 @@
     using static Application.Animal.ShowAnimalToEdit;
     using static Application.AnimalCategory.AllAnimalCategories;
     using static Common.GeneralApplicationConstants;
+    using static Application.Animal.AnimalProfile;
 
     //[Authorize(Roles = MatchingRoleName)]
     [ApiController]
@@ -113,6 +114,19 @@
 
             var allCategories = await mediator.Send(query);
             return new JsonResult(allCategories);
+        }
+
+        [HttpGet("AnimalProfile/{animalId}")]
+        public async Task<IActionResult> AnimalProfile(string animalId)
+        {
+            AnimalProfileQuery animalProfileQuery = new AnimalProfileQuery
+            {
+                AnimalId = animalId
+            };
+
+            var animalProfile = await mediator.Send(animalProfileQuery);
+
+            return new JsonResult(animalProfile);
         }
     }
 }
