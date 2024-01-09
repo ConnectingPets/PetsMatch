@@ -116,7 +116,7 @@
             return new JsonResult(allCategories);
         }
 
-        [HttpGet("AnimalProfile/{animalId}")]
+        [HttpGet("profile/{animalId}")]
         public async Task<IActionResult> AnimalProfile(string animalId)
         {
             AnimalProfileQuery animalProfileQuery = new AnimalProfileQuery
