@@ -36,12 +36,12 @@
             public async Task<Result<ShowAnimalToEditDto>> Handle(ShowAnimalToEditQuery request, CancellationToken cancellationToken)
             {
                 Animal? animal =
-                     repository.
+                      await repository.
                     All<Animal>(a => a.AnimalId.ToString()
                     == request.AnimalId).
                     Include(a => a.Photos).
                     Include(a => a.Breed).
-                    FirstOrDefault();
+                    FirstOrDefaultAsync();
 
                 if (animal == null)
                 {

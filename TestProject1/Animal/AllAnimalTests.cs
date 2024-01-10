@@ -1,9 +1,10 @@
 ﻿namespace Tests.Animal
 {
+    using System.Linq;
     using System.Linq.Expressions;
 
-    using Microsoft.EntityFrameworkCore;
     using Moq;
+    using MockQueryable.EntityFrameworkCore;
 
     using Domain;
     using Domain.Enum;
@@ -87,8 +88,8 @@
                 }
             };
 
-            repositoryMock.Setup(r => r.All(It.IsAny<Expression<Func<User, bool>>>()))
-                .Returns(MockDbSet(userWithPets));
+            var queryable = new List<User> { userWithPets }.AsQueryable();
+            SetUpAllAnimals(repositoryMock, queryable);
 
             var result = await handler.Handle(query, CancellationToken.None);
 
@@ -112,8 +113,8 @@
                      Name = "Test",
                      Animals = new List<Animal>()
                  };
-
-            repositoryMock.Setup(r => r.All(It.IsAny<Expression<Func<User, bool>>>())).Returns(MockDbSet(userWithoutPets));
+            var queryable = new List<User> { userWithoutPets }.AsQueryable();
+            SetUpAllAnimals(repositoryMock, queryable);
 
             var result = await handler.Handle(query, CancellationToken.None);
 
@@ -121,18 +122,16 @@
             Assert.AreEqual("You don't have pets yet", result.ErrorMessage);
         }
 
-        private static DbSet<T> MockDbSet<T>(T elements) where T : class
+        private static void SetUpAllAnimals(
+            Mock<IRepository> repositoryMock,
+            IQueryable<User> queryable)
         {
-            var queryable = new List<T> { elements }.AsQueryable();
-            var dbSetMock = new Mock<DbSet<T>>();
+            var asyncEnumerable =
+                new TestAsyncEnumerableEfCore<User>(queryable);
 
-            dbSetMock.As<IQueryable<T>>().Setup(m => m.Provider).Returns(queryable.Provider);
-            dbSetMock.As<IQueryable<T>>().Setup(m => m.Expression).Returns(queryable.Expression);
-            dbSetMock.As<IQueryable<T>>().Setup(m => m.ElementType).Returns(queryable.ElementType);
-            dbSetMock.As<IQueryable<T>>().Setup(m => m.GetEnumerator()).Returns(queryable.GetEnumerator());
-
-            return dbSetMock.Object;
+            repositoryMock.
+                Setup(r => r.All(It.IsAny<Expression<Func<User, bool>>>())).
+                Returns(asyncEnumerable);
         }
-
     }
 }

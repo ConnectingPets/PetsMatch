@@ -1,9 +1,10 @@
 ﻿namespace Tests.Animal
 {
+    using System.Linq;
     using System.Linq.Expressions;
 
     using Moq;
-    using Microsoft.EntityFrameworkCore;
+    using MockQueryable.EntityFrameworkCore;
 
     using Domain;
     using Domain.Enum;
@@ -62,9 +63,8 @@
         [Test]
         public async Task Handle_ValidCommand_ReturnsSuccessResult()
         {
-            repositoryMock.
-                Setup(r => r.All(It.IsAny<Expression<Func<Animal, bool>>>()))
-                .Returns(MockDbSet(animal));
+            var queryable = new List<Animal> { animal }.AsQueryable();
+            SetUpShowAnimalToEdit(queryable, repositoryMock);
 
             var result = await handler.Handle(query, CancellationToken.None);
 
@@ -78,6 +78,8 @@
         [Test]
         public async Task Handle_InvalidAnimalId_ReturnsFailureResult()
         {
+            var queryable = new List<Animal>().AsQueryable();
+            SetUpShowAnimalToEdit(queryable, repositoryMock);
             var result = await handler.Handle(query, CancellationToken.None);
 
             Assert.IsFalse(result.IsSuccess);
@@ -88,9 +90,8 @@
         public async Task Handle_NotRightUser_ReturnsFailureResult()
         {
             query.UserId = "a48b6b31-cf50-4676-b244-223a6f691cdc";
-            repositoryMock.
-                Setup(r => r.All(It.IsAny<Expression<Func<Animal, bool>>>()))
-                .Returns(MockDbSet(animal));
+            var queryable = new List<Animal> { animal }.AsQueryable();
+            SetUpShowAnimalToEdit(queryable, repositoryMock);
 
             var result = await handler.Handle(query, CancellationToken.None);
 
@@ -98,16 +99,14 @@
             Assert.AreEqual("This pet does not belong to you!", result.ErrorMessage);
         }
 
-        private static DbSet<T> MockDbSet<T>(T elements) where T : class
+        private static void SetUpShowAnimalToEdit(
+            IQueryable<Animal> queryable, 
+            Mock<IRepository> repositoryMock)
         {
-            var queryable = new List<T> { elements }.AsQueryable();
-            var dbSetMock = new Mock<DbSet<T>>();
-
-            dbSetMock.As<IQueryable<T>>().Setup(m => m.Provider).Returns(queryable.Provider);
-            dbSetMock.As<IQueryable<T>>().Setup(m => m.Expression).Returns(queryable.Expression);
-            dbSetMock.As<IQueryable<T>>().Setup(m => m.ElementType).Returns(queryable.ElementType);
-            dbSetMock.As<IQueryable<T>>().Setup(m => m.GetEnumerator()).Returns(queryable.GetEnumerator());
-            return dbSetMock.Object;
+            var asyncEnumerable = new TestAsyncEnumerableEfCore<Animal>(queryable);
+            repositoryMock.
+                Setup(r => r.All(It.IsAny<Expression<Func<Animal, bool>>>()))
+                .Returns(asyncEnumerable);
         }
     }
 }

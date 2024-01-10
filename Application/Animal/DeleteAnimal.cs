@@ -4,6 +4,7 @@
     using System.Threading.Tasks;
 
     using MediatR;
+    using Microsoft.EntityFrameworkCore;
 
     using Domain;
     using Response;
@@ -41,7 +42,7 @@
                 Animal? animal =
                     await repository.FirstOrDefaultAsync<Animal>(a => a.AnimalId.ToString() == animalId);
 
-                Photo[] animalPhotos =  repository.All<Photo>(p => p.AnimalId.ToString() == animalId).ToArray();
+                Photo[] animalPhotos = await repository.All<Photo>(p => p.AnimalId.ToString() == animalId).ToArrayAsync();
 
                 foreach (Photo photo in animalPhotos)
                 {
@@ -66,12 +67,12 @@
                     DeleteRange<Swipe>(s => s.SwiperAnimalId.ToString() == animalId
                     || s.SwipeeAnimalId.ToString() == animalId);
 
-                AnimalMatch[] animalMatch =  repository.
-                    All<AnimalMatch>(am => am.AnimalId.ToString() == animalId).ToArray();
+                AnimalMatch[] animalMatch = await repository.
+                    All<AnimalMatch>(am => am.AnimalId.ToString() == animalId).ToArrayAsync();
 
                 foreach (AnimalMatch match in animalMatch)
                 {
-                    AnimalMatch[] animalMatches =  repository.All<AnimalMatch>(am => am.MatchId == match.MatchId).ToArray();
+                    AnimalMatch[] animalMatches = repository.All<AnimalMatch>(am => am.MatchId == match.MatchId).ToArray();
 
                     Guid[] matchesIds = animalMatches.
                         Select(am => am.MatchId)
@@ -85,16 +86,16 @@
                     }
                 }
 
-                Message[] allMessages =  repository.
+                Message[] allMessages = await repository.
                     All<Message>(m => m.AnimalId.ToString() == animalId).
-                    ToArray();
+                    ToArrayAsync();
 
                 repository.DeleteRange(allMessages);
 
                 try
                 {
                     await repository.SaveChangesAsync();
-                    return Result<Unit>.Success(Unit.Value,String.Format(SuccessfullyDeleteAnimal,animal.Name));
+                    return Result<Unit>.Success(Unit.Value, String.Format(SuccessfullyDeleteAnimal, animal.Name));
                 }
                 catch (Exception)
                 {

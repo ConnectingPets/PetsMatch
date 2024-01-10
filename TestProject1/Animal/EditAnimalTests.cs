@@ -6,7 +6,7 @@
     using Domain.Enum;
     using Persistence.Repositories;
     using Application.DTOs.Animal;
-
+    
     using static Application.Animal.EditAnimal;
 
     [TestFixture]
