@@ -5,7 +5,8 @@
     height: 100%;
     background: rgb(255, 90, 57);
     background: linear-gradient(306deg, rgba(255, 90, 57, 0.7777311608237045) 3%, rgba(253, 41, 115, 0.5480392840730042) 94%);
-    overflow: scroll;
+    overflow: auto;
+    padding-bottom: 2rem;
 
     &__dark {
         background: rgb(3, 218, 198);
@@ -61,9 +62,11 @@
 
     &__unmatch-btn {
         position: absolute;
-        bottom: 0.5rem;
+        bottom: 0;
         width: 100%;
         @include gs.display-flex(none, center, none);
+        backdrop-filter: blur(0.15rem);
+        padding: 0.25rem 0;
         
         &>button {
             padding: 0.5rem 1rem;
