@@ -13,6 +13,7 @@
 
     using static Common.ExceptionMessages.User;
     using static Common.ExceptionMessages.Animal;
+    using Application.DTOs.Photo;
 
     public class AnimalsToSwipe
     {
@@ -74,7 +75,12 @@
                         Weight = a.Weight,
                         IsHavingValidDocuments = a.IsHavingValidDocuments,
                         Breed = a.Breed.Name,
-                        Photo = a.Photos.First(p => p.IsMain).Url
+                        Photos = a.Photos.Select(p => new PhotoDto
+                        {
+                            Id = p.Id,
+                            IsMain = p.IsMain,
+                            Url = p.Url
+                        }).ToArray()
                     })
                     .ToArray();
 
