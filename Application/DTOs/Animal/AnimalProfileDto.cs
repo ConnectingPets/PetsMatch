@@ -5,11 +5,6 @@
 
     public class AnimalProfileDto
     {
-        public AnimalProfileDto()
-        {
-            Photos = new HashSet<PhotoDto>();
-        }
-
         public string AnimalId { get; set; } = null!;
 
         public string Name { get; set; } = null!;
@@ -34,6 +29,6 @@
 
         public string Breed { get; set; } = null!;
 
-        public ICollection<PhotoDto> Photos { get; set; }
+        public ICollection<PhotoDto> Photos { get; set; } = null!;
     }
 }

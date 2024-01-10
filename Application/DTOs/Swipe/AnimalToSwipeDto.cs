@@ -1,5 +1,7 @@
 ﻿namespace Application.DTOs.Swipe
 {
+    using Application.DTOs.Photo;
+
     public class AnimalToSwipeDto
     {
         public string AnimalId { get; set; } = null!;
@@ -26,6 +28,6 @@
 
         public string Breed { get; set; } = null!;
 
-        public string? Photo { get; set; }
+        public IEnumerable<PhotoDto> Photos { get; set; } = null!;
     }
 }
