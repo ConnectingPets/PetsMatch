@@ -11,6 +11,7 @@ import { useEffect, useRef, useState } from "react";
 import * as signalR from "@microsoft/signalr";
 import { IMessage } from "../../interfaces/Interfaces";
 import themeStore from "../../stores/themeStore";
+import React from "react";
 
 interface PetChatProps {
   updateMatches: () => void;
