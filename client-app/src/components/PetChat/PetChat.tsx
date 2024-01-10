@@ -13,7 +13,9 @@ import { useEffect, useRef, useState } from "react";
 import * as signalR from "@microsoft/signalr";
 import { IMessage } from "../../interfaces/Interfaces";
 
-interface PetChatProps { }
+interface PetChatProps {
+  onCloseChat: () => void
+}
 
 interface ISendMessage {
   Content: string;
@@ -21,7 +23,7 @@ interface ISendMessage {
   MatchId: string;
 }
 
-export const PetChat: React.FC<PetChatProps> = observer(() => {
+export const PetChat: React.FC<PetChatProps> = observer(({ onCloseChat }) => {
   const { id: animalId } = useParams();
   const [messages, setMessages] = useState<IMessage[]>([]);
 
@@ -91,7 +93,7 @@ export const PetChat: React.FC<PetChatProps> = observer(() => {
 
   return (
     <div className="chat-container">
-      <ChatHeader />
+      <ChatHeader onCloseChat={onCloseChat} />
       <ChatMessages messages={messages} />
       <Form
         onSubmit={(values, form) => onSend(values, form)}

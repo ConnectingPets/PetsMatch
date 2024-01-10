@@ -18,10 +18,11 @@ import './PetProfile.scss';
 
 interface PetProfileProps {
     pet: IPossibleSwipes,
-    onUnmatch: () => void
+    onUnmatch: () => void,
+    clearProfileSection: () => void
 }
 
-const PetProfile: React.FC<PetProfileProps> = ({ pet, onUnmatch }) => {
+const PetProfile: React.FC<PetProfileProps> = ({ pet, onUnmatch, clearProfileSection }) => {
     const [currentPhotoIndex, setCurrentPhotoIndex] = useState<number>(0);
     const { id: petId } = useParams();
     let birthDate;
@@ -56,6 +57,7 @@ const PetProfile: React.FC<PetProfileProps> = ({ pet, onUnmatch }) => {
                 toast.success(res.successMessage);
 
                 onUnmatch();
+                clearProfileSection();
                 chatStore.hideChat();
             } else {
                 toast.error(res.errorMessage);
@@ -69,15 +71,17 @@ const PetProfile: React.FC<PetProfileProps> = ({ pet, onUnmatch }) => {
 
     return (
         <div className={themeStore.isLightTheme ? 'profile-wrapper' : 'profile-wrapper profile-wrapper__dark'}>
-            <div className="profile-wrapper__img">
-                <img src={pet.photos[currentPhotoIndex].url} alt={`${pet.name}'s photo`} />
-                {pet.photos && pet.photos.length > 1 && (
-                    <div className="profile-wrapper__img__buttons">
-                        <button onClick={onClickPrevPhoto}>{'<'}</button>
-                        <button onClick={onClickNextPhoto}>{'>'}</button>
-                    </div>
-                )}
-            </div>
+            {pet.photos && pet.photos.length > 0 && (
+                <div className="profile-wrapper__img">
+                    <img src={pet.photos[currentPhotoIndex]?.url} alt={`${pet.name}'s photo`} />
+                    {pet.photos.length > 1 && (
+                        <div className="profile-wrapper__img__buttons">
+                            <button onClick={onClickPrevPhoto}>{'<'}</button>
+                            <button onClick={onClickNextPhoto}>{'>'}</button>
+                        </div>
+                    )}
+                </div>
+            )}
 
             <div className="profile-wrapper__info">
                 <p className="profile-wrapper__info__name">{pet.name}</p>
