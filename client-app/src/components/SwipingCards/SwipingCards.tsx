@@ -8,7 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import themeStore from '../../stores/themeStore';
 import chatProfileStore from '../../stores/chatProfileStore';
-import { IPossibleSwipes, ITinderCard } from '../../interfaces/Interfaces';
+import { IPhoto, IPossibleSwipes, ITinderCard } from '../../interfaces/Interfaces';
 import agent from '../../api/axiosAgent';
 
 import './SwipingCards.scss';
@@ -111,16 +111,16 @@ const SwipingCards: React.FC<SwipingCardsProps> = ({ onPetChange, onNewMatch }) 
                 </div>
             )}
 
-            {possibleSwipes && possibleSwipes.map((pet: { name: string, photo: string }, index) => (
+            {possibleSwipes && possibleSwipes.map((pet: { name: string, animalId: string, photos: IPhoto[] }, index) => (
                 <TinderCard
-                    key={pet.photo}
+                    key={pet.animalId}
                     ref={childRef[index] as never}
                     onSwipe={(dir) => swiped(index, dir)}
                     preventSwipe={['up', 'down']}
                     onCardLeftScreen={() => outOfFrame(index)}
                     className={`card-wrapper__swipe ${chatProfileStore.isItShown ? 'card-wrapper__swipe__hidden' : null}`}
                 >
-                    <div style={{ backgroundImage: `url(${pet.photo})` }} className="card-wrapper__swipe__card">
+                    <div style={{ backgroundImage: `url(${pet.photos[0].url})` }} className="card-wrapper__swipe__card">
                         <h3 className={themeStore.isLightTheme ? '' : 'h3-dark'}>{pet.name}</h3>
                     </div>
                 </TinderCard>

@@ -51,7 +51,7 @@ export interface Breeds {
 }
 
 export interface IPossibleSwipes {
-    map(arg0: (pet: { name: string; photo: string; }, arg1: number) => import('react/jsx-runtime').JSX.Element): React.ReactNode;
+    map(arg0: (pet: { name: string; animalId: string; photos: IPhoto[]; }, arg1: number) => import('react/jsx-runtime').JSX.Element): React.ReactNode;
     animalId: string,
     age: number,
     birthDate?: Date,
@@ -62,10 +62,16 @@ export interface IPossibleSwipes {
     isEducated: false,
     isHavingValidDocuments: true,
     name: string,
-    photo: string,
+    photos: IPhoto[],
     socialMedia?: string,
     weight?: number,
     unmatchId?: string
+}
+
+export interface IPhoto {
+    id: string,
+    isMain: boolean,
+    url: string
 }
 
 export interface ITinderCard {

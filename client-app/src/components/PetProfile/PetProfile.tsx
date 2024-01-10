@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { GiPartyPopper } from 'react-icons/gi';
 import { PiDogThin } from 'react-icons/pi';
@@ -22,8 +22,13 @@ interface PetProfileProps {
 }
 
 const PetProfile: React.FC<PetProfileProps> = ({ pet, onUnmatch }) => {
+    const [currentPhotoIndex, setCurrentPhotoIndex] = useState<number>(0);
     const { id: petId } = useParams();
     let birthDate;
+
+    useEffect(() => {
+        setCurrentPhotoIndex(0);
+    }, [pet]);
 
     if (pet.birthDate) {
         const inputDate = new Date(pet.birthDate);
@@ -32,6 +37,14 @@ const PetProfile: React.FC<PetProfileProps> = ({ pet, onUnmatch }) => {
         const day = String(inputDate.getDate()).padStart(2, '0');
         birthDate = `${day}-${month}-${year}`;
     }
+
+    const onClickNextPhoto = () => {
+        setCurrentPhotoIndex((prevIndex) => (prevIndex + 1) % pet.photos.length);
+    };
+
+    const onClickPrevPhoto = () => {
+        setCurrentPhotoIndex((prevIndex) => prevIndex == 0 ? pet.photos.length - 1 : prevIndex - 1);
+    };
 
     const onUnmatchClick = async () => {
         try {
@@ -57,7 +70,13 @@ const PetProfile: React.FC<PetProfileProps> = ({ pet, onUnmatch }) => {
     return (
         <div className={themeStore.isLightTheme ? 'profile-wrapper' : 'profile-wrapper profile-wrapper__dark'}>
             <div className="profile-wrapper__img">
-                <img src={pet.photo} alt={`${pet.name}'s photo`} />
+                <img src={pet.photos[currentPhotoIndex].url} alt={`${pet.name}'s photo`} />
+                {pet.photos && pet.photos.length > 1 && (
+                    <div className="profile-wrapper__img__buttons">
+                        <button onClick={onClickPrevPhoto}>{'<'}</button>
+                        <button onClick={onClickNextPhoto}>{'>'}</button>
+                    </div>
+                )}
             </div>
 
             <div className="profile-wrapper__info">
@@ -75,7 +94,9 @@ const PetProfile: React.FC<PetProfileProps> = ({ pet, onUnmatch }) => {
             </div>
 
             {pet.unmatchId && (
-                <button onClick={onUnmatchClick}>UNMATCH</button>
+                <div className="profile-wrapper__unmatch-btn">
+                    <button onClick={onUnmatchClick}>UNMATCH</button>
+                </div>
             )}
         </div>
     );
