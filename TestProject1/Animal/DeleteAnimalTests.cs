@@ -11,6 +11,7 @@
     using Application.Service.Interfaces;
 
     using static Application.Animal.DeleteAnimal;
+    using Application.Match;
 
     [TestFixture]
     public class DeleteAnimalTests
@@ -19,6 +20,7 @@
         private Mock<IPhotoService> photoServiceMock;
         private DeleteAnimalCommand command;
         private Animal animal;
+        private DeleteAnimalCommandHandler handler;
 
         [SetUp]
         public void SetUp()
@@ -43,30 +45,24 @@
                 IsHavingValidDocuments = false,
                 HealthStatus = HealthStatus.Vaccinated
             };
+            handler = new DeleteAnimalCommandHandler(repositoryMock.Object, photoServiceMock.Object);
         }
 
         [Test]
         public async Task Handle_ValidCommandAndOwner_ReturnsSuccessResult()
         {
-            var handler = new DeleteAnimalCommandHandler(repositoryMock.Object, photoServiceMock.Object);
+            IEnumerable<AnimalMatch> matches = new List<AnimalMatch>()
+            {
+                new AnimalMatch()
+                {
+                     AnimalId = 
+                     Guid.Parse("1c9cd1de-dba5-46f7-837e-a316447e13c0"),
+                     MatchId = 
+                     Guid.Parse("5efc7539-f654-4425-86b2-2413b7756116")
+                }
+            };
 
-            repositoryMock.Setup(r => r.FirstOrDefaultAsync(It.IsAny<Expression<Func<Animal, bool>>>())).ReturnsAsync(animal);
-            repositoryMock.Setup(r => r.GetById<Animal>(Guid.Parse(command.AnimalId)))
-                .ReturnsAsync(animal);
-            repositoryMock.Setup(r => r.DeleteAsync<Animal>(Guid.Parse(command.AnimalId)))
-                .Returns(Task.CompletedTask);
-            repositoryMock.Setup(r => r.DeleteRange(It.IsAny<Expression<Func<Swipe, bool>>>()));
-            repositoryMock.Setup(r => r.All(It.IsAny<Expression<Func<AnimalMatch, bool>>>()))
-                .Returns(MockDbSet(Array.Empty<AnimalMatch>()));
-            repositoryMock.Setup(r => r.All(It.IsAny<Expression<Func<Message, bool>>>()))
-                .Returns(MockDbSet(Array.Empty<Message>()));
-            repositoryMock.Setup(r => r.DeleteRange(It.IsAny<Message[]>()));
-            repositoryMock.Setup(r => r.DeleteRange(It.IsAny<AnimalMatch[]>()));
-            repositoryMock.Setup(r => r.DeleteAsync<Domain.Match>(It.IsAny<Guid>()))
-                .Returns(Task.CompletedTask);
-            repositoryMock.Setup(r => r.SaveChangesAsync())
-                .ReturnsAsync(1);
-
+            SetUpRepository(repositoryMock,command,animal,matches);
             var result = await handler.Handle(command, CancellationToken.None);
 
             Assert.IsTrue(result.IsSuccess);
@@ -76,8 +72,6 @@
         [Test]
         public async Task Handle_InvalidAnimalId_ReturnsFailureResult()
         {
-            var handler = new DeleteAnimalCommandHandler(repositoryMock.Object, photoServiceMock.Object);
-
             repositoryMock.Setup(r => r.DeleteAsync<Animal>(Guid.Parse(command.AnimalId))).ThrowsAsync(new InvalidOperationException());
 
             var result = await handler.Handle(command, CancellationToken.None);
@@ -95,8 +89,6 @@
                  UserId = "0088f999-acbb-44ad-b99e-0a5f3854dc78"
             };
 
-            var handler = new DeleteAnimalCommandHandler(repositoryMock.Object,photoServiceMock.Object);
-
             repositoryMock.Setup(r => r.FirstOrDefaultAsync(It.IsAny<Expression<Func<Animal, bool>>>()))
                 .ReturnsAsync(animal);
 
@@ -104,6 +96,18 @@
 
             Assert.IsFalse(result.IsSuccess);
             Assert.AreEqual("This pet does not belong to you!", result.ErrorMessage);
+        }
+
+        [Test]
+        public async Task Handle_ShouldReturnsError_WhenSavingChanges()
+        {
+            repositoryMock.Setup(r => r.FirstOrDefaultAsync(It.IsAny<Expression<Func<Animal, bool>>>())).ReturnsAsync(animal);
+            repositoryMock.Setup(r => r.SaveChangesAsync()).ThrowsAsync(new Exception());
+
+            var result = await handler.Handle(command, CancellationToken.None);
+
+            Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual($"Failed to delete pet - {animal.Name}", result.ErrorMessage);
         }
 
         private static DbSet<T> MockDbSet<T>(IEnumerable<T> elements) where T : class
@@ -116,6 +120,32 @@
             dbSetMock.As<IQueryable<T>>().Setup(m => m.ElementType).Returns(queryable.ElementType);
             dbSetMock.As<IQueryable<T>>().Setup(m => m.GetEnumerator()).Returns(queryable.GetEnumerator());
             return dbSetMock.Object;
+        }
+
+        private static void SetUpRepository(Mock<IRepository> repositoryMock,DeleteAnimalCommand command, Animal animal, IEnumerable<AnimalMatch> matches)
+        {
+            repositoryMock.Setup(r => r.FirstOrDefaultAsync(It.IsAny<Expression<Func<Animal, bool>>>())).ReturnsAsync(animal);
+
+            repositoryMock.Setup(r => r.GetById<Animal>(Guid.Parse(command.AnimalId)))
+                .ReturnsAsync(animal);
+
+            repositoryMock.Setup(r => r.DeleteAsync<Animal>(Guid.Parse(command.AnimalId)))
+                .Returns(Task.CompletedTask);
+
+            repositoryMock.Setup(r => r.All(It.IsAny<Expression<Func<AnimalMatch, bool>>>()))
+                .Returns(MockDbSet(matches));
+
+            repositoryMock.Setup(r => r.All(It.IsAny<Expression<Func<AnimalMatch, bool>>>()))
+                .Returns(matches.AsQueryable());
+
+            repositoryMock.Setup(r => r.All(It.IsAny<Expression<Func<Message, bool>>>()))
+                .Returns(MockDbSet(Array.Empty<Message>()));
+
+            repositoryMock.Setup(r => r.DeleteAsync<Domain.Match>(It.IsAny<Guid>()))
+                .Returns(Task.CompletedTask);
+
+            repositoryMock.Setup(r => r.SaveChangesAsync())
+                .ReturnsAsync(1);
         }
     }
 }

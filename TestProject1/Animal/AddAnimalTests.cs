@@ -16,12 +16,14 @@
         private Mock<IRepository> repositoryMock;
         private Mock<IPhotoService> photoService;
         private AddAnimalCommand command;
+        private AddAnimalCommandHandler handler;
 
         [SetUp]
         public void Setup()
         {
             repositoryMock = new Mock<IRepository>();
             photoService = new Mock<IPhotoService>();
+            handler = new AddAnimalCommandHandler(repositoryMock.Object, photoService.Object);
 
             command = new AddAnimalCommand
             {
@@ -43,8 +45,6 @@
         [Test]
         public async Task Handle_ValidCommand_ReturnsSuccessResult()
         {
-            var handler = new AddAnimalCommandHandler(repositoryMock.Object, photoService.Object);
-
             var result = await handler.Handle(command, CancellationToken.None);
 
             Assert.IsTrue(result.IsSuccess);
@@ -58,7 +58,6 @@
         {
             repositoryMock.Setup(r => r.SaveChangesAsync()).Throws(new Exception("Simulating save failure"));
 
-            var handler = new AddAnimalCommandHandler(repositoryMock.Object, photoService.Object);
             var result = await handler.Handle(command, CancellationToken.None);
 
             Assert.IsFalse(result.IsSuccess);

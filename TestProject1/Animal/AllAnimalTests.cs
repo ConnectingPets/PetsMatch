@@ -15,18 +15,18 @@
     public class AllAnimalTests
     {
         private Mock<IRepository> repositoryMock;
+        private AllAnimalQueryHandler handler;
 
         [SetUp]
         public void Setup()
         {
             repositoryMock = new Mock<IRepository>();
+            handler = new AllAnimalQueryHandler(repositoryMock.Object);
 
         }
         [Test]
         public async Task Handle_UserWithPets_ReturnsSuccessResult()
         {
-            var handler = new AllAnimalQueryHandler(repositoryMock.Object);
-
             var query = new AllAnimalQuery
             {
                 OwnerId = "F6E0FC1A-7726-4519-A599-0114A1EB1875"
@@ -101,8 +101,6 @@
         [Test]
         public async Task Handle_UserWithoutPets_ReturnsFailureResult()
         {
-            var handler = new AllAnimalQueryHandler(repositoryMock.Object);
-
             var query = new AllAnimalQuery
             {
                 OwnerId = "F6E0FC1A-7726-4519-A599-0114A1EB1875"
