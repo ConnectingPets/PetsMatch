@@ -61,7 +61,7 @@
         [Test]
         public async Task Handle_ValidCommandAndOwner_ReturnsSuccessResult()
         {
-            SetUpPhotos(repositoryMock);
+            SetUpReturningPhotos(repositoryMock);
             SetUpDeletingAnimal(repositoryMock, command, animal, matches);
 
             var result = await handler.Handle(command, CancellationToken.None);
@@ -76,7 +76,7 @@
             repositoryMock.Setup(r => r.DeleteAsync<Animal>(Guid.Parse(command.AnimalId))).
                 ThrowsAsync(new InvalidOperationException());
 
-            SetUpPhotos(repositoryMock);
+            SetUpReturningPhotos(repositoryMock);
             var result = await handler.Handle(command, CancellationToken.None);
 
             Assert.IsFalse(result.IsSuccess);
@@ -95,7 +95,7 @@
             repositoryMock.Setup(r => r.FirstOrDefaultAsync(It.IsAny<Expression<Func<Animal, bool>>>()))
                 .ReturnsAsync(animal);
 
-            SetUpPhotos(repositoryMock);
+            SetUpReturningPhotos(repositoryMock);
             var result = await handler.Handle(command, CancellationToken.None);
 
             Assert.IsFalse(result.IsSuccess);
@@ -106,7 +106,7 @@
         public async Task Handle_ShouldReturnsError_WhenSavingChanges()
         {
             SetUpDeletingAnimal(repositoryMock, command, animal, matches);
-            SetUpPhotos(repositoryMock);
+            SetUpReturningPhotos(repositoryMock);
 
             repositoryMock.Setup(r => r.FirstOrDefaultAsync(It.IsAny<Expression<Func<Animal, bool>>>()))
                 .ReturnsAsync(animal);
@@ -159,7 +159,8 @@
                 .ReturnsAsync(1);
         }
 
-        private static void SetUpPhotos(Mock<IRepository> repositoryMock)
+        private static void SetUpReturningPhotos(
+            Mock<IRepository> repositoryMock)
         {
             var queryablePhoto = new List<Photo>().AsQueryable();
             var asyncEnumerablePhoto =

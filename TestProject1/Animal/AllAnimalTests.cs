@@ -108,11 +108,12 @@
             };
 
             var userWithoutPets = new User()
-                 {
-                     Id = Guid.Parse("F6E0FC1A-7726-4519-A599-0114A1EB1875"),
-                     Name = "Test",
-                     Animals = new List<Animal>()
-                 };
+            {
+                Id = Guid.Parse("F6E0FC1A-7726-4519-A599-0114A1EB1875"),
+                Name = "Test",
+                Animals = new List<Animal>()
+            };
+
             var queryable = new List<User> { userWithoutPets }.AsQueryable();
             SetUpAllAnimals(repositoryMock, queryable);
 

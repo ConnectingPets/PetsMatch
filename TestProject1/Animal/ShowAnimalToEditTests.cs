@@ -64,7 +64,7 @@
         public async Task Handle_ValidCommand_ReturnsSuccessResult()
         {
             var queryable = new List<Animal> { animal }.AsQueryable();
-            SetUpShowAnimalToEdit(queryable, repositoryMock);
+            SetUpReturningAnimal(queryable, repositoryMock);
 
             var result = await handler.Handle(query, CancellationToken.None);
 
@@ -79,7 +79,7 @@
         public async Task Handle_InvalidAnimalId_ReturnsFailureResult()
         {
             var queryable = new List<Animal>().AsQueryable();
-            SetUpShowAnimalToEdit(queryable, repositoryMock);
+            SetUpReturningAnimal(queryable, repositoryMock);
             var result = await handler.Handle(query, CancellationToken.None);
 
             Assert.IsFalse(result.IsSuccess);
@@ -91,7 +91,7 @@
         {
             query.UserId = "a48b6b31-cf50-4676-b244-223a6f691cdc";
             var queryable = new List<Animal> { animal }.AsQueryable();
-            SetUpShowAnimalToEdit(queryable, repositoryMock);
+            SetUpReturningAnimal(queryable, repositoryMock);
 
             var result = await handler.Handle(query, CancellationToken.None);
 
@@ -99,7 +99,7 @@
             Assert.AreEqual("This pet does not belong to you!", result.ErrorMessage);
         }
 
-        private static void SetUpShowAnimalToEdit(
+        private static void SetUpReturningAnimal(
             IQueryable<Animal> queryable, 
             Mock<IRepository> repositoryMock)
         {
