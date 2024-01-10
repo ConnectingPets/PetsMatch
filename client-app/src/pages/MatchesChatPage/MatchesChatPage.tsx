@@ -19,26 +19,32 @@ interface IMatch {
   name: string;
   photo: string;
   matchId: string;
+  isChatStarted: boolean;
 }
 
 export const MatchesChatPage: React.FC<MatchesChatPageProps> = observer(() => {
   const [matchesOrMessages, setMatchesOrMessages] = useState(true);
   const [shownMatches, setShownMatches] = useState(true);
   const [matches, setMatches] = useState<IMatch[]>([]);
+  const [messagesCards, setMessagesCards] = useState<IMatch[]>([]);
+  const [matchId, setMatchId] = useState<string>();
   const { id } = useParams();
 
   useEffect(() => {
     if (id) {
-      agent.apiMatches.animalMatches(id!)
-        .then((res) => {
-          setMatches(res.data);
-        });
+      agent.apiMatches.animalMatches(id!).then((res) => {
+        setMatches(res.data);
+      });
     }
   }, [id]);
 
   useEffect(() => {
     chatStore.hideChat();
-  }, [id])
+  }, [id]);
+
+  useEffect(() => {
+    setMessagesCards(matches.filter((m) => m.isChatStarted));
+  }, [matches]);
 
   const matchesOption = () => {
     setMatchesOrMessages(true);
@@ -54,6 +60,39 @@ export const MatchesChatPage: React.FC<MatchesChatPageProps> = observer(() => {
 
   const showMatchesHandler = () => {
     setShownMatches(!shownMatches);
+  };
+
+  const updateMatches = () => {
+    setMatches((prev) => {
+      const updatedMatches = [...prev];
+
+      const matchToUpdate = updatedMatches.find((m) => m.matchId === matchId);
+
+      if (matchToUpdate) {
+        matchToUpdate.isChatStarted = true;
+      }
+
+      return updatedMatches;
+    });
+  };
+
+  const renderMatchesOrMessages = (array: IMatch[]) => {
+    return (
+      <>
+        {array.map((match) => (
+          <CMatchCard
+            name={match.name}
+            photo={match.photo}
+            key={match.animalId}
+            onSetMatchId={() => handleSetMatchId(match.matchId)}
+          />
+        ))}
+      </>
+    );
+  };
+
+  const handleSetMatchId = (newMatchId: string) => {
+    setMatchId(newMatchId);
   };
 
   return (
@@ -112,23 +151,14 @@ export const MatchesChatPage: React.FC<MatchesChatPageProps> = observer(() => {
             className={!matchesOrMessages ? "matches__messages__option" : ""}
             onClick={messagesOption}
           >
-            messages<span>{3}</span>
+            messages<span>{messagesCards.length}</span>
           </h4>
         </article>
 
         <article className="matches__page__matches__render">
-          {matchesOrMessages ? (
-            <>
-              {matches.map((match) => (
-                <CMatchCard
-                  name={match.name}
-                  photo={match.photo}
-                  matchId={match.matchId}
-                  key={match.animalId}
-                />
-              ))}
-            </>
-          ) : null}
+          {matchesOrMessages
+            ? renderMatchesOrMessages(matches)
+            : renderMatchesOrMessages(messagesCards)}
         </article>
       </section>
 
@@ -139,7 +169,9 @@ export const MatchesChatPage: React.FC<MatchesChatPageProps> = observer(() => {
             : " matches__page__chat  matches__page__chat__large"
         }
       >
-        {chatStore.isShown && <PetChat />}
+        {chatStore.isShown && (
+          <PetChat updateMatches={updateMatches} matchId={matchId!} />
+        )}
         {!chatStore.isShown && <p>Swipes</p>}
       </section>
 
