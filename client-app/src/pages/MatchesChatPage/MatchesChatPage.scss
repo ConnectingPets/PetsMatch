@@ -20,23 +20,18 @@
             // width: 33%;
             border-right: 1px solid #e3dcdc;
             height: 100vh;
-
-            ::-webkit-scrollbar {
-                display: none;
-            }
-
             -ms-overflow-style: none;
-            scrollbar-width: none;
 
             &:first-of-type,
             &:last-of-type {
                 overflow: auto;
+                scrollbar-width: none;
+
+                ::-webkit-scrollbar {
+                    display: none;
+                }
             }
         }
-
-
-
-
 
         &__theme__button {
             position: absolute;

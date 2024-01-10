@@ -11,19 +11,21 @@ interface CMatchCardProps {
     photo: string,
     matchId: string,
     petId: string,
-    onPetChange: (pet: IPossibleSwipes | undefined) => void;
+    onPetChange: (pet: IPossibleSwipes | undefined) => void,
+    onSetMatchId: () => void
 }
 
 export const CMatchCard: React.FC<CMatchCardProps> = observer(({
     name,
     photo,
-    matchId,
     petId,
-    onPetChange
+    onPetChange,
+    onSetMatchId
 })=>{
 
     const onChatCardClick = async () => {
-        chatStore.showChat(name, photo, matchId);
+        chatStore.showChat(name, photo);
+        onSetMatchId();
 
         try {
             const res = await agent.apiMatches.getPetProfile(petId);
@@ -34,7 +36,7 @@ export const CMatchCard: React.FC<CMatchCardProps> = observer(({
             console.log(err);
         }
     };
- 
+
     return (
         <article onClick={onChatCardClick} className={themeStore.isLightTheme ? 'match__card match__card__light' : 'match__card match__card__dark'}>
             <div className='match__card__image__wrapper'>

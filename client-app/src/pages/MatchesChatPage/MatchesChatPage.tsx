@@ -22,12 +22,15 @@ interface IMatch {
     name: string;
     photo: string;
     matchId: string;
+    isChatStarted: boolean;
 }
 
 export const MatchesChatPage: React.FC<MatchesChatPageProps> = observer(() => {
     const [matchesOrMessages, setMatchesOrMessages] = useState(true);
     const [shownMatches, setShownMatches] = useState(true);
     const [matches, setMatches] = useState<IMatch[]>([]);
+    const [messagesCards, setMessagesCards] = useState<IMatch[]>([]);
+    const [matchId, setMatchId] = useState<string>();
     const { id } = useParams();
     const [currentPet, setCurrentPet] = useState<IPossibleSwipes | undefined>(undefined);
 
@@ -43,6 +46,10 @@ export const MatchesChatPage: React.FC<MatchesChatPageProps> = observer(() => {
     useEffect(() => {
         chatStore.hideChat();
     }, [id]);
+
+    useEffect(() => {
+        setMessagesCards(matches.filter((m) => m.isChatStarted));
+    }, [matches]);
 
     const onPetChange = (pet: IPossibleSwipes | undefined) => {
         setCurrentPet(pet);
@@ -74,8 +81,45 @@ export const MatchesChatPage: React.FC<MatchesChatPageProps> = observer(() => {
         setCurrentPet(undefined);
     };
 
+    const updateMatches = () => {
+        setMatches((prev) => {
+            const updatedMatches = [...prev];
+
+            const matchToUpdate = updatedMatches.find((m) => m.matchId === matchId);
+
+            if (matchToUpdate) {
+                matchToUpdate.isChatStarted = true;
+            }
+
+            return updatedMatches;
+        });
+    };
+
+    const renderMatchesOrMessages = (array: IMatch[]) => {
+        return (
+            <>
+                {array.map((match) => (
+                    <CMatchCard
+                        name={match.name}
+                        photo={match.photo}
+                        matchId={match.matchId}
+                        petId={match.animalId}
+                        onPetChange={onPetChange}
+                        key={match.animalId}
+                        onSetMatchId={() => handleSetMatchId(match.matchId)}
+                    />
+                ))}
+            </>
+        );
+    };
+
+    const handleSetMatchId = (newMatchId: string) => {
+        setMatchId(newMatchId);
+    };
+
     return (
         <section className={themeStore.isLightTheme ? 'matches__page' : 'matches__page  matches__page__dark'}>
+
             <div className='matches__page__theme__button'>
                 <CChangeThemeButton />
             </div>
@@ -85,25 +129,24 @@ export const MatchesChatPage: React.FC<MatchesChatPageProps> = observer(() => {
             <div className='matches__page__profile__button'>
                 <CShowHideButton param='Profile' clickHandler={showProfileHandler} state={chatProfileStore.isItShown} />
             </div>
+
             <section className={`${shownMatches ? 'matches__page__matches' : 'matches__page__matches matches__page__matches__hidden'} ${themeStore.isLightTheme ? null : 'matches__page__matches__dark'}`}>
                 <CMatchesHeader />
+                
                 <article className={themeStore.isLightTheme ? 'matches__page__matches__links' : 'matches__page__matches__links matches__page__matches__links__dark'}>
                     <h4 className={matchesOrMessages ? 'matches__messages__option' : ''} onClick={matchesOption}>matches <span>{matches.length}</span></h4>
-                    <h4 className={!matchesOrMessages ? 'matches__messages__option' : ''} onClick={messagesOption}>messages<span>{3}</span></h4>
+                    <h4 className={!matchesOrMessages ? 'matches__messages__option' : ''} onClick={messagesOption}>messages<span>{messagesCards.length}</span></h4>
                 </article>
 
-                <article className='matches__page__matches__render' >
-                    {
-                        matchesOrMessages
-                            ? <>{matches.map(match => <CMatchCard name={match.name} photo={match.photo} matchId={match.matchId} petId={match.animalId} onPetChange={onPetChange}
-                                key={match.animalId} />)}</>
-                            : null
-                    }
+                <article className="matches__page__matches__render">
+                    {matchesOrMessages
+                        ? renderMatchesOrMessages(matches)
+                        : renderMatchesOrMessages(messagesCards)}
                 </article>
             </section>
 
             <section className={chatProfileStore.isItShown || shownMatches ? ' matches__page__chat' : ' matches__page__chat  matches__page__chat__large'}>
-                {chatStore.isShown && <PetChat onCloseChat={clearProfileSection} />}
+                {chatStore.isShown && <PetChat updateMatches={updateMatches} matchId={matchId!} onCloseChat={clearProfileSection} />}
                 {!chatStore.isShown && <SwipingCards onPetChange={onPetChange} onNewMatch={onNewMatchOrUnmatch} />}
             </section>
 
