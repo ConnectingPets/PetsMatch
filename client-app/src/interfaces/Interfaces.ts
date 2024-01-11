@@ -12,6 +12,7 @@ export interface IUser {
     Address?: string,
     City?: string,
     PhotoUrl?: string
+    Roles: string[]
 }
 
 export interface IAnimal {
