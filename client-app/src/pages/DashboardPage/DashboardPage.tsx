@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { observer } from 'mobx-react';
-import { FcHome, FcShop } from 'react-icons/fc';
+import { FcShop } from 'react-icons/fc';
 import { MdPets } from 'react-icons/md';
 
 import themeStore from '../../stores/themeStore';
@@ -74,11 +74,8 @@ export const DashboardPage: React.FC<DashboardPageProps> = observer(() => {
             </article>
 
             <nav className='dashboard__navbar'>
-                <div className='dashboard__navbar__icons'>
-                    <FcHome onClick={onHomeClick} />
-                    <MdPets onClick={onAdoptionplaceClick} />
-                    <FcShop onClick={onMarketplaceClick} />
-                </div>
+                <MdPets onClick={onHomeClick} />
+                <FcShop onClick={onMarketplaceClick} />
             </nav>
 
             {place == 'home' && (
@@ -91,21 +88,21 @@ export const DashboardPage: React.FC<DashboardPageProps> = observer(() => {
                 </article>
             )}
 
-            {place == 'adoption' && (
+            {place != 'home' && (
                 <article className={themeStore.isLightTheme ? 'dashboard__article ' : 'dashboard__article dashboard__article__dark '}>
-                    <h3>Adoption place</h3>
-                    <section className='dashboard__pets'>
-                        {petsForAdoption && petsForAdoption.map(x => <CPetCard name={x.name} photo={x.mainPhoto} id={x.id} key={x.id} />)}
-                        <CAddPetCard />
+                    <section className='dashboard__article__options'>
+                        <div>
+                            <h3 className={place == 'market' ? 'dashboard__article__option' : ''} onClick={onMarketplaceClick}>Marketplace</h3>
+                        </div>
+                        <div>
+                            <h3 className={place == 'adoption' ? 'dashboard__article__option' : ''} onClick={onAdoptionplaceClick}>For Adoption</h3>
+                        </div>
                     </section>
-                </article>
-            )}
 
-            {place == 'market' && (
-                <article className={themeStore.isLightTheme ? 'dashboard__article ' : 'dashboard__article dashboard__article__dark '}>
-                    <h3>Marketplace</h3>
                     <section className='dashboard__pets'>
-                        {petsInMarket && petsInMarket.map(x => <CPetCard name={x.name} photo={x.mainPhoto} id={x.id} key={x.id} />)}
+                        {place == 'adoption' && petsForAdoption && petsForAdoption.map(x => <CPetCard name={x.name} photo={x.mainPhoto} id={x.id} key={x.id} />)}
+
+                        {place == 'market' && petsInMarket && petsInMarket.map(x => <CPetCard name={x.name} photo={x.mainPhoto} id={x.id} key={x.id} />)}
                         <CAddPetCard />
                     </section>
                 </article>
