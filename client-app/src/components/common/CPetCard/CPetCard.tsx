@@ -3,11 +3,13 @@ import { CCardMatchesButton } from '../CCardMatchesButton/CCardMatchesButton';
 import { CCardEditButton } from '../CCardEditButton/CCardEditButton';
 import themeStore from '../../../stores/themeStore';
 import './CPetCard.scss';
+import { CMarketCardButton } from '../CMarketCardButton/CMarketCardButton';
 
 interface CPetCardProps {
     id: string,
     name: string,
-    photo: string
+    photo: string,
+    buttons: string
 }
 
 export const CPetCard: React.FC<CPetCardProps> = (pet) => {
@@ -17,8 +19,18 @@ export const CPetCard: React.FC<CPetCardProps> = (pet) => {
             <div className='pet__card__content'>
                 <h3>{pet.name}</h3>
                 <div className='pet__card__buttons__wrapper'>
-                    <CCardEditButton id={pet.id} />
-                    <CCardMatchesButton id={pet.id}/>
+                    {pet.buttons == 'edit' && (
+                        <>
+                            <CCardEditButton id={pet.id} />
+                            <CCardMatchesButton id={pet.id} />
+                        </>
+                    )}
+                    {pet.buttons == 'market' && (
+                        <>
+                            <CMarketCardButton id={pet.id} button='view' />
+                            <CMarketCardButton id={pet.id} button='edit' />
+                        </>
+                    )}
                 </div>
             </div>
         </article>
