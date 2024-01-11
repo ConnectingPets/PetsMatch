@@ -92,6 +92,43 @@
         }
     }
 
+    &__navbar {
+        width: 100%;
+        max-width: 93rem;
+        padding: 0 1rem;
+        position: fixed;
+        top: 8rem;
+        z-index: 3;
+
+        &__icons {
+            backdrop-filter: blur(0.25rem);
+            display: inline-block;
+            border: 2px solid grey;
+            border-radius: 1.5rem;
+            padding: 0.5rem;
+
+            &>svg {
+                font-size: 3rem;
+                display: flex;
+                flex-direction: column;
+                margin-bottom: 1rem;
+                cursor: pointer;
+
+                @include gs.breakpoint(mobile-start, mobile-end) {
+                    font-size: 2.5rem;
+                }
+
+                &:nth-child(2) {
+                    color: lightgreen;
+                }
+    
+                &:last-of-type {
+                    margin-bottom: unset;
+                }
+            }
+        }
+    }
+
     &__pets {
         @include gs.display-grid(3, 2.2rem, center);
         margin: 2rem 0;

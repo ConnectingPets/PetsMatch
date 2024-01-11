@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { observer } from 'mobx-react';
+import { FcHome, FcShop } from 'react-icons/fc';
+import { MdPets } from 'react-icons/md';
 
 import themeStore from '../../stores/themeStore';
 import './DashboardPage.scss';
@@ -22,6 +24,7 @@ interface UserAnimals {
 
 export const DashboardPage: React.FC<DashboardPageProps> = observer(() => {
     const [pets, setPets] = useState<UserAnimals[]>([]);
+    const [place, setPlace] = useState<string>('home');
 
     useEffect(() => {
         agent.apiAnimal.getAllAnimals()
@@ -30,24 +33,66 @@ export const DashboardPage: React.FC<DashboardPageProps> = observer(() => {
             });
     }, []);
 
+    const onHomeClick = () => {
+        setPlace('home');
+    };
+
+    const onAdoptionplaceClick = () => {
+        setPlace('adoption');
+    };
+
+    const onMarketplaceClick = () => {
+        setPlace('market');
+    };
+
     return (
         <section className={themeStore.isLightTheme ? 'dashboard__wrapper' : 'dashboard__wrapper dashboard__wrapper__dark'}>
 
             <article className='dashboard__greet'>
-                <CLogo/>
-                <h1 className={themeStore.isLightTheme ? 'greet__title' :'greet__title dashboard__greet__dark'}>welcome, {userStore.user?.Name} !</h1>
+                <CLogo />
+                <h1 className={themeStore.isLightTheme ? 'greet__title' : 'greet__title dashboard__greet__dark'}>welcome, {userStore.user?.Name} !</h1>
                 <CChangeThemeButton />
             </article>
 
-            <article className={themeStore.isLightTheme ?'dashboard__article ' : 'dashboard__article dashboard__article__dark '}>
-                <h3>my pets</h3>
-                <section className='dashboard__pets'>
-                    {pets && pets.map(x => <CPetCard name={x.name} photo={x.mainPhoto} id={x.id} key={x.id} />)}
-                    <CAddPetCard />
-                </section>
-            </article>
+            <nav className='dashboard__navbar'>
+                <div className='dashboard__navbar__icons'>
+                    <FcHome onClick={onHomeClick} />
+                    <MdPets onClick={onAdoptionplaceClick} />
+                    <FcShop onClick={onMarketplaceClick} />
+                </div>
+            </nav>
 
-            <article className={themeStore.isLightTheme ? 'dashboard__article': 'dashboard__article dashboard__article__dark'}>
+            {place == 'home' && (
+                <article className={themeStore.isLightTheme ? 'dashboard__article ' : 'dashboard__article dashboard__article__dark '}>
+                    <h3>my pets</h3>
+                    <section className='dashboard__pets'>
+                        {pets && pets.map(x => <CPetCard name={x.name} photo={x.mainPhoto} id={x.id} key={x.id} />)}
+                        <CAddPetCard />
+                    </section>
+                </article>
+            )}
+
+            {place == 'adoption' && (
+                <article className={themeStore.isLightTheme ? 'dashboard__article ' : 'dashboard__article dashboard__article__dark '}>
+                    <h3>Adoption place</h3>
+                    <section className='dashboard__pets'>
+
+                        <CAddPetCard />
+                    </section>
+                </article>
+            )}
+
+            {place == 'market' && (
+                <article className={themeStore.isLightTheme ? 'dashboard__article ' : 'dashboard__article dashboard__article__dark '}>
+                    <h3>Marketplace</h3>
+                    <section className='dashboard__pets'>
+
+                        <CAddPetCard />
+                    </section>
+                </article>
+            )}
+
+            <article className={themeStore.isLightTheme ? 'dashboard__article' : 'dashboard__article dashboard__article__dark'}>
                 <h3>my profile</h3>
                 <UserProfile />
             </article>
