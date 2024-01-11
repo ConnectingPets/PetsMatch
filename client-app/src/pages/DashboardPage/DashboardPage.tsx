@@ -19,11 +19,14 @@ interface DashboardPageProps { }
 interface UserAnimals {
     id: string,
     name: string,
-    mainPhoto: string
+    mainPhoto: string,
+    price?: number | null
 }
 
 export const DashboardPage: React.FC<DashboardPageProps> = observer(() => {
     const [pets, setPets] = useState<UserAnimals[]>([]);
+    const [petsInMarket, setPetsInMarket] = useState<UserAnimals[]>([]);
+    const [petsForAdoption, setPetsForAdoption] = useState<UserAnimals[]>([]);
     const [place, setPlace] = useState<string>('home');
 
     useEffect(() => {
@@ -37,12 +40,28 @@ export const DashboardPage: React.FC<DashboardPageProps> = observer(() => {
         setPlace('home');
     };
 
-    const onAdoptionplaceClick = () => {
+    const onAdoptionplaceClick = async () => {
         setPlace('adoption');
+
+        try {
+            const res = await agent.apiAdoption.getAllAnimalsForAdoption();
+
+            setPetsForAdoption(res.data);
+        } catch (err) {
+            console.error(err);
+        }
     };
 
-    const onMarketplaceClick = () => {
+    const onMarketplaceClick = async () => {
         setPlace('market');
+
+        try {
+            const res = await agent.apiMarketplace.getAllAnimalsInMarketplace();
+
+            setPetsInMarket(res.data);
+        } catch (err) {
+            console.error(err);
+        }
     };
 
     return (
@@ -76,7 +95,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = observer(() => {
                 <article className={themeStore.isLightTheme ? 'dashboard__article ' : 'dashboard__article dashboard__article__dark '}>
                     <h3>Adoption place</h3>
                     <section className='dashboard__pets'>
-
+                        {petsForAdoption && petsForAdoption.map(x => <CPetCard name={x.name} photo={x.mainPhoto} id={x.id} key={x.id} />)}
                         <CAddPetCard />
                     </section>
                 </article>
@@ -86,7 +105,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = observer(() => {
                 <article className={themeStore.isLightTheme ? 'dashboard__article ' : 'dashboard__article dashboard__article__dark '}>
                     <h3>Marketplace</h3>
                     <section className='dashboard__pets'>
-
+                        {petsInMarket && petsInMarket.map(x => <CPetCard name={x.name} photo={x.mainPhoto} id={x.id} key={x.id} />)}
                         <CAddPetCard />
                     </section>
                 </article>

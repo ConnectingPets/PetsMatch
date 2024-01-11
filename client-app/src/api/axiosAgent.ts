@@ -62,12 +62,22 @@ const apiMessages = {
     sendMessage: (body: object) => requests.post('/sendMessage', body, headers.appJSON)
 };
 
+const apiMarketplace = {
+    getAllAnimalsInMarketplace: () => requests.get('/api/marketplace/AllAnimalsForSale')
+};
+
+const apiAdoption = {
+    getAllAnimalsForAdoption: () => requests.get('/api/marketplace/AllAnimalsForAdoption')
+};
+
 const agent = {
     apiUser,
     apiAnimal,
     apiMatches,
     apiPhotos,
-    apiMessages
+    apiMessages,
+    apiMarketplace,
+    apiAdoption
 };
 
 export default agent;
