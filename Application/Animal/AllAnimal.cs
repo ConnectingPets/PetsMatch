@@ -12,6 +12,7 @@
     using Persistence.Repositories;
 
     using static Common.ExceptionMessages.Animal;
+    using Domain.Enum;
 
     public class AllAnimal
     {
@@ -35,20 +36,23 @@
                 string userId = request.OwnerId;
                 User? user = await repository.
                     All<User>(u => u.Id.ToString() == userId).
-                    Include(u => u.Animals).FirstOrDefaultAsync();
+                    Include(u => u.Animals).
+                    ThenInclude(a => a.Photos).
+                    FirstOrDefaultAsync();
 
-                if (!(user!.Animals.Any()))
-                {
-                    return Result<IEnumerable<AllAnimalDto>>.Failure(NoPets);
-                }
-
-                var userAnimals = user.Animals.
+                var userAnimals = user!.Animals.
+                    Where(a => a.AnimalStatus == AnimalStatus.ForSwiping).
                     Select(a => new AllAnimalDto()
                     {
                         Id = a.AnimalId.ToString(),
                         Name = a.Name,
                         MainPhoto = a.Photos.First(p => p.IsMain).Url
                     }).ToList();
+
+                if (!userAnimals.Any())
+                {
+                    return Result<IEnumerable<AllAnimalDto>>.Failure(NoPets);
+                }
 
                 return Result<IEnumerable<AllAnimalDto>>.Success(userAnimals);
             }
