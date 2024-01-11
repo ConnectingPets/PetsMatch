@@ -1,8 +1,9 @@
-﻿namespace Application.DTOs.Swipe
+﻿namespace Application.DTOs.Animal
 {
     using Application.DTOs.Photo;
+    using Domain.Enum;
 
-    public class AnimalToSwipeDto
+    public class AnimalProfileDto
     {
         public string AnimalId { get; set; } = null!;
 
@@ -12,7 +13,7 @@
 
         public int Age { get; set; }
 
-        public DateTime? BirthDate {  get; set; }
+        public DateTime? BirthDate { get; set; }
 
         public bool IsEducated { get; set; }
 
@@ -28,6 +29,6 @@
 
         public string Breed { get; set; } = null!;
 
-        public IEnumerable<PhotoDto> Photos { get; set; } = null!;
+        public ICollection<PhotoDto> Photos { get; set; } = null!;
     }
 }

@@ -13,5 +13,5 @@ export const CCardMatchesButton: React.FC<CCardMatchesButtonProps> = ({
 }) => {
     return (
         <Link to={`/matches/${id}`} className={themeStore.isLightTheme ? 'card__matches__button' : 'card__matches__button__dark'}> matches <AiOutlineFire/></Link>
-    )
-}
+    );
+};

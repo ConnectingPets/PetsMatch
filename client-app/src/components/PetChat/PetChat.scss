@@ -1,4 +1,4 @@
-@use '../../global-styles/' as gs;
+@use "../../global-styles/" as gs;
 
 $primary-color: #fd5068;
 $background-color: #fff;
@@ -6,15 +6,46 @@ $shadow-color: rgba(0, 0, 0, 0.1);
 
 .chat-container {
   width: 100%;
-  background-color: $background-color;
   box-shadow: 0 0 10px $shadow-color;
   display: flex;
   flex-direction: column;
   height: 100vh;
 
-  .dark {
-    @include gs.dark-theme(gs.$dark-background-color-second);
-    transition: 0.5s;
+  &.dark {
+    .message-input {
+      input {
+        background-color: #5f5f5f;
+        color: white;
+
+        &::placeholder {
+          color: white;
+        }
+      }
+
+      button {
+        background: linear-gradient(220deg, #bb86fc 0%, #03dac6 77%);
+
+        &.disabled {
+          color: white;
+        }
+      }
+    }
+
+    .username {
+      color: white;
+    }
+
+    .recipient .message-text {
+      background-color: #5f5f5f;
+    }
+
+    .sender .message-text {
+      background: #02c5ff;
+    }
+
+    .chat-header {
+      border-bottom: 0.5px solid white;
+    }
   }
 
   .message-input {
@@ -40,7 +71,13 @@ $shadow-color: rgba(0, 0, 0, 0.1);
       padding: 8px 15px;
       border-radius: 5px;
       cursor: pointer;
+      font-weight: 600;
+
+      &.disabled {
+        background: #909090;
+        color: black;
+        cursor: not-allowed;
+      }
     }
   }
 }
-

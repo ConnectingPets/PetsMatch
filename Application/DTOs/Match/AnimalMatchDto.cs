@@ -9,5 +9,7 @@
         public required string Name { get; set; }
 
         public required string Photo { get; set; }
+
+        public required bool IsChatStarted { get; set; }
     }
 }
