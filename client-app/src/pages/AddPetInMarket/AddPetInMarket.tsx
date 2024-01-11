@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-// import { useNavigate } from 'react-router-dom';
-// import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { IAnimal } from '../../interfaces/Interfaces';
 import { returnCorrectTypesForAddOrEditPetForm } from '../../utils/convertTypes';
-// import agent from '../../api/axiosAgent';
+import agent from '../../api/axiosAgent';
 
 
 import { CLoading } from '../../components/common/CLoading/CLoading';
@@ -14,8 +14,7 @@ import AdoptionMarketplaceForm from '../../components/AdoptionMarketplaceForm/Ad
 interface AddPetInMarketProps { }
 
 const AddPetInMarket: React.FC<AddPetInMarketProps> = () => {
-    // const navigate = useNavigate();
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const addOrEditPet = 'add';
 
@@ -34,18 +33,16 @@ const AddPetInMarket: React.FC<AddPetInMarketProps> = () => {
                 formData.append(key, (value as string));
             }
         });
-        
-console.log(values);
 
-        // try {
-        //     setIsLoading(true);
-        //     const res = await agent.apiAnimal.addAnimal(formData);
+        try {
+            setIsLoading(true);
+            const res = await agent.apiMarketplace.addAnimal(formData);
 
-        //     navigate('/dashboard');
-        //     toast.success(res.successMessage);
-        // } catch (err) {
-        //     console.error(err);
-        // }
+            navigate('/dashboard');
+            toast.success(res.successMessage);
+        } catch (err) {
+            console.error(err);
+        }
     };
 
     return (

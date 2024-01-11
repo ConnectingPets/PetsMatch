@@ -37,7 +37,9 @@ export interface IAnimal {
     IsHavingValidDocuments: string | boolean,
     isModifiedBreed?: boolean,
     isModifiedGender?: boolean,
-    isModifiedName?: boolean
+    isModifiedName?: boolean,
+    IsForSale?: string,
+    Price?: string
 }
 
 export interface Categories {

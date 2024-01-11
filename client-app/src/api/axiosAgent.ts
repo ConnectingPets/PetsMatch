@@ -63,7 +63,8 @@ const apiMessages = {
 };
 
 const apiMarketplace = {
-    getAllAnimalsInMarketplace: () => requests.get('/api/marketplace/AllAnimalsForSale')
+    getAllAnimalsInMarketplace: () => requests.get('/api/marketplace/AllAnimalsForSale'),
+    addAnimal: (animalData: FormData) => requests.post('/api/marketplace/Add', animalData, headers.multipart)
 };
 
 const apiAdoption = {
