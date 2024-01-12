@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import { Form, Field, FieldInputProps } from 'react-final-form';
 import { CgAsterisk } from 'react-icons/cg';
 import { TbArrowBack } from 'react-icons/tb';
 import { FaTrashAlt } from 'react-icons/fa';
-// import { toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import themeStore from '../../stores/themeStore';
@@ -32,7 +32,7 @@ interface AdoptionMarketplaceFormProps {
 }
 
 const AdoptionMarketplaceForm: React.FC<AdoptionMarketplaceFormProps> = observer(({ addOrEditPet, onAddPetSubmit, petData, onEditPetSubmit, petId }) => {
-    // const navigate = useNavigate();
+    const navigate = useNavigate();
     const [categories, setCategories] = useState<Categories[]>([]);
     const [selectedCategory, setSelectedCategory] = useState<string | null | unknown>(null);
     const [isCategoryDisabled, setIsCategoryDisabled] = useState<boolean>(false);
@@ -89,23 +89,21 @@ const AdoptionMarketplaceForm: React.FC<AdoptionMarketplaceFormProps> = observer
     };
 
     const onConfirmDelete = async () => {
-        //           TO DO...
+        try {
+            if (petId) {
+                const res = await agent.apiMarketplace.deleteAnimal(petId);
 
-        // try {
-        //     if (petId) {
-        //         const res = await agent.apiAnimal.deleteAnimal(petId);
+                navigate('/dashboard');
 
-        //         navigate('/dashboard');
-
-        //         if (res.isSuccess) {
-        //             toast.success(res.successMessage);
-        //         } else {
-        //             toast.error(res.errorMessage);
-        //         }
-        //     }
-        // } catch (err) {
-        //     console.error(err);
-        // }
+                if (res.isSuccess) {
+                    toast.success(res.successMessage);
+                } else {
+                    toast.error(res.errorMessage);
+                }
+            }
+        } catch (err) {
+            console.error(err);
+        }
     };
 
     return (
