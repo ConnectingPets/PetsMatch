@@ -1,10 +1,13 @@
 ﻿namespace Tests.AnimalCategories
 {
-    using Domain;
-    using MockQueryable.EntityFrameworkCore;
-    using Moq;
-    using Persistence.Repositories;
     using System.Linq;
+
+    using Moq;
+    using MockQueryable.EntityFrameworkCore;
+
+    using Domain;
+    using Persistence.Repositories;
+
     using static Application.AnimalCategory.AllAnimalCategories;
 
     [TestFixture]
