@@ -154,13 +154,11 @@
                 }
                 catch
                 {
-  
                     return Result<Unit>.Failure(ErrorDeletingPhoto);
                 }
             }
             catch (Exception)
             {
-
                 return Result<Unit>.Failure(ErrorDeletingPhoto);
             }
         }

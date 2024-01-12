@@ -16,7 +16,7 @@
     {
         public class DeleteAnimalPhotoCommand : IRequest<Result<Unit>>
         {
-            public string PublicId { get; set; } = null!;
+            public string PhotoId { get; set; } = null!;
         }
 
         public class DeleteAnimalPhotoCommandHandler : IRequestHandler<DeleteAnimalPhotoCommand, Result<Unit>>
@@ -33,7 +33,7 @@
 
             public async Task<Result<Unit>> Handle(DeleteAnimalPhotoCommand request, CancellationToken cancellationToken)
             {
-                string photoId = request.PublicId;
+                string photoId = request.PhotoId;
                 Photo? photo = await repository.
                FirstOrDefaultAsync<Photo>(p => p.Id == photoId);
 
