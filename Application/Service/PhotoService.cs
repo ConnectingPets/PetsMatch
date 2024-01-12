@@ -28,7 +28,8 @@
             this.repository = repository;
         }
 
-        public async Task<Result<string>> AddAnimalPhotosAsync(IFormFile[] files, Animal animal)
+        public async Task<Result<Unit>> AddAnimalPhotosAsync(
+            IFormFile[] files, Animal animal)
         {
             try
             {
@@ -36,7 +37,7 @@
                 {
                     if (animal.Photos.Count == 6)
                     {
-                        return Result<string>.Failure(FullCapacityImage);
+                        return Result<Unit>.Failure(FullCapacityImage);
                     }
 
                     var imageUploadResult = new ImageUploadResult();
@@ -55,7 +56,7 @@
                         }
                         catch (Exception)
                         {
-                            return Result<string>.Failure(ErrorUploadPhoto);
+                            return Result<Unit>.Failure(ErrorUploadPhoto);
                         }
                     }
 
@@ -71,16 +72,14 @@
                     await repository.SaveChangesAsync();
                 }
 
-
-                return Result<string>.Success(SuccessfullyUploadPhoto);
+                return 
+                    Result<Unit>.Success(Unit.Value, SuccessfullyUploadPhoto);
             }
             catch
             {
-
-                return Result<string>.Failure(ErrorUploadPhoto);
+                return Result<Unit>.Failure(ErrorUploadPhoto);
             }
         }
-
 
         public async Task<Result<Unit>> AddUserPhotoAsync(IFormFile file, string userId)
         {

@@ -14,14 +14,14 @@
 
     public class AddAnimalPhoto
     {
-        public class AddAnimalPhotoCommand : IRequest<Result<string>>
+        public class AddAnimalPhotoCommand : IRequest<Result<Unit>>
         {
             public string AnimalId { get; set; } = null!;
             public IFormFile[] Files { get; set; } = null!;
         }
 
         public class AddAnimalPhotoCommandHandler :
-            IRequestHandler<AddAnimalPhotoCommand, Result<string>>
+            IRequestHandler<AddAnimalPhotoCommand, Result<Unit>>
         {
             private readonly IPhotoService photoService;
             private readonly IRepository repository;
@@ -33,7 +33,7 @@
                 this.repository = repository;
             }
 
-            public async Task<Result<string>> Handle(AddAnimalPhotoCommand request, CancellationToken cancellationToken)
+            public async Task<Result<Unit>> Handle(AddAnimalPhotoCommand request, CancellationToken cancellationToken)
             {
                 IFormFile[] files = request.Files;
                 string animalId = request.AnimalId;
@@ -41,7 +41,7 @@
                 if (files == null || files.Length == 0)
                 {
                     return
-                        Result<string>.Failure(EmptyPhoto);
+                        Result<Unit>.Failure(EmptyPhoto);
                 }
 
                 Animal? animal = await repository.
@@ -51,10 +51,11 @@
 
                 if (animal == null)
                 {
-                    return Result<string>.Failure(AnimalNotFound);
+                    return Result<Unit>.Failure(AnimalNotFound);
                 }
 
-                var result = await photoService.AddAnimalPhotosAsync(files, animal);
+                var result = await photoService.
+                    AddAnimalPhotosAsync(files, animal);
 
                 return result;
             }
