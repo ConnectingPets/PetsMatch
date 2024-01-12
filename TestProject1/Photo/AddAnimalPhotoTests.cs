@@ -1,16 +1,18 @@
 ﻿namespace Tests.Photo
 {
-    using Application.Response;
-    using Application.Service.Interfaces;
-    using Domain;
-    using Domain.Enum;
+    using System.Linq.Expressions;
+
     using MediatR;
     using Microsoft.AspNetCore.Http;
     using MockQueryable.EntityFrameworkCore;
+
     using Moq;
+    using Domain;
+    using Domain.Enum;
     using Persistence.Repositories;
-    using System.Linq.Expressions;
-    using System.Text;
+    using Application.Response;
+    using Application.Service.Interfaces;
+    
     using static Application.Photo.AddAnimalPhoto;
 
     [TestFixture]
@@ -44,18 +46,8 @@
         [Test]
         public async Task Handler_ShouldAddPhoto_WhenGivingCorrectData()
         {
-            var formFileMock = new Mock<IFormFile>();
-
-            var command = new AddAnimalPhotoCommand()
-            {
-                AnimalId = Guid.NewGuid().ToString(),
-                Files =
-                   [
-                       formFileMock.Object
-                   ]
-            };
-
             SetUpReturningAnimal(repositoryMock, animal);
+            var command = SetUpReturningPhoto();
 
             photoServiceMock.Setup(ps => ps.
             AddAnimalPhotosAsync(command.Files, animal)).
@@ -69,9 +61,39 @@
         }
 
         [Test]
-        public async Task Handler_ShouldReturnError_WhenGivingCorrectData()
+        public async Task Handler_ShouldReturnError_WhenPhotosIsNull()
         {
+            var result = await handler.
+                Handle(new AddAnimalPhotoCommand(), CancellationToken.None);
 
+            Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual("File is not selected or empty", result.ErrorMessage);
+        }
+
+        [Test]
+        public async Task Handler_ShouldReturnError_WhenPhotosArrayIsEmpty()
+        {
+            var command = new AddAnimalPhotoCommand()
+            {
+                 Files = Array.Empty<IFormFile>()
+            };
+
+            var result = await handler.Handle(command, CancellationToken.None);
+
+            Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual("File is not selected or empty", result.ErrorMessage);
+        }
+
+        [Test]
+        public async Task Handler_ShouldReturnError_WhenAnimalDoesNotExist()
+        {
+            var command = SetUpReturningPhoto();
+            SetUpReturningAnimal(repositoryMock, null);
+
+            var result = await handler.Handle(command, CancellationToken.None);
+
+            Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual("This pet does not exist! Please select an existing one", result.ErrorMessage);
         }
 
         private static void SetUpReturningAnimal(
@@ -85,6 +107,22 @@
             repositoryMock.Setup(r => r.
             All(It.IsAny<Expression<Func<Animal, bool>>>()))
                 .Returns(asyncEnumerable);
+        }
+
+        private static AddAnimalPhotoCommand SetUpReturningPhoto()
+        {
+            var formFileMock = new Mock<IFormFile>();
+
+            var command = new AddAnimalPhotoCommand()
+            {
+                AnimalId = Guid.NewGuid().ToString(),
+                Files =
+                   [
+                       formFileMock.Object
+                   ]
+            };
+
+            return command;
         }
     }
 }
