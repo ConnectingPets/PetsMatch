@@ -46,7 +46,11 @@ const AdoptionMarketplaceForm: React.FC<AdoptionMarketplaceFormProps> = observer
             setSelectedCategory(category);
             loadBreeds(category);
         }
-    }, [addOrEditPet, petData?.AnimalCategory]);
+
+        if (addOrEditPet == 'edit' && petData?.IsForSale == 'For sale') {
+            setIsForSale(true);
+        }
+    }, [addOrEditPet, petData?.AnimalCategory, petData?.IsForSale]);
 
     useEffect(() => {
         agent.apiAnimal.getAllCategories()

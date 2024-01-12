@@ -29,6 +29,7 @@ interface PetValues {
     lastModifiedName: string,
     name: string,
     photos: object[],
+    price: number, 
     socialMedia: string,
     weight: number
 }
@@ -76,6 +77,10 @@ const returnCorrectTypes = (data: PetValues) => {
 
     if (data.weight) {
         petData['Weight'] = data.weight;
+    }
+
+    if (data.price) {
+        petData['Price'] = data.price;
     }
 
     return petData;
