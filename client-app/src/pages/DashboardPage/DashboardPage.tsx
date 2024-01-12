@@ -44,7 +44,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = observer(() => {
         setPlace('adoption');
 
         try {
-            const res = await agent.apiAdoption.getAllAnimalsForAdoption();
+            const res = await agent.apiAdoption.getMyAnimalsForAdoption();
 
             setPetsForAdoption(res.data);
         } catch (err) {
@@ -56,7 +56,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = observer(() => {
         setPlace('market');
 
         try {
-            const res = await agent.apiMarketplace.getAllAnimalsInMarketplace();
+            const res = await agent.apiMarketplace.getMyAnimalsForSale();
 
             setPetsInMarket(res.data);
         } catch (err) {
