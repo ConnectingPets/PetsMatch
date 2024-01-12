@@ -17,7 +17,7 @@
     {
         private Mock<IRepository> repositoryMock;
         private Mock<IPhotoService> photoServiceMock;
-        private DeleteAnimalPhotoCommandHandler handler;
+        private DeleteAnimalPhotoHandler handler;
         private Photo photo;
 
         [SetUp]
@@ -25,7 +25,7 @@
         {
             repositoryMock = new Mock<IRepository>();
             photoServiceMock = new Mock<IPhotoService>();
-            handler = new DeleteAnimalPhotoCommandHandler(photoServiceMock.Object, repositoryMock.Object);
+            handler = new DeleteAnimalPhotoHandler(photoServiceMock.Object, repositoryMock.Object);
             photo = new Photo()
             {
                 Id = "Id",

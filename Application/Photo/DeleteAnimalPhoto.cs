@@ -19,12 +19,12 @@
             public string PhotoId { get; set; } = null!;
         }
 
-        public class DeleteAnimalPhotoCommandHandler : IRequestHandler<DeleteAnimalPhotoCommand, Result<Unit>>
+        public class DeleteAnimalPhotoHandler : IRequestHandler<DeleteAnimalPhotoCommand, Result<Unit>>
         {
             private readonly IPhotoService photoService;
             private readonly IRepository repository;
 
-            public DeleteAnimalPhotoCommandHandler(IPhotoService photoService,
+            public DeleteAnimalPhotoHandler(IPhotoService photoService,
                                              IRepository repository)
             {
                 this.photoService = photoService;
