@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 // import { useNavigate } from 'react-router-dom';
 import { observer } from 'mobx-react';
-import { Form, Field } from 'react-final-form';
+import { Form, Field, FieldInputProps } from 'react-final-form';
 import { CgAsterisk } from 'react-icons/cg';
 import { TbArrowBack } from 'react-icons/tb';
 import { FaTrashAlt } from 'react-icons/fa';
@@ -10,7 +10,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import themeStore from '../../stores/themeStore';
 import { Breeds, Categories, IAnimal } from '../../interfaces/Interfaces';
-// import { addOrEditPetFormValidator } from '../../validators/addOrEditPetFormValidator';
+import { adoptionMarketFormValidator } from '../../validators/adoptionMarketFormValidator';
 import agent from '../../api/axiosAgent';
 
 import FormsHeader from '../FormsHeader/FormsHeader';
@@ -38,6 +38,7 @@ const AdoptionMarketplaceForm: React.FC<AdoptionMarketplaceFormProps> = observer
     const [isCategoryDisabled, setIsCategoryDisabled] = useState<boolean>(false);
     const [breeds, setBreeds] = useState<Breeds[]>([]);
     const [isDeleteClick, setIsDeleteClick] = useState<boolean>(false);
+    const [isForSale, setIsForSale] = useState<boolean>(petData?.IsForSale == 'For sale' || false);
 
     useEffect(() => {
         if (addOrEditPet == 'edit' && petData?.AnimalCategory) {
@@ -75,6 +76,14 @@ const AdoptionMarketplaceForm: React.FC<AdoptionMarketplaceFormProps> = observer
         setIsCategoryDisabled(false);
     };
 
+    const onForSaleChange = (
+        e: React.ChangeEvent<HTMLSelectElement>,
+        input: FieldInputProps<unknown, HTMLElement>
+    ) => {
+        setIsForSale(e.target.value === 'For sale');
+        input.onChange(e.target.value);
+    };
+
     const onDeleteOrCancelClick = () => {
         setIsDeleteClick(state => !state);
     };
@@ -108,7 +117,7 @@ const AdoptionMarketplaceForm: React.FC<AdoptionMarketplaceFormProps> = observer
 
                 <Form
                     initialValues={petData}
-                    // validate={addOrEditPetFormValidator}        // TO DO....
+                    validate={adoptionMarketFormValidator}
                     onSubmit={(values: IAnimal) => {
                         if (addOrEditPet === 'add' && onAddPetSubmit) {
                             onAddPetSubmit(values);
@@ -225,7 +234,7 @@ const AdoptionMarketplaceForm: React.FC<AdoptionMarketplaceFormProps> = observer
                                             <div className="required">
                                                 <CLabel inputName='IsForSale' title='For ...' />
                                                 <CgAsterisk className="asterisk" />
-                                                <select {...input} name="IsForSale" id="IsForSale">
+                                                <select {...input} onChange={(e) => onForSaleChange(e, input)} name="IsForSale" id="IsForSale">
                                                     <option>  </option>
                                                     <option>For sale</option>
                                                     <option>For adoption</option>
@@ -236,18 +245,19 @@ const AdoptionMarketplaceForm: React.FC<AdoptionMarketplaceFormProps> = observer
                                     )}
                                 </Field>
 
-                                <Field name='Price'>
-                                    {({ input, meta }) => (
-                                        <div className="wrapper">
-                                            <div className="required">
-                                                <CLabel inputName='Price' title='Price' />
-                                                <CgAsterisk className="asterisk" />
-                                                <input type="text" {...input} name='Price' id='Price' placeholder='70' />
+                                {isForSale && (
+                                    <Field name='Price'>
+                                        {({ input, meta }) => (
+                                            <div className="wrapper">
+                                                <div className="content">
+                                                    <CLabel inputName='Price' title='Price' />
+                                                    <input type="text" {...input} name='Price' id='Price' placeholder='70' />
+                                                </div>
+                                                {meta.touched && meta.error && <span>{meta.error}</span>}
                                             </div>
-                                            {meta.touched && meta.error && <span>{meta.error}</span>}
-                                        </div>
-                                    )}
-                                </Field>
+                                        )}
+                                    </Field>
+                                )}
                             </div>
 
                             <div className="pairs">
