@@ -76,7 +76,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = observer(() => {
                 <article className={themeStore.isLightTheme ? 'dashboard__article ' : 'dashboard__article dashboard__article__dark '}>
                     <h3>my pets</h3>
                     <section className='dashboard__pets'>
-                        {pets && pets.map(x => <CPetCard name={x.name} photo={x.mainPhoto} id={x.id} buttons='edit' key={x.id} />)}
+                        {pets && pets.map(x => <CPetCard name={x.name} photo={x.mainPhoto} id={x.id} buttons='myPets' key={x.id} />)}
                         <CAddPetCard />
                     </section>
                 </article>
@@ -95,9 +95,9 @@ export const DashboardPage: React.FC<DashboardPageProps> = observer(() => {
                     </section>
 
                     <section className='dashboard__pets'>
-                        {place == 'adoption' && petsForAdoption && petsForAdoption.map(x => <CPetCard name={x.name} photo={x.mainPhoto} id={x.id} buttons='market' key={x.id} />)}
+                        {place == 'adoption' && petsForAdoption && petsForAdoption.map(x => <CPetCard name={x.name} photo={x.mainPhoto} id={x.id} buttons='myPetsInMarket' key={x.id} />)}
 
-                        {place == 'market' && petsInMarket && petsInMarket.map(x => <CPetCard name={x.name} photo={x.mainPhoto} id={x.id} buttons='market' key={x.id} />)}
+                        {place == 'market' && petsInMarket && petsInMarket.map(x => <CPetCard name={x.name} photo={x.mainPhoto} id={x.id} buttons='myPetsInMarket' key={x.id} />)}
                         <CAddPetCard link='market' />
                     </section>
                 </article>

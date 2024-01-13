@@ -19,16 +19,28 @@ export const CPetCard: React.FC<CPetCardProps> = (pet) => {
             <div className='pet__card__content'>
                 <h3>{pet.name}</h3>
                 <div className='pet__card__buttons__wrapper'>
-                    {pet.buttons == 'edit' && (
+                    {pet.buttons == 'myPets' && (
                         <>
                             <CCardEditButton id={pet.id} />
                             <CCardMatchesButton id={pet.id} />
                         </>
                     )}
-                    {pet.buttons == 'market' && (
+                    {pet.buttons == 'myPetsInMarket' && (
                         <>
-                            <CMarketCardButton id={pet.id} button='view' />
+                            <CMarketCardButton id={pet.id} button='details' />
                             <CMarketCardButton id={pet.id} button='edit' />
+                        </>
+                    )}
+                    {pet.buttons == 'catalogMarket' && (
+                        <>
+                            <CMarketCardButton id={pet.id} button='details' />
+                            <CMarketCardButton id={pet.id} button='buy' />
+                        </>
+                    )}
+                    {pet.buttons == 'catalogAdoption' && (
+                        <>
+                            <CMarketCardButton id={pet.id} button='details' />
+                            <CMarketCardButton id={pet.id} button='adopt' />
                         </>
                     )}
                 </div>
