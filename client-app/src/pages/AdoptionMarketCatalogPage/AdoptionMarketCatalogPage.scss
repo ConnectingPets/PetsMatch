@@ -1,0 +1,94 @@
+@use '../../global-styles/' as gs;
+
+.catalog-wrapper {
+    @include gs.page-center (column, none, center);
+    transition: 0.5s;
+
+    &__pets {
+        @include gs.display-grid(3, 2.2rem, center);
+        margin: 2rem 0;
+
+        @include gs.breakpoint(display-start, display-end) {
+            @include gs.display-grid(2, 1.2rem, center);
+        }
+
+        @include gs.breakpoint(tablet-start, tablet-end) {
+            @include gs.display-grid(2, 1.2rem, center);
+        }
+
+        @include gs.breakpoint(mobile-start, mobile-end) {
+            @include gs.display-grid(1, 1.6rem, center);
+        }
+    }
+
+    &__dark {
+        @include gs.dark-theme(gs.$dark-background-color-second);
+    }
+}
+
+.catalog-wrapper__article {
+    width: 95%;
+    max-width: 86rem;
+    min-height: 70vh;
+    background: gs.$light-background-color;
+    margin: 1.3rem auto;
+    border-radius: 1.5rem;
+    padding: 1rem;
+    @include gs.shadow(gs.$dark-shadow);
+
+    &>h3 {
+        text-align: center;
+        margin: 0.5rem;
+        text-transform: capitalize;
+    }
+
+    &__options {
+        @include gs.display-flex(row, center, center);
+        gap: 2rem;
+        width: 100%;
+        padding: 2rem;
+        margin-top: 1.2rem;
+
+        &>div {
+            &>h3 {
+                cursor: pointer;
+            }
+        }
+    }
+
+    &__option {
+        position: relative;
+        @include gs.display-flex(column, center, center);
+
+        &::after {
+            content: '';
+            width: 110%;
+            border-radius: 20%;
+            height: 0.2rem;
+            background: #000;
+            position: absolute;
+            opacity: 1;
+            bottom: -0.6rem;
+            margin: 0.1rem;
+            animation: opacityS 0.5 forwards;
+            -webkit-animation: opacityS 0.5s forwards;
+            -moz-animation: opacityS 0.5s forwards;
+        }
+    }
+
+    &__dark {
+        @include gs.dark-theme(gs.$dark-background-color);
+    }
+}
+
+@keyframes opacityS {
+    0% {
+        opacity: 0;
+        transform: scale(0);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1.1);
+    }
+}

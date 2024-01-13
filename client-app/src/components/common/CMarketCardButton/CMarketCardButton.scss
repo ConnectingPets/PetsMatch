@@ -11,3 +11,8 @@
     font-size: 0.8rem;
     @include gs.set-button(gs.$dark-primary,gs.$dark-secondary,gs.$dark-primary-variant);
 }
+
+.market {
+    font-size: 1rem;
+    text-transform: unset;
+}

@@ -14,6 +14,7 @@ import { CAddPetCard } from '../../components/common/CAddPetCard/CAddPetCard';
 import { UserProfile } from '../../components/UserProfile/UserProfile';
 import { CLogo } from '../../components/common/CLogo/CLogo';
 import { CChangeThemeButton } from '../../components/common/CChangeThemeButton/CChangeThemeButton';
+import { CMarketCardButton } from '../../components/common/CMarketCardButton/CMarketCardButton';
 
 interface DashboardPageProps { }
 
@@ -84,6 +85,9 @@ export const DashboardPage: React.FC<DashboardPageProps> = observer(() => {
 
             {place != 'home' && (
                 <article className={themeStore.isLightTheme ? 'dashboard__article ' : 'dashboard__article dashboard__article__dark '}>
+                    <div className="dashboard__article__market-btn">
+                        <CMarketCardButton button='Go to Market' />
+                    </div>
                     <h3>My Pets</h3>
                     <section className='dashboard__article__options'>
                         <div>

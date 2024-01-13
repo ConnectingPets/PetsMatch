@@ -9,6 +9,7 @@ import { DashboardPage } from './pages/DashboardPage/DashboardPage';
 import AddPetPage from './pages/AddPetPage/AddPetPage';
 import EditPetPage from './pages/EditPetPage/EditPetPage';
 import EditUserProfilePage from './pages/EditUserProfilePage/EditUserProfilePage';
+import AdoptionMarketCatalogPage from './pages/AdoptionMarketCatalogPage/AdoptionMarketCatalogPage';
 import AddPetInMarket from './pages/AddPetInMarket/AddPetInMarket';
 import EditPetInMarket from './pages/EditPetInMarket/EditPetInMarket';
 import Page404 from './pages/Page404/Page404';
@@ -24,6 +25,7 @@ const AllRoutes: React.FC = () => {
             <Route path='add-pet' element={<AddPetPage />} />
             <Route path='pet/:petId/edit' element={<EditPetPage />} />
             <Route path='user/edit-profile' element={<EditUserProfilePage />} />
+            <Route path='market/catalog' element={<AdoptionMarketCatalogPage />} />
             <Route path='market/add-pet' element={<AddPetInMarket />} />
             <Route path='market/catalog/:petId/edit' element={<EditPetInMarket />} />
             <Route path='*' element={<Page404 />} />

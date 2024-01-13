@@ -138,6 +138,20 @@
     padding: 1rem;
     @include gs.shadow(gs.$dark-shadow);
 
+    &__market-btn {
+        width: 15%;
+        margin-left: 0.5rem;
+
+        @include gs.breakpoint(tablet-start, tablet-end) {
+            width: 35%;
+        }
+
+        @include gs.breakpoint(mobile-start, mobile-end) {
+            width: 100%;
+            margin-bottom: 2rem;
+        }
+    }
+
     &>h3 {
         text-align: center;
         margin: 0.5rem;
