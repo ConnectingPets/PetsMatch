@@ -15,6 +15,7 @@ import { UserProfile } from '../../components/UserProfile/UserProfile';
 import { CLogo } from '../../components/common/CLogo/CLogo';
 import { CChangeThemeButton } from '../../components/common/CChangeThemeButton/CChangeThemeButton';
 import { CMarketCardButton } from '../../components/common/CMarketCardButton/CMarketCardButton';
+import Footer from '../../components/Footer/Footer';
 
 interface DashboardPageProps { }
 
@@ -112,6 +113,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = observer(() => {
                 <UserProfile />
             </article>
 
+            <Footer />
         </section>
     );
 });
