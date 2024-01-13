@@ -14,6 +14,6 @@ interface CMarketCardButtonProps {
 export const CMarketCardButton: React.FC<CMarketCardButtonProps> = ({ id, button }) => {
 
     return (
-        <Link to={`/market/pet/${id}/${button == 'edit' ? 'edit' : ''}`} className={themeStore.isLightTheme ? 'card__button' : 'card__button__dark'}>{button == 'edit' ? 'edit' : 'view'}{button == 'edit' ? <AiOutlineEdit/> : <FaEye />}</Link>
+        <Link to={`/market/pet/${id}/${button == 'edit' ? 'edit' : ''}`} className={themeStore.isLightTheme ? 'card__button' : 'card__button__dark'}>{button == 'edit' ? 'edit' : 'details'}{button == 'edit' ? <AiOutlineEdit/> : <FaEye />}</Link>
     );
 };

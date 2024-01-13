@@ -5,7 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import { IAnimal } from '../../interfaces/Interfaces';
 import { returnCorrectTypesForAddOrEditPetForm } from '../../utils/convertTypes';
-import { AnimalStatus, GenderEnum, HealthStatusEnum, animalStatus, genderEnum, healthStatusEnum } from '../../utils/constants';
+import { AnimalStatusEnum, GenderEnum, HealthStatusEnum, animalStatusEnum, genderEnum, healthStatusEnum } from '../../utils/constants';
 import { isMoreThan30DaysAgo } from '../../utils/utils';
 import agent from '../../api/axiosAgent';
 
@@ -37,7 +37,7 @@ interface PetValues {
 const returnCorrectTypes = (data: PetValues) => {
     const genderValue = Object.keys(genderEnum).filter(x => genderEnum[x as keyof GenderEnum] == data.gender)[0];
     const healthStatusValue = Object.keys(healthStatusEnum).filter(x => healthStatusEnum[x as keyof HealthStatusEnum] == data.healthStatus)[0];
-    const isForSaleValue = Object.keys(animalStatus).filter(x => animalStatus[x as keyof AnimalStatus] == data.animalStatus)[0];
+    const isForSaleValue = Object.keys(animalStatusEnum).filter(x => animalStatusEnum[x as keyof AnimalStatusEnum] == data.animalStatus)[0];
 
     const isEducatedValue = data.isEducated == true ? 'Yes' : 'No';
     const isHavingValidDocumentsValue = data.isHavingValidDocuments == true ? 'Yes' : 'No';
@@ -104,7 +104,10 @@ const EditPetInMarket: React.FC<EditPetInMarketProps> = () => {
     }, [petId]);
 
     const onEditPetSubmit = async (values: IAnimal) => {
-        const newValues = returnCorrectTypesForAddOrEditPetForm(values);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const {IsForSale, ...otherValues} = returnCorrectTypesForAddOrEditPetForm(values);
+        const animalStatus = animalStatusEnum[values.IsForSale as unknown as keyof AnimalStatusEnum];
+        const newValues = {...otherValues, animalStatus};
 
         try {
             if (petId) {

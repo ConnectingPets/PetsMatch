@@ -3,6 +3,7 @@ import { observer } from 'mobx-react';
 import { FcShop } from 'react-icons/fc';
 import { MdPets } from 'react-icons/md';
 
+import { IUserAnimals } from '../../interfaces/Interfaces';
 import themeStore from '../../stores/themeStore';
 import './DashboardPage.scss';
 import userStore from '../../stores/userStore';
@@ -16,17 +17,10 @@ import { CChangeThemeButton } from '../../components/common/CChangeThemeButton/C
 
 interface DashboardPageProps { }
 
-interface UserAnimals {
-    id: string,
-    name: string,
-    mainPhoto: string,
-    price?: number | null
-}
-
 export const DashboardPage: React.FC<DashboardPageProps> = observer(() => {
-    const [pets, setPets] = useState<UserAnimals[]>([]);
-    const [petsInMarket, setPetsInMarket] = useState<UserAnimals[]>([]);
-    const [petsForAdoption, setPetsForAdoption] = useState<UserAnimals[]>([]);
+    const [pets, setPets] = useState<IUserAnimals[]>([]);
+    const [petsInMarket, setPetsInMarket] = useState<IUserAnimals[]>([]);
+    const [petsForAdoption, setPetsForAdoption] = useState<IUserAnimals[]>([]);
     const [place, setPlace] = useState<string>('home');
 
     useEffect(() => {
@@ -90,9 +84,10 @@ export const DashboardPage: React.FC<DashboardPageProps> = observer(() => {
 
             {place != 'home' && (
                 <article className={themeStore.isLightTheme ? 'dashboard__article ' : 'dashboard__article dashboard__article__dark '}>
+                    <h3>My Pets</h3>
                     <section className='dashboard__article__options'>
                         <div>
-                            <h3 className={place == 'market' ? 'dashboard__article__option' : ''} onClick={onMarketplaceClick}>Marketplace</h3>
+                            <h3 className={place == 'market' ? 'dashboard__article__option' : ''} onClick={onMarketplaceClick}>For Sale</h3>
                         </div>
                         <div>
                             <h3 className={place == 'adoption' ? 'dashboard__article__option' : ''} onClick={onAdoptionplaceClick}>For Adoption</h3>

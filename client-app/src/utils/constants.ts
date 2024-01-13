@@ -10,7 +10,7 @@ export type HealthStatusEnum = {
     'Dewormed': number
 };
 
-export type AnimalStatus = {
+export type AnimalStatusEnum = {
     'For adoption': number,
     'For sale': number,
     'For swiping': number
@@ -28,7 +28,7 @@ export const healthStatusEnum: HealthStatusEnum = {
     'Dewormed': 2
 };
 
-export const animalStatus: AnimalStatus = {
+export const animalStatusEnum: AnimalStatusEnum = {
     'For adoption': 1,
     'For sale': 2,
     'For swiping': 3

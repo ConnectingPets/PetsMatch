@@ -16,6 +16,13 @@ export interface IUser {
     PhotoUrl?: string
 }
 
+export interface IUserAnimals {
+    id: string,
+    name: string,
+    mainPhoto: string,
+    price?: number | null
+}
+
 export interface IAnimal {
     AnimalId?: string,
     Name: string,
