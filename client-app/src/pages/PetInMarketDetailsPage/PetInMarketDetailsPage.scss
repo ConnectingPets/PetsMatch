@@ -1,0 +1,23 @@
+@use '../../global-styles/' as gs;
+
+.details-wrapper {
+    @include gs.page-center (column, none, center);
+
+    &__article {
+        width: 95%;
+        max-width: 86rem;
+        background: gs.$light-background-color;
+        margin: 1.3rem auto;
+        border-radius: 1.5rem;
+        padding: 1rem;
+        @include gs.shadow(gs.$dark-shadow);
+
+        &__dark {
+            @include gs.dark-theme(gs.$dark-background-color);
+        }
+    }
+
+    &__dark {
+        @include gs.dark-theme(gs.$dark-background-color-second);
+    }
+}

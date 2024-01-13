@@ -66,6 +66,7 @@ const apiMarketplace = {
     getAllAnimalsInMarketplace: () => requests.get('/api/marketplace/AllAnimalsForSale'),
     getMyAnimalsForSale: () => requests.get('/api/marketplace/MyAnimalsForSale'),
     getAnimalById: (animalId: string) => requests.get(`/api/marketplace/EditAnimal/${animalId}`),
+    getAnimalWithUserInfoByAnimalId: (animalId: string) => requests.get(`/api/marketplace/GetAnimal/${animalId}`),
     addAnimal: (animalData: FormData) => requests.post('/api/marketplace/Add', animalData, headers.multipart),
     editAnimalById: (animalId: string, animalData: IAnimal) => requests.patch(`/api/marketplace/${animalId}`, animalData, headers.multipart),
     deleteAnimal: (animalId: string) => requests.del(`/api/marketplace/${animalId}`)

@@ -82,5 +82,6 @@ export const adoptionMarketFormValidator = combineValidators({
         weightRange
     )('This field'),
     IsHavingValidDocuments: isRequired('This field'),
-    IsForSale: isRequired('This field')
+    IsForSale: isRequired('This field'),
+    Price: isNumeric('Price')
 });
