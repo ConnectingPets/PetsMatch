@@ -252,7 +252,7 @@ const AdoptionMarketplaceForm: React.FC<AdoptionMarketplaceFormProps> = observer
                                         {({ input, meta }) => (
                                             <div className="wrapper">
                                                 <div className="content">
-                                                    <CLabel inputName='Price' title='Price' />
+                                                    <CLabel inputName='Price' title='Price in $' />
                                                     <input type="text" {...input} name='Price' id='Price' placeholder='70' />
                                                 </div>
                                                 {meta.touched && meta.error && <span>{meta.error}</span>}

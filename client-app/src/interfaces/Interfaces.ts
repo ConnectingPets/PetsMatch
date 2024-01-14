@@ -59,6 +59,26 @@ export interface Breeds {
     breedId: number
 }
 
+export interface IAnimalWithUserInfo {
+    address: string
+    age: number
+    birthDate: string
+    breedName: string
+    city: string
+    description: string
+    gender: number
+    healthStatus: number
+    isEducated: boolean
+    isHavingValidDocuments: boolean
+    name: string
+    photos: IPhoto[]
+    price: number
+    socialMedia: string
+    userEmail: string
+    userName: string
+    weight: number
+}
+
 export interface IPossibleSwipes {
     map(arg0: (pet: { name: string; animalId: string; photos: IPhoto[]; }, arg1: number) => import('react/jsx-runtime').JSX.Element): React.ReactNode;
     animalId: string,
