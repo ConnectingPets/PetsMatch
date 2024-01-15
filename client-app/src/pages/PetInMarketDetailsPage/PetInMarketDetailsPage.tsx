@@ -15,6 +15,7 @@ interface PetInMarketDetailsPageProps { }
 
 const PetInMarketDetailsPage: React.FC<PetInMarketDetailsPageProps> = observer(() => {
     const [pet, setPet] = useState<IAnimalWithUserInfo | undefined>(undefined);
+    const [largePhoto, setLargePhoto] = useState<string>('');
     const { petId } = useParams();
 
     useEffect(() => {
@@ -36,6 +37,10 @@ const PetInMarketDetailsPage: React.FC<PetInMarketDetailsPageProps> = observer((
 
         pet.birthDate = birthDate;
     }
+
+    const onCloseLargePhoto = () => {
+        setLargePhoto('');
+    };
 
     return (
         <div className={themeStore.isLightTheme ? 'details-wrapper' : 'details-wrapper details-wrapper__dark'}>
@@ -86,10 +91,19 @@ const PetInMarketDetailsPage: React.FC<PetInMarketDetailsPageProps> = observer((
             <article className={themeStore.isLightTheme ? 'details-wrapper__content ' : 'details-wrapper__content details-wrapper__content__dark '}>
                 <div className="photo-container">
                     {pet?.photos.map((photo, index) => (
-                        <img key={index} src={photo.url} alt={`${pet.name}'s photo`} />
+                        <img onClick={() => setLargePhoto(photo.url)} key={index} src={photo.url} alt={`${pet.name}'s photo`} />
                     ))}
                 </div>
             </article>
+
+            {largePhoto && (
+                <div className="details-wrapper__zoom-photo">
+                    <div className="details-wrapper__zoom-photo__modal">
+                        <img src={largePhoto} alt="pet photo" />
+                        <button onClick={onCloseLargePhoto}>X</button>
+                    </div>
+                </div>
+            )}
 
             <Footer />
         </div>
