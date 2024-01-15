@@ -16,6 +16,30 @@ const AdoptionMarketCatalogPage: React.FC<AdoptionMarketCatalogPageProps> = obse
     const [isMarket, setIsMarket] = useState<boolean>(true);
     const [petsInMarket, setPetsInMarket] = useState<IUserAnimals[]>([]);
     const [petsForAdoption, setPetsForAdoption] = useState<IUserAnimals[]>([]);
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [itemsPerPage] = useState<number>(12);
+
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = isMarket
+        ? petsInMarket.slice(indexOfFirstItem, indexOfLastItem)
+        : petsForAdoption.slice(indexOfFirstItem, indexOfLastItem);
+
+    const pages = Math.ceil((isMarket ? petsInMarket.length : petsForAdoption.length) / itemsPerPage);
+
+    const paginationButtons = () => {
+        const pageButtons = [];
+
+        for (let i = 1; i <= pages; i++) {
+            pageButtons.push(
+                <button key={i} onClick={() => setCurrentPage(i)} className={i == currentPage ? 'current-btn' : ''}>
+                    {i}
+                </button>
+            );
+        }
+
+        return pageButtons;
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -35,6 +59,8 @@ const AdoptionMarketCatalogPage: React.FC<AdoptionMarketCatalogPageProps> = obse
 
     const onClickAdoptionMarket = () => {
         setIsMarket(state => !state);
+
+        setCurrentPage(1);
     };
 
     return (
@@ -52,10 +78,12 @@ const AdoptionMarketCatalogPage: React.FC<AdoptionMarketCatalogPageProps> = obse
                 </section>
 
                 <section className='catalog-wrapper__pets'>
-                    {!isMarket && petsForAdoption.map(x => <CPetCard name={x.name} photo={x.mainPhoto} id={x.id} buttons='catalogAdoption' key={x.id} />)}
+                    {!isMarket && currentItems.map(x => <CPetCard name={x.name} photo={x.mainPhoto} id={x.id} buttons='catalogAdoption' key={x.id} />)}
 
-                    {isMarket && petsInMarket.map(x => <CPetCard name={x.name} photo={x.mainPhoto} id={x.id} buttons='catalogMarket' key={x.id} />)}
+                    {isMarket && currentItems.map(x => <CPetCard name={x.name} photo={x.mainPhoto} id={x.id} buttons='catalogMarket' key={x.id} />)}
                 </section>
+
+                <div className='catalog-wrapper__pagination-btn'>{paginationButtons()}</div>
             </article>
 
             <Footer />
