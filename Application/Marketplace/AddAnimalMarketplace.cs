@@ -12,6 +12,7 @@
     using Service.Interfaces;
     using Persistence.Repositories;
     using Application.DTOs.Marketplace;
+
     using static Common.ExceptionMessages.Animal;
     using static Common.SuccessMessages.Animal;
 
@@ -93,7 +94,8 @@
                 }
                 catch (Exception)
                 {
-                    return Result<Unit>.Failure(FailedToCreate);
+                    return Result<Unit>.
+                        Failure(string.Format(FailedToCreate,animal.Name));
                 }
             }
         }
