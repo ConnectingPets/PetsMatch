@@ -13,7 +13,8 @@ export interface IUser {
     Gender?: number,
     Address?: string,
     City?: string,
-    PhotoUrl?: string
+    PhotoUrl?: string,
+    RememberMe?: boolean
 }
 
 export interface IUserAnimals {

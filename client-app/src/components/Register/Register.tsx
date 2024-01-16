@@ -24,17 +24,18 @@ export const Register: React.FC<RegisterProps> = observer(({
     const navigate = useNavigate();
 
     const onSubmit = async (values: IUser) => {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        // const { ConfirmPassword, ...userData } = values;
+        const { RememberMe, ...userData } = values;
 
         try {
-            const result = await agent.apiUser.register(values);
+            const result = await agent.apiUser.register(userData);
 
             if (result.isSuccess) {
-                const { name: Name, token } = result.data;
-                const Email = values.Email;
-            
-                userStore.setUser({ Name, Email }, token);
+                if (RememberMe) {
+                    const { name: Name, token } = result.data;
+                    const Email = values.Email;
+
+                    userStore.setUser({ Name, Email }, token);
+                }
 
                 navigate('/dashboard');
             } else {
@@ -95,8 +96,17 @@ export const Register: React.FC<RegisterProps> = observer(({
                             )}
                         </Field>
 
+                        <Field name='RememberMe'>
+                            {({ input }) => (
+                                <div>
+                                    <CLabel inputName='RememberMe' title='Remember me' />
+                                    <input type="checkbox" {...input} name='RememberMe' id='RememberMe' />
+                                </div>
+                            )}
+                        </Field>
+
                         <CSubmitButton textContent='Register' />
-                        <p className='account__message' onClick={showLogin}>If you have an account click here!</p>
+                        <p className='account__message' onClick={showLogin}>Already a user, click here.</p>
                     </form>
                 )} />
         </section>
