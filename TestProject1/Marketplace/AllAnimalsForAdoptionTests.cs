@@ -93,7 +93,7 @@
             var result = await handler.Handle(new AllAnimalsForAdoptionQuery(), CancellationToken.None);
 
             Assert.IsFalse(result.IsSuccess);
-            Assert.AreEqual("We still don't have animal for adoption", result.ErrorMessage);
+            Assert.AreEqual("We still don't have animals for adoption", result.ErrorMessage);
         }
 
         private static void SetUpReturningAnimals(

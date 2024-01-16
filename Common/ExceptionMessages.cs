@@ -77,7 +77,7 @@
 
         public static class Marketplace
         {
-            public const string NoAnimalsForAdoption = "We still don't have animal for adoption";
+            public const string NoAnimalsForAdoption = "We still don't have animals for adoption";
             public const string NoAnimalsForSale = "We still don't have animals for sale";
             public const string DoNotHaveAnimalForSale = "You still don't have animal for sale";
             public const string DoNotHaveAnimalForAdoption = "You still don't have animal for adoption";

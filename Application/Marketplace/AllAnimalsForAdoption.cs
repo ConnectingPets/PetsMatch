@@ -11,6 +11,7 @@
     using DTOs.Animal;
     using Domain.Enum;
     using Persistence.Repositories;
+
     using static Common.ExceptionMessages.Marketplace;
 
     public class AllAnimalsForAdoption
