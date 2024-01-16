@@ -25,6 +25,7 @@
             handler = new AllAnimalQueryHandler(repositoryMock.Object);
 
         }
+
         [Test]
         public async Task Handle_UserWithPets_ReturnsSuccessResult()
         {
