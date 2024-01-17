@@ -66,7 +66,7 @@
                     new Animal
                     {
                         AnimalId =
-                        Guid.Parse("ab661c5c-3e89-4beb-8b98-923fd08c3935"),       Name = "Pet2",
+                        Guid.Parse("ab661c5c-3e89-4beb-8b98-923fd08c3935"),         Name = "Pet2",
                         Age = 1,
                         AnimalStatus = AnimalStatus.ForSwiping,
                         BreedId = 2,

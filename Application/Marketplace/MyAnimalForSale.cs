@@ -1,4 +1,4 @@
-﻿namespace Application.Marketplace
+﻿ namespace Application.Marketplace
 {
     using System.Threading;
     using System.Threading.Tasks;
@@ -11,6 +11,7 @@
     using Domain.Enum;
     using Persistence.Repositories;
     using Application.DTOs.Marketplace;
+
     using static Common.ExceptionMessages.Marketplace;
 
     public class MyAnimalForSale
