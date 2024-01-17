@@ -89,6 +89,7 @@ export const editUserProfileFormValidator = combineValidators({
         isNumeric,
         ageRange
     )('Age'),
+    Roles: isHaveRole('Role'),
     Education: composeValidators(
         isAlphabeticWithSpaces,
         hasLengthBetween(5, 50)

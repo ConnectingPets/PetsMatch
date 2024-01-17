@@ -39,6 +39,7 @@ const userData = (user: IUserProfile) => {
 
 const EditUserProfilePage: React.FC<EditUserProfilePageProps> = observer(() => {
     const [user, setUser] = useState<IUserProfile | object>({});
+    const [initialRoles, setInitialRoles] = useState<string[] | undefined>(undefined);
     const navigate = useNavigate();
 
     const [isDeleteClick, setIsDeleteClick] = useState<boolean>(false);
@@ -52,6 +53,7 @@ const EditUserProfilePage: React.FC<EditUserProfilePageProps> = observer(() => {
                 const user = userData(res.data);
 
                 setUser(user);
+                setInitialRoles(user.Roles);
             });
     }, []);
 
@@ -62,6 +64,12 @@ const EditUserProfilePage: React.FC<EditUserProfilePageProps> = observer(() => {
             const result = await agent.apiUser.editUser(userData);
 
             if (result.isSuccess) {
+                for (const role of initialRoles!) {
+                    if (!userData.Roles.includes(role)) {
+                        await agent.apiUser.deleteRole(role);
+                    }
+                }
+                
                 userStore.setUser({ ...values, PhotoUrl: userStore.user?.PhotoUrl }, userStore.authToken!);
 
                 navigate('/dashboard');
@@ -95,10 +103,6 @@ const EditUserProfilePage: React.FC<EditUserProfilePageProps> = observer(() => {
         } catch (err) {
             console.error(err);
         }
-    };
-
-    const onDeleteRoleClick = async (value: string) => {
-        await agent.apiUser.deleteRole(value);
     };
 
     return (
@@ -178,29 +182,6 @@ const EditUserProfilePage: React.FC<EditUserProfilePageProps> = observer(() => {
                                 </Field>
                             </div>
 
-                            <section className="register__form__roles">
-                                <Field type="checkbox" name="Roles" value="Matching">
-                                    {({ input }) => (
-                                        <div>
-                                            <label htmlFor='Roles'>Matching</label>
-                                            <input onClick={() => onDeleteRoleClick(input.value)} type="checkbox" {...input} name="Roles" value="Matching" className="checkbox__input" />
-                                        </div>
-                                    )}
-                                </Field>
-
-                                <Field type="checkbox" name="Roles" value="Marketplace">
-                                    {({ input, meta }) => (
-                                        <div className="register__form__roles__marketplace">
-                                            <div>
-                                                <label htmlFor='Roles'>Marketplace</label>
-                                                <input onClick={() => onDeleteRoleClick(input.value)} type="checkbox" {...input} name="Roles" value="Marketplace" className="checkbox__input" />
-                                            </div>
-                                            {meta.touched && meta.error && <div className="register__form__error__message">{meta.error}</div>}
-                                        </div>
-                                    )}
-                                </Field>
-                            </section>
-
                             <Field name='Education'>
                                 {({ input, meta }) => (
                                     <>
@@ -249,6 +230,27 @@ const EditUserProfilePage: React.FC<EditUserProfilePageProps> = observer(() => {
                                     </>
                                 )}
                             </Field>
+
+                            <section className="pairs">
+                                <Field type="checkbox" name="Roles" value="Matching">
+                                    {({ input }) => (
+                                        <div className="wrapper">
+                                            <CLabel inputName='Roles' title='Matching' />
+                                            <input type="checkbox" {...input} name="Roles" value="Matching" />
+                                        </div>
+                                    )}
+                                </Field>
+
+                                <Field type="checkbox" name="Roles" value="Marketplace">
+                                    {({ input, meta }) => (
+                                        <div className="wrapper">
+                                            <CLabel inputName='Roles' title='Marketplace' />
+                                            <input type="checkbox" {...input} name="Roles" value="Marketplace" />
+                                            {meta.touched && meta.error && <span>{meta.error}</span>}
+                                        </div>
+                                    )}
+                                </Field>
+                            </section>
 
                             <CSubmitButton textContent='Edit profile' />
                             <button type="button" onClick={onDeleteOrCancelClick} className="deleteBtn"><FaTrashAlt /></button>
