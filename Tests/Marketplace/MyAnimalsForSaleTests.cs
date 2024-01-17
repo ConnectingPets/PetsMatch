@@ -1,12 +1,15 @@
 ﻿namespace Tests.Marketplace
 {
-    using Moq;
-    using Persistence.Repositories;
-    using Domain;
-    using static Application.Marketplace.MyAnimalForSale;
-    using Domain.Enum;
-    using MockQueryable.EntityFrameworkCore;
     using System.Linq.Expressions;
+
+    using Moq;
+    using MockQueryable.EntityFrameworkCore;
+
+    using Domain;
+    using Domain.Enum;
+    using Persistence.Repositories;
+
+    using static Application.Marketplace.MyAnimalForSale;
 
     [TestFixture]
     public class MyAnimalsForSaleTests

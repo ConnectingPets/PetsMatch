@@ -1,13 +1,16 @@
 ﻿namespace Tests.Photo
 {
-    using Application.Service.Interfaces;
-    using Moq;
-    using Persistence.Repositories;
-    using Domain;
-    using static Application.Photo.SetAnimaMainPhoto;
     using System.Linq.Expressions;
-    using Application.Response;
+
+    using Moq;
     using MediatR;
+
+    using Domain;
+    using Persistence.Repositories;
+    using Application.Response;
+    using Application.Service.Interfaces;
+
+    using static Application.Photo.SetAnimaMainPhoto;
 
     [TestFixture]
     public class SetAnimalMainTests

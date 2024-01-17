@@ -1,12 +1,14 @@
 ﻿namespace Tests.AnimalMatches
 {
+    using System.Linq.Expressions;
+
+    using Moq;
+    using MockQueryable.EntityFrameworkCore;
+
     using Domain;
     using Domain.Enum;
-    using Microsoft.EntityFrameworkCore;
-    using MockQueryable.EntityFrameworkCore;
-    using Moq;
     using Persistence.Repositories;
-    using System.Linq.Expressions;
+
     using static Application.Match.AnimalMatches;
 
     [TestFixture]
