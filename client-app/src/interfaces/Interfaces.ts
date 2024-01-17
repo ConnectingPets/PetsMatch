@@ -17,6 +17,19 @@ export interface IUser {
     RememberMe?: boolean
 }
 
+export interface IUserProfile {
+    address?: string
+    age?: number
+    city?: string
+    education?: string
+    email: string
+    gender?: string
+    jobTitle?: string
+    name: string
+    photo?: string
+    roles?: string[]
+}
+
 export interface IUserAnimals {
     id: string,
     name: string,

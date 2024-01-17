@@ -3,10 +3,9 @@ import { observer } from 'mobx-react';
 import { FcShop } from 'react-icons/fc';
 import { MdPets } from 'react-icons/md';
 
-import { IUserAnimals } from '../../interfaces/Interfaces';
+import { IUserAnimals, IUserProfile } from '../../interfaces/Interfaces';
 import themeStore from '../../stores/themeStore';
 import './DashboardPage.scss';
-import userStore from '../../stores/userStore';
 import agent from '../../api/axiosAgent';
 
 import { CPetCard } from '../../components/common/CPetCard/CPetCard';
@@ -20,10 +19,18 @@ import Footer from '../../components/Footer/Footer';
 interface DashboardPageProps { }
 
 export const DashboardPage: React.FC<DashboardPageProps> = observer(() => {
+    const [user, setUser] = useState<IUserProfile | undefined>(undefined);
     const [pets, setPets] = useState<IUserAnimals[]>([]);
     const [petsInMarket, setPetsInMarket] = useState<IUserAnimals[]>([]);
     const [petsForAdoption, setPetsForAdoption] = useState<IUserAnimals[]>([]);
     const [place, setPlace] = useState<string>('home');
+
+    useEffect(() => {
+        agent.apiUser.getUserProfile()
+            .then(res => {
+                setUser(res.data);
+            });
+    }, []);
 
     useEffect(() => {
         agent.apiAnimal.getAllAnimals()
@@ -65,7 +72,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = observer(() => {
 
             <article className='dashboard__greet'>
                 <CLogo />
-                <h1 className={themeStore.isLightTheme ? 'greet__title' : 'greet__title dashboard__greet__dark'}>welcome, {userStore.user?.Name} !</h1>
+                <h1 className={themeStore.isLightTheme ? 'greet__title' : 'greet__title dashboard__greet__dark'}>welcome, {user?.name} !</h1>
                 <CChangeThemeButton />
             </article>
 
@@ -110,7 +117,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = observer(() => {
 
             <article className={themeStore.isLightTheme ? 'dashboard__article' : 'dashboard__article dashboard__article__dark'}>
                 <h3>my profile</h3>
-                <UserProfile />
+                <UserProfile user={user} />
             </article>
 
             <Footer />
