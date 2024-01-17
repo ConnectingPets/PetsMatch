@@ -28,7 +28,8 @@ const apiUser = {
     login: (userData: IUser) => requests.post('/api/user/login', userData, headers.appJSON),
     logout: (body: object) => requests.post('/api/user/logout', body, headers.appJSON),
     editUser: (body: IUser) => requests.patch('/api/profile/edit', body, headers.appJSON),
-    deleteUser: () => requests.del('/api/profile/delete')
+    deleteUser: () => requests.del('/api/profile/delete'),
+    deleteRole: (role: string) => requests.del(`/api/profile/deleterole?rolename=${role}`)
 };
 
 const apiAnimal = {

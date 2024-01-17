@@ -97,6 +97,10 @@ const EditUserProfilePage: React.FC<EditUserProfilePageProps> = observer(() => {
         }
     };
 
+    const onDeleteRoleClick = async (value: string) => {
+        await agent.apiUser.deleteRole(value);
+    };
+
     return (
         <div className={themeStore.isLightTheme ? 'forms__container' : 'forms__container forms__container__dark'}>
             <FormsHeader title={title} />
@@ -173,6 +177,29 @@ const EditUserProfilePage: React.FC<EditUserProfilePageProps> = observer(() => {
                                     )}
                                 </Field>
                             </div>
+
+                            <section className="register__form__roles">
+                                <Field type="checkbox" name="Roles" value="Matching">
+                                    {({ input }) => (
+                                        <div>
+                                            <label htmlFor='Roles'>Matching</label>
+                                            <input onClick={() => onDeleteRoleClick(input.value)} type="checkbox" {...input} name="Roles" value="Matching" className="checkbox__input" />
+                                        </div>
+                                    )}
+                                </Field>
+
+                                <Field type="checkbox" name="Roles" value="Marketplace">
+                                    {({ input, meta }) => (
+                                        <div className="register__form__roles__marketplace">
+                                            <div>
+                                                <label htmlFor='Roles'>Marketplace</label>
+                                                <input onClick={() => onDeleteRoleClick(input.value)} type="checkbox" {...input} name="Roles" value="Marketplace" className="checkbox__input" />
+                                            </div>
+                                            {meta.touched && meta.error && <div className="register__form__error__message">{meta.error}</div>}
+                                        </div>
+                                    )}
+                                </Field>
+                            </section>
 
                             <Field name='Education'>
                                 {({ input, meta }) => (
