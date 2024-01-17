@@ -20,6 +20,10 @@
 
         public string? Photo { get; set; } = null!;
 
+        public string? Description { get; set; }
+
+        public string Token { get; set; } = null!;
+
         public IEnumerable<string> Roles { get; set; } = null!;
     }
 }

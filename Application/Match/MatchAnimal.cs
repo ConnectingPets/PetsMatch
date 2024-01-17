@@ -118,7 +118,7 @@
 
             private async Task<bool> IsMatch(string animalOneId, string animalTwoId)
                 => await this.repository.CountAsync<Swipe>(s => (s.SwiperAnimalId.ToString() == animalOneId.ToLower() &&
-                                                                    s.SwipeeAnimalId.ToString() == animalTwoId.ToLower() && s.SwipedRight) ||
+                                                                            s.SwipeeAnimalId.ToString() == animalTwoId.ToLower() && s.SwipedRight) ||
                                                                  s.SwiperAnimalId.ToString() == animalTwoId.ToLower() &&
                                                                     s.SwipeeAnimalId.ToString() == animalOneId.ToLower() && s.SwipedRight) == 2;
         }

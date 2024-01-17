@@ -11,6 +11,7 @@
     using DTOs.Photo;
     using DTOs.Marketplace;
     using Persistence.Repositories;
+
     using static Common.ExceptionMessages.Animal;
 
     public class GetAnimal

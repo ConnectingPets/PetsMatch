@@ -11,6 +11,7 @@
     using DTOs.Animal;
     using Domain.Enum;
     using Persistence.Repositories;
+
     using static Common.ExceptionMessages.Marketplace;
 
     public class AllAnimalsForAdoption
@@ -33,8 +34,8 @@
             {
                 string userId = request.UserId;
 
-                var allAnimals = await repository
-                    .AllReadonly<Animal>(a => a.OwnerId.ToString() != userId && a.AnimalStatus == AnimalStatus.ForAdoption).
+                var allAnimals = await repository.
+                    AllReadonly<Animal>(a => a.OwnerId.ToString() != userId && a.AnimalStatus == AnimalStatus.ForAdoption).
                     Select(a => new AllAnimalDto()
                     {
                         Id = a.AnimalId.ToString(),

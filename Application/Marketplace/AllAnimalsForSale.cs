@@ -11,6 +11,7 @@
     using Domain.Enum;
     using Persistence.Repositories;
     using Application.DTOs.Marketplace;
+
     using static Common.ExceptionMessages.Marketplace;
 
     public class AllAnimalsForSale

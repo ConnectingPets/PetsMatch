@@ -6,6 +6,7 @@
     using Microsoft.AspNetCore.Authorization;
 
     using Infrastructure;
+
     using static Application.Photo.AddUserPhoto;
     using static Application.Photo.AddAnimalPhoto;
     using static Application.Photo.DeleteAnimalPhoto;    
@@ -42,7 +43,7 @@
         {
             DeleteAnimalPhotoCommand command = new DeleteAnimalPhotoCommand()
             {
-                PublicId = photoId
+                PhotoId = photoId
             };
 
             var result = await mediator.Send(command);
