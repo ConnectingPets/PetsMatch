@@ -24,10 +24,17 @@ export const DashboardPage: React.FC<DashboardPageProps> = observer(() => {
     const [petsInMarket, setPetsInMarket] = useState<IUserAnimals[]>([]);
     const [petsForAdoption, setPetsForAdoption] = useState<IUserAnimals[]>([]);
     const [place, setPlace] = useState<string>('home');
+    const [isHaveTwoRoles, setIsHaveTwoRoles] = useState<boolean>(false);
 
     useEffect(() => {
         agent.apiUser.getUserProfile()
             .then(res => {
+                if (res.data.roles.includes('Marketplace') && res.data.roles.includes('Matching')) {
+                    setIsHaveTwoRoles(true);
+                } else if (res.data.roles.includes('Marketplace')) {
+                    setPlace('market');
+                }
+
                 setUser(res.data);
             });
     }, []);
@@ -77,8 +84,12 @@ export const DashboardPage: React.FC<DashboardPageProps> = observer(() => {
             </article>
 
             <nav className='dashboard__navbar'>
-                <MdPets onClick={onHomeClick} />
-                <FcShop onClick={onMarketplaceClick} />
+                {isHaveTwoRoles && (
+                    <>
+                        <MdPets onClick={onHomeClick} />
+                        <FcShop onClick={onMarketplaceClick} />
+                    </>
+                )}
             </nav>
 
             {place == 'home' && (
