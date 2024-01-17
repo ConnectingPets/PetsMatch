@@ -36,10 +36,20 @@
 	&__roles {
 		@include gs.display-flex(column, none, center);
 		margin-bottom: 1rem;
-		font-weight: 600;
 
+		&__matching {
+			margin-bottom: 0.25rem;
+
+			&>label {
+				font-weight: 500;
+			}
+		}
 		&__marketplace {
 			@include gs.display-flex(column, none, center);
+
+			&>div>label {
+				font-weight: 500;
+			}
 		}
 	}
 }

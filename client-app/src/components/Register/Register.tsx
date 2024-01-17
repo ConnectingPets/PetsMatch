@@ -8,7 +8,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import { IUser } from '../../interfaces/Interfaces';
 import { registerFormValidator } from '../../validators/userProfileFormValidators';
 import agent from '../../api/axiosAgent';
-import userStore from '../../stores/userStore';
 
 import { CLabel } from '../common/CLabel/CLabel';
 import { CSubmitButton } from '../common/CSubmitButton/CSubmitButton';
@@ -18,23 +17,15 @@ interface RegisterProps {
     showLogin: () => void;
 }
 
-export const Register: React.FC<RegisterProps> = observer(({ showLogin }) => {
+export const Register: React.FC<RegisterProps> = observer(() => {
     const navigate = useNavigate();
 
     const onSubmit = async (values: IUser) => {
-        const { RememberMe, ...userData } = values;
 
         try {
-            const result = await agent.apiUser.register(userData);
+            const result = await agent.apiUser.register(values);
 
             if (result.isSuccess) {
-                if (RememberMe) {
-                    const { name: Name, token } = result.data;
-                    const Email = values.Email;
-                    const Roles = values.Roles;
-
-                    userStore.setUser({ Name, Email, Roles }, token);
-                }
 
                 navigate('/dashboard');
             } else {
@@ -75,29 +66,6 @@ export const Register: React.FC<RegisterProps> = observer(({ showLogin }) => {
                             )}
                         </Field>
 
-                        <section className="register__form__roles">
-                            <Field type="checkbox" name="Roles" value="Matching">
-                                {({ input }) => (
-                                    <div>
-                                        <label htmlFor='Roles'>Matching</label>
-                                        <input type="checkbox" {...input} name="Roles" value="Matching" className="checkbox__input" />
-                                    </div>
-                                )}
-                            </Field>
-
-                            <Field type="checkbox" name="Roles" value="Marketplace">
-                                {({ input, meta }) => (
-                                    <div className="register__form__roles__marketplace">
-                                        <div>
-                                            <label htmlFor='Roles'>Marketplace</label>
-                                            <input type="checkbox" {...input} name="Roles" value="Marketplace" className="checkbox__input" />
-                                        </div>
-                                        {meta.touched && meta.error && <div className="register__form__error__message">{meta.error}</div>}
-                                    </div>
-                                )}
-                            </Field>
-                        </section>
-
                         <Field name="Password">
                             {({ input, meta }) => (
                                 <div>
@@ -118,17 +86,32 @@ export const Register: React.FC<RegisterProps> = observer(({ showLogin }) => {
                             )}
                         </Field>
 
-                        <Field name='RememberMe'>
-                            {({ input }) => (
-                                <div>
-                                    <CLabel inputName='RememberMe' title='Remember me' />
-                                    <input type="checkbox" {...input} name='RememberMe' id='RememberMe' />
-                                </div>
-                            )}
-                        </Field>
+                        <section className="register__form__roles">
+                            <CLabel inputName={''} title={'Select Role'} />
+
+                            <Field type="checkbox" name="Roles" value="Matching">
+                                {({ input }) => (
+                                    <div className="register__form__roles__matching">
+                                        <label htmlFor='Roles'>Matching</label>
+                                        <input type="checkbox" {...input} name="Roles" value="Matching" className="checkbox__input" />
+                                    </div>
+                                )}
+                            </Field>
+
+                            <Field type="checkbox" name="Roles" value="Marketplace">
+                                {({ input, meta }) => (
+                                    <div className="register__form__roles__marketplace">
+                                        <div>
+                                            <label htmlFor='Roles'>Marketplace</label>
+                                            <input type="checkbox" {...input} name="Roles" value="Marketplace" className="checkbox__input" />
+                                        </div>
+                                        {meta.touched && meta.error && <div className="register__form__error__message">{meta.error}</div>}
+                                    </div>
+                                )}
+                            </Field>
+                        </section>
 
                         <CSubmitButton textContent='Register' />
-                        <p className='account__message' onClick={showLogin}>Already a user, click here.</p>
                     </form>
                 )} />
         </section>
