@@ -52,7 +52,8 @@ export const Login: React.FC<LoginProps> = ({
                         City,
                         Address,
                         Education,
-                        Gender
+                        Gender,
+                        Roles: []
                     }, token);
                 }
 
