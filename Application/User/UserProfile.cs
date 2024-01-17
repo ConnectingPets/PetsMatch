@@ -13,6 +13,7 @@
     using Application.Response;
 
     using static Common.ExceptionMessages.User;
+    using Application.Service.Interfaces;
 
     public class UserProfile
     {
@@ -24,12 +25,15 @@
         public class UserProfileCommand : IRequestHandler<UserProfileQuery, Result<UserProfileDto>>
         {
             private readonly IRepository repository;
+            private readonly ITokenService tokenService;
             private readonly UserManager<User> userManager;
 
             public UserProfileCommand(IRepository repository,
+                                      ITokenService tokenService,
                                       UserManager<User> userManager)
             {
                 this.repository = repository;
+                this.tokenService = tokenService;
                 this.userManager = userManager;
             }
 
@@ -60,6 +64,8 @@
                     Education = user.Education,
                     JobTitle = user.JobTitle,
                     Photo = user.Photo?.Url,
+                    Description = user.Description,
+                    Token = this.tokenService.CreateToken(user),
                     Roles = await userManager.GetRolesAsync(user)
                 };
 

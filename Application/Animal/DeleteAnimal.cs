@@ -72,7 +72,7 @@
 
                 foreach (AnimalMatch match in animalMatch)
                 {
-                    AnimalMatch[] animalMatches = await repository.All<AnimalMatch>(am => am.MatchId == match.MatchId).ToArrayAsync();
+                    AnimalMatch[] animalMatches = repository.All<AnimalMatch>(am => am.MatchId == match.MatchId).ToArray();
 
                     Guid[] matchesIds = animalMatches.
                         Select(am => am.MatchId)
@@ -95,7 +95,7 @@
                 try
                 {
                     await repository.SaveChangesAsync();
-                    return Result<Unit>.Success(Unit.Value,String.Format(SuccessfullyDeleteAnimal,animal.Name));
+                    return Result<Unit>.Success(Unit.Value, String.Format(SuccessfullyDeleteAnimal, animal.Name));
                 }
                 catch (Exception)
                 {
