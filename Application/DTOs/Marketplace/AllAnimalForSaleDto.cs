@@ -2,7 +2,7 @@
 {
     using Animal;
 
-    public class AllAnimalForSaleDto : AllAnimalDto
+    public class AllAnimalsForSaleDto : AllAnimalsDto
     {
         public decimal? Price { get; set; }
     }

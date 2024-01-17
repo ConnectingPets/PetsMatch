@@ -14,14 +14,14 @@
 
     using static Common.ExceptionMessages.Marketplace;
 
-    public class MyAnimalForSale
+    public class MyAnimalsForSale
     {
-        public class MyAnimalForSaleQuery : IRequest<Result<IEnumerable<AllAnimalForSaleDto>>>
+        public class MyAnimalsForSaleQuery : IRequest<Result<IEnumerable<AllAnimalsForSaleDto>>>
         {
             public string UserId { get; set; } = null!;
         }
 
-        public class MyAnimalForSaleQueryHandler : IRequestHandler<MyAnimalForSaleQuery, Result<IEnumerable<AllAnimalForSaleDto>>>
+        public class MyAnimalForSaleQueryHandler : IRequestHandler<MyAnimalsForSaleQuery, Result<IEnumerable<AllAnimalsForSaleDto>>>
         {
             private readonly IRepository repository;
 
@@ -30,13 +30,13 @@
                 this.repository = repository;
             }
 
-            public async Task<Result<IEnumerable<AllAnimalForSaleDto>>> Handle(MyAnimalForSaleQuery request, CancellationToken cancellationToken)
+            public async Task<Result<IEnumerable<AllAnimalsForSaleDto>>> Handle(MyAnimalsForSaleQuery request, CancellationToken cancellationToken)
             {
                 string userId = request.UserId;
 
                 var allAnimals = await repository
                     .AllReadonly<Animal>(a => a.OwnerId.ToString() == userId && a.AnimalStatus == AnimalStatus.ForSale).
-                    Select(a => new AllAnimalForSaleDto()
+                    Select(a => new AllAnimalsForSaleDto()
                     {
                         Id = a.AnimalId.ToString(),
                         MainPhoto = a.Photos.First(a => a.IsMain).Url,
@@ -46,10 +46,10 @@
 
                 if (!allAnimals.Any())
                 {
-                    return Result<IEnumerable<AllAnimalForSaleDto>>.Failure(DoNotHaveAnimalForSale);
+                    return Result<IEnumerable<AllAnimalsForSaleDto>>.Failure(DoNotHaveAnimalForSale);
                 }
 
-                return Result<IEnumerable<AllAnimalForSaleDto>>.Success(allAnimals);
+                return Result<IEnumerable<AllAnimalsForSaleDto>>.Success(allAnimals);
             }
         }
     }

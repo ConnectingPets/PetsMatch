@@ -16,12 +16,12 @@
 
     public class AllAnimalsForAdoption
     {
-        public class AllAnimalsForAdoptionQuery : IRequest<Result<IEnumerable<AllAnimalDto>>>
+        public class AllAnimalsForAdoptionQuery : IRequest<Result<IEnumerable<AllAnimalsDto>>>
         {
             public string UserId { get; set; } = null!;
         }
 
-        public class AllAnimalsForAdoptionQueryHandler : IRequestHandler<AllAnimalsForAdoptionQuery, Result<IEnumerable<AllAnimalDto>>>
+        public class AllAnimalsForAdoptionQueryHandler : IRequestHandler<AllAnimalsForAdoptionQuery, Result<IEnumerable<AllAnimalsDto>>>
         {
             private readonly IRepository repository;
 
@@ -30,13 +30,13 @@
                 this.repository = repository;
             }
 
-            public async Task<Result<IEnumerable<AllAnimalDto>>> Handle(AllAnimalsForAdoptionQuery request, CancellationToken cancellationToken)
+            public async Task<Result<IEnumerable<AllAnimalsDto>>> Handle(AllAnimalsForAdoptionQuery request, CancellationToken cancellationToken)
             {
                 string userId = request.UserId;
 
                 var allAnimals = await repository.
                     AllReadonly<Animal>(a => a.OwnerId.ToString() != userId && a.AnimalStatus == AnimalStatus.ForAdoption).
-                    Select(a => new AllAnimalDto()
+                    Select(a => new AllAnimalsDto()
                     {
                         Id = a.AnimalId.ToString(),
                         MainPhoto = a.Photos.First(a => a.IsMain).Url,
@@ -45,10 +45,10 @@
 
                 if (!allAnimals.Any())
                 {
-                    return Result<IEnumerable<AllAnimalDto>>.Failure(NoAnimalsForAdoption);
+                    return Result<IEnumerable<AllAnimalsDto>>.Failure(NoAnimalsForAdoption);
                 }
 
-                return Result<IEnumerable<AllAnimalDto>>.Success(allAnimals);
+                return Result<IEnumerable<AllAnimalsDto>>.Success(allAnimals);
             }
         }
     }

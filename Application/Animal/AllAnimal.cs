@@ -16,13 +16,13 @@
 
     public class AllAnimal
     {
-        public class AllAnimalQuery : IRequest<Result<IEnumerable<AllAnimalDto>>>
+        public class AllAnimalQuery : IRequest<Result<IEnumerable<AllAnimalsDto>>>
         {
             public string OwnerId { get; set; } = null!;
         }
 
         public class AllAnimalQueryHandler :
-            IRequestHandler<AllAnimalQuery, Result<IEnumerable<AllAnimalDto>>>
+            IRequestHandler<AllAnimalQuery, Result<IEnumerable<AllAnimalsDto>>>
         {
             private readonly IRepository repository;
 
@@ -31,7 +31,7 @@
                 this.repository = repository;
             }
 
-            public async Task<Result<IEnumerable<AllAnimalDto>>> Handle(AllAnimalQuery request, CancellationToken cancellationToken)
+            public async Task<Result<IEnumerable<AllAnimalsDto>>> Handle(AllAnimalQuery request, CancellationToken cancellationToken)
             {
                 string userId = request.OwnerId;
                 User? user = await repository.
@@ -42,7 +42,7 @@
 
                 var userAnimals = user!.Animals.
                     Where(a => a.AnimalStatus == AnimalStatus.ForSwiping).
-                    Select(a => new AllAnimalDto()
+                    Select(a => new AllAnimalsDto()
                     {
                         Id = a.AnimalId.ToString(),
                         Name = a.Name,
@@ -51,10 +51,10 @@
 
                 if (!userAnimals.Any())
                 {
-                    return Result<IEnumerable<AllAnimalDto>>.Failure(NoPets);
+                    return Result<IEnumerable<AllAnimalsDto>>.Failure(NoPets);
                 }
 
-                return Result<IEnumerable<AllAnimalDto>>.Success(userAnimals);
+                return Result<IEnumerable<AllAnimalsDto>>.Success(userAnimals);
             }
         }
     }

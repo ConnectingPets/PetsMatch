@@ -16,12 +16,12 @@
 
     public class AllAnimalsForSale
     {
-        public class AllAnimalsForSaleQuery : IRequest<Result<IEnumerable<AllAnimalForSaleDto>>>
+        public class AllAnimalsForSaleQuery : IRequest<Result<IEnumerable<AllAnimalsForSaleDto>>>
         {
             public string UserId { get; set; } = null!;
         }
 
-        public class AllAnimalsForSaleQueryHandler : IRequestHandler<AllAnimalsForSaleQuery, Result<IEnumerable<AllAnimalForSaleDto>>>
+        public class AllAnimalsForSaleQueryHandler : IRequestHandler<AllAnimalsForSaleQuery, Result<IEnumerable<AllAnimalsForSaleDto>>>
         {
             private readonly IRepository repository;
 
@@ -30,14 +30,14 @@
                 this.repository = repository;
             }
 
-            public async Task<Result<IEnumerable<AllAnimalForSaleDto>>> Handle(AllAnimalsForSaleQuery request, CancellationToken cancellationToken)
+            public async Task<Result<IEnumerable<AllAnimalsForSaleDto>>> Handle(AllAnimalsForSaleQuery request, CancellationToken cancellationToken)
             {
                 string userId = request.UserId;
 
                 var allAnimals = await repository.
                     AllReadonly<Animal>(a => a.OwnerId.ToString() != userId 
                     && a.AnimalStatus == AnimalStatus.ForSale).
-                    Select(a => new AllAnimalForSaleDto()
+                    Select(a => new AllAnimalsForSaleDto()
                     {
                         Id = a.AnimalId.ToString(),
                         Name = a.Name,
@@ -47,10 +47,10 @@
 
                 if (!allAnimals.Any())
                 {
-                    return Result<IEnumerable<AllAnimalForSaleDto>>.Failure(NoAnimalsForSale);
+                    return Result<IEnumerable<AllAnimalsForSaleDto>>.Failure(NoAnimalsForSale);
                 }
 
-                return Result<IEnumerable<AllAnimalForSaleDto>>.Success(allAnimals);
+                return Result<IEnumerable<AllAnimalsForSaleDto>>.Success(allAnimals);
             }
         }
     }
