@@ -3,8 +3,8 @@ import './CLogo.scss';
 
 export const CLogo = () => {
     return (
-        <Link to='#' className="logo__image__wrapper">
+        <Link to='/dashboard' className="logo__image__wrapper">
             <img src="/logo.png" alt="logo" />
         </Link>
-    )
-}
+    );
+};
