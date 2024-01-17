@@ -1,0 +1,166 @@
+@use '../../global-styles/' as gs;
+
+.card-wrapper {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    @include gs.display-flex(none, center, center);
+
+    &__welcomeMessage {
+        position: absolute;
+        z-index: 3;
+        width: 100%;
+        height: 100%;
+        backdrop-filter: blur(4.5rem);
+        @include gs.display-flex(column, center, center);
+
+        &>p {
+            font-size: 2.5rem;
+
+            @media (max-width: 62.5rem) {
+                font-size: 2rem;
+            }
+        }
+
+        &>.p-dark {
+            color: black;
+            text-shadow: 0px 0px 4px white;
+        }
+
+        &>button {
+            padding: 0.5rem 1rem;
+            border: 1px solid gray;
+            border-radius: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: bolder;
+            background-color: #f75a91;
+            box-shadow: 0 0 1rem white;
+            cursor: pointer;
+
+            &:hover {
+                box-shadow: 0 0 2rem white;
+                transition: 0.5s;
+            }
+        }
+
+        &>.btn-dark {
+            background-color: #54ccc0;
+        }
+    }
+
+    &__swipe {
+        position: absolute;
+        z-index: 2;
+
+        &__card {
+            position: relative;
+            background-color: white;
+            width: 80vw;
+            max-width: 28rem;
+            height: 33rem;
+            box-shadow: 0 0 0.7rem rgba(0, 0, 0, 0.1);
+            border-radius: 1.25rem;
+            background-size: cover;
+            background-position: center;
+            cursor: grab;
+
+            @media (max-width: 75rem) {
+                max-width: 20rem;
+                height: 24rem;
+            }
+
+            @media (max-height: 56.25rem) and (orientation: landscape) {
+                max-width: 26rem;
+                height: 30rem;
+            }
+
+            @media (max-height: 37.5rem) and (orientation: landscape) {
+                max-width: 16rem;
+                height: 20rem;
+            }
+
+            @media (max-height: 25rem) and (orientation: landscape) {
+                max-width: 14.5rem;
+                height: 16rem;
+            }
+
+            &>h3 {
+                background-color: rgba(255, 255, 255, 0.705);
+                display: inline-block;
+                padding: 0.5rem;
+                border-radius: 1rem;
+                margin-left: 0.25rem;
+                font-size: 1.25rem;
+            }
+
+            &>.h3-dark {
+                color: black;
+            }
+        }
+
+        &__hidden {
+            @media (max-width: 56.25rem) {
+                display: none;
+            }
+        }
+    }
+
+    &__buttons {
+        position: absolute;
+        bottom: 7rem;
+
+        @media (max-height: 46.875rem) {
+            bottom: 4rem;
+        }
+
+        @media (max-height: 56.25rem) and (orientation: landscape) {
+            bottom: 3rem;
+        }
+
+        @media (max-height: 30rem) and (orientation: landscape) {
+            bottom: 0.5rem;
+        }
+
+        &>button {
+            font-size: 2.5rem;
+            border: 2px solid gray;
+            border-radius: 0.5rem;
+            margin-right: 0.25rem;
+            background-color: #54ccc0;
+            box-shadow: 1px 1px 3px black;
+            cursor: pointer;
+
+            @media (max-height: 37.5rem) and (orientation: landscape) {
+                font-size: 1.5rem;
+
+                &:hover {
+                    font-size: 1.4rem;
+                    box-shadow: unset;
+                }
+            }
+
+            &:hover {
+                font-size: 2.4rem;
+                box-shadow: unset;
+            }
+
+            &:first-of-type {
+                background-color: #54ccc0;
+            }
+
+            &:last-of-type {
+                background-color: #f75a91;
+            }
+        }
+
+        &>#like-btn-dark {
+            background-color: #BB86FC;
+        }
+
+        &__hidden {
+            @media (max-width: 56.25rem) {
+                display: none;
+            }
+        }
+    }
+}

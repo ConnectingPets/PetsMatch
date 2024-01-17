@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { observer } from 'mobx-react';
 import { Form, Field } from 'react-final-form';
 import { CgAsterisk } from 'react-icons/cg';
@@ -6,9 +6,8 @@ import { FaTrashAlt } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 
-
 import themeStore from '../../stores/themeStore';
-import { IUser } from '../../interfaces/Interfaces';
+import { IUser, IUserProfile } from '../../interfaces/Interfaces';
 import { editUserProfileFormValidator } from '../../validators/userProfileFormValidators';
 import userStore from '../../stores/userStore';
 import agent from '../../api/axiosAgent';
@@ -23,13 +22,38 @@ import { returnCorrecTypesForEditUser } from '../../utils/convertTypes';
 
 interface EditUserProfilePageProps { }
 
+const userData = (user: IUserProfile) => {
+    return {
+        Address: user.address,
+        Age: user.age,
+        City: user.city,
+        Education: user.education,
+        Email: user.email,
+        Gender: user.gender,
+        JobTitle: user.jobTitle,
+        Name: user.name,
+        Photo: user.photo,
+        Roles: user.roles
+    };
+};
+
 const EditUserProfilePage: React.FC<EditUserProfilePageProps> = observer(() => {
+    const [user, setUser] = useState<IUserProfile | object>({});
     const navigate = useNavigate();
 
     const [isDeleteClick, setIsDeleteClick] = useState<boolean>(false);
 
     const title = 'Edit My Profile';
     const subjectForDelete = 'this profile';
+
+    useEffect(() => {
+        agent.apiUser.getUserProfile()
+            .then(res => {
+                const user = userData(res.data);
+
+                setUser(user);
+            });
+    }, []);
 
     const onEditUserProfileSubmit = async (values: IUser) => {
         const userData = returnCorrecTypesForEditUser(values);
@@ -38,7 +62,7 @@ const EditUserProfilePage: React.FC<EditUserProfilePageProps> = observer(() => {
             const result = await agent.apiUser.editUser(userData);
 
             if (result.isSuccess) {
-                userStore.setUser({...values, PhotoUrl: userStore.user?.PhotoUrl}, userStore.authToken!);
+                userStore.setUser({ ...values, PhotoUrl: userStore.user?.PhotoUrl }, userStore.authToken!);
 
                 navigate('/dashboard');
 
@@ -49,7 +73,7 @@ const EditUserProfilePage: React.FC<EditUserProfilePageProps> = observer(() => {
         } catch (err) {
             console.error(err);
         }
-    }
+    };
 
     const onDeleteOrCancelClick = () => {
         setIsDeleteClick(state => !state);
@@ -81,7 +105,7 @@ const EditUserProfilePage: React.FC<EditUserProfilePageProps> = observer(() => {
                 <p>Fields with "<CgAsterisk className="asterisk" />" are required!</p>
 
                 <Form
-                    initialValues={userStore.user}
+                    initialValues={user}
                     onSubmit={onEditUserProfileSubmit}
                     validate={editUserProfileFormValidator}
                     render={({ handleSubmit }) => (

@@ -8,11 +8,11 @@
 
     using Domain;
     using Response;
-    using Persistence;
     using Application.DTOs.Animal;
     using Persistence.Repositories;
 
     using static Common.ExceptionMessages.Animal;
+    using Domain.Enum;
 
     public class AllAnimal
     {
@@ -25,12 +25,10 @@
             IRequestHandler<AllAnimalQuery, Result<IEnumerable<AllAnimalDto>>>
         {
             private readonly IRepository repository;
-            private readonly DataContext dataContext;
 
-            public AllAnimalQueryHandler(IRepository repository, DataContext dataContext)
+            public AllAnimalQueryHandler(IRepository repository)
             {
                 this.repository = repository;
-                this.dataContext = dataContext;
             }
 
             public async Task<Result<IEnumerable<AllAnimalDto>>> Handle(AllAnimalQuery request, CancellationToken cancellationToken)
@@ -38,21 +36,23 @@
                 string userId = request.OwnerId;
                 User? user = await repository.
                     All<User>(u => u.Id.ToString() == userId).
-                    Include(u => u.Animals).FirstOrDefaultAsync();
+                    Include(u => u.Animals).
+                    ThenInclude(a => a.Photos).
+                    FirstOrDefaultAsync();
 
-                if (!(user!.Animals.Any()))
-                {
-                    return Result<IEnumerable<AllAnimalDto>>.Failure(NoPets);
-                }
-
-                var userAnimals = await repository.
-                    AllReadonly<Animal>(a => a.OwnerId.ToString() == userId).
+                var userAnimals = user!.Animals.
+                    Where(a => a.AnimalStatus == AnimalStatus.ForSwiping).
                     Select(a => new AllAnimalDto()
                     {
                         Id = a.AnimalId.ToString(),
                         Name = a.Name,
                         MainPhoto = a.Photos.First(p => p.IsMain).Url
-                    }).ToListAsync();
+                    }).ToList();
+
+                if (!userAnimals.Any())
+                {
+                    return Result<IEnumerable<AllAnimalDto>>.Failure(NoPets);
+                }
 
                 return Result<IEnumerable<AllAnimalDto>>.Success(userAnimals);
             }

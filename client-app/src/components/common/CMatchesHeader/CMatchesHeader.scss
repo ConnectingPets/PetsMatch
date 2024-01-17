@@ -5,7 +5,7 @@
     height: 5rem;
     background: linear-gradient(220deg, gs.$light-gradient-first 0%, gs.$light-gradient-second 77%);
     @include gs.display-flex(row, space-between, center);
-    padding: 1rem 3rem;
+    padding: 1rem;
     transition: 0.5s;
 
     @include gs.breakpoint(tablet-start, tablet-end){
@@ -43,7 +43,7 @@
         }
     }
 
-    &>a {
+    &>div>a {
         color: gs.$white-text;
 
         &>svg {
@@ -57,5 +57,10 @@
                 transform: scale(1.1);
             }
         }
+
+    }
+
+    &>div>a:first-of-type {
+        margin-right: 0.5rem;
     }
 }

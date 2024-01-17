@@ -1,0 +1,86 @@
+@use '../../global-styles/' as gs;
+
+.profile-wrapper {
+    width: 100%;
+    height: 100%;
+    background: rgb(255, 90, 57);
+    background: linear-gradient(306deg, rgba(255, 90, 57, 0.7777311608237045) 3%, rgba(253, 41, 115, 0.5480392840730042) 94%);
+    overflow: auto;
+    padding-bottom: 2rem;
+
+    &__dark {
+        background: rgb(3, 218, 198);
+        background: linear-gradient(306deg, rgba(3, 218, 198, 1) 3%, rgba(187, 134, 252, 1) 94%);
+    }
+
+    &__img {
+        height: 50%;
+        position: relative;
+
+        &>img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        &__buttons {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            @include gs.display-flex(none, space-between, center);
+
+            &>button {
+                background: transparent;
+                border: 1px solid grey;
+                border-radius: 100%;
+                font-size: 2rem;
+                color: white;
+                backdrop-filter: blur(0.2rem);
+                margin: 0.5rem;
+                cursor: pointer;
+            }
+        }
+    }
+
+    &__info {
+        padding: 1rem;
+
+        &>p {
+            margin-bottom: 0.5rem;
+
+            &>svg {
+                margin-right: 0.35rem;
+            }
+        }
+
+        &__name {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+    }
+
+    &__unmatch-btn {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        @include gs.display-flex(none, center, none);
+        backdrop-filter: blur(0.15rem);
+        padding: 0.25rem 0;
+        
+        &>button {
+            padding: 0.5rem 1rem;
+            border: 2px solid gray;
+            border-radius: 1.5rem;
+            font-weight: bold;
+            font-size: 1rem;
+            letter-spacing: 0.15rem;
+            background-color: #BB86FC;
+            cursor: pointer;
+
+            &:hover {
+                color: white;
+            }
+        }
+    }
+}

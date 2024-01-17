@@ -1,3 +1,4 @@
+import React from "react";
 import { observer } from "mobx-react";
 import "./PetChat.scss";
 import { ChatMessages } from "../ChatMessages/ChatMessages";
@@ -11,9 +12,9 @@ import { useEffect, useRef, useState } from "react";
 import * as signalR from "@microsoft/signalr";
 import { IMessage } from "../../interfaces/Interfaces";
 import themeStore from "../../stores/themeStore";
-import React from "react";
 
 interface PetChatProps {
+  onCloseChat: () => void
   updateMatches: () => void;
   matchId: string;
 }
@@ -24,10 +25,9 @@ interface ISendMessage {
   MatchId: string;
 }
 
-export const PetChat: React.FC<PetChatProps> = observer(
-  ({ updateMatches, matchId }) => {
-    const { id: animalId } = useParams();
-    const [messages, setMessages] = useState<IMessage[]>([]);
+export const PetChat: React.FC<PetChatProps> = observer(({ onCloseChat, updateMatches, matchId }) => {
+  const { id: animalId } = useParams();
+  const [messages, setMessages] = useState<IMessage[]>([]);
 
     const connection = useRef<signalR.HubConnection | null>(null);
 
@@ -102,39 +102,34 @@ export const PetChat: React.FC<PetChatProps> = observer(
       }
     };
 
-    return (
-      <div
-        className={
-          themeStore.isLightTheme ? "chat-container" : "chat-container dark"
-        }
-      >
-        <ChatHeader />
-        <ChatMessages messages={messages} />
-        <Form
-          onSubmit={(values, form) => onSend(values, form)}
-          validate={sendMessageValidator}
-          render={({ handleSubmit, pristine }) => (
-            <form onSubmit={handleSubmit} className="message-input">
-              <Field name="Content">
-                {({ input }) => (
-                  <input
-                    {...input}
-                    type="text"
-                    placeholder="Type your message..."
-                  />
-                )}
-              </Field>
-              <button
-                type="submit"
-                disabled={pristine}
-                className={pristine ? "disabled" : ""}
-              >
-                Send
-              </button>
-            </form>
-          )}
-        />
-      </div>
-    );
-  }
-);
+  return (
+    <div className={themeStore.isLightTheme ? "chat-container" : "chat-container dark"}>
+      <ChatHeader onCloseChat={onCloseChat} />
+      <ChatMessages messages={messages} />
+      <Form
+        onSubmit={(values, form) => onSend(values, form)}
+        validate={sendMessageValidator}
+        render={({ handleSubmit, pristine }) => (
+          <form onSubmit={handleSubmit} className="message-input">
+            <Field name="Content">
+              {({ input }) => (
+                <input
+                  {...input}
+                  type="text"
+                  placeholder="Type your message..."
+                />
+              )}
+            </Field>
+            <button 
+              type="submit" 
+              disabled={pristine}
+              className={pristine ? "disabled" : ""}
+            >
+              Send
+            </button>
+          </form>
+        )}
+      />
+    </div>
+  );
+});

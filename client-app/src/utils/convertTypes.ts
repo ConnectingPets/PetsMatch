@@ -36,6 +36,14 @@ export const returnCorrectTypesForAddOrEditPetForm = (values: IAnimal) => {
             petData['BirthDate'] = otherValues.BirthDate;       
         }
 
+        if (otherValues.IsForSale) {
+          petData['IsForSale'] = otherValues.IsForSale == 'For sale' ? true : false;
+        }
+
+        if (otherValues.Price) {
+          petData['Price'] = Number(otherValues.Price);
+        }
+
         return petData;
 };
 

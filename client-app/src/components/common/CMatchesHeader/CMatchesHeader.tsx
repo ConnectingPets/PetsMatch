@@ -1,10 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { FaShieldDog } from 'react-icons/fa6';
 import { observer } from 'mobx-react';
 import themeStore from '../../../stores/themeStore';
 import './CMatchesHeader.scss';
 import agent from '../../../api/axiosAgent';
+import { MdOutlineDashboardCustomize } from 'react-icons/md';
 
 interface CMatchesHeaderProps { }
 
@@ -15,23 +16,23 @@ interface IMatchesHeaderAnimal {
 
 export const CMatchesHeader: React.FC<CMatchesHeaderProps> = observer(() => {
     const [pet, setPet] = useState<IMatchesHeaderAnimal>();
-    const {id} = useParams();
+    const { id } = useParams();
 
     useEffect(() => {
         if (id) {
             agent.apiAnimal.getAnimalById(id!)
                 .then(res => {
-                    const {name, photos} = res.data;
+                    const { name, photos } = res.data;
 
                     setPet({
                         name,
                         photo: photos.find((p: {
                             isMain: boolean
                         }) => p.isMain).url
-                    })
-                })
+                    });
+                });
         }
-    }, [id])
+    }, [id]);
 
     return (
         <section className={themeStore.isLightTheme ? 'matches__header' : 'matches__header  matches__header__dark'}>
@@ -41,9 +42,14 @@ export const CMatchesHeader: React.FC<CMatchesHeaderProps> = observer(() => {
                 </div>
                 <h5>{pet?.name}</h5>
             </article>
-            <Link to={'/about-faq'}>
-                <FaShieldDog />
-            </Link>
+            <div>
+                <Link to={'/dashboard'}>
+                    <MdOutlineDashboardCustomize />
+                </Link>
+                <Link to={'/about-faq'}>
+                    <FaShieldDog />
+                </Link>
+            </div>
         </section>
-    )
-})
+    );
+});

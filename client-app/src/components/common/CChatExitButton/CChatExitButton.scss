@@ -5,6 +5,10 @@
   width: 30px;
   height: 30px;
 
+  @media (max-width: 56.25rem) {
+    margin-right: 4rem;
+  }
+
   &:hover {
     text-decoration: none;
   }
