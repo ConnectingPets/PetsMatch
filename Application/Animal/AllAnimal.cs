@@ -7,12 +7,12 @@
     using Microsoft.EntityFrameworkCore;
 
     using Domain;
+    using Domain.Enum;
     using Response;
     using Application.DTOs.Animal;
     using Persistence.Repositories;
 
     using static Common.ExceptionMessages.Animal;
-    using Domain.Enum;
 
     public class AllAnimal
     {

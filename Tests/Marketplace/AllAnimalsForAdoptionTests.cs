@@ -47,7 +47,20 @@
                            Url = "URL"
                       }
                 },
+                Breed = new Breed()
+                {
+                    CategoryId = 2,
+                    Name = "BreedTest",
+                    Category = new AnimalCategory()
+                    {
+                        Name = "AnimalCategoryTest"
+                    }
+                },
                 OwnerId = Guid.NewGuid(),
+                Owner = new User()
+                {
+                    Name = "OwnerTest"
+                }
             };
             var animalTwo = new Animal()
             {
@@ -68,7 +81,20 @@
                            Url = "URL"
                       }
                 },
+                Breed = new Breed()
+                {
+                    CategoryId = 2,
+                    Name = "BreedTest",
+                    Category = new AnimalCategory()
+                    {
+                        Name = "AnimalCategoryTest"
+                    }
+                },
                 OwnerId = Guid.NewGuid(),
+                Owner = new User()
+                {
+                    Name = "TestOwner"
+                }
             };
 
             var queryable =
@@ -87,8 +113,8 @@
         public async Task Handle_ShowAllAnimalForAdoption_WhenNoAnimalsFound_ReturnsFailureResult()
         {
             var queryable =
-               new List<Animal> {}.AsQueryable();
-           SetUpReturningAnimals(queryable, repositoryMock);
+               new List<Animal> { }.AsQueryable();
+            SetUpReturningAnimals(queryable, repositoryMock);
 
             var result = await handler.Handle(new AllAnimalsForAdoptionQuery(), CancellationToken.None);
 

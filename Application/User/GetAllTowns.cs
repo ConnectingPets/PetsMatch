@@ -29,6 +29,7 @@
             public async Task<Result<IEnumerable<string>>> Handle(GetAllTownsQuery request, CancellationToken cancellationToken)
             {
                 var towns = await repository.AllReadonly<User>().
+                    Where(u => u.City != null).
                     Select(u => u.City).Distinct().ToArrayAsync();
 
                 return Result<IEnumerable<string>>.Success(towns);

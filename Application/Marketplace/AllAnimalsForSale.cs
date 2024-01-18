@@ -42,7 +42,11 @@
                         Id = a.AnimalId.ToString(),
                         Name = a.Name,
                         MainPhoto = a.Photos.First(p => p.IsMain).Url,
-                        Price = a.Price
+                        Price = a.Price,
+                        Breed = a.Breed.Name,
+                        Category = a.Breed.Category.Name,
+                        City = a.Owner.City!,
+                        Gender = a.Gender.ToString(),
                     }).ToArrayAsync();
 
                 if (!allAnimals.Any())
