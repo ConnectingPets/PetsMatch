@@ -13,7 +13,22 @@ export interface IUser {
     Gender?: number,
     Address?: string,
     City?: string,
-    PhotoUrl?: string
+    PhotoUrl?: string,
+    Roles: string[],
+    RememberMe?: boolean
+}
+
+export interface IUserProfile {
+    address?: string
+    age?: number
+    city?: string
+    education?: string
+    email: string
+    gender?: string
+    jobTitle?: string
+    name: string
+    photo?: string
+    roles?: string[]
 }
 
 export interface IUserAnimals {

@@ -68,7 +68,8 @@
                     UserDto userDto = new UserDto
                     {
                         Name = user.Name,
-                        Token = this.tokenService.CreateToken(user)
+                        Token = this.tokenService.CreateToken(user),
+                        Roles = roles
                     };
 
                     foreach (var role in roles)

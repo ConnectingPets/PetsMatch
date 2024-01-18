@@ -32,6 +32,16 @@ const ageRange = createValidator(
     field => `${field} must be between 16 and 90`
 );
 
+const isHaveRole = createValidator(
+    message => value => {
+        if (value == undefined || value.length == 0) {
+            return message;
+        }
+    },
+
+    field => `At least one ${field} must be selected`
+);
+
 export const registerFormValidator = combineValidators({
     Name: composeValidators(
         isRequired,
@@ -42,6 +52,7 @@ export const registerFormValidator = combineValidators({
         isRequired,
         isValidEmail
     )('Email'),
+    Roles: isHaveRole('Role'),
     Password: composeValidators(
         isRequired,
         hasLengthGreaterThan(4)
@@ -78,6 +89,7 @@ export const editUserProfileFormValidator = combineValidators({
         isNumeric,
         ageRange
     )('Age'),
+    Roles: isHaveRole('Role'),
     Education: composeValidators(
         isAlphabeticWithSpaces,
         hasLengthBetween(5, 50)

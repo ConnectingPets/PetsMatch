@@ -23,5 +23,7 @@
         public string? Gender { get; set; }
 
         public string? JobTitle { get; set; }
+
+        public string[] Roles { get; set; } = null!;
     }
 }
