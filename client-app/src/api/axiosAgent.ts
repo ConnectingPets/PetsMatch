@@ -24,6 +24,7 @@ const requests = {
 
 const apiUser = {
     getUserProfile: () => requests.get('/api/profile'),
+    getAllTowns: () => requests.get('/api/user/AllTowns'),
     register: (userData: IUser) => requests.post('/api/user/register', userData, headers.appJSON),
     login: (userData: IUser) => requests.post('/api/user/login', userData, headers.appJSON),
     logout: (body: object) => requests.post('/api/user/logout', body, headers.appJSON),

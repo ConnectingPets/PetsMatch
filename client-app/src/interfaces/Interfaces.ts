@@ -36,7 +36,11 @@ export interface IUserAnimals {
     id: string,
     name: string,
     mainPhoto: string,
-    price?: number | null
+    price?: number | null,
+    breed?: string,
+    category?: string,
+    city?: string,
+    gender?: string
 }
 
 export interface IAnimal {

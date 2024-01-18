@@ -4,6 +4,7 @@ import { observer } from 'mobx-react';
 
 import themeStore from '../../stores/themeStore';
 import { Breeds, Categories, IUserAnimals } from '../../interfaces/Interfaces';
+import { AnimalBreedEnum, AnimalCategoryEnum, animalBreedEnum, animalCategoryEnum } from '../../utils/constants';
 import agent from '../../api/axiosAgent';
 
 import FormsHeader from '../../components/FormsHeader/FormsHeader';
@@ -14,14 +15,24 @@ import './AdoptionMarketCatalogPage.scss';
 
 interface AdoptionMarketCatalogPageProps { }
 
+interface ISearchValues {
+    AnimalCategory: string
+    BreedId: string
+    City: string
+    Gender: string
+}
+
 const AdoptionMarketCatalogPage: React.FC<AdoptionMarketCatalogPageProps> = observer(() => {
     const [isMarket, setIsMarket] = useState<boolean>(true);
+    const [allPetsInMarket, setAllPetsInMarket] = useState<IUserAnimals[]>([]);
     const [petsInMarket, setPetsInMarket] = useState<IUserAnimals[]>([]);
+    const [allPetsForAdoption, setAllPetsForAdoption] = useState<IUserAnimals[]>([]);
     const [petsForAdoption, setPetsForAdoption] = useState<IUserAnimals[]>([]);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [itemsPerPage] = useState<number>(12);
     const [categories, setCategories] = useState<Categories[]>([]);
     const [breeds, setBreeds] = useState<Breeds[]>([]);
+    const [towns, setTowns] = useState<string[]>([]);
 
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -50,9 +61,11 @@ const AdoptionMarketCatalogPage: React.FC<AdoptionMarketCatalogPageProps> = obse
             try {
                 const allPetsInMarketResult = await agent.apiMarketplace.getAllAnimalsInMarketplace();
                 setPetsInMarket(allPetsInMarketResult.data);
+                setAllPetsInMarket(allPetsInMarketResult.data);
 
                 const allPetsForAdoptionResult = await agent.apiAdoption.getAllAnimalsForAdoption();
                 setPetsForAdoption(allPetsForAdoptionResult.data);
+                setAllPetsForAdoption(allPetsForAdoptionResult.data);
             } catch (err) {
                 console.error(err);
             }
@@ -68,13 +81,22 @@ const AdoptionMarketCatalogPage: React.FC<AdoptionMarketCatalogPageProps> = obse
     };
 
     useEffect(() => {
-        agent.apiAnimal.getAllCategories()
-            .then(res => {
-                setCategories(res.data);
-            });
+        const fetchData = async () => {
+            try {
+                const allCategories = await agent.apiAnimal.getAllCategories();
+                setCategories(allCategories.data);
+
+                const allCities = await agent.apiUser.getAllTowns();
+                setTowns(allCities.data);
+            } catch (err) {
+                console.error(err);
+            }
+        };
+
+        fetchData();
     }, []);
 
-    const onSearchSubmit = async (values: any) => {
+    const onSearchSubmit = async (values: ISearchValues) => {
         console.log(values);
 
         if (values.AnimalCategory) {
@@ -82,6 +104,30 @@ const AdoptionMarketCatalogPage: React.FC<AdoptionMarketCatalogPageProps> = obse
 
             setBreeds(res.data);
         }
+
+        let filteredPets = isMarket ? allPetsInMarket : allPetsForAdoption;
+
+        if (values.AnimalCategory) {
+            const category = Object.keys(animalCategoryEnum).filter(x => String(animalCategoryEnum[x as keyof AnimalCategoryEnum]) == values.AnimalCategory)[0];
+
+            filteredPets = filteredPets.filter(x => x.category == category);
+        }
+
+        if (values.BreedId) {
+            const breed = Object.keys(animalBreedEnum).filter(x => String(animalBreedEnum[x as keyof AnimalBreedEnum]) == values.BreedId)[0];
+
+            filteredPets = filteredPets.filter(x => x.breed == breed);
+        }
+
+        if (values.Gender) {
+            filteredPets = filteredPets.filter(x => x.gender == values.Gender);
+        }
+
+        if (values.City) {
+            filteredPets = filteredPets.filter(x => x.city == values.City);
+        }
+
+        isMarket ? setPetsInMarket(filteredPets) : setPetsForAdoption(filteredPets);
     };
 
     return (
@@ -148,9 +194,7 @@ const AdoptionMarketCatalogPage: React.FC<AdoptionMarketCatalogPageProps> = obse
                                             <CLabel inputName='City' title='City' />
                                             <select {...input} name="City" id="City">
                                                 <option>  </option>
-                                                <option>Pernik</option>
-                                                <option>Svishtov</option>
-                                                <option>Chicago</option>
+                                                {towns && towns.map(t => <option value={t} key={t}>{t}</option>)}
                                             </select>
                                         </>
                                     )}
@@ -165,6 +209,12 @@ const AdoptionMarketCatalogPage: React.FC<AdoptionMarketCatalogPageProps> = obse
 
                     {isMarket && currentItems.map(x => <CPetCard name={x.name} photo={x.mainPhoto} id={x.id} buttons='catalogMarket' key={x.id} />)}
                 </section>
+
+                {currentItems.length == 0 && (
+                    <div className='catalog-wrapper__empty-page'>
+                        <p>No pets found matching these filters!</p>
+                    </div>
+                )}
 
                 <div className='catalog-wrapper__pagination-btn'>{paginationButtons()}</div>
             </article>
