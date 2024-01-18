@@ -22,6 +22,7 @@ export interface IUserProfile {
     address?: string
     age?: number
     city?: string
+    description?: string
     education?: string
     email: string
     gender?: string

@@ -27,6 +27,7 @@ const userData = (user: IUserProfile) => {
         Address: user.address,
         Age: user.age,
         City: user.city,
+        Description: user.description,
         Education: user.education,
         Email: user.email,
         Gender: user.gender,
@@ -69,7 +70,7 @@ const EditUserProfilePage: React.FC<EditUserProfilePageProps> = observer(() => {
                         await agent.apiUser.deleteRole(role);
                     }
                 }
-                
+
                 userStore.setUser({ ...values, PhotoUrl: userStore.user?.PhotoUrl }, userStore.authToken!);
 
                 navigate('/dashboard');

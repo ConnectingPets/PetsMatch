@@ -32,5 +32,9 @@
         text-transform: capitalize;
         text-align: center;
     }
+
+    &__remember-me>div>label {
+        margin-right: 0.25rem;
+    }
 }
 
