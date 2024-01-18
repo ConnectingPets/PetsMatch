@@ -1,12 +1,14 @@
 ﻿namespace Tests.AnimalMatches
 {
+    using System.Linq.Expressions;
+
+    using Moq;
+    using MockQueryable.EntityFrameworkCore;
+
     using Domain;
     using Domain.Enum;
-    using Microsoft.EntityFrameworkCore;
-    using MockQueryable.EntityFrameworkCore;
-    using Moq;
     using Persistence.Repositories;
-    using System.Linq.Expressions;
+
     using static Application.Match.AnimalMatches;
 
     [TestFixture]
@@ -78,7 +80,6 @@
                     }
                 }
             };
-
             var match1 = new Domain.Match
             {
                 MatchId = Guid.NewGuid(),
@@ -92,7 +93,6 @@
                    }
                 }
             };
-
             var match2 = new Domain.Match
             {
                 MatchId = Guid.NewGuid(),
@@ -124,6 +124,16 @@
             repositoryMock.
                 Setup(r => r.All(It.IsAny<Expression<Func<Animal, bool>>>())).
                 Returns(asyncEnumerableAnimal);
+
+            var queryableAnimalMatches = 
+                new List<AnimalMatch> {animal.AnimalMatches.First()}.
+                AsQueryable();
+            var asyncEnumerableAnimalMatches =
+                new TestAsyncEnumerableEfCore<AnimalMatch>(queryableAnimalMatches);
+            repositoryMock.
+                Setup(r => r.
+                All(It.IsAny<Expression<Func<AnimalMatch, bool>>>())).
+                Returns(asyncEnumerableAnimalMatches);
 
             SetUpReturningUser(repositoryMock);
 

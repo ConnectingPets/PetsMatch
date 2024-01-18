@@ -39,7 +39,8 @@
 
                 if (category == null)
                 {
-                    return Result<IEnumerable<BreedDto>>.Failure(CategoryNotExist);
+                    return Result<IEnumerable<BreedDto>>.
+                        Failure(CategoryNotExist);
                 }
 
                 BreedDto[] breeds = category.Breeds.

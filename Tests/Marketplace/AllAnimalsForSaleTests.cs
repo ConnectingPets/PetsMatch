@@ -47,7 +47,20 @@
                            Url = "URL"
                       }
                 },
+                Breed = new Breed()
+                {
+                    CategoryId = 2,
+                    Name = "BreedTest",
+                    Category = new AnimalCategory()
+                    {
+                        Name = "AnimalCategoryTest"
+                    }
+                },
                 OwnerId = Guid.NewGuid(),
+                Owner = new User() 
+                {
+                    Name = "TestOwner"
+                }
             };
             var animalTwo = new Animal()
             {
@@ -68,7 +81,20 @@
                            Url = "URL"
                       }
                 },
+                Breed = new Breed()
+                {
+                    CategoryId = 2,
+                    Name = "BreedTest",
+                    Category = new AnimalCategory()
+                    {
+                        Name = "AnimalCategoryTest"
+                    }
+                },
                 OwnerId = Guid.NewGuid(),
+                Owner = new User()
+                {
+                    Name = "TestOwner"
+                }
             };
 
             var queryable =

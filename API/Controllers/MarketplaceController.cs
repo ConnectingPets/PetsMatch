@@ -8,7 +8,7 @@
     using Application.DTOs.Marketplace;
 
     using static Application.Marketplace.GetAnimal;
-    using static Application.Marketplace.MyAnimalForSale;
+    using static Application.Marketplace.MyAnimalsForSale;
     using static Application.Marketplace.MyAnimalsForAdoption;
     using static Application.Marketplace.AddAnimalMarketplace;
     using static Application.Marketplace.EditAnimalMarketplace;
@@ -129,8 +129,8 @@
         [HttpGet("MyAnimalsForSale")]
         public async Task<IActionResult> GetMyAnimalsForSale()
         {
-            MyAnimalForSaleQuery query =
-                new MyAnimalForSaleQuery()
+            MyAnimalsForSaleQuery query =
+                new MyAnimalsForSaleQuery()
                 {
                     UserId = this.User.GetById()
                 };

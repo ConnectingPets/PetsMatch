@@ -5,9 +5,9 @@
     using Domain;
     using Domain.Enum;
     using Persistence.Repositories;
+    using Application.DTOs.Marketplace;
 
     using static Application.Marketplace.EditAnimalMarketplace;
-    using Application.DTOs.Marketplace;
 
     [TestFixture]
     public class EditAnimalMarketplaceTests

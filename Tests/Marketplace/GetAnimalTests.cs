@@ -96,6 +96,5 @@
                 All(It.IsAny<Expression<Func<Animal, bool>>>())).
                 Returns(asyncEnumerable);
         }
-
     }
 }

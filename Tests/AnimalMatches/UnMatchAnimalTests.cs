@@ -1,21 +1,19 @@
 ﻿namespace Tests.AnimalMatches
 {
-    using Application.Match;
-    using Domain;
-    using Microsoft.EntityFrameworkCore;
-    using Moq;
-    using Persistence.Repositories;
     using System;
-    using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
     using System.Threading.Tasks;
-    using Domain;
-    using static Application.Match.UnMatchAnimal;
     using System.Linq.Expressions;
-    using Domain.Enum;
-    using static Application.Matches.MatchAnimal;
+    using System.Collections.Generic;
+
+    using Moq;
     using MockQueryable.EntityFrameworkCore;
+
+    using Domain;
+    using Domain.Enum;
+    using Persistence.Repositories;
+
+    using static Application.Match.UnMatchAnimal;
 
     [TestFixture]
     public class UnMatchAnimalTests

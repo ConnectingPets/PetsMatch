@@ -1,27 +1,31 @@
 ﻿namespace Tests.Marketplace
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Linq.Expressions;
+    using System.Threading.Tasks;
 
-    using Moq;
     using MockQueryable.EntityFrameworkCore;
+    using Moq;
 
     using Domain;
     using Domain.Enum;
     using Persistence.Repositories;
 
-    using static Application.Marketplace.MyAnimalsForSale;
+    using static Application.Marketplace.MyAnimalsForAdoption;
 
     [TestFixture]
-    public class MyAnimalsForSaleTests
+    public class MyAnimalsForAdoptionTests
     {
         private Mock<IRepository> repositoryMock;
-        private MyAnimalForSaleQueryHandler handler;
+        private MyAnimalsForAdoptionQueryHandler handler;
 
         [SetUp]
         public void SetUp()
         {
             repositoryMock = new Mock<IRepository>();
-            handler = new MyAnimalForSaleQueryHandler(repositoryMock.Object);
+            handler = new MyAnimalsForAdoptionQueryHandler(repositoryMock.Object);
         }
 
         [Test]
@@ -71,10 +75,10 @@
             };
 
             var queryable =
-                    new List<Animal> { animalOne, animalTwo}.AsQueryable();
+                    new List<Animal> { animalOne, animalTwo }.AsQueryable();
             SetUpReturningAnimals(queryable, repositoryMock);
 
-            var result = await handler.Handle(new MyAnimalsForSaleQuery(), CancellationToken.None);
+            var result = await handler.Handle(new MyAnimalsForAdoptionQuery(), CancellationToken.None);
 
             Assert.IsTrue(result.IsSuccess);
             Assert.AreEqual(2, result.Data.Count());
@@ -86,13 +90,13 @@
         public async Task Handle_UserWithoutPets_ReturnsFailureResult()
         {
             var queryable =
-                    new List<Animal> {}.AsQueryable();
+                    new List<Animal> { }.AsQueryable();
             SetUpReturningAnimals(queryable, repositoryMock);
 
-            var result = await handler.Handle(new MyAnimalsForSaleQuery(), CancellationToken.None);
+            var result = await handler.Handle(new MyAnimalsForAdoptionQuery(), CancellationToken.None);
 
             Assert.IsFalse(result.IsSuccess);
-            Assert.AreEqual("You still don't have animal for sale", result.ErrorMessage);
+            Assert.AreEqual("You still don't have animal for adoption", result.ErrorMessage);
         }
 
         private static void SetUpReturningAnimals(
@@ -108,5 +112,4 @@
         }
     }
 }
-
 
