@@ -56,5 +56,15 @@
 
             return Ok(result);
         }
+
+        [Authorize]
+        [Route("AllTowns")]
+        [HttpGet]
+        public async Task<IActionResult> GetAllTowns()
+        {
+            var result = await this.userService.GetAllTownsAsync();
+
+            return Ok(result);
+        }
     }
 }
