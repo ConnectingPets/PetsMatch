@@ -24,7 +24,7 @@ const isValidEmail = createValidator(
 
 const ageRange = createValidator(
     message => value => {
-        if (Number(value) < 16 || Number(value) > 90) {
+        if (value !== null && value != 0 && (Number(value) < 16 || Number(value) > 90)) {
             return message;
         }
     },
