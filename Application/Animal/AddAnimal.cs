@@ -15,7 +15,7 @@
 
     public class AddAnimal
     {
-        public class AddAnimalCommand : IRequest<Result<Unit>>
+        public class AddAnimalCommand : IRequest<Result<Unit>> 
         {
             public AddAnimalDto AnimalDto { get; set; } = null!;
 

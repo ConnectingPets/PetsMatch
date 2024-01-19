@@ -7,8 +7,8 @@
     using Microsoft.EntityFrameworkCore;
 
     using Domain;
+    using Domain.Enum;
     using Response;
-    using Persistence;
     using Application.DTOs.Animal;
     using Persistence.Repositories;
 
@@ -16,45 +16,45 @@
 
     public class AllAnimal
     {
-        public class AllAnimalQuery : IRequest<Result<IEnumerable<AllAnimalDto>>>
+        public class AllAnimalQuery : IRequest<Result<IEnumerable<AllAnimalsDto>>>
         {
             public string OwnerId { get; set; } = null!;
         }
 
         public class AllAnimalQueryHandler :
-            IRequestHandler<AllAnimalQuery, Result<IEnumerable<AllAnimalDto>>>
+            IRequestHandler<AllAnimalQuery, Result<IEnumerable<AllAnimalsDto>>>
         {
             private readonly IRepository repository;
-            private readonly DataContext dataContext;
 
-            public AllAnimalQueryHandler(IRepository repository, DataContext dataContext)
+            public AllAnimalQueryHandler(IRepository repository)
             {
                 this.repository = repository;
-                this.dataContext = dataContext;
             }
 
-            public async Task<Result<IEnumerable<AllAnimalDto>>> Handle(AllAnimalQuery request, CancellationToken cancellationToken)
+            public async Task<Result<IEnumerable<AllAnimalsDto>>> Handle(AllAnimalQuery request, CancellationToken cancellationToken)
             {
                 string userId = request.OwnerId;
                 User? user = await repository.
                     All<User>(u => u.Id.ToString() == userId).
-                    Include(u => u.Animals).FirstOrDefaultAsync();
+                    Include(u => u.Animals).
+                    ThenInclude(a => a.Photos).
+                    FirstOrDefaultAsync();
 
-                if (!(user!.Animals.Any()))
-                {
-                    return Result<IEnumerable<AllAnimalDto>>.Failure(NoPets);
-                }
-
-                var userAnimals = await repository.
-                    AllReadonly<Animal>(a => a.OwnerId.ToString() == userId).
-                    Select(a => new AllAnimalDto()
+                var userAnimals = user!.Animals.
+                    Where(a => a.AnimalStatus == AnimalStatus.ForSwiping).
+                    Select(a => new AllAnimalsDto()
                     {
                         Id = a.AnimalId.ToString(),
                         Name = a.Name,
                         MainPhoto = a.Photos.First(p => p.IsMain).Url
-                    }).ToListAsync();
+                    }).ToList();
 
-                return Result<IEnumerable<AllAnimalDto>>.Success(userAnimals);
+                if (!userAnimals.Any())
+                {
+                    return Result<IEnumerable<AllAnimalsDto>>.Failure(NoPets);
+                }
+
+                return Result<IEnumerable<AllAnimalsDto>>.Success(userAnimals);
             }
         }
     }

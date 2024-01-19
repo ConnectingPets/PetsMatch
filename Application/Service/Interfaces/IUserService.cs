@@ -12,5 +12,7 @@
         Task<Result<UserDto>> RegisterAsync(string email, string password, string name, string[] roles);
 
         Task<Result<Unit>> LogoutAsync(string email);
+
+        Task<Result<IEnumerable<string>>> GetAllTownsAsync();
     }
 }

@@ -8,7 +8,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import { IUser } from '../../interfaces/Interfaces';
 import { registerFormValidator } from '../../validators/userProfileFormValidators';
 import agent from '../../api/axiosAgent';
-import userStore from '../../stores/userStore';
 
 import { CLabel } from '../common/CLabel/CLabel';
 import { CSubmitButton } from '../common/CSubmitButton/CSubmitButton';
@@ -18,23 +17,15 @@ interface RegisterProps {
     showLogin: () => void;
 }
 
-export const Register: React.FC<RegisterProps> = observer(({
-    showLogin
-}) => {
+export const Register: React.FC<RegisterProps> = observer(() => {
     const navigate = useNavigate();
 
     const onSubmit = async (values: IUser) => {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        // const { ConfirmPassword, ...userData } = values;
 
         try {
             const result = await agent.apiUser.register(values);
 
             if (result.isSuccess) {
-                const { name: Name, token } = result.data;
-                const Email = values.Email;
-            
-                userStore.setUser({ Name, Email }, token);
 
                 navigate('/dashboard');
             } else {
@@ -48,19 +39,19 @@ export const Register: React.FC<RegisterProps> = observer(({
     };
 
     return (
-        <section className='register__form__section'>
+        <section className="register__form__section">
             <Form
                 onSubmit={onSubmit}
                 validate={registerFormValidator}
                 render={({ handleSubmit }) => (
-                    <form className='register__form' onSubmit={handleSubmit}>
+                    <form className="register__form" onSubmit={handleSubmit}>
 
                         <Field name="Name">
                             {({ input, meta }) => (
                                 <div>
                                     <CLabel inputName={'Name'} title={'Name'} />
-                                    <input className='register__form__input' type="text" {...input} name='Name' id='Name' placeholder="John Sillver" />
-                                    {meta.touched && meta.error && <div className='register__form__error__message'>{meta.error}</div>}
+                                    <input className="register__form__input" type="text" {...input} name="Name" id="Name" placeholder="John Sillver" />
+                                    {meta.touched && meta.error && <div className="register__form__error__message">{meta.error}</div>}
                                 </div>
                             )}
                         </Field>
@@ -69,8 +60,8 @@ export const Register: React.FC<RegisterProps> = observer(({
                             {({ input, meta }) => (
                                 <div>
                                     <CLabel inputName={'Email'} title={'Email'} />
-                                    <input className='register__form__input' type="text" {...input} name='Email' id='Email' placeholder="john-sillver@gmail.com" />
-                                    {meta.touched && meta.error && <div className='register__form__error__message'>{meta.error}</div>}
+                                    <input className="register__form__input" type="text" {...input} name="Email" id="Email" placeholder="john-sillver@gmail.com" />
+                                    {meta.touched && meta.error && <div className="register__form__error__message">{meta.error}</div>}
                                 </div>
                             )}
                         </Field>
@@ -79,8 +70,8 @@ export const Register: React.FC<RegisterProps> = observer(({
                             {({ input, meta }) => (
                                 <div>
                                     <CLabel inputName={'Password'} title={'Password'} />
-                                    <input className='register__form__input' type="password" {...input} name='Password' id='Password' placeholder="* * * * * * *" />
-                                    {meta.touched && meta.error && <div className='register__form__error__message'>{meta.error}</div>}
+                                    <input className="register__form__input" type="password" {...input} name="Password" id="Password" placeholder="* * * * * * *" />
+                                    {meta.touched && meta.error && <div className="register__form__error__message">{meta.error}</div>}
                                 </div>
                             )}
                         </Field>
@@ -89,14 +80,38 @@ export const Register: React.FC<RegisterProps> = observer(({
                             {({ input, meta }) => (
                                 <div>
                                     <CLabel inputName={'ConfirmPassword'} title={'Confirm Password'} />
-                                    <input className='register__form__input' type="password" {...input} name='ConfirmPassword' id='ConfirmPassword' placeholder="* * * * * * *" />
-                                    {meta.touched && meta.error && <div className='register__form__error__message'>{meta.error}</div>}
+                                    <input className="register__form__input" type="password" {...input} name="ConfirmPassword" id="ConfirmPassword" placeholder="* * * * * * *" />
+                                    {meta.touched && meta.error && <div className="register__form__error__message">{meta.error}</div>}
                                 </div>
                             )}
                         </Field>
 
+                        <section className="register__form__roles">
+                            <CLabel inputName={''} title={'Select Role'} />
+
+                            <Field type="checkbox" name="Roles" value="Matching">
+                                {({ input }) => (
+                                    <div className="register__form__roles__matching">
+                                        <label htmlFor='Roles'>Matching</label>
+                                        <input type="checkbox" {...input} name="Roles" value="Matching" className="checkbox__input" />
+                                    </div>
+                                )}
+                            </Field>
+
+                            <Field type="checkbox" name="Roles" value="Marketplace">
+                                {({ input, meta }) => (
+                                    <div className="register__form__roles__marketplace">
+                                        <div>
+                                            <label htmlFor='Roles'>Marketplace</label>
+                                            <input type="checkbox" {...input} name="Roles" value="Marketplace" className="checkbox__input" />
+                                        </div>
+                                        {meta.touched && meta.error && <div className="register__form__error__message">{meta.error}</div>}
+                                    </div>
+                                )}
+                            </Field>
+                        </section>
+
                         <CSubmitButton textContent='Register' />
-                        <p className='account__message' onClick={showLogin}>If you have an account click here!</p>
                     </form>
                 )} />
         </section>

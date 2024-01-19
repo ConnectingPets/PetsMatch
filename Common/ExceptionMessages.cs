@@ -6,7 +6,7 @@
         {
             public const string InvalidNameLength = "The animal name should be with length between 2 and 50";
             public const string InvalidDescriptionLength = "The animal description has max length of 150";
-            public const string AnimalNotFound = "This pet does not exist! Please select existing one";
+            public const string AnimalNotFound = "This pet does not exist! Please select an existing one";
             public const string NotOwner = "This pet does not belong to you";
             public const string FailedToCreate = "Failed to create pet - {0}";
             public const string NoPets = "You don't have pets yet";
@@ -77,7 +77,7 @@
 
         public static class Marketplace
         {
-            public const string NoAnimalsForAdoption = "We still don't have animal for adoption";
+            public const string NoAnimalsForAdoption = "We still don't have animals for adoption";
             public const string NoAnimalsForSale = "We still don't have animals for sale";
             public const string DoNotHaveAnimalForSale = "You still don't have animal for sale";
             public const string DoNotHaveAnimalForAdoption = "You still don't have animal for adoption";

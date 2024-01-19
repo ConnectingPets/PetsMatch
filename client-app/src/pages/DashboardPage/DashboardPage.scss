@@ -25,15 +25,16 @@
                 grid-area: one;
             }
 
-            .change__theme__button{
+            .change__theme__button {
                 grid-area: two;
             }
 
-            .greet__title{
+            .greet__title {
                 grid-area: three;
             }
 
         }
+
         @include gs.breakpoint(mobile-start, mobile-end) {
             @include gs.display-grid(3, 1rem, center);
             grid-template-areas:
@@ -44,11 +45,11 @@
                 grid-area: one;
             }
 
-            .change__theme__button{
+            .change__theme__button {
                 grid-area: two;
             }
 
-            .greet__title{
+            .greet__title {
                 grid-area: three;
             }
 
@@ -92,6 +93,22 @@
         }
     }
 
+    &__navbar {
+        width: 100%;
+        max-width: 93rem;
+        @include gs.display-flex(none, center, none);
+        gap: 2rem;
+
+        &>svg {
+            font-size: 3rem;
+            cursor: pointer;
+
+            &:first-child {
+                color: lightgreen;
+            }
+        }
+    }
+
     &__pets {
         @include gs.display-grid(3, 2.2rem, center);
         margin: 2rem 0;
@@ -121,10 +138,61 @@
     padding: 1rem;
     @include gs.shadow(gs.$dark-shadow);
 
+    &__market-btn {
+        width: 15%;
+        margin-left: 0.5rem;
+
+        @include gs.breakpoint(tablet-start, tablet-end) {
+            width: 35%;
+        }
+
+        @include gs.breakpoint(mobile-start, mobile-end) {
+            width: 100%;
+            margin-bottom: 2rem;
+        }
+    }
+
     &>h3 {
         text-align: center;
         margin: 0.5rem;
         text-transform: capitalize;
+    }
+
+    &__options {
+        @include gs.display-flex(row, center, center);
+        gap: 2rem;
+        width: 100%;
+        padding: 2rem;
+        margin-top: 1.2rem;
+
+        &>div {
+            &>h3 {
+                // display: flex;
+                // flex-direction: column;
+                // position: relative;
+                cursor: pointer;
+            }
+        }
+    }
+
+    &__option {
+        position: relative;
+        @include gs.display-flex(column, center, center);
+
+        &::after {
+            content: '';
+            width: 110%;
+            border-radius: 20%;
+            height: 0.2rem;
+            background: #000;
+            position: absolute;
+            opacity: 1;
+            bottom: -0.6rem;
+            margin: 0.1rem;
+            animation: opacityShow 0.5 forwards;
+            -webkit-animation: opacityShow 0.5s forwards;
+            -moz-animation: opacityShow 0.5s forwards;
+        }
     }
 }
 
@@ -137,4 +205,16 @@
     // @include gs.dark-theme(gs.$dark-background-color-second);
     @include gs.dark-theme(gs.$dark-background-color);
 
+}
+
+@keyframes opacityShow {
+    0% {
+        opacity: 0;
+        transform: scale(0);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1.1);
+    }
 }

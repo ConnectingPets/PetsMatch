@@ -13,7 +13,29 @@ export interface IUser {
     Gender?: number,
     Address?: string,
     City?: string,
-    PhotoUrl?: string
+    PhotoUrl?: string,
+    Roles: string[],
+    RememberMe?: boolean
+}
+
+export interface IUserProfile {
+    address?: string
+    age?: number
+    city?: string
+    education?: string
+    email: string
+    gender?: string
+    jobTitle?: string
+    name: string
+    photo?: string
+    roles?: string[]
+}
+
+export interface IUserAnimals {
+    id: string,
+    name: string,
+    mainPhoto: string,
+    price?: number | null
 }
 
 export interface IAnimal {
@@ -37,7 +59,9 @@ export interface IAnimal {
     IsHavingValidDocuments: string | boolean,
     isModifiedBreed?: boolean,
     isModifiedGender?: boolean,
-    isModifiedName?: boolean
+    isModifiedName?: boolean,
+    IsForSale?: string,
+    Price?: string
 }
 
 export interface Categories {
@@ -48,6 +72,26 @@ export interface Categories {
 export interface Breeds {
     name: string,
     breedId: number
+}
+
+export interface IAnimalWithUserInfo {
+    address: string
+    age: number
+    birthDate: string
+    breedName: string
+    city: string
+    description: string
+    gender: number
+    healthStatus: number
+    isEducated: boolean
+    isHavingValidDocuments: boolean
+    name: string
+    photos: IPhoto[]
+    price: number
+    socialMedia: string
+    userEmail: string
+    userName: string
+    weight: number
 }
 
 export interface IPossibleSwipes {

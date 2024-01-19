@@ -1,6 +1,7 @@
 ﻿namespace Application.Service
 {
     using System.Threading.Tasks;
+    using System.Collections.Generic;
 
     using MediatR;
 
@@ -11,6 +12,7 @@
     using static Application.User.LoginUser;
     using static Application.User.LogoutUser;
     using static Application.User.RegisterUser;
+    using static Application.User.GetAllTowns;
 
     public class UserService : IUserService
     {
@@ -43,5 +45,8 @@
                 Name = name,
                 Roles = roles
             });
+
+        public async Task<Result<IEnumerable<string>>> GetAllTownsAsync()
+        => await this.mediator.Send(new GetAllTownsQuery());
     }
 }

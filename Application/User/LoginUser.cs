@@ -30,17 +30,20 @@
         public class LoginUserHandler : IRequestHandler<LoginUserCommand, Result<UserDto>>
         {
             private readonly SignInManager<User> signInManager;
+            private readonly UserManager<User> userManager;
             private readonly IRepository repository;
             private readonly ITokenService tokenService;
 
             public LoginUserHandler(
                 SignInManager<User> signInManager,
+                UserManager<User> userManager,
                 IRepository repository,
                 ITokenService tokenService)
             {
                 this.repository = repository;
                 this.signInManager = signInManager;
                 this.tokenService = tokenService;
+                this.userManager = userManager;
             }
 
             public async Task<Result<UserDto>> Handle(LoginUserCommand request, CancellationToken cancellationToken)
@@ -64,6 +67,8 @@
                         return Result<UserDto>.Failure(FailedLogin);
                     }
 
+                    string[] roles = (await userManager.GetRolesAsync(user)).ToArray();
+
                     UserDto userDto = new UserDto
                     {
                         Name = user.Name,
@@ -74,7 +79,8 @@
                         JobTitle = user.JobTitle,
                         Gender = user.Gender.ToString(),
                         Education = user.Education,
-                        Age = user.Age
+                        Age = user.Age,
+                        Roles = roles
                     };
 
                     return Result<UserDto>.Success(userDto);

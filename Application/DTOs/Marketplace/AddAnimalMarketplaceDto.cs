@@ -1,7 +1,7 @@
-﻿using Application.DTOs.Animal;
-
-namespace Application.DTOs.Marketplace
+﻿namespace Application.DTOs.Marketplace
 {
+    using Animal;
+
     public class AddAnimalMarketplaceDto : AddAnimalDto
     {
         public bool IsForSale { get; set; }

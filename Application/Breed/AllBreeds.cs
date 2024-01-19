@@ -33,20 +33,22 @@
             {
                 int categoryId = request.CategoryId;
 
-                AnimalCategory? category = await repository.GetById<AnimalCategory>(categoryId);
+                AnimalCategory? category = await repository.
+                    All<AnimalCategory>(c => c.AnimalCategoryId == categoryId).Include(c => c.Breeds).
+                    FirstOrDefaultAsync();
 
                 if (category == null)
                 {
-                    return Result<IEnumerable<BreedDto>>.Failure(CategoryNotExist);
+                    return Result<IEnumerable<BreedDto>>.
+                        Failure(CategoryNotExist);
                 }
 
-                BreedDto[] breeds = await repository.
-                   All<Breed>().Where(b => b.CategoryId == categoryId).
+                BreedDto[] breeds = category.Breeds.
                    Select(b => new BreedDto()
                    {
                        BreedId = b.BreedId,
                        Name = b.Name,
-                   }).ToArrayAsync();
+                   }).ToArray();
 
                 return Result<IEnumerable<BreedDto>>.Success(breeds);
             }

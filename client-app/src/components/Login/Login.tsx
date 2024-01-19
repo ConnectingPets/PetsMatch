@@ -23,36 +23,41 @@ export const Login: React.FC<LoginProps> = ({
     const navigate = useNavigate();
 
     const onSubmit = async (values: IUser) => {
+        const { RememberMe, ...userData } = values;
+
         try {
-            const result = await agent.apiUser.login(values);
+            const result = await agent.apiUser.login(userData);
 
             if (result.isSuccess) {
-                const { 
-                    name: Name,
-                    photoUrl: PhotoUrl, 
-                    age: Age,
-                    jobTitle: JobTitle,
-                    city: City,
-                    address: Address,
-                    education: Education,
-                    gender: Gender,
-                    token
-                } = result.data;
-                const Email = values.Email;
-            
-                userStore.setUser({
-                    Name,
-                    PhotoUrl,
-                    Age,
-                    Email,
-                    JobTitle,
-                    City,
-                    Address,
-                    Education,
-                    Gender
-                }, token);
+                if (RememberMe) {
+                    const {
+                        name: Name,
+                        photoUrl: PhotoUrl,
+                        age: Age,
+                        jobTitle: JobTitle,
+                        city: City,
+                        address: Address,
+                        education: Education,
+                        gender: Gender,
+                        token
+                    } = result.data;
+                    const Email = values.Email;
 
-                navigate('/dashboard'); 
+                    userStore.setUser({
+                        Name,
+                        PhotoUrl,
+                        Age,
+                        Email,
+                        JobTitle,
+                        City,
+                        Address,
+                        Education,
+                        Gender,
+                        Roles: []
+                    }, token);
+                }
+
+                navigate('/dashboard');
             } else {
                 toast.error(result.errorMessage);
             }
@@ -91,8 +96,17 @@ export const Login: React.FC<LoginProps> = ({
                             )}
                         </Field>
 
+                        <Field name='RememberMe'>
+                            {({ input }) => (
+                                <div>
+                                    <CLabel inputName='RememberMe' title='Remember me' />
+                                    <input type="checkbox" {...input} name='RememberMe' id='RememberMe' />
+                                </div>
+                            )}
+                        </Field>
+
                         <CSubmitButton textContent='Login' />
-                        <p className='account__message' onClick={showRegister}>If you don't have an account click here!</p>
+                        <p className='account__message' onClick={showRegister}>Register Now!</p>
                     </form>
                 )
                 } />

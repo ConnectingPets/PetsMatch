@@ -23,11 +23,13 @@ const requests = {
 };
 
 const apiUser = {
+    getUserProfile: () => requests.get('/api/profile'),
     register: (userData: IUser) => requests.post('/api/user/register', userData, headers.appJSON),
     login: (userData: IUser) => requests.post('/api/user/login', userData, headers.appJSON),
     logout: (body: object) => requests.post('/api/user/logout', body, headers.appJSON),
     editUser: (body: IUser) => requests.patch('/api/profile/edit', body, headers.appJSON),
-    deleteUser: () => requests.del('/api/profile/delete')
+    deleteUser: () => requests.del('/api/profile/delete'),
+    deleteRole: (role: string) => requests.del(`/api/profile/deleterole?rolename=${role}`)
 };
 
 const apiAnimal = {
@@ -62,12 +64,29 @@ const apiMessages = {
     sendMessage: (body: object) => requests.post('/sendMessage', body, headers.appJSON)
 };
 
+const apiMarketplace = {
+    getAllAnimalsInMarketplace: () => requests.get('/api/marketplace/AllAnimalsForSale'),
+    getMyAnimalsForSale: () => requests.get('/api/marketplace/MyAnimalsForSale'),
+    getAnimalById: (animalId: string) => requests.get(`/api/marketplace/EditAnimal/${animalId}`),
+    getAnimalWithUserInfoByAnimalId: (animalId: string) => requests.get(`/api/marketplace/GetAnimal/${animalId}`),
+    addAnimal: (animalData: FormData) => requests.post('/api/marketplace/Add', animalData, headers.multipart),
+    editAnimalById: (animalId: string, animalData: IAnimal) => requests.patch(`/api/marketplace/${animalId}`, animalData, headers.multipart),
+    deleteAnimal: (animalId: string) => requests.del(`/api/marketplace/${animalId}`)
+};
+
+const apiAdoption = {
+    getAllAnimalsForAdoption: () => requests.get('/api/marketplace/AllAnimalsForAdoption'),
+    getMyAnimalsForAdoption: () => requests.get('/api/marketplace/MyAnimalsForAdoption')
+};
+
 const agent = {
     apiUser,
     apiAnimal,
     apiMatches,
     apiPhotos,
-    apiMessages
+    apiMessages,
+    apiMarketplace,
+    apiAdoption
 };
 
 export default agent;
