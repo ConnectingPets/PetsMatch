@@ -11,9 +11,9 @@
     using Persistence.Repositories;
     using Application.DTOs.User;
     using Application.Response;
+    using Application.Service.Interfaces;
 
     using static Common.ExceptionMessages.User;
-    using Application.Service.Interfaces;
 
     public class UserProfile
     {
@@ -22,13 +22,13 @@
             public string UserId { get; set; } = null!;
         }
 
-        public class UserProfileCommand : IRequestHandler<UserProfileQuery, Result<UserProfileDto>>
+        public class UserProfileHandler : IRequestHandler<UserProfileQuery, Result<UserProfileDto>>
         {
             private readonly IRepository repository;
             private readonly ITokenService tokenService;
             private readonly UserManager<User> userManager;
 
-            public UserProfileCommand(IRepository repository,
+            public UserProfileHandler(IRepository repository,
                                       ITokenService tokenService,
                                       UserManager<User> userManager)
             {
