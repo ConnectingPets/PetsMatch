@@ -78,6 +78,13 @@ const AdoptionMarketCatalogPage: React.FC<AdoptionMarketCatalogPageProps> = obse
         setIsMarket(state => !state);
 
         setCurrentPage(1);
+
+        // onSearchSubmit({
+        //     AnimalCategory: '',
+        //     BreedId: '',
+        //     City: '',
+        //     Gender: ''
+        // });
     };
 
     useEffect(() => {
@@ -207,7 +214,7 @@ const AdoptionMarketCatalogPage: React.FC<AdoptionMarketCatalogPageProps> = obse
                 <section className='catalog-wrapper__pets'>
                     {!isMarket && currentItems.map(x => <CPetCard name={x.name} photo={x.mainPhoto} id={x.id} buttons='catalogAdoption' key={x.id} />)}
 
-                    {isMarket && currentItems.map(x => <CPetCard name={x.name} photo={x.mainPhoto} id={x.id} buttons='catalogMarket' key={x.id} />)}
+                    {isMarket && currentItems.map(x => <CPetCard name={x.name} photo={x.mainPhoto} price={x.price} id={x.id} buttons='catalogMarket' key={x.id} />)}
                 </section>
 
                 {currentItems.length == 0 && (
