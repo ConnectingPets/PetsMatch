@@ -20,6 +20,7 @@ interface ISearchValues {
     BreedId: string
     City: string
     Gender: string
+    Price: string
 }
 
 const AdoptionMarketCatalogPage: React.FC<AdoptionMarketCatalogPageProps> = observer(() => {
@@ -104,7 +105,6 @@ const AdoptionMarketCatalogPage: React.FC<AdoptionMarketCatalogPageProps> = obse
     }, []);
 
     const onSearchSubmit = async (values: ISearchValues) => {
-        console.log(values);
 
         if (values.AnimalCategory) {
             const res = await agent.apiAnimal.getAllBreeds(Number(values.AnimalCategory));
@@ -132,6 +132,18 @@ const AdoptionMarketCatalogPage: React.FC<AdoptionMarketCatalogPageProps> = obse
 
         if (values.City) {
             filteredPets = filteredPets.filter(x => x.city == values.City);
+        }
+
+        if (values.Price) {
+            if (values.Price.includes('-')) {
+                const range = values.Price.split('-');
+                const firstNum = Number(range[0]);
+                const secondNum = Number(range[1]);
+
+                filteredPets = filteredPets.filter(x => x.price && x.price >= firstNum && x.price <= secondNum);
+            } else {
+                filteredPets = filteredPets.filter(x => x.price && x.price >= 800);
+            }
         }
 
         isMarket ? setPetsInMarket(filteredPets) : setPetsForAdoption(filteredPets);
@@ -206,6 +218,24 @@ const AdoptionMarketCatalogPage: React.FC<AdoptionMarketCatalogPageProps> = obse
                                         </>
                                     )}
                                 </Field>
+
+                                {isMarket && (
+                                    <Field name='Price'>
+                                        {({ input }) => (
+                                            <>
+                                                <CLabel inputName='Price' title='Price in $' />
+                                                <select {...input} name="Price" id="Price">
+                                                    <option>  </option>
+                                                    <option>0-200</option>
+                                                    <option>200-400</option>
+                                                    <option>400-600</option>
+                                                    <option>600-800</option>
+                                                    <option>800 +</option>
+                                                </select>
+                                            </>
+                                        )}
+                                    </Field>
+                                )}
 
                             </form>
                         )} />
