@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FieldInputProps } from 'react-final-form';
 
 import { CLabel } from '../common/CLabel/CLabel';
@@ -14,7 +14,13 @@ interface UserPhotoProps {
 }
 
 const UserPhoto: React.FC<UserPhotoProps> = ({ input, initialValue }) => {
-    const [photo, setPhoto] = useState<string | null>(initialValue || null);
+    const [photo, setPhoto] = useState<string | undefined>(initialValue || undefined);
+
+    useEffect(() => {
+        if (initialValue) {
+            setPhoto(initialValue);
+        }
+    }, [initialValue]);
 
     const handleFile = async (
         e: React.ChangeEvent<HTMLInputElement>,
@@ -49,7 +55,7 @@ const UserPhoto: React.FC<UserPhotoProps> = ({ input, initialValue }) => {
     };
 
     const handleRemovePhoto = async (input: FieldInputProps<File, HTMLElement>) => {
-        setPhoto(null);
+        setPhoto(undefined);
         input.onChange(null);
 
         try {
