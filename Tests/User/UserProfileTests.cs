@@ -39,7 +39,10 @@
                  new Mock<IServiceProvider>().Object,
                  new Mock<ILogger<UserManager<User>>>().Object
              );
-            handler = new UserProfileHandler(repositoryMock.Object, tokenServiceMock.Object, userManagerMock.Object);
+            handler = new UserProfileHandler(
+                repositoryMock.Object, 
+                tokenServiceMock.Object, 
+                userManagerMock.Object);
         }
 
         [Test]
