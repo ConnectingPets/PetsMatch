@@ -104,9 +104,7 @@
             var asyncEnumerable =
                new TestAsyncEnumerableEfCore<Animal>(queryable);
             repositoryMock.
-                Setup(r => r.
-                All<Animal>()).
-                Returns(asyncEnumerable);
+                Setup(r => r.All<Animal>()).Returns(asyncEnumerable);
         }
     }
 }
