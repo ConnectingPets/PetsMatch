@@ -11,9 +11,9 @@ export type HealthStatusEnum = {
 };
 
 export type AnimalCategoryEnum = {
-    'cat': number,
-    'dog': number,
-    'bunny': number
+    'Cat': number,
+    'Dog': number,
+    'Bunny': number
 };
 
 export type AnimalBreedEnum = {
@@ -49,9 +49,9 @@ export const animalStatusEnum: AnimalStatusEnum = {
 };
 
 export const animalCategoryEnum: AnimalCategoryEnum = {
-    'cat': 1,
-    'dog': 2,
-    'bunny': 3
+    'Cat': 1,
+    'Dog': 2,
+    'Bunny': 3
 };
 
 export const animalBreedEnum: AnimalBreedEnum = {
