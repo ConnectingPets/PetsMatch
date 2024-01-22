@@ -18,7 +18,7 @@
     using static Application.Marketplace.AllAnimalsForSale;
     using static Common.GeneralApplicationConstants;
 
-    // [Authorize(Roles = MarketplaceRoleName)]
+    [Authorize(Roles = MarketplaceRoleName)]
     [ApiController]
     [Route("api/[controller]")]
     public class MarketplaceController : ControllerBase

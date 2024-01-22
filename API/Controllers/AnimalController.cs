@@ -17,7 +17,7 @@
     using static Common.GeneralApplicationConstants;
     using static Application.Animal.AnimalProfile;
 
-    //[Authorize(Roles = MatchingRoleName)]
+    [Authorize(Roles = MatchingRoleName)]
     [ApiController]
     [Route("api/[controller]")]
     public class AnimalController : ControllerBase
