@@ -4,17 +4,17 @@
     using System.Threading.Tasks;
     
     using MediatR;
+    using Microsoft.EntityFrameworkCore;
     using Microsoft.AspNetCore.Identity;
     
     using Domain;
     using Application.Response;
     using Application.DTOs.User;
+    using Persistence.Repositories;
     using Application.Service.Interfaces;
 
     using static Common.ExceptionMessages.User;
     using static Common.FailMessages.User;
-    using Persistence.Repositories;
-    using Microsoft.EntityFrameworkCore;
 
     public class LoginUser
     {
