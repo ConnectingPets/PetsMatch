@@ -7,7 +7,6 @@
     using Microsoft.AspNetCore.Identity;
 
     using Domain;
-    using Persistence.Repositories;
     using Application.Service.Interfaces;
 
     using static Application.User.RegisterUser;
@@ -15,7 +14,6 @@
     [TestFixture]
     public class RegisterUserTests
     {
-        private Mock<IRepository> repositoryMock;
         private Mock<ITokenService> tokenServiceMock;
         private Mock<UserManager<User>> userManagerMock;
         private Mock<SignInManager<User>> userSingInManagerMock;
@@ -24,7 +22,6 @@
         [SetUp]
         public void SetUp()
         {
-            repositoryMock = new Mock<IRepository>();
             tokenServiceMock = new Mock<ITokenService>();
             userManagerMock = new Mock<UserManager<User>>(
                 new Mock<IUserStore<User>>().Object,
