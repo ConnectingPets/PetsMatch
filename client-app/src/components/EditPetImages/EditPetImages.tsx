@@ -45,7 +45,7 @@ const EditPetImages: React.FC<EditPetImagesProps> = ({ input, initialImages, pet
                 const res = await agent.apiAnimal.uploadAnimalPhoto(petId, formData);
 
                 if (res.isSuccess) {
-                    toast.success(res.data);
+                    toast.success(res.successMessage);
                 } else {
                     toast.error(res.errorMessage);
                 }
@@ -167,9 +167,11 @@ const EditPetImages: React.FC<EditPetImagesProps> = ({ input, initialImages, pet
                                                 className={image.isMain ? 'image-preview main' : 'image-preview'}
                                             >
                                                 <img src={getPreviewUrl(image)} alt={`preview image ${index}`} />
-                                                <button type="button" onClick={() => handleRemoveImage(image.id)}>
-                                                    X
-                                                </button>
+                                                {!image.isMain && (
+                                                    <button type="button" onClick={() => handleRemoveImage(image.id)}>
+                                                        X
+                                                    </button>
+                                                )}
                                                 {image.isMain && <span className="main-message">Main photo</span>}
                                                 {!image.isMain && (
                                                     <button onClick={() => setMainPhoto(image.id)} className="set-main-btn" type="button">Set as Main</button>
