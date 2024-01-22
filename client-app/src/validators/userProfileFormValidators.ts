@@ -3,7 +3,7 @@ import { combineValidators, composeValidators, isRequired, hasLengthBetween, has
 const isAlphabeticWithSpaces = createValidator(
     message => value => {
         const pattern = /^[A-Za-z\s]+$/;
-        if (!pattern.test(value)) {
+        if (value !== '' && !pattern.test(value)) {
             return message;
         }
     },

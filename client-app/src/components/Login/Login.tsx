@@ -21,10 +21,10 @@ export const Login: React.FC<LoginProps> = () => {
     const navigate = useNavigate();
 
     const onSubmit = async (values: IUser) => {
-        const { RememberMe, ...userData } = values;
+        const RememberMe = values.RememberMe;
 
         try {
-            const result = await agent.apiUser.login(userData);
+            const result = await agent.apiUser.login(values);
 
             if (result.isSuccess) {
                 if (RememberMe) {
