@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { Field, Form } from 'react-final-form';
+import React, { useState, useEffect, useRef } from 'react';
 
 import { Breeds, Categories, IUserAnimals } from '../../interfaces/Interfaces';
 import { AnimalBreedEnum, AnimalCategoryEnum, animalBreedEnum, animalCategoryEnum } from '../../utils/constants';
@@ -25,6 +24,19 @@ const MarketplaceSearch: React.FC<MarketplaceSearchProps> = ({ filteredPets, isM
     const [categories, setCategories] = useState<Categories[]>([]);
     const [breeds, setBreeds] = useState<Breeds[]>([]);
     const [towns, setTowns] = useState<string[]>([]);
+    const [searchValues, setSearchValues] = useState<ISearchValues>({
+        AnimalCategory: '',
+        BreedId: '',
+        Gender: '',
+        City: '',
+        Price: ''
+    });
+
+    const animalCategoryRef = useRef<HTMLSelectElement>(null);
+    const breedRef = useRef<HTMLSelectElement>(null);
+    const genderRef = useRef<HTMLSelectElement>(null);
+    const cityRef = useRef<HTMLSelectElement>(null);
+    const priceRef = useRef<HTMLSelectElement>(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -42,43 +54,107 @@ const MarketplaceSearch: React.FC<MarketplaceSearchProps> = ({ filteredPets, isM
         fetchData();
     }, []);
 
-    const onSearchSubmit = async (values: ISearchValues) => {
+    useEffect(() => {
+        isMarket ? resetFilters() : resetFilters();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isMarket]);
 
-        if (values.AnimalCategory) {
-            const res = await agent.apiAnimal.getAllBreeds(Number(values.AnimalCategory));
+    const resetFilters = () => {
+        setSearchValues({
+            AnimalCategory: '',
+            BreedId: '',
+            Gender: '',
+            City: '',
+            Price: ''
+        });
 
-            setBreeds(res.data);
+        setBreeds([]);
+
+        if (animalCategoryRef.current) {
+            animalCategoryRef.current.value = '';
+        }
+        if (breedRef.current) {
+            breedRef.current.value = '';
+        }
+        if (genderRef.current) {
+            genderRef.current.value = '';
+        }
+        if (cityRef.current) {
+            cityRef.current.value = '';
+        }
+        if (priceRef.current) {
+            priceRef.current.value = '';
         }
 
-        if (values.AnimalCategory) {
-            const category = Object.keys(animalCategoryEnum).filter(x => String(animalCategoryEnum[x as keyof AnimalCategoryEnum]) == values.AnimalCategory)[0];
+        onSearch(filteredPets);
+    };
 
-            filteredPets = filteredPets.filter(x => x.category == category);
-        }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const onSearchChange = async (e: any) => {
 
-        if (values.BreedId) {
-            const breed = Object.keys(animalBreedEnum).filter(x => String(animalBreedEnum[x as keyof AnimalBreedEnum]) == values.BreedId)[0];
+        const { name, value } = e.target;
+        setSearchValues(state => ({ ...state, [name]: value }));
 
-            filteredPets = filteredPets.filter(x => x.breed == breed);
-        }
+        // if (name == 'AnimalCategory' && value != '' && breedRef.current?.value) {
+        //     breedRef.current.value = '';
+        //     setSearchValues(state => ({ ...state, ['BreedId']: '' }));
+        // }
 
-        if (values.Gender) {
-            filteredPets = filteredPets.filter(x => x.gender == values.Gender);
-        }
+        if (searchValues.AnimalCategory || name == 'AnimalCategory') {
+            const data = name == 'AnimalCategory' ? value : searchValues.AnimalCategory;
 
-        if (values.City) {
-            filteredPets = filteredPets.filter(x => x.city?.toLowerCase().trim() == values.City?.toLowerCase().trim());
-        }
+            if (data != '') {
+                const res = await agent.apiAnimal.getAllBreeds(Number(data));
 
-        if (values.Price) {
-            if (values.Price.includes('-')) {
-                const range = values.Price.split('-');
-                const firstNum = Number(range[0]);
-                const secondNum = Number(range[1]);
+                setBreeds(res.data);
 
-                filteredPets = filteredPets.filter(x => x.price && x.price >= firstNum && x.price <= secondNum);
+                const category = Object.keys(animalCategoryEnum).filter(x => String(animalCategoryEnum[x as keyof AnimalCategoryEnum]) == data)[0];
+
+                filteredPets = filteredPets.filter(x => x.category == category);
             } else {
-                filteredPets = filteredPets.filter(x => x.price && x.price >= 800);
+                setBreeds([]);
+            }
+        }
+
+        if (searchValues.BreedId || name == 'BreedId') {
+            const data = name == 'BreedId' ? value : searchValues.BreedId;
+
+            if (data != '') {
+                const breed = Object.keys(animalBreedEnum).filter(x => String(animalBreedEnum[x as keyof AnimalBreedEnum]) == data)[0];
+
+                filteredPets = filteredPets.filter(x => x.breed == breed);
+            }
+        }
+
+        if (searchValues.Gender || name == 'Gender') {
+            const data = name == 'Gender' ? value : searchValues.Gender;
+
+            if (data != '') {
+                filteredPets = filteredPets.filter(x => x.gender == data);
+            }
+        }
+
+        if (searchValues.City || name == 'City') {
+            const data = name == 'City' ? value : searchValues.City;
+
+            if (data != '') {
+                filteredPets = filteredPets.filter(x => x.city?.toLowerCase().trim() == data?.toLowerCase().trim());
+            }
+        }
+
+        if (searchValues.Price || name == 'Price') {
+            const data = name == 'Price' ? value : searchValues.Price;
+
+            if (data != '') {
+                if (data.includes('-')) {
+                    const range = data.split('-');
+                    const firstNum = Number(range[0]);
+                    const secondNum = Number(range[1]);
+
+                    filteredPets = filteredPets.filter(x => x.price && x.price >= firstNum && x.price <= secondNum);
+                } else {
+                    filteredPets = filteredPets.filter(x => x.price && x.price >= 800);
+                }
             }
         }
 
@@ -88,80 +164,48 @@ const MarketplaceSearch: React.FC<MarketplaceSearchProps> = ({ filteredPets, isM
     return (
         <>
             <h3>Search by</h3>
-            <Form
-                onSubmit={onSearchSubmit}
-                render={({ handleSubmit }) => (
-                    <form onChange={handleSubmit}>
+            <form onChange={onSearchChange}>
 
-                        <Field name='AnimalCategory'>
-                            {({ input }) => (
-                                <>
-                                    <CLabel inputName='AnimalCategory' title='Category' />
-                                    <select {...input} name="AnimalCategory" id="AnimalCategory">
-                                        <option>  </option>
-                                        {categories && categories.map(c => <option value={c.animalCategoryId} key={c.animalCategoryId}>{c.name}</option>)}
-                                    </select>
-                                </>
-                            )}
-                        </Field>
+                <CLabel inputName='AnimalCategory' title='Category' />
+                <select name="AnimalCategory" id="AnimalCategory" ref={animalCategoryRef}>
+                    <option>  </option>
+                    {categories && categories.map(c => <option value={c.animalCategoryId} key={c.animalCategoryId}>{c.name}</option>)}
+                </select>
 
-                        <Field name='BreedId'>
-                            {({ input }) => (
-                                <>
-                                    <CLabel inputName='BreedId' title='Breed' />
-                                    <select {...input} name="BreedId.breedId" id="Breed">
-                                        <option>  </option>
-                                        {categories && breeds.map(b => <option value={b.breedId} key={b.breedId}>{b.name}</option>)}
-                                    </select>
-                                </>
-                            )}
-                        </Field>
+                <CLabel inputName='BreedId' title='Breed' />
+                <select name="BreedId" id="Breed" ref={breedRef}>
+                    <option>  </option>
+                    {categories && breeds.map(b => <option value={b.breedId} key={b.breedId}>{b.name}</option>)}
+                </select>
 
-                        <Field name='Gender'>
-                            {({ input }) => (
-                                <>
-                                    <CLabel inputName='Gender' title='Gender' />
-                                    <select {...input} name="Gender" id="Gender">
-                                        <option>  </option>
-                                        <option>Male</option>
-                                        <option>Female</option>
-                                    </select>
-                                </>
-                            )}
-                        </Field>
+                <CLabel inputName='Gender' title='Gender' />
+                <select name="Gender" id="Gender" ref={genderRef}>
+                    <option>  </option>
+                    <option>Male</option>
+                    <option>Female</option>
+                </select>
 
-                        <Field name='City'>
-                            {({ input }) => (
-                                <>
-                                    <CLabel inputName='City' title='City' />
-                                    <select {...input} name="City" id="City">
-                                        <option>  </option>
-                                        {towns && towns.map(t => <option value={t} key={t}>{t}</option>)}
-                                    </select>
-                                </>
-                            )}
-                        </Field>
+                <CLabel inputName='City' title='City' />
+                <select name="City" id="City" ref={cityRef}>
+                    <option>  </option>
+                    {towns && towns.map(t => <option value={t} key={t}>{t}</option>)}
+                </select>
 
-                        {isMarket && (
-                            <Field name='Price'>
-                                {({ input }) => (
-                                    <>
-                                        <CLabel inputName='Price' title='Price in $' />
-                                        <select {...input} name="Price" id="Price">
-                                            <option>  </option>
-                                            <option>0-200</option>
-                                            <option>200-400</option>
-                                            <option>400-600</option>
-                                            <option>600-800</option>
-                                            <option>800 +</option>
-                                        </select>
-                                    </>
-                                )}
-                            </Field>
-                        )}
+                {isMarket && (
+                    <>
+                        <CLabel inputName='Price' title='Price in $' />
+                        <select name="Price" id="Price" ref={priceRef}>
+                            <option>  </option>
+                            <option>0-200</option>
+                            <option>200-400</option>
+                            <option>400-600</option>
+                            <option>600-800</option>
+                            <option>800 +</option>
+                        </select>
+                    </>
+                )}
 
-                    </form>
-                )} />
+            </form>
         </>
     );
 };

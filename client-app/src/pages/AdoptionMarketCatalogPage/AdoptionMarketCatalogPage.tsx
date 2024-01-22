@@ -66,13 +66,6 @@ const AdoptionMarketCatalogPage: React.FC<AdoptionMarketCatalogPageProps> = obse
         setIsMarket(state => !state);
 
         setCurrentPage(1);
-
-        // onSearchSubmit({
-        //     AnimalCategory: '',
-        //     BreedId: '',
-        //     City: '',
-        //     Gender: ''
-        // });
     };
 
     const filteredPets = isMarket ? allPetsInMarket : allPetsForAdoption;

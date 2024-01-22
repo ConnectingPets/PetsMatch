@@ -17,11 +17,11 @@ export type AnimalCategoryEnum = {
 };
 
 export type AnimalBreedEnum = {
-    'pitbull': number,
-    'husky': number,
+    'Pitbull': number,
+    'Husky': number,
     'American rabbit': number,
-    'Persian Cat': number,
-    'Bengal Cat.': number
+    'Persian cat': number,
+    'Bengal cat': number
 };
 
 export type AnimalStatusEnum = {
@@ -55,9 +55,9 @@ export const animalCategoryEnum: AnimalCategoryEnum = {
 };
 
 export const animalBreedEnum: AnimalBreedEnum = {
-    'pitbull': 1,
-    'husky': 2,
+    'Pitbull': 1,
+    'Husky': 2,
     'American rabbit': 3,
-    'Persian Cat': 4,
-    'Bengal Cat.': 5
+    'Persian cat': 4,
+    'Bengal cat': 5
 };
