@@ -14,8 +14,8 @@
     using static Application.Animal.DeleteAnimal;
     using static Application.Animal.ShowAnimalToEdit;
     using static Application.AnimalCategory.AllAnimalCategories;
-    using static Common.GeneralApplicationConstants;
     using static Application.Animal.AnimalProfile;
+    using static Common.GeneralApplicationConstants;
 
     [Authorize(Roles = MatchingRoleName)]
     [ApiController]

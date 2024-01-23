@@ -30,11 +30,16 @@
                 Age = 1,
                 AnimalStatus = AnimalStatus.ForSwiping,
                 BreedId = 1,
-                Gender = Gender.Male,
+                Gender = Gender.Female,
                 HealthStatus = HealthStatus.Vaccinated,
                 IsEducated = false,
                 IsHavingValidDocuments = false,
                 Name = "Test",
+                Breed = new Breed()
+                {
+                    Name = "Test",
+                    CategoryId = 2,
+                },
                 OwnerId = Guid.Parse("0e48736b-7b3a-41cb-ac14-e22e3d77571b"),
             };
             command = new AnimalsToSwipeQuery()
@@ -64,7 +69,7 @@
                 Breed = new Breed()
                 {
                     Name = "Test breed",
-                    CategoryId = 1,
+                    CategoryId = 2,
                 }
             };
         }

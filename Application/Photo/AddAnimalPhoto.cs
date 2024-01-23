@@ -6,6 +6,7 @@
 
     using Domain;
     using Response;
+    using DTOs.Photo;
     using Service.Interfaces;
     using Persistence.Repositories;
 
@@ -14,14 +15,14 @@
 
     public class AddAnimalPhoto
     {
-        public class AddAnimalPhotoCommand : IRequest<Result<Unit>>
+        public class AddAnimalPhotoCommand : IRequest<Result<PhotoDto>>
         {
             public string AnimalId { get; set; } = null!;
-            public IFormFile[] Files { get; set; } = null!;
+            public IFormFile File { get; set; } = null!;
         }
 
         public class AddAnimalPhotoCommandHandler :
-            IRequestHandler<AddAnimalPhotoCommand, Result<Unit>>
+            IRequestHandler<AddAnimalPhotoCommand, Result<PhotoDto>>
         {
             private readonly IPhotoService photoService;
             private readonly IRepository repository;
@@ -33,15 +34,15 @@
                 this.repository = repository;
             }
 
-            public async Task<Result<Unit>> Handle(AddAnimalPhotoCommand request, CancellationToken cancellationToken)
+            public async Task<Result<PhotoDto>> Handle(AddAnimalPhotoCommand request, CancellationToken cancellationToken)
             {
-                IFormFile[] files = request.Files;
+                IFormFile files = request.File;
                 string animalId = request.AnimalId;
 
                 if (files == null || files.Length == 0)
                 {
                     return
-                        Result<Unit>.Failure(EmptyPhoto);
+                        Result<PhotoDto>.Failure(EmptyPhoto);
                 }
 
                 Animal? animal = await repository.
@@ -51,11 +52,11 @@
 
                 if (animal == null)
                 {
-                    return Result<Unit>.Failure(AnimalNotFound);
+                    return Result<PhotoDto>.Failure(AnimalNotFound);
                 }
 
                 var result = await photoService.
-                    AddAnimalPhotosAsync(files, animal);
+                    AddAnimalPhotoAsync(files, animal);
 
                 return result;
             }
