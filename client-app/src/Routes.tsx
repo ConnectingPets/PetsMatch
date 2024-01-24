@@ -13,6 +13,7 @@ import AdoptionMarketCatalogPage from './pages/AdoptionMarketCatalogPage/Adoptio
 import PetInMarketDetailsPage from './pages/PetInMarketDetailsPage/PetInMarketDetailsPage';
 import AddPetInMarket from './pages/AddPetInMarket/AddPetInMarket';
 import EditPetInMarket from './pages/EditPetInMarket/EditPetInMarket';
+import AdoptionTipsPage from './pages/AdoptionTipsPage/AdoptionTipsPage';
 import Page404 from './pages/Page404/Page404';
 
 const AllRoutes: React.FC = () => {
@@ -30,6 +31,7 @@ const AllRoutes: React.FC = () => {
             <Route path='market/catalog/:petId/details' element={<PetInMarketDetailsPage />} />
             <Route path='market/add-pet' element={<AddPetInMarket />} />
             <Route path='market/catalog/:petId/edit' element={<EditPetInMarket />} />
+            <Route path='market/catalog/adoption-tips' element={<AdoptionTipsPage />} />
             <Route path='*' element={<Page404 />} />
         </Routes>
     );
