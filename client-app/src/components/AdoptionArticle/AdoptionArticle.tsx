@@ -7,7 +7,7 @@ interface AdoptionArticleProps {
     title: string
     image: string
     content: string
-    extendedContent: ReactElement
+    extendedContent?: ReactElement
 }
 
 const AdoptionArticle: React.FC<AdoptionArticleProps> = ({ title, image, content, extendedContent }) => {
