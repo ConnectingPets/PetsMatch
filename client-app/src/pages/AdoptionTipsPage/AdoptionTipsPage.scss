@@ -81,6 +81,21 @@
         }
     }
 
+    &__pagination-btn {
+        @include gs.display-flex(none, center, none);
+        margin-bottom: 1.5rem;
+
+        &>button {
+            margin-right: 0.25rem;
+            font-size: 1.25rem;
+            cursor: pointer;
+        }
+
+        &>.current-btn {
+            background-color: #9da1a4;
+        }
+    }
+
     &__dark {
         @include gs.dark-theme(gs.$dark-background-color-second);
     }
