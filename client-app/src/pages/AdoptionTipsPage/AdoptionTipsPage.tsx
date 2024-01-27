@@ -6,6 +6,7 @@ import themeStore from '../../stores/themeStore';
 import { IAdoptionArticle } from '../../interfaces/Interfaces';
 
 import { adoptionArticles } from './adoptionArticlesArray';
+import ScrollToTop from '../../components/ScrollToTop/ScrollToTop';
 import FormsHeader from '../../components/FormsHeader/FormsHeader';
 import AdoptionArticle from '../../components/AdoptionArticle/AdoptionArticle';
 import Footer from '../../components/Footer/Footer';
@@ -25,6 +26,8 @@ const AdoptionTipsPage: React.FC<AdoptionTipsPageProps> = observer(() => {
 
     return (
         <div className={themeStore.isLightTheme ? 'adoption-tips-wrapper' : 'adoption-tips-wrapper adoption-tips-wrapper__dark'}>
+            <ScrollToTop page={currentPage} />
+
             <FormsHeader title='Adoption Tips' />
             <h3>Things To Do Before You Adopt a Pet</h3>
 
