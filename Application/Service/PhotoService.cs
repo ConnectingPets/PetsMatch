@@ -28,56 +28,60 @@
             this.repository = repository;
         }
 
-        public async Task<Result<Unit>> AddAnimalPhotosAsync(
-            IFormFile[] files, Animal animal)
+        public async Task<Result<PhotoDto>> AddAnimalPhotoAsync(
+            IFormFile file, Animal animal)
         {
             try
             {
-                foreach (var file in files)
+                if (animal.Photos.Count == 6)
                 {
-                    if (animal.Photos.Count == 6)
-                    {
-                        return Result<Unit>.Failure(FullCapacityImage);
-                    }
-
-                    var imageUploadResult = new ImageUploadResult();
-
-                    using (var stream = file.OpenReadStream())
-                    {
-                        var uploadParams = new ImageUploadParams
-                        {
-                            File = new FileDescription(file.FileName, stream)
-                        };
-
-                        try
-                        {
-                            imageUploadResult =
-                                await cloudinary.UploadAsync(uploadParams);
-                        }
-                        catch (Exception)
-                        {
-                            return Result<Unit>.Failure(ErrorUploadPhoto);
-                        }
-                    }
-
-                    Photo photo = new Photo()
-                    {
-                        Id = imageUploadResult.PublicId,
-                        IsMain = false,
-                        Url = imageUploadResult.Url.AbsoluteUri,
-                        AnimalId = animal.AnimalId
-                    };
-
-                    await repository.AddAsync(photo);
-                    await repository.SaveChangesAsync();
+                    return Result<PhotoDto>.Failure(FullCapacityImage);
                 }
 
-                return 
-                    Result<Unit>.Success(Unit.Value, SuccessfullyUploadPhoto);
+                var imageUploadResult = new ImageUploadResult();
+
+                using (var stream = file.OpenReadStream())
+                {
+                    var uploadParams = new ImageUploadParams
+                    {
+                        File = new FileDescription(file.FileName, stream)
+                    };
+
+                    try
+                    {
+                        imageUploadResult =
+                            await cloudinary.UploadAsync(uploadParams);
+                    }
+                    catch (Exception)
+                    {
+                        return Result<PhotoDto>.Failure(ErrorUploadPhoto);
+                    }
+                }
+
+                Photo photo = new Photo()
+                {
+                    Id = imageUploadResult.PublicId,
+                    IsMain = false,
+                    Url = imageUploadResult.Url.AbsoluteUri,
+                    AnimalId = animal.AnimalId
+                };
+
+                await repository.AddAsync(photo);
+                await repository.SaveChangesAsync();
+
+                PhotoDto photoDto = new PhotoDto()
+                {
+                    Id = photo.Id,
+                    IsMain = false,
+                    Url = photo.Url,
+                };
+
+                return
+                    Result<PhotoDto>.Success(photoDto, SuccessfullyUploadPhoto);
             }
             catch
             {
-                return Result<Unit>.Failure(ErrorUploadPhoto);
+                return Result<PhotoDto>.Failure(ErrorUploadPhoto);
             }
         }
 
@@ -102,7 +106,7 @@
                     catch (Exception)
                     {
                         return Result<Unit>.
-                            Failure("Error occurred during image upload");                       
+                            Failure("Error occurred during image upload");
                     }
                 }
 

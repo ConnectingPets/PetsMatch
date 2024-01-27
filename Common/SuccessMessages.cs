@@ -14,6 +14,8 @@
             public const string SuccessEditUser = "The user {0} is edited successfully";
             public const string SuccessDeleteRole = 
                 "The profile {0} is deleted successfully";
+            public const string SuccessChangePassword 
+                = "You successfully changed your password";
         }
 
         public static class Animal

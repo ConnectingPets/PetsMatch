@@ -58,6 +58,7 @@
                 }.ToArray(),
                 Name = "Test name"
             };
+
             userManagerMock.
                 Setup(um => um.
                 CreateAsync(It.IsAny<User>(), It.IsAny<string>())).
