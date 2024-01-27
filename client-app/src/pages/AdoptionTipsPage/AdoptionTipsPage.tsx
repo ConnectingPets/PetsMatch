@@ -33,15 +33,15 @@ const AdoptionTipsPage: React.FC<AdoptionTipsPageProps> = observer(() => {
 
             {currentPage == 1 && (
                 <article className={themeStore.isLightTheme ? 'adoption-tips-wrapper__article ' : 'adoption-tips-wrapper__article adoption-tips-wrapper__article__dark '}>
+                    <div className='adoption-tips-wrapper__article__image'>
+                        <img src="/images/ai.jpg" alt="pet image" />
+                    </div>
+                    
                     <div className='adoption-tips-wrapper__article__first'>
                         <span><MdOutlinePets /></span>
                         <p>So you've made the decision to get a dog or cat. Hooray! Pets are a lot of fun to play with and can be exceptional cuddling partners. In short, they are fantastic companions and even incredible support when we feel depressed and anxious.</p>
 
                         <p>A dog or cat is a multi-year commitment of care, which includes ensuring their safety, feeding and housing them, and keeping them healthy. Yep, there's a lot to know. So let's get you ready to bring home your new furry family member.</p>
-                    </div>
-
-                    <div className='adoption-tips-wrapper__article__image'>
-                        <img src="/images/ai.jpg" alt="pet image" />
                     </div>
                 </article>
             )}
