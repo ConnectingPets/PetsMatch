@@ -1,5 +1,10 @@
 import React from 'react';
 import { Form, Field } from 'react-final-form';
+import { toast } from 'react-toastify';
+
+import themeStore from '../../stores/themeStore';
+import { IUserPasswordData } from '../../interfaces/Interfaces';
+import agent from '../../api/axiosAgent';
 
 import { CLabel } from '../common/CLabel/CLabel';
 import { CSubmitButton } from '../common/CSubmitButton/CSubmitButton';
@@ -9,16 +14,22 @@ interface ChangePasswordModalProps {
     onClickChangePassword: () => void
 }
 
-interface PasswordValues {
-    OldPassword: string
-    NewPassword: string
-    ConfirmPassword: string
-}
-
 const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ onClickChangePassword }) => {
 
-    const onChangePasswordSubmit = (values: PasswordValues) => {
-        console.log(values);
+    const onChangePasswordSubmit = async (values: IUserPasswordData) => {
+        try {
+            const res = await agent.apiUser.changePassword(values);
+
+            if (res.isSuccess) {
+                toast.success(res.successMessage);
+
+                onClickChangePassword();
+            } else {
+                toast.error(res.errorMessage);
+            }
+        } catch (err) {
+            console.log(err);
+        }
     };
 
     return (
@@ -28,7 +39,7 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ onClickChange
                     onSubmit={onChangePasswordSubmit}
                     // validate={}
                     render={({ handleSubmit }) => (
-                        <form className='change-pass__modal__form' onSubmit={handleSubmit}>
+                        <form className={themeStore.isLightTheme ? 'change-pass__modal__form' : 'change-pass__modal__form change-pass__modal__form__dark'} onSubmit={handleSubmit}>
 
                             <Field name="OldPassword">
                                 {({ input, meta }) => (

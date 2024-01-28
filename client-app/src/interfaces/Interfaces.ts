@@ -32,6 +32,12 @@ export interface IUserProfile {
     roles?: string[]
 }
 
+export interface IUserPasswordData {
+    OldPassword: string
+    NewPassword: string
+    ConfirmPassword: string
+}
+
 export interface IUserAnimals {
     id: string,
     name: string,
