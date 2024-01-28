@@ -6,14 +6,14 @@
     using MediatR;
     using Microsoft.EntityFrameworkCore;
     
+    using DTOs.Photo;
+    using DTOs.Swipe;
     using Domain;
+    using Response;
     using Persistence.Repositories;
-    using Application.DTOs.Swipe;
-    using Application.Response;
 
     using static Common.ExceptionMessages.User;
     using static Common.ExceptionMessages.Animal;
-    using Application.DTOs.Photo;
 
     public class AnimalsToSwipe
     {
@@ -60,7 +60,9 @@
                     .ToArrayAsync();
 
                 IEnumerable<AnimalToSwipeDto> animalsToSwipeDto = animals 
-                    .Where(a => !a.SwipesFrom.Any(s => s.SwiperAnimalId.ToString() == animal.AnimalId.ToString()))
+                    .Where(a => !a.SwipesFrom.Any(s => s.SwiperAnimalId.ToString() == animal.AnimalId.ToString()) 
+                    && a.Breed.CategoryId == animal.Breed.CategoryId
+                    && a.Gender != animal.Gender)
                     .Select(a => new AnimalToSwipeDto
                     {
                         AnimalId = a.AnimalId.ToString(),

@@ -4,14 +4,16 @@
 
     using MediatR;
 
-    using Application.DTOs.User;
-    using Application.Service.Interfaces;
-    using Application.Response;
+    using DTOs.User;
+    using Interfaces;
+    using Response;
+    using Domain;
 
-    using static Application.User.DeleteUser;
-    using static Application.User.EditUser;
-    using static Application.User.UserProfile;
-    using static Application.User.DeleteRole;
+    using static User.DeleteUser;
+    using static User.EditUser;
+    using static User.UserProfile;
+    using static User.DeleteRole;
+    using static User.ChangePassword;
 
     public class ProfileService : IProfileService
     {
@@ -47,5 +49,14 @@
                 RoleName = roleName,
                 UserId = userId
             });
+
+        public async Task<Result<Unit>> ChangePassword(
+            ChangePasswordDto dto,
+            User user)
+        => await this.mediator.Send(new ChangePasswordCommand()
+        {
+            Dto = dto,
+            User = user
+        });
     }
 }

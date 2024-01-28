@@ -14,10 +14,10 @@
     using static Application.Animal.DeleteAnimal;
     using static Application.Animal.ShowAnimalToEdit;
     using static Application.AnimalCategory.AllAnimalCategories;
-    using static Common.GeneralApplicationConstants;
     using static Application.Animal.AnimalProfile;
+    using static Common.GeneralApplicationConstants;
 
-    //[Authorize(Roles = MatchingRoleName)]
+    [Authorize(Roles = MatchingRoleName)]
     [ApiController]
     [Route("api/[controller]")]
     public class AnimalController : ControllerBase

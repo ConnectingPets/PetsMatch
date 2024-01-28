@@ -9,7 +9,8 @@ interface CPetCardProps {
     id: string,
     name: string,
     photo: string,
-    buttons: string
+    buttons: string,
+    price?: number | null 
 }
 
 export const CPetCard: React.FC<CPetCardProps> = (pet) => {
@@ -17,7 +18,7 @@ export const CPetCard: React.FC<CPetCardProps> = (pet) => {
         <article className={themeStore.isLightTheme ? 'pet__card' : 'pet__card__dark'}>
             <img src={pet.photo} alt="pet" />
             <div className='pet__card__content'>
-                <h3>{pet.name}</h3>
+                <h3>{pet.name} <span>{pet.price ? `$${pet.price}` : null}</span></h3>
                 <div className='pet__card__buttons__wrapper'>
                     {pet.buttons == 'myPets' && (
                         <>

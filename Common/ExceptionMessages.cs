@@ -57,12 +57,16 @@
             public const string InvalidCityLength = "The user city should be with length between 3 and 50";
             public const string UserNotFound = "The user is not found";
             public const string UserResultNotSucceeded = "The user result is not succeeded";
-            public const string InvalidPassword = "THe password is invalid";
+            public const string InvalidPassword = "The password is invalid";
             public const string InvalidPasswordLength = "The password must be at least 5 characters long";
             public const string PasswordsDoNotMatch = "Passwords do not match";
             public const string InvalidEmail = "The email is invalid";
             public const string NotAuthenticated = "The user is not authenticated";
             public const string InvalidGender = "The gender that you picked is not valid";
+            public const string InvalidOldPassword
+                = "The old password is incorrect";
+            public const string ChangingPasswordFailed 
+                = "Changing password failed";
         }
 
         public static class Message

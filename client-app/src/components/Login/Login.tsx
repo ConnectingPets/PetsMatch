@@ -17,16 +17,14 @@ interface LoginProps {
     showRegister: () => void;
 }
 
-export const Login: React.FC<LoginProps> = ({
-    showRegister
-}) => {
+export const Login: React.FC<LoginProps> = () => {
     const navigate = useNavigate();
 
     const onSubmit = async (values: IUser) => {
-        const { RememberMe, ...userData } = values;
+        const RememberMe = values.RememberMe;
 
         try {
-            const result = await agent.apiUser.login(userData);
+            const result = await agent.apiUser.login(values);
 
             if (result.isSuccess) {
                 if (RememberMe) {
@@ -96,17 +94,18 @@ export const Login: React.FC<LoginProps> = ({
                             )}
                         </Field>
 
-                        <Field name='RememberMe'>
-                            {({ input }) => (
-                                <div>
-                                    <CLabel inputName='RememberMe' title='Remember me' />
-                                    <input type="checkbox" {...input} name='RememberMe' id='RememberMe' />
-                                </div>
-                            )}
-                        </Field>
+                        <div className='login__form__remember-me'>
+                            <Field type="checkbox" name='RememberMe'>
+                                {({ input }) => (
+                                    <div>
+                                        <CLabel inputName='RememberMe' title='Remember me' />
+                                        <input type="checkbox" {...input} name='RememberMe' id='RememberMe' />
+                                    </div>
+                                )}
+                            </Field>
+                        </div>
 
                         <CSubmitButton textContent='Login' />
-                        <p className='account__message' onClick={showRegister}>Register Now!</p>
                     </form>
                 )
                 } />

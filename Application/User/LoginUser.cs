@@ -4,17 +4,17 @@
     using System.Threading.Tasks;
     
     using MediatR;
+    using Microsoft.EntityFrameworkCore;
     using Microsoft.AspNetCore.Identity;
     
     using Domain;
     using Application.Response;
     using Application.DTOs.User;
+    using Persistence.Repositories;
     using Application.Service.Interfaces;
 
     using static Common.ExceptionMessages.User;
     using static Common.FailMessages.User;
-    using Persistence.Repositories;
-    using Microsoft.EntityFrameworkCore;
 
     public class LoginUser
     {
@@ -30,20 +30,17 @@
         public class LoginUserHandler : IRequestHandler<LoginUserCommand, Result<UserDto>>
         {
             private readonly SignInManager<User> signInManager;
-            private readonly UserManager<User> userManager;
             private readonly IRepository repository;
             private readonly ITokenService tokenService;
 
             public LoginUserHandler(
                 SignInManager<User> signInManager,
-                UserManager<User> userManager,
                 IRepository repository,
                 ITokenService tokenService)
             {
                 this.repository = repository;
                 this.signInManager = signInManager;
                 this.tokenService = tokenService;
-                this.userManager = userManager;
             }
 
             public async Task<Result<UserDto>> Handle(LoginUserCommand request, CancellationToken cancellationToken)
@@ -67,8 +64,6 @@
                         return Result<UserDto>.Failure(FailedLogin);
                     }
 
-                    string[] roles = (await userManager.GetRolesAsync(user)).ToArray();
-
                     UserDto userDto = new UserDto
                     {
                         Name = user.Name,
@@ -79,8 +74,7 @@
                         JobTitle = user.JobTitle,
                         Gender = user.Gender.ToString(),
                         Education = user.Education,
-                        Age = user.Age,
-                        Roles = roles
+                        Age = user.Age
                     };
 
                     return Result<UserDto>.Success(userDto);

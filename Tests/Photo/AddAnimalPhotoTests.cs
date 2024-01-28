@@ -14,6 +14,7 @@
     using Application.Service.Interfaces;
     
     using static Application.Photo.AddAnimalPhoto;
+    using Application.DTOs.Photo;
 
     [TestFixture]
     public class AddAnimalPhotoTests
@@ -50,9 +51,9 @@
             var command = SetUpReturningPhoto();
 
             photoServiceMock.Setup(ps => ps.
-            AddAnimalPhotosAsync(command.Files, animal)).
-            ReturnsAsync(Result<Unit>.
-            Success(Unit.Value, "Successfully upload photo"));
+            AddAnimalPhotoAsync(command.File, animal)).
+            ReturnsAsync(Result<PhotoDto>.
+            Success(new PhotoDto(), "Successfully upload photo"));
 
             var result = await handler.Handle(command, CancellationToken.None);
 
@@ -73,9 +74,11 @@
         [Test]
         public async Task Handler_ShouldReturnError_WhenPhotosArrayIsEmpty()
         {
+            var formFileMock = new Mock<IFormFile>();
+
             var command = new AddAnimalPhotoCommand()
             {
-                 Files = Array.Empty<IFormFile>()
+                 File = formFileMock.Object
             };
 
             var result = await handler.Handle(command, CancellationToken.None);
@@ -112,14 +115,12 @@
         private static AddAnimalPhotoCommand SetUpReturningPhoto()
         {
             var formFileMock = new Mock<IFormFile>();
+            formFileMock.Setup(f => f.Length).Returns(2);
 
             var command = new AddAnimalPhotoCommand()
             {
                 AnimalId = Guid.NewGuid().ToString(),
-                Files =
-                   [
-                       formFileMock.Object
-                   ]
+                File = formFileMock.Object   
             };
 
             return command;

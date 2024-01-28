@@ -64,5 +64,9 @@ export const returnCorrecTypesForEditUser = (values: IUser) => {
     userData.Gender = gender;
   }
 
+  if (otherValues.City) {
+    userData.City = otherValues.City.trim().charAt(0).toUpperCase() + otherValues.City.trim().slice(1);
+  }
+
   return userData;
 };

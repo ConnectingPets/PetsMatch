@@ -3,7 +3,7 @@ import { combineValidators, composeValidators, isRequired, hasLengthBetween, has
 const isAlphabeticWithSpaces = createValidator(
     message => value => {
         const pattern = /^[A-Za-z\s]+$/;
-        if (!pattern.test(value)) {
+        if (value !== '' && !pattern.test(value)) {
             return message;
         }
     },
@@ -24,7 +24,7 @@ const isValidEmail = createValidator(
 
 const ageRange = createValidator(
     message => value => {
-        if (Number(value) < 16 || Number(value) > 90) {
+        if (value !== null && value != 0 && (Number(value) < 16 || Number(value) > 90)) {
             return message;
         }
     },

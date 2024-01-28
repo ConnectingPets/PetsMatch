@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 
 export interface IUser {
     Id?: string,
@@ -22,6 +22,7 @@ export interface IUserProfile {
     address?: string
     age?: number
     city?: string
+    description?: string
     education?: string
     email: string
     gender?: string
@@ -35,7 +36,11 @@ export interface IUserAnimals {
     id: string,
     name: string,
     mainPhoto: string,
-    price?: number | null
+    price?: number | null,
+    breed?: string,
+    category?: string,
+    city?: string,
+    gender?: string
 }
 
 export interface IAnimal {
@@ -139,4 +144,11 @@ export interface IMessage {
     content: string;
     animalId: string;
     sentOn: string;
+}
+
+export interface IAdoptionArticle {
+    title: string
+    image: string
+    content: string
+    extendedContent?: ReactElement
 }

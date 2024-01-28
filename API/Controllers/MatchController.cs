@@ -11,7 +11,7 @@ namespace API.Controllers
 
     using static Common.GeneralApplicationConstants;
 
-    //[Authorize(Roles = MatchingRoleName)]
+    [Authorize(Roles = MatchingRoleName)]
     [Route("api/[controller]")]
     [ApiController]
     public class MatchController : ControllerBase 

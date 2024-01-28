@@ -21,6 +21,15 @@
         }
     }
 
+    &__empty-page {
+        text-align: center;
+        margin: 5rem 0;
+        
+        &>p {
+            font-size: 1.5rem;
+        }
+    }
+
     &__pagination-btn {
         @include gs.display-flex(none, center, none);
 
@@ -87,6 +96,24 @@
             animation: opacityS 0.5 forwards;
             -webkit-animation: opacityS 0.5s forwards;
             -moz-animation: opacityS 0.5s forwards;
+        }
+    }
+
+    &__search {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        &>form {
+
+            &>label {
+                margin-right: 0.25rem;
+            }
+
+            &>select {
+                margin-right: 1rem;
+                border-radius: 0.5rem;
+            }
         }
     }
 

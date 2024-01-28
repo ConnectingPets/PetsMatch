@@ -26,7 +26,7 @@ export const CMarketCardButton: React.FC<CMarketCardButtonProps> = ({ id, button
 
             {button == 'buy' && <Link to={`/market/catalog/${id}/buy`} className={themeStore.isLightTheme ? 'card__button' : 'card__button__dark'}>buy <GiShoppingCart /></Link>}
 
-            {button == 'adopt' && <Link to={`/market/catalog/${id}/adopt`} className={themeStore.isLightTheme ? 'card__button' : 'card__button__dark'}>adopt <MdOutlinePets /></Link>}
+            {button == 'adopt' && <Link to={'/market/catalog/adoption-tips'} className={themeStore.isLightTheme ? 'card__button' : 'card__button__dark'}>adopt <MdOutlinePets /></Link>}
         </>
     );
 };

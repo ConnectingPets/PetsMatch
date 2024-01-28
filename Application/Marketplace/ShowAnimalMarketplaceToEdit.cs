@@ -8,6 +8,7 @@
     using DTOs.Photo;
     using Persistence.Repositories;
     using Application.DTOs.Marketplace;
+
     using static Common.ExceptionMessages.Animal;
 
     public class ShowAnimalMarketplaceToEdit
@@ -37,7 +38,7 @@
                     await repository.All<Animal>().
                     Include(a => a.Photos).
                     Include(a => a.Breed).
-                    FirstOrDefaultAsync(a => a.AnimalId.ToString() == request.AnimalId);
+                    FirstOrDefaultAsync();
 
                 if (animal == null)
                 {

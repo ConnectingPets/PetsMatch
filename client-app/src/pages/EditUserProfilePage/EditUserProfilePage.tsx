@@ -22,23 +22,24 @@ import { returnCorrecTypesForEditUser } from '../../utils/convertTypes';
 
 interface EditUserProfilePageProps { }
 
-const userData = (user: IUserProfile) => {
+const userData = (user: IUserProfile | undefined) => {
     return {
-        Address: user.address,
-        Age: user.age,
-        City: user.city,
-        Education: user.education,
-        Email: user.email,
-        Gender: user.gender,
-        JobTitle: user.jobTitle,
-        Name: user.name,
-        Photo: user.photo,
-        Roles: user.roles
+        Address: user?.address,
+        Age: user?.age,
+        City: user?.city,
+        Description: user?.description,
+        Education: user?.education,
+        Email: user?.email,
+        Gender: user?.gender,
+        JobTitle: user?.jobTitle,
+        Name: user?.name,
+        Photo: user?.photo,
+        Roles: user?.roles
     };
 };
 
 const EditUserProfilePage: React.FC<EditUserProfilePageProps> = observer(() => {
-    const [user, setUser] = useState<IUserProfile | object>({});
+    const [user, setUser] = useState<IUserProfile | undefined>(undefined);
     const [initialRoles, setInitialRoles] = useState<string[] | undefined>(undefined);
     const navigate = useNavigate();
 
@@ -50,10 +51,8 @@ const EditUserProfilePage: React.FC<EditUserProfilePageProps> = observer(() => {
     useEffect(() => {
         agent.apiUser.getUserProfile()
             .then(res => {
-                const user = userData(res.data);
-
-                setUser(user);
-                setInitialRoles(user.Roles);
+                setUser(res.data);
+                setInitialRoles(res.data.roles);
             });
     }, []);
 
@@ -69,7 +68,7 @@ const EditUserProfilePage: React.FC<EditUserProfilePageProps> = observer(() => {
                         await agent.apiUser.deleteRole(role);
                     }
                 }
-                
+
                 userStore.setUser({ ...values, PhotoUrl: userStore.user?.PhotoUrl }, userStore.authToken!);
 
                 navigate('/dashboard');
@@ -113,7 +112,7 @@ const EditUserProfilePage: React.FC<EditUserProfilePageProps> = observer(() => {
                 <p>Fields with "<CgAsterisk className="asterisk" />" are required!</p>
 
                 <Form
-                    initialValues={user}
+                    initialValues={userData(user)}
                     onSubmit={onEditUserProfileSubmit}
                     validate={editUserProfileFormValidator}
                     render={({ handleSubmit }) => (
@@ -225,7 +224,7 @@ const EditUserProfilePage: React.FC<EditUserProfilePageProps> = observer(() => {
                             <Field name='Photo'>
                                 {({ input, meta }) => (
                                     <>
-                                        <UserPhoto input={input} initialValue={userStore.user?.PhotoUrl} />
+                                        <UserPhoto input={input} initialValue={user?.photo} />
                                         {meta.touched && meta.error && <span>{meta.error}</span>}
                                     </>
                                 )}

@@ -10,6 +10,20 @@ export type HealthStatusEnum = {
     'Dewormed': number
 };
 
+export type AnimalCategoryEnum = {
+    'Cat': number,
+    'Dog': number,
+    'Bunny': number
+};
+
+export type AnimalBreedEnum = {
+    'Pitbull': number,
+    'Husky': number,
+    'American rabbit': number,
+    'Persian cat': number,
+    'Bengal cat': number
+};
+
 export type AnimalStatusEnum = {
     'For adoption': number,
     'For sale': number,
@@ -32,4 +46,18 @@ export const animalStatusEnum: AnimalStatusEnum = {
     'For adoption': 1,
     'For sale': 2,
     'For swiping': 3
+};
+
+export const animalCategoryEnum: AnimalCategoryEnum = {
+    'Cat': 1,
+    'Dog': 2,
+    'Bunny': 3
+};
+
+export const animalBreedEnum: AnimalBreedEnum = {
+    'Pitbull': 1,
+    'Husky': 2,
+    'American rabbit': 3,
+    'Persian cat': 4,
+    'Bengal cat': 5
 };
