@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 
 import themeStore from '../../stores/themeStore';
 import { IUserPasswordData } from '../../interfaces/Interfaces';
+import { changePasswordFormValidator } from '../../validators/userProfileFormValidators';
 import agent from '../../api/axiosAgent';
 
 import { CLabel } from '../common/CLabel/CLabel';
@@ -37,7 +38,7 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ onClickChange
             <div className="change-pass__modal">
                 <Form
                     onSubmit={onChangePasswordSubmit}
-                    // validate={}
+                    validate={changePasswordFormValidator}
                     render={({ handleSubmit }) => (
                         <form className={themeStore.isLightTheme ? 'change-pass__modal__form' : 'change-pass__modal__form change-pass__modal__form__dark'} onSubmit={handleSubmit}>
 

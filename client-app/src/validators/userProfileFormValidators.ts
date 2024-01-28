@@ -104,3 +104,18 @@ export const editUserProfileFormValidator = combineValidators({
         hasLengthBetween(3, 50)
     )('City')
 });
+
+export const changePasswordFormValidator = combineValidators({
+    OldPassword: composeValidators(
+        isRequired,
+        hasLengthGreaterThan(4)
+    )('Old password'),
+    NewPassword: composeValidators(
+        isRequired,
+        hasLengthGreaterThan(4)
+    )('New password'),
+    ConfirmPassword: composeValidators(
+        isRequired,
+        matchesField('NewPassword', 'NewPassword')
+    )('Confirm password'),
+});
