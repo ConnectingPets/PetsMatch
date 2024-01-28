@@ -2,7 +2,7 @@
 
 .add__pet__card {
     @include gs.card-main-style(17.5rem, 23rem, #fff, gs.$dark-shadow);
-    cursor: default;
+    cursor: pointer;
     
     @include gs.breakpoint(tablet-start, tablet-end) {
         width: 13rem;
@@ -48,6 +48,8 @@
             left: 50%;
             transform: translate(-50%, -50%);
             @include gs.display-flex(column, center, center);
+            width: 100%;
+            height: 100%;
 
             &>svg {
                 width: 2.2rem;
