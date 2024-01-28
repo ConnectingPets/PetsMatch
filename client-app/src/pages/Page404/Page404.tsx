@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 import { CLogo } from '../../components/common/CLogo/CLogo';
 import Footer from '../../components/Footer/Footer';
@@ -22,7 +21,7 @@ const Page404: React.FC<Page404Props> = () => {
                         <img src="/images/404.png" alt="404" />
                     </div>
                     <div className="container-404__background__content__link">
-                        <Link to="/">Go Back</Link>
+                        <button onClick={() => window.history.back()}>Go Back</button>
                     </div>
                 </div>
             </div>

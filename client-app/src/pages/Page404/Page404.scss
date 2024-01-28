@@ -47,7 +47,8 @@
                 height: 100%;
             }
 
-            &__link>a {
+            &__link>button {
+                font-size: 1.05rem;
                 @include gs.set-button(gs.$light-gradient-first, gs.$light-gradient-second, #fff);
                 width: 40%;
                 margin: 0 auto;
