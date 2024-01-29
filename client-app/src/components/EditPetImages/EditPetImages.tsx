@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { FieldInputProps } from 'react-final-form';
 import { DragDropContext, Draggable, DropResult, Droppable } from 'react-beautiful-dnd';
 import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { CgAsterisk } from 'react-icons/cg';
 
 import agent from '../../api/axiosAgent';
@@ -35,33 +34,6 @@ const EditPetImages: React.FC<EditPetImagesProps> = ({ input, initialImages, pet
             return image.url;
         }
     };
-                                    // file optional ??
-    const updatedImg = async (image: { file?: string | Blob; isMain: boolean; id: string; }) => {
-        try {
-            if (image.file && petId) {
-                const formData = new FormData();
-                formData.append('files', image.file);
-
-                const res = await agent.apiAnimal.uploadAnimalPhoto(petId, formData);
-
-                if (res.isSuccess) {
-                    toast.success(res.successMessage);
-                } else {
-                    toast.error(res.errorMessage);
-                }
-            } else if (image.id) {
-                const res = await agent.apiAnimal.deleteAnimalPhoto(image.id);
-
-                if (res.isSuccess) {
-                    toast.success(res.successMessage);
-                } else {
-                    toast.error(res.errorMessage);
-                }
-            }
-        } catch (err) {
-            console.error(err);
-        }
-    };
 
     const handleFile = async (
         e: React.ChangeEvent<HTMLInputElement>,
@@ -70,31 +42,46 @@ const EditPetImages: React.FC<EditPetImagesProps> = ({ input, initialImages, pet
     ) => {
         const file = e.target.files?.[0];
 
-        if (file) {
-            const imageUrl = URL.createObjectURL(file);
+        if (file && petId) {
+            const formData = new FormData();
+            formData.append('file', file);
 
-            const updatedImages = [...images];
-            updatedImages[order] = { id: `new-${order}`, isMain: false, url: imageUrl, file, order };
+            const res = await agent.apiAnimal.uploadAnimalPhoto(petId, formData);
 
-            setImages(updatedImages);
-            const updatedFiles = updatedImages.map((img) => img.file);
-            input.onChange(updatedFiles);
+            if (res.isSuccess) {
+                toast.success(res.successMessage);
 
-            await updatedImg(updatedImages[order]);
+                const imageUrl = URL.createObjectURL(file);
+
+                const updatedImages = [...images];
+                updatedImages[order] = { id: `new-${order}`, isMain: false, url: imageUrl, file, order };
+                setImages(updatedImages);
+
+                const updatedFiles = updatedImages.map((img) => img.file);
+                input.onChange(updatedFiles);
+            } else {
+                toast.error(res.errorMessage);
+            }
         }
     };
 
     const handleRemoveImage = async (id: string) => {
-        const removedImage = images.find((img) => img.id == id);
+        try {
+            const res = await agent.apiAnimal.deleteAnimalPhoto(id);
 
-        if (removedImage) {
-            const updatedImages = images.filter((img) => img.id !== id);
-            setImages(updatedImages);
-    
-            const updatedFiles = updatedImages.map((img) => img.file);
-            input.onChange(updatedFiles);
+            if (res.isSuccess) {
+                toast.success(res.successMessage);
 
-            await updatedImg(removedImage);
+                const updatedImages = images.filter((img) => img.id !== id);
+                setImages(updatedImages);
+
+                const updatedFiles = updatedImages.map((img) => img.file);
+                input.onChange(updatedFiles);
+            } else {
+                toast.error(res.errorMessage);
+            }
+        } catch (err) {
+            console.error(err);
         }
     };
 
@@ -121,9 +108,9 @@ const EditPetImages: React.FC<EditPetImagesProps> = ({ input, initialImages, pet
                     ...img,
                     isMain: img.id == id
                 }));
-    
+
                 setImages(updatedImages);
-                
+
                 toast.success(res.successMessage);
             } else {
                 toast.error(res.errorMessage);
