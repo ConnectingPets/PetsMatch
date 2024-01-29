@@ -55,6 +55,8 @@ export const Login: React.FC<LoginProps> = () => {
                     }, token);
                 }
 
+                userStore.setIsLoggedIn();
+
                 navigate('/dashboard');
             } else {
                 toast.error(result.errorMessage);

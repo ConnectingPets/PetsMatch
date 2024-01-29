@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { IUser } from '../../interfaces/Interfaces';
 import { registerFormValidator } from '../../validators/userProfileFormValidators';
 import agent from '../../api/axiosAgent';
+import userStore from '../../stores/userStore';
 
 import { CLabel } from '../common/CLabel/CLabel';
 import { CSubmitButton } from '../common/CSubmitButton/CSubmitButton';
@@ -26,6 +27,7 @@ export const Register: React.FC<RegisterProps> = observer(() => {
             const result = await agent.apiUser.register(values);
 
             if (result.isSuccess) {
+                userStore.setIsLoggedIn();
 
                 navigate('/dashboard');
             } else {
