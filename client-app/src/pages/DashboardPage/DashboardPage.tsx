@@ -31,6 +31,13 @@ export const DashboardPage: React.FC<DashboardPageProps> = observer(() => {
     useEffect(() => {
         agent.apiUser.getUserProfile()
             .then(res => {
+                if (res.data.roles.includes('Matching')) {
+                    agent.apiAnimal.getAllAnimals()
+                        .then(res => {
+                            setPets(res.data);
+                        });
+                }
+
                 if (res.data.roles.includes('Marketplace') && res.data.roles.includes('Matching')) {
                     setIsHaveTwoRoles(true);
                 } else if (res.data.roles.includes('Marketplace')) {
@@ -38,13 +45,6 @@ export const DashboardPage: React.FC<DashboardPageProps> = observer(() => {
                 }
 
                 setUser(res.data);
-            });
-    }, []);
-
-    useEffect(() => {
-        agent.apiAnimal.getAllAnimals()
-            .then(res => {
-                setPets(res.data);
             });
     }, []);
 
