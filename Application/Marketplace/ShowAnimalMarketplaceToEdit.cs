@@ -35,7 +35,8 @@
                 CancellationToken cancellationToken)
             {
                 Animal? animal =
-                    await repository.All<Animal>().
+                    await repository.
+                    All<Animal>(a => a.AnimalId.ToString() == request.AnimalId).
                     Include(a => a.Photos).
                     Include(a => a.Breed).
                     FirstOrDefaultAsync();

@@ -17,7 +17,7 @@
     using static Application.Animal.AnimalProfile;
     using static Common.GeneralApplicationConstants;
 
-    [Authorize(Roles = MatchingRoleName)]
+    [Authorize(Roles = MarketplaceRoleName + "," + MatchingRoleName)]
     [ApiController]
     [Route("api/[controller]")]
     public class AnimalController : ControllerBase
@@ -29,6 +29,7 @@
             this.mediator = mediator;
         }
 
+        [Authorize(Roles = MatchingRoleName)]
         [HttpPost("Add")]
         public async Task<IActionResult> AddAnimal([FromForm]AddAnimalDto animal)
         {
@@ -44,6 +45,7 @@
             return new JsonResult(result);
         }
 
+        [Authorize(Roles = MatchingRoleName)]
         [HttpGet("AllAnimals")]
         public async Task<IActionResult> GetAllAnimals()
         {
@@ -58,6 +60,7 @@
             return new JsonResult(allAnimals);
         }
 
+        [Authorize(Roles = MatchingRoleName)]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAnimal([FromRoute] string id)
         {
@@ -70,6 +73,7 @@
             return new JsonResult(await mediator.Send(command));
         }
 
+        [Authorize(Roles = MatchingRoleName)]
         [HttpPatch("{id}")]
         public async Task<IActionResult> UpdateAnimal([FromBody] EditAnimalDto animalDto, [FromRoute]string id)
         {
@@ -83,6 +87,7 @@
             return new JsonResult(await mediator.Send(command));
         }
 
+        [Authorize(Roles = MatchingRoleName)]
         [HttpGet("EditAnimal/{id}")]
         public async Task<IActionResult> EditAnimal([FromRoute] string id)
         {

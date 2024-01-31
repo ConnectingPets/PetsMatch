@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 
-import { IUser } from '../interfaces/Interfaces';
+import { IUser, IUserPasswordData } from '../interfaces/Interfaces';
 import { IAnimal } from '../interfaces/Interfaces';
 
 const axiosInstance = axios.create({
@@ -30,7 +30,8 @@ const apiUser = {
     logout: (body: object) => requests.post('/api/user/logout', body, headers.appJSON),
     editUser: (body: IUser) => requests.patch('/api/profile/edit', body, headers.appJSON),
     deleteUser: () => requests.del('/api/profile/delete'),
-    deleteRole: (role: string) => requests.del(`/api/profile/deleterole?rolename=${role}`)
+    deleteRole: (role: string) => requests.del(`/api/profile/deleterole?rolename=${role}`),
+    changePassword: (passData: IUserPasswordData) => requests.post('/api/profile/changePassword', passData, headers.appJSON)
 };
 
 const apiAnimal = {

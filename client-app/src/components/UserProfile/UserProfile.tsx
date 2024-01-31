@@ -11,9 +11,10 @@ import { toast } from 'react-toastify';
 
 interface UserProfileProps {
     user: IUserProfile | undefined
+    onClickChangePassword: () => void
 }
 
-export const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
+export const UserProfile: React.FC<UserProfileProps> = ({ user, onClickChangePassword }) => {
     const navigate = useNavigate();
 
     const onLogoutClick = async () => {
@@ -73,7 +74,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
 
             <div className='dashboard__user__profile__buttons__wrapper'>
                 <Link to="/user/edit-profile" className={themeStore.isLightTheme ? '' : 'dark'}>Edit Profile</Link>
-                <button className={themeStore.isLightTheme ? '' : 'dark'}>Change Password</button>
+                <button onClick={() => onClickChangePassword()} className={themeStore.isLightTheme ? '' : 'dark'}>Change Password</button>
                 <button onClick={onLogoutClick} className={themeStore.isLightTheme ? '' : 'dark'}>Logout</button>
             </div>
         </section>

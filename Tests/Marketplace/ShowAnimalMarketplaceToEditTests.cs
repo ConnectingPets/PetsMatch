@@ -1,5 +1,7 @@
 ﻿namespace Tests.Marketplace
 {
+    using System.Linq.Expressions;
+
     using Moq;
     using MockQueryable.EntityFrameworkCore;
 
@@ -104,7 +106,8 @@
             var asyncEnumerable =
                new TestAsyncEnumerableEfCore<Animal>(queryable);
             repositoryMock.
-                Setup(r => r.All<Animal>()).Returns(asyncEnumerable);
+                Setup(r => r.All(It.IsAny<Expression<Func<Animal,bool>>>())).
+                Returns(asyncEnumerable);
         }
     }
 }

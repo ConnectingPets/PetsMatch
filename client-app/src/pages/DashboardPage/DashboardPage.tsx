@@ -14,6 +14,7 @@ import { UserProfile } from '../../components/UserProfile/UserProfile';
 import { CLogo } from '../../components/common/CLogo/CLogo';
 import { CChangeThemeButton } from '../../components/common/CChangeThemeButton/CChangeThemeButton';
 import { CMarketCardButton } from '../../components/common/CMarketCardButton/CMarketCardButton';
+import ChangePasswordModal from '../../components/ChangePasswordModal/ChangePasswordModal';
 import Footer from '../../components/Footer/Footer';
 
 interface DashboardPageProps { }
@@ -25,6 +26,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = observer(() => {
     const [petsForAdoption, setPetsForAdoption] = useState<IUserAnimals[]>([]);
     const [place, setPlace] = useState<string>('home');
     const [isHaveTwoRoles, setIsHaveTwoRoles] = useState<boolean>(false);
+    const [isClickChangePassword, setIsClickChangePassword] = useState<boolean>(false);
 
     useEffect(() => {
         agent.apiUser.getUserProfile()
@@ -72,6 +74,10 @@ export const DashboardPage: React.FC<DashboardPageProps> = observer(() => {
         } catch (err) {
             console.error(err);
         }
+    };
+
+    const onClickChangePassword = () => {
+        setIsClickChangePassword(state => !state);
     };
 
     return (
@@ -128,8 +134,10 @@ export const DashboardPage: React.FC<DashboardPageProps> = observer(() => {
 
             <article className={themeStore.isLightTheme ? 'dashboard__article' : 'dashboard__article dashboard__article__dark'}>
                 <h3>my profile</h3>
-                <UserProfile user={user} />
+                <UserProfile user={user} onClickChangePassword={onClickChangePassword} />
             </article>
+
+            {isClickChangePassword && <ChangePasswordModal onClickChangePassword={onClickChangePassword} />}
 
             <Footer />
         </section>
