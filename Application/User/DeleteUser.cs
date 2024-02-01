@@ -39,7 +39,6 @@
             {
                 User? user = await this.repository
                     .All<User>(u => u.Id.ToString() == request.UserId.ToLower())
-                    .Include(u => u.UsersPassions)
                     .Include(u => u.Photo)
                     .Include(u => u.Animals)
                         .ThenInclude(a => a.AnimalMatches)
@@ -73,7 +72,6 @@
 
             private async Task<Result<Unit>> DeleteAllData(User user)
             {
-                this.repository.DeleteRange(user.UsersPassions.ToArray());
 
                 foreach (var animal in user.Animals)
                 {
