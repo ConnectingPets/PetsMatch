@@ -23,7 +23,7 @@ const AllRoutes: React.FC = () => {
             <Route path='/' element={<StartUpPage />} />
             <Route path='about-faq' element={<AboutFAQPage />} />
             <Route path='login-register' element={<LoginRegisterPage />} />
-            <Route path='dashboard' element={<AuthGuard element={<DashboardPage />} />} />
+            <Route path='dashboard' element={<DashboardPage />} />
             <Route path='matches/:id' element={<AuthGuard element={<MatchesChatPage />} />} />
             <Route path='add-pet' element={<AuthGuard element={<AddPetPage />} />} />
             <Route path='pet/:petId/edit' element={<AuthGuard element={<EditPetPage />} />} />
