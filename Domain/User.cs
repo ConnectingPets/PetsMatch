@@ -16,7 +16,6 @@ namespace Domain
         public User()
         {
             base.Id = Guid.NewGuid();
-            this.UsersPassions = new HashSet<UserPassion>();
             this.Animals = new HashSet<Animal>();
         }
 
@@ -57,8 +56,6 @@ namespace Domain
         [Comment("user city")]
         [StringLength(CityMaxLength, ErrorMessage = InvalidCityLength)]
         public string? City { get; set; }
-
-        public ICollection<UserPassion> UsersPassions { get; set; } = null!;
 
         public ICollection<Animal> Animals { get; set; } = null!;
     }

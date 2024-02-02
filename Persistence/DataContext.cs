@@ -21,8 +21,6 @@ namespace Persistence
 
         public DbSet<Breed> Breeds { get; set; } = null!;
 
-        public DbSet<Passion> Passions { get; set; } = null!;
-
         public DbSet<Match> Matches { get; set; } = null!;
 
         public DbSet<Message> Messages { get; set; } = null!;
