@@ -22,6 +22,17 @@ const isValidEmail = createValidator(
     field => `Invalid ${field}`
 );
 
+const passwordRequirements = createValidator(
+    message => value => {
+        const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).*/;
+        if (!passwordRegex.test(value)) {
+            return message;
+        }
+    },
+
+    field => `${field} must have digit, lower and upper case and non alphanumeric symbol`
+);
+
 const ageRange = createValidator(
     message => value => {
         if (value !== null && value != 0 && (Number(value) < 16 || Number(value) > 90)) {
@@ -55,7 +66,8 @@ export const registerFormValidator = combineValidators({
     Roles: isHaveRole('Role'),
     Password: composeValidators(
         isRequired,
-        hasLengthGreaterThan(4)
+        passwordRequirements,
+        hasLengthGreaterThan(7)
     )('Password'),
     ConfirmPassword: composeValidators(
         isRequired,
@@ -70,7 +82,8 @@ export const loginFormValidator = combineValidators({
     )('Email'),
     Password: composeValidators(
         isRequired,
-        hasLengthGreaterThan(4)
+        passwordRequirements,
+        hasLengthGreaterThan(7)
     )('Password')
 });
 
@@ -108,11 +121,12 @@ export const editUserProfileFormValidator = combineValidators({
 export const changePasswordFormValidator = combineValidators({
     OldPassword: composeValidators(
         isRequired,
-        hasLengthGreaterThan(4)
+        hasLengthGreaterThan(7)
     )('Old password'),
     NewPassword: composeValidators(
         isRequired,
-        hasLengthGreaterThan(4)
+        passwordRequirements,
+        hasLengthGreaterThan(7)
     )('New password'),
     ConfirmPassword: composeValidators(
         isRequired,

@@ -69,9 +69,16 @@ const EditUserProfilePage: React.FC<EditUserProfilePageProps> = observer(() => {
                     }
                 }
 
-                userStore.setUser({ ...values, PhotoUrl: userStore.user?.PhotoUrl }, userStore.authToken!);
+                if (JSON.stringify(initialRoles) == JSON.stringify(userData.Roles)) {
+                    userStore.setUser({ ...values, PhotoUrl: userStore.user?.PhotoUrl }, userStore.authToken!);
+    
+                    navigate('/dashboard');
+                } else {
+                    toast.warning('Change roles require logout');
 
-                navigate('/dashboard');
+                    await agent.apiUser.logout({});
+                    navigate('/login-register');
+                }
 
                 toast.success(result.successMessage);
             } else {

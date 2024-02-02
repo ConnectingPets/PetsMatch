@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import { Form, Field } from 'react-final-form';
 import { observer } from 'mobx-react';
 import { toast } from 'react-toastify';
@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { IUser } from '../../interfaces/Interfaces';
 import { registerFormValidator } from '../../validators/userProfileFormValidators';
 import agent from '../../api/axiosAgent';
+// import userStore from '../../stores/userStore';
 
 import { CLabel } from '../common/CLabel/CLabel';
 import { CSubmitButton } from '../common/CSubmitButton/CSubmitButton';
@@ -17,8 +18,8 @@ interface RegisterProps {
     showLogin: () => void;
 }
 
-export const Register: React.FC<RegisterProps> = observer(() => {
-    const navigate = useNavigate();
+export const Register: React.FC<RegisterProps> = observer(({ showLogin }) => {
+    // const navigate = useNavigate();
 
     const onSubmit = async (values: IUser) => {
 
@@ -26,8 +27,13 @@ export const Register: React.FC<RegisterProps> = observer(() => {
             const result = await agent.apiUser.register(values);
 
             if (result.isSuccess) {
+                // userStore.setIsLoggedIn();
 
-                navigate('/dashboard');
+                // navigate('/dashboard');
+
+                await agent.apiUser.logout({});
+                showLogin();
+                toast.success(`Successfully register ${result.data.name}`);
             } else {
                 toast.error(result.errorMessage);
             }

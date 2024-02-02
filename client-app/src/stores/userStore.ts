@@ -5,6 +5,7 @@ import { IUser } from '../interfaces/Interfaces';
 class UserStore {
     user: IUser | null = null;
     authToken: string | null = null;
+    isLoggedIn: boolean = false;
 
     constructor() {
         this.loadFromStorage();
@@ -12,9 +13,16 @@ class UserStore {
         makeAutoObservable(this, {
             user: observable,
             authToken: observable,
+            isLoggedIn: observable,
             setUser: action,
             clearUser: action
         });
+    }
+
+    setIsLoggedIn() {
+        this.isLoggedIn = true;
+
+        localStorage.setItem('isLogged', JSON.stringify(this.isLoggedIn));
     }
 
     setUser(userData: IUser, authToken: string) {
@@ -34,6 +42,11 @@ class UserStore {
     loadFromStorage() {
         const storedUser = localStorage.getItem('user');
         const storedToken = localStorage.getItem('token');
+        const storedIsLoggedIn = localStorage.getItem('isLoggedIn');
+
+        if (storedIsLoggedIn) {
+            this.isLoggedIn = JSON.parse(storedIsLoggedIn);
+        }
 
         if (storedUser && storedToken) {
             this.user = JSON.parse(storedUser);
@@ -51,6 +64,7 @@ class UserStore {
     removeFromStorage() {
         localStorage.removeItem('user');
         localStorage.removeItem('token');
+        localStorage.removeItem('isLogged');
     }
 }
 
