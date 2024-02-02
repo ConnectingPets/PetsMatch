@@ -15,6 +15,7 @@ import AddPetInMarket from './pages/AddPetInMarket/AddPetInMarket';
 import EditPetInMarket from './pages/EditPetInMarket/EditPetInMarket';
 import AdoptionTipsPage from './pages/AdoptionTipsPage/AdoptionTipsPage';
 import Page404 from './pages/Page404/Page404';
+import AuthGuard from './components/AuthGuard/AuthGuard';
 
 const AllRoutes: React.FC = () => {
     return (
@@ -22,16 +23,16 @@ const AllRoutes: React.FC = () => {
             <Route path='/' element={<StartUpPage />} />
             <Route path='about-faq' element={<AboutFAQPage />} />
             <Route path='login-register' element={<LoginRegisterPage />} />
-            <Route path='dashboard' element={<DashboardPage />} />
-            <Route path='matches/:id' element={<MatchesChatPage />} />
-            <Route path='add-pet' element={<AddPetPage />} />
-            <Route path='pet/:petId/edit' element={<EditPetPage />} />
-            <Route path='user/edit-profile' element={<EditUserProfilePage />} />
-            <Route path='market/catalog' element={<AdoptionMarketCatalogPage />} />
-            <Route path='market/catalog/:petId/details' element={<PetInMarketDetailsPage />} />
-            <Route path='market/add-pet' element={<AddPetInMarket />} />
-            <Route path='market/catalog/:petId/edit' element={<EditPetInMarket />} />
-            <Route path='market/catalog/adoption-tips' element={<AdoptionTipsPage />} />
+            <Route path='dashboard' element={<AuthGuard element={<DashboardPage />} />} />
+            <Route path='matches/:id' element={<AuthGuard element={<MatchesChatPage />} />} />
+            <Route path='add-pet' element={<AuthGuard element={<AddPetPage />} />} />
+            <Route path='pet/:petId/edit' element={<AuthGuard element={<EditPetPage />} />} />
+            <Route path='user/edit-profile' element={<AuthGuard element={<EditUserProfilePage />} />} />
+            <Route path='market/catalog' element={<AuthGuard element={<AdoptionMarketCatalogPage />} />} />
+            <Route path='market/catalog/:petId/details' element={<AuthGuard element={<PetInMarketDetailsPage />} />} />
+            <Route path='market/add-pet' element={<AuthGuard element={<AddPetInMarket />} />} />
+            <Route path='market/catalog/:petId/edit' element={<AuthGuard element={<EditPetInMarket />} />} />
+            <Route path='market/catalog/adoption-tips' element={<AuthGuard element={<AdoptionTipsPage />} />} />
             <Route path='*' element={<Page404 />} />
         </Routes>
     );
