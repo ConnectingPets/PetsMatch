@@ -42,6 +42,8 @@ export const DashboardPage: React.FC<DashboardPageProps> = observer(() => {
                     setIsHaveTwoRoles(true);
                 } else if (res.data.roles.includes('Marketplace')) {
                     setPlace('market');
+                    
+                    onMarketplaceClick();
                 }
 
                 setUser(res.data);

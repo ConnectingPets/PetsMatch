@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 
 import { FiPlus } from 'react-icons/fi';
 import { MdClear } from 'react-icons/md';
+import userStore from '../../stores/userStore';
 import './FAQ.scss';
 
 import { questionsData } from './questionData';
@@ -27,8 +28,12 @@ const Faq: React.FC<FAQProps> = () => {
                 <div>
                     <h3>Got a question?</h3>
                     <h3>Get your answer</h3>
-                    <span>or</span>
-                    <Link to='/login-register'>Login / Sign Up</Link>
+                    {!userStore.isLoggedIn && (
+                        <>
+                            <span>or</span>
+                            <Link to='/login-register'>Login / Sign Up</Link>
+                        </>
+                    )}
                 </div>
                 <div className="info__container__faq-banner__img">
                     <img src="/images/faq-dog.jpg" alt="dog" />

@@ -77,6 +77,7 @@ const EditUserProfilePage: React.FC<EditUserProfilePageProps> = observer(() => {
                     toast.warning('Change roles require logout');
 
                     await agent.apiUser.logout({});
+                    userStore.clearUser();
                     navigate('/login-register');
                 }
 

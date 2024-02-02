@@ -54,7 +54,7 @@ const EditPetImages: React.FC<EditPetImagesProps> = ({ input, initialImages, pet
                 const imageUrl = URL.createObjectURL(file);
 
                 const updatedImages = [...images];
-                updatedImages[order] = { id: `new-${order}`, isMain: false, url: imageUrl, file, order };
+                updatedImages[order] = { id: res.data.id, isMain: false, url: imageUrl, file, order };
                 setImages(updatedImages);
 
                 const updatedFiles = updatedImages.map((img) => img.file);

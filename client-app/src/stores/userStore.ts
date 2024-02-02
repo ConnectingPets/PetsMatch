@@ -35,6 +35,7 @@ class UserStore {
     clearUser() {
         this.user = null;
         this.authToken = null;
+        this.isLoggedIn = false;
 
         this.removeFromStorage();
     }
